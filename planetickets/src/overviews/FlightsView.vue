@@ -1,5 +1,14 @@
 <template>
-    <h1>{{ this.letoviString }}</h1>
+   <!-- <h1>{{ this.letoviString }}</h1>
+    <p>abc</p>-->
+    <h1>Vase porudzbine</h1>
+    <div v-show="flights">
+        <porTemp v-bind:listaPorudzbina="flights"></porTemp>     
+    </div>
+    <div v-if="flights.length==0">            
+        <p style="font-family:Verdana;font-size:30px;font-style: italic;">LISTA Porudzbina JE PRAZNA</p>
+    </div>
+        
 </template>
 <script>
 import dataService from '../services/dataService'
@@ -7,17 +16,17 @@ import { VueperSlides, VueperSlide } from 'vueperslides'
 import 'vueperslides/dist/vueperslides.css'
 import parserMixin from '@/mixins/mixin'
 import axios from 'axios'
+import PorTemlate from '../components/PorudzbineTemplate.vue'
     export default{   
         components:{
             vueperslides : VueperSlides,
-            vueperslide :VueperSlide
+            vueperslide :VueperSlide,
+            porTemp:PorTemlate,
         },
         data(){
             return{
                 letoviString:"",
-                flights:{
-                    
-                },
+                flights:[],
                 btnEnabled:false,
                 userId : '',
                 username : '',
@@ -41,6 +50,7 @@ import axios from 'axios'
                 try{
                     dataService.getUserFlights(id).then(response=>{
                         this.letoviString=response.data;
+                        this.flights=response.data;
                         console.log("LETOVI: " + JSON.stringify(response.data));
 
                     })
