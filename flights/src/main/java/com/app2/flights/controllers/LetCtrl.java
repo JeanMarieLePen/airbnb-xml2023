@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.app2.flights.dtos.LetDTO;
 import com.app2.flights.dtos.LetDTOSimple;
+import com.app2.flights.dtos.PretragaDTO;
 import com.app2.flights.services.LetService;
 
 import jakarta.websocket.server.PathParam;
@@ -40,19 +41,6 @@ public class LetCtrl {
 		}
 	}
 	
-	@GetMapping("/{lokOd}/{lokDo}")
-	public ResponseEntity<List<LetDTOSimple>> findLetovi(@PathVariable String lokOd,@PathVariable String lokDo,
-			@RequestParam @DateTimeFormat(pattern="dd-MM-yyyy'T'HH:mm:ss") LocalDateTime datumIVreme,
-			@RequestParam int brojPutnika)
-	{
-		List<LetDTOSimple> letovi = letService.findLetovi(lokOd, lokDo, datumIVreme, brojPutnika);
-		
-		if(letovi.isEmpty()) {
-			return new ResponseEntity<List<LetDTOSimple>>(HttpStatus.NO_CONTENT);
-		}else {
-			return new ResponseEntity<List<LetDTOSimple>>(letovi,HttpStatus.OK);
-		}
-	}
 	
 	@PostMapping("/addNew")
 	public ResponseEntity<LetDTO> addNew(@Validated @RequestBody LetDTO l){
@@ -73,7 +61,12 @@ public class LetCtrl {
 			return new ResponseEntity<LetDTO>(retVal, HttpStatus.OK);
 		}
 	}
-	
+
+	@PostMapping("/pretraga")
+	public ResponseEntity<List<LetDTOSimple>> pretraga(@RequestBody PretragaDTO dto){
+		List<LetDTOSimple> lista= letService.pretraga(dto) ;
+		return new ResponseEntity<List<LetDTOSimple>> (lista, HttpStatus.OK);
+	}
 
 	
 	

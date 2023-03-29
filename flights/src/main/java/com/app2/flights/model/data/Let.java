@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
+import java.util.stream.Collectors;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.DBRef;
@@ -32,13 +33,13 @@ public class Let {
 	private LocalDateTime datumIVreme;
 	@DBRef
 	@Nullable
-	private Collection<RegKor> listaPutnika;
+	private Collection<Porudzbina> listaPorudzbina;
 	
 	public Let() {
 		super();
 	}
 	public Let(String id, Adresa lokOd, Adresa lokDo, String brojLeta, int kapacitet, double cena,
-			LocalDateTime datumIVreme, Collection<RegKor> listaPutnika) {
+			LocalDateTime datumIVreme, Collection<Porudzbina> listaPorudzbina) {
 		super();
 		this.id = id;
 		this.lokOd = lokOd;
@@ -47,7 +48,7 @@ public class Let {
 		this.kapacitet = kapacitet;
 		this.cena = cena;
 		this.datumIVreme = datumIVreme;
-		this.listaPutnika = listaPutnika;
+		this.listaPorudzbina = listaPorudzbina;
 	}
 	public Let(LetDTO novi) {
 		super();
@@ -57,14 +58,14 @@ public class Let {
 		this.kapacitet = novi.getKapacitet();
 		this.cena = novi.getCena();
 		this.datumIVreme = novi.getDatumIVreme();
-		this.listaPutnika = new ArrayList<RegKor>();
+		this.listaPorudzbina = new ArrayList<Porudzbina>();
 	}
 
-	public Collection<RegKor> getListaPutnika() {
-		return listaPutnika;
+	public Collection<Porudzbina> getListaPorudzbina() {
+		return listaPorudzbina;
 	}
-	public void setListaPutnika(Collection<RegKor> listaPutnika) {
-		this.listaPutnika = listaPutnika;
+	public void setListaPorudzbina(Collection<Porudzbina> listaPorudzbina) {
+		this.listaPorudzbina = listaPorudzbina;
 	}
 	public String getId() {
 		return id;
@@ -126,5 +127,8 @@ public class Let {
 	}
 	public void setDatumIVreme(LocalDateTime datumIVreme) {
 		this.datumIVreme = datumIVreme;
+	}
+	public int brZauzetoihMesta() {
+		return this.getListaPorudzbina().stream().map(x->x.getBrojKarata()).collect(Collectors.summingInt(Integer::intValue));	 
 	}
 }

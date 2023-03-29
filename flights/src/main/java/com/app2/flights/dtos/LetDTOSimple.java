@@ -76,6 +76,4 @@ public class LetDTOSimple {
 	public void setBrSlobMesta(int brSlobMesta) {
 		this.brSlobMesta = brSlobMesta;
 	}
-	
-	
 }

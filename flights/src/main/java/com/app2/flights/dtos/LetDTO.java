@@ -14,16 +14,16 @@ public class LetDTO {
 	private int kapacitet;
 	private double cena;
 	private LocalDateTime datumIVreme;	
-	private Collection<RegKorDTO> listaPutnika;
+	private Collection<PorudzbinaDTO> listaPorudzbina;
 	public LetDTO() {
 		super();
 	}
 	
-	public Collection<RegKorDTO> getListaPutnika() {
-		return listaPutnika;
+	public Collection<PorudzbinaDTO> getListaPorudzbina() {
+		return listaPorudzbina;
 	}
-	public void setListaPutnika(Collection<RegKorDTO> listaPutnika) {
-		this.listaPutnika = listaPutnika;
+	public void setListaPorudzbina(Collection<PorudzbinaDTO> listaPorudzbina) {
+		this.listaPorudzbina = listaPorudzbina;
 	}
 	public String getId() {
 		return id;
