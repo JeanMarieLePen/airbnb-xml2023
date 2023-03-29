@@ -10,7 +10,7 @@ import NoviLet from '../components/NoviLet'
 import About from '../views/AboutView'
 import FlightsView from '../overviews/FlightsView'
 import FlightOvewview from '../overviews/FlightOverview'
-
+import Pretraga from '../components/Pretraga'
 const routes = [
   {
     path:`/create`,
@@ -71,6 +71,11 @@ const routes = [
     name:'FlightOverview',
     component:FlightOvewview
   },
+  {
+    path:'/search',
+    name:'search',
+    component:Pretraga
+  }
 
 ]
 

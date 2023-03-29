@@ -51,6 +51,12 @@ axios.interceptors.request.use(request => {
     rezervisi(rez){
         return axios.post(`${API_URL}/regkor/reservation`, rez)
     }
+    ukloniRez(user,por){
+        return axios.put(`${API_URL}/regkor/cancelReservation/${user}/${por}`)
+    }
+    searchQuery(pretraga){
+        return axios.post(`${API_URL}/let/pretraga`,pretraga)
+    }
 }
 
 
