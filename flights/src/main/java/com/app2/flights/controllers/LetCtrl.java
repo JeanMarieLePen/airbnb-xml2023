@@ -74,6 +74,7 @@ public class LetCtrl {
 			return new ResponseEntity<LetDTO>(retVal, HttpStatus.OK);
 		}
 	}
+<<<<<<< HEAD
 	@PutMapping("/deleteLet/{id}")
 	public ResponseEntity<LetDTO> deleteLet(@PathVariable(value = "id") String id ){
 		LetDTO retVal = letService.removeLet(id);
@@ -83,6 +84,8 @@ public class LetCtrl {
 			return new ResponseEntity<LetDTO>(retVal, HttpStatus.OK);
 		}
 	}
+=======
+>>>>>>> 3c782cf9bde61cddf5be2e8f54beab5f87b111f8
 
 	@PostMapping("/pretraga")
 	public ResponseEntity<List<LetDTOSimple>> pretraga(@RequestBody PretragaDTO dto){

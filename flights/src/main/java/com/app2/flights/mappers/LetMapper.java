@@ -9,9 +9,11 @@ import org.springframework.stereotype.Component;
 import com.app2.flights.dtos.AdresaDTO;
 import com.app2.flights.dtos.LetDTO;
 import com.app2.flights.dtos.LetDTOSimple;
+import com.app2.flights.dtos.PorudzbinaDTO;
 import com.app2.flights.dtos.RegKorDTO;
 import com.app2.flights.model.data.Adresa;
 import com.app2.flights.model.data.Let;
+import com.app2.flights.model.data.Porudzbina;
 import com.app2.flights.model.user.RegKor;
 import com.app2.flights.repositories.LetRep;
 import com.app2.flights.services.LetService;
@@ -25,7 +27,7 @@ public class LetMapper {
 	@Autowired RegKorMapper regKorMapper;
 	@Autowired LetRep lRep;
 	@Autowired LetService lServ;
-	
+	@Autowired PorudzbinaMapper porMap;
 	public Let fromDTO(LetDTO dto) {
 		Let l = new Let();
 		l.setBrojLeta(dto.getBrojLeta());
@@ -41,13 +43,13 @@ public class LetMapper {
 		
 		
 		
-		if(dto.getListaPutnika()!= null) {
-			Collection<RegKor> tempList = new ArrayList<RegKor>();
-			for(RegKorDTO rdto: dto.getListaPutnika()) {
-				RegKor temp = regKorMapper.fromDTO(rdto);
+		if(dto.getListaPorudzbina()!= null) {
+			Collection<Porudzbina> tempList = new ArrayList<Porudzbina>();
+			for(PorudzbinaDTO rdto: dto.getListaPorudzbina()) {
+				Porudzbina temp = porMap.fromDTO(rdto);
 				tempList.add(temp);
 			}
-			l.setListaPutnika(tempList);
+			l.setListaPorudzbina(tempList);
 		}
 		
 		return l;
@@ -66,12 +68,12 @@ public class LetMapper {
 		dto.setLokOd(new AdresaDTO(l.getLokOd()));
 		dto.setLokDo(new AdresaDTO(l.getLokDo()));
 		
-		Collection<RegKorDTO> tempList = new ArrayList<RegKorDTO>();
-		for(RegKor r : l.getListaPutnika()) {
-			RegKorDTO temp = regKorMapper.toDTO(r);
+		Collection<PorudzbinaDTO> tempList = new ArrayList<PorudzbinaDTO>();
+		for(Porudzbina r : l.getListaPorudzbina()) {
+			PorudzbinaDTO temp = porMap.toDTO(r);
 			tempList.add(temp);
 		}
-		dto.setListaPutnika(tempList);
+		dto.setListaPorudzbina(tempList);
 		return dto;
 	}
 	

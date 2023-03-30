@@ -5,7 +5,10 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+<<<<<<< HEAD
 import java.util.regex.Pattern;
+=======
+>>>>>>> 3c782cf9bde61cddf5be2e8f54beab5f87b111f8
 import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
@@ -18,6 +21,7 @@ import javax.persistence.criteria.JoinType;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
+<<<<<<< HEAD
 import org.bson.Document;
 import org.hibernate.criterion.Projection;
 import org.hibernate.query.criteria.internal.expression.function.AggregationFunction.SUM;
@@ -27,6 +31,11 @@ import org.springframework.data.mongodb.core.aggregation.Aggregation;
 import org.springframework.data.mongodb.core.aggregation.AggregationOperation;
 import org.springframework.data.mongodb.core.aggregation.MatchOperation;
 import org.springframework.data.mongodb.core.aggregation.ProjectionOperation;
+=======
+import org.hibernate.query.criteria.internal.expression.function.AggregationFunction.SUM;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.mongodb.core.MongoTemplate;
+>>>>>>> 3c782cf9bde61cddf5be2e8f54beab5f87b111f8
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Service;
@@ -188,6 +197,13 @@ public class LetService {
 			Criteria jeftinijeOd=Criteria.where("cena").lte(dto.getMaxCena());
 			query.addCriteria(jeftinijeOd);
 		}
+<<<<<<< HEAD
+=======
+		//if(dto.getBrKarata()>-1) { //vezati porudzbine za letove
+		//	Criteria potrebnoKarata=Criteria.where("listaPorudzbina").;
+			//)
+		//}
+>>>>>>> 3c782cf9bde61cddf5be2e8f54beab5f87b111f8
 		/***LOKACIJE***/
 		if(dto.getPocetnaLok()!=null && !dto.getPocetnaLok().getAdresa().trim().equals("")) {
 			Criteria kreceIz= Criteria.where("lokOd.adresa") .regex(dto.getPocetnaLok().getAdresa().toLowerCase());
@@ -198,6 +214,7 @@ public class LetService {
 			query.addCriteria(sleceU);
 		}	
 		List<Let> letovi= monTempl.find(query,Let.class);
+<<<<<<< HEAD
 		if(dto.getBrKarata()>-1) { //vezati porudzbine za letove
 			letovi=letovi.stream().filter(x-> x.getKapacitet()-x.brZauzetoihMesta()>=dto.getBrKarata()).collect(Collectors.toList());
 		}
@@ -215,6 +232,10 @@ public class LetService {
 		monTempl.aggregate(ag, Let.class, Document.class).forEach(doc->System.out.println(doc.toJson()));
 		//System.out.println("DUZINA DTO2 : " + list.size());
 		return null;
+=======
+		return  letovi.stream().map(x->letMapper.toDTOSimple(x)).collect(Collectors.toList());
+	}
+>>>>>>> 3c782cf9bde61cddf5be2e8f54beab5f87b111f8
 		
 	}		
 }
