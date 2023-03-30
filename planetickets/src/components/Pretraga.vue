@@ -35,7 +35,7 @@
         </div>
     </div>
     <div  v-if="letovi.length>0">
-            <LetTemplate v-bind:listaLetova="letovi"></LetTemplate>     
+            <LetTemplate v-bind:listaLetova="prop"></LetTemplate>     
     </div>
     <div v-if="letovi.length==0">            
         <p style="font-family:Verdana;font-size:30px;font-style: italic;">LISTA LETOVA JE PRAZNA</p>
@@ -60,6 +60,10 @@ import LetoviTemplate from '../overviews/FlightsTableSearch.vue';
                 currentSort : 'nazivEntiteta',
                 currentSortDir : 'asc',
                 letovi:[],
+                prop:{
+                    listaLetova:[],
+                    brKarata:''
+                },
                 letoviString:'',
                 parametri:{
                     pocetak:'',
@@ -128,6 +132,8 @@ import LetoviTemplate from '../overviews/FlightsTableSearch.vue';
                         console.log("Broj Pronadjenih:"+response.data.length);
                         this.letovi = response.data;
                         this.letoviString=JSON.stringify(response.data);
+                        this.prop.listaLetova=response.data
+                        this.prop.brKarata=this.parametri.brKarata;
                     }
                 });
             },

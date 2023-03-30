@@ -22,11 +22,16 @@
                     <img v-if='currentSortDir == "asc" && currentSort== "cena"' src='../assets/up-arrow1.1.png'>
                     <img v-if='currentSortDir == "desc" && currentSort== "cena" ' src='../assets/down-arrow1.1.png'>
                 </th>
+                <th @click="tempSort('cenaUK')" v-if="this.getBrKarata()>0">Cena za {{this.getBrKarata()}} karte
+                    <img v-if='currentSortDir == "asc" && currentSort== "cenaUk"' src='../assets/up-arrow1.1.png'>
+                    <img v-if='currentSortDir == "desc" && currentSort== "cenaUk" ' src='../assets/down-arrow1.1.png'>
+                </th>
                 <th @click="tempSort('brSlobM')">Preostalo Mesta
                     <img v-if='currentSortDir == "asc" && currentSort== "brSlobM"' src='../assets/up-arrow1.1.png'>
                     <img v-if='currentSortDir == "desc" && currentSort== "brSlobM" ' src='../assets/down-arrow1.1.png'>
                 </th>
-                <th v-if="userObj.role=='ADMINISTRATOR'">   Opcije 
+                <th>   Opcije 
+                    
 
                 </th>
             </thead>
@@ -37,10 +42,11 @@
                     <td>{{letT.lokDo}}</td>
                     <td><a href="" v-on:click="flightDetails(letT.id)">{{letT.brojLeta}}</a></td>
                     <td>{{letT.cena}}</td>
+                    <td v-if="this.getBrKarata()>0">{{this.getUkCena(letT.cena)}}</td>
                     <td>{{letT.brSlobMesta}}</td>
-                    <td v-if="userObj.role=='ADMINISTRATOR'"> 
+                    <td > 
                         <button v-if="userObj.role=='ADMINISTRATOR'" style="margin-left:30px;" v-on:click="ObrisiLet(this.userObj.id,letT.id)" class="btn btn-primary">Ukloni</button>
-                       <!-- <button v-if="userObj.role=='REG_KOR'" style="margin-left:30px;" v-on:click="brzaREz(letT.id)" class="btn btn-primary">BrzaRez</button>-->
+                        <button v-if="userObj.role=='REG_KOR' && letT.brSlobMesta>=this.getBrKarata() && this.getBrKarata()>0" style="margin-left:30px;" v-on:click="brzaREz(letT.id)" class="btn btn-primary">BrzaRez</button>
                     </td>
                 </tr>
             </tbody>
@@ -72,7 +78,7 @@
         },
         methods:{
             brzaREz(letId){
-                this.
+                this.rezDTO.brojKarata=this.getBrKarata();
                 this.rezDTO.let=letId
                 dataService.rezervisi(this.rezDTO)
             },
@@ -82,6 +88,13 @@
             ObrisiLet(idUser, idLet){
                 dataService.ukloniLet(idLet);
                 this.$router.go();
+            },
+            getUkCena(cena){
+                return cena*this.getBrKarata();
+            },
+            getBrKarata(){
+                if (this.listaLetova.brKarata==''){ return 0;} 
+                return this.listaLetova.brKarata;
             },
             tempSort(s){
                 if (s === this.currentSort) {
@@ -123,6 +136,14 @@
                         tempList = tmpLista.sort((a, b) => (a.cena < b.cena) ? 1 : -1)
                     }
                 }
+                if(this.currentSort == 'cenaUk'){
+                    if(this.currentSortDir == 'asc'){
+                        tempList = tmpLista.sort((a, b) => (a.cena > b.cena) ? 1 : -1);
+                    }
+                    else{
+                        tempList = tmpLista.sort((a, b) => (a.cena < b.cena) ? 1 : -1)
+                    }
+                }
                 if(this.currentSort == 'polazak'){
                     if(this.currentSortDir == 'asc'){
                         tempList = tmpLista.sort((a, b) => (a.datumIVreme > b.datumIVreme) ? 1 : -1);
@@ -148,7 +169,7 @@
                     }
                 }
                 return tempList;
-            }
+            },
             
         },
         created(){
@@ -159,9 +180,10 @@
         },
         computed:{
             sortEntities(){
-                let sortirani=this.sortiranje(this.listaLetova)
+                let sortirani=this.sortiranje(this.listaLetova.listaLetova)
             return sortirani;
             },
+            
         }
 
     }
