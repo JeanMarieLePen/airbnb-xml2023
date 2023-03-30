@@ -29,7 +29,12 @@ public class Adresa {
 		this.lat = lat;
 		this.lng = lng;
 	}
-	
+	public Adresa( String adresa, double lat, double lng) {
+		super();
+		this.adresa = adresa;
+		this.lat = lat;
+		this.lng = lng;
+	}
 	
 
 	public Adresa(AdresaDTO nova) {

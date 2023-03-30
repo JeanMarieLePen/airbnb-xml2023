@@ -13,9 +13,11 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import com.app2.flights.model.data.Adresa;
 import com.app2.flights.model.data.Porudzbina;
+import com.app2.flights.model.user.Administrator;
 import com.app2.flights.model.user.RegKor;
 import com.app2.flights.model.user.StatusNaloga;
 import com.app2.flights.model.user.TipKorisnika;
+import com.app2.flights.repositories.AdministratorRep;
 import com.app2.flights.repositories.AdresaRep;
 import com.app2.flights.repositories.KorisnikRep;
 import com.app2.flights.repositories.RegKorRep;
@@ -37,7 +39,7 @@ public class FlightsApplication {
 	private KorisnikRep korRep;
 	@Autowired 
 	private AdresaRep adrRep;
-	
+	@Autowired AdministratorRep adminRep;
 	public static void main(String[] args) {
 		SpringApplication.run(FlightsApplication.class, args);
 
@@ -45,6 +47,10 @@ public class FlightsApplication {
 	@Bean
     CommandLineRunner runner(){
         return args -> {
+        	
+        	if(adminRep.findAll().size()==0) {
+        		dodajAdmina("admin1");
+        	}
         	if(regKorRep.findAll().size()>0) {
         		System.out.println("BROJ KORISNIKAAAA: " + regKorRep.findAll().size());
         		return;
@@ -72,4 +78,16 @@ public class FlightsApplication {
     		System.out.println("BROJ KORISNIKA: " + regKorRep.findAll().size());
         };
     }
+	
+	public void dodajAdmina(String username) {
+    	BCryptPasswordEncoder bc = new BCryptPasswordEncoder();
+    	Adresa adr= new Adresa("Lava Nikolajevica, 21, Beograd",21.525,24.63632);
+    	adrRep.save(adr);
+
+    	Administrator a= new Administrator("admin", "adminovic", "adminMail@hhh.com",username, bc.encode("1234"),
+    			adr, TipKorisnika.ADMINISTRATOR, StatusNaloga.AKTIVAN);
+    	adminRep.save(a);
+    	korRep.save(a);
+    	
+	}
 }
