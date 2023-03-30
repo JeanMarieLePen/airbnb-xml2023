@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -20,6 +21,7 @@ import com.app2.flights.dtos.KorisnikDTO;
 import com.app2.flights.dtos.LetDTO;
 import com.app2.flights.dtos.PorudzbinaDTO;
 import com.app2.flights.dtos.PorudzbinaDTOnova;
+import com.app2.flights.dtos.RegKorDTO;
 import com.app2.flights.dtos.UpdateProfileDTO;
 import com.app2.flights.model.data.Let;
 import com.app2.flights.services.KorisnikService;
@@ -88,6 +90,15 @@ public class RegKorCtrl {
 			return new ResponseEntity<List<PorudzbinaDTO>>(HttpStatus.NO_CONTENT);
 		}else {
 			return new ResponseEntity<List<PorudzbinaDTO>>(retVal, HttpStatus.OK);
+		}
+	}
+	@DeleteMapping("/deleteAccount/{id}")
+	public ResponseEntity<?> deleteAcc(@PathVariable(value = "id") String id){
+		KorisnikDTO retVal = this.korisnikService.deleteAcc(id.substring(1, id.length() - 1));
+		if(retVal == null) {
+			return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+		}else {
+			return new ResponseEntity<KorisnikDTO>(retVal, HttpStatus.OK);
 		}
 	}
 }

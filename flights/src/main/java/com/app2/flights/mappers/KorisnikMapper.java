@@ -58,6 +58,14 @@ public class KorisnikMapper {
 		dto.setPassword(k.getPassword());
 		dto.setStatus(k.getStatus());
 		dto.setTip(k.getTip());
+		Collection<String> tempSlike = new ArrayList<String>();
+		if(k.getSlike() != null) {
+			for(byte[] tmp : k.getSlike()) {
+				String tempSlika = Base64.getEncoder().encodeToString(tmp);
+				tempSlike.add(tempSlika);
+			}
+		}
+		dto.setSlike(tempSlike);
 		dto.setUsername(k.getUsername());
 		return dto;
 	}

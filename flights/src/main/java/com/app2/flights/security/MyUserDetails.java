@@ -73,6 +73,8 @@ public class MyUserDetails implements UserDetails {
 	@Override
 	public boolean isEnabled() {
 		// TODO Auto-generated method stub
+
+		//korisnik se moze autentifikovati samo ako je StatusNaloga = AKTIVAN
 		if(this.korisnik.getStatus().equals(StatusNaloga.AKTIVAN)) {
 			return true;
 		}

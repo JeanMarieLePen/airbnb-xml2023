@@ -100,7 +100,7 @@ public class PorudzbinaService {
 				nova.setLet(l);
 				nova.setUkupnaCena(p.getBrojKarata()*l.getCena());
 				nova.setStatus(StatusPorudzbine.REZERVISANA);
-				//porRep.save(nova);
+				porRep.save(nova);
 				
 				l.getListaPorudzbina().add(nova);
 				letRep.save(l);

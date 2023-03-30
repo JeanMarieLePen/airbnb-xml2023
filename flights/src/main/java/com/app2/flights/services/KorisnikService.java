@@ -16,14 +16,17 @@ import org.springframework.transaction.annotation.Transactional;
 import com.app2.flights.dtos.KorisnikDTO;
 import com.app2.flights.dtos.LetDTO;
 import com.app2.flights.dtos.PorudzbinaDTO;
+import com.app2.flights.dtos.RegKorDTO;
 import com.app2.flights.dtos.UpdateProfileDTO;
 import com.app2.flights.mappers.AdresaMapper;
 import com.app2.flights.mappers.KorisnikMapper;
 import com.app2.flights.mappers.PorudzbinaMapper;
 import com.app2.flights.model.data.Adresa;
+import com.app2.flights.model.data.Porudzbina;
 import com.app2.flights.model.data.StatusPorudzbine;
 import com.app2.flights.model.user.Korisnik;
 import com.app2.flights.model.user.RegKor;
+import com.app2.flights.model.user.StatusNaloga;
 import com.app2.flights.repositories.AdresaRep;
 import com.app2.flights.repositories.KorisnikRep;
 import com.app2.flights.repositories.RegKorRep;
@@ -119,5 +122,37 @@ public class KorisnikService {
 		List<PorudzbinaDTO> lista= k.getPorudzbine().stream().filter(x->x.getStatus().equals(sp))
 				.map(x->porMap.toDTO(x)).collect(Collectors.toList());
 		return lista;
+	}
+
+
+	public KorisnikDTO deleteAcc(String id) {
+		// TODO Auto-generated method stub
+		//RegKor ne postoji
+		RegKor rk = this.regRep.findById(id).orElse(null);
+		if(rk == null) {
+			return null;
+		}
+		//korisnik ne postoji
+		Korisnik k = this.regRep.findById(id).orElse(null);
+		if(k == null) {
+			return null;
+		}
+
+		//ima aktivne rezervacije, ne moze da se obrise nalog
+		if(this.hasActiveOrders(rk)) {
+			return null;
+		}
+		//ako prodje sve provere, nalog se brise logicki
+		rk.setStatus(StatusNaloga.OBRISAN);
+		k.setStatus(StatusNaloga.OBRISAN);
+		regRep.save(rk);
+		korRep.save(k);
+
+		KorisnikDTO retVal = korMapper.toDTO(k);
+		return retVal;
+	}
+	public boolean hasActiveOrders(RegKor rk) {
+		boolean retVal = rk.getPorudzbine().stream().map(Porudzbina::getStatus).filter(StatusPorudzbine.REZERVISANA::equals).findFirst().isPresent();
+		return retVal;
 	}
 }

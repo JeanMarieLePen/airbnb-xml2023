@@ -24,7 +24,7 @@ import com.app2.flights.repositories.RegKorRep;
 
 @SpringBootApplication
 @EnableMongoRepositories
-@EnableDiscoveryClient
+//@EnableDiscoveryClient
 public class FlightsApplication {
 
 	//autowired se ne moze koristiti u okviru main metode jer je ona static
