@@ -31,6 +31,19 @@ public class LetCtrl {
 	@Autowired
 	private LetService letService;
 	
+	@GetMapping("/getAll")
+	public ResponseEntity<List<LetDTOSimple>> getAllLet()
+	{
+		List<LetDTOSimple> letovi = letService.findAllLetovi();
+		
+		if(letovi.isEmpty()) {
+			return new ResponseEntity<List<LetDTOSimple>>(HttpStatus.NO_CONTENT);
+		}else {
+			return new ResponseEntity<List<LetDTOSimple>>(letovi,HttpStatus.OK);
+		}
+		
+	}
+	
 	@GetMapping("/getById/{id}")
 	public ResponseEntity<LetDTOSimple> getLetById(@PathVariable(value = "id") String id){
 		LetDTOSimple retVal = this.letService.getLetById(id);

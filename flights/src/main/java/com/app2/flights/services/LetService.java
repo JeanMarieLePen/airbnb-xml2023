@@ -115,7 +115,15 @@ public class LetService {
 			}
 		}
 	}
-	
+		
+	public List<LetDTOSimple> findAllLetovi()
+	{
+		List<Let> letovi = letRep.findAll();
+		
+		return letovi.stream()
+				.map(letMapper::toDTOSimple)
+				.collect(Collectors.toList());
+	}
 	
 	public int brojSlobodnihMesta(String id) {
 		

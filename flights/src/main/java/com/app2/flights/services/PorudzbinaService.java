@@ -38,15 +38,15 @@ public class PorudzbinaService {
 		if(l == null || k == null) {
 			return null;
 		}else {
-			if(l.getKapacitet() - l.getListaPutnika().size() > 0) {
+			if(l.getKapacitet() - l.brZauzetoihMesta() > 0) {
 				Porudzbina nova = new Porudzbina();
 				nova.setBrojKarata(p.getBrojKarata());
 				nova.setKupac(k);
 				nova.setLet(l);
 				nova.setUkupnaCena(p.getUkupnaCena());
-				porRep.save(nova);
+				//porRep.save(nova);
 				
-				l.getListaPutnika().add(k);
+				l.getListaPorudzbina().add(nova);
 				letRep.save(l);
 				
 				k.getPorudzbine().add(nova);
@@ -92,7 +92,7 @@ public class PorudzbinaService {
 		if(l == null || k == null) {
 			return null;
 		}else {
-			if(l.getListaPutnika().size() +p.getBrojKarata()<=l.getKapacitet()) {
+			if(l.brZauzetoihMesta() +p.getBrojKarata()<=l.getKapacitet()) {
 				System.out.println("NOVA PORUDZBINA");
 				Porudzbina nova = new Porudzbina();
 				nova.setBrojKarata(p.getBrojKarata());
@@ -100,9 +100,9 @@ public class PorudzbinaService {
 				nova.setLet(l);
 				nova.setUkupnaCena(p.getBrojKarata()*l.getCena());
 				nova.setStatus(StatusPorudzbine.REZERVISANA);
-				porRep.save(nova);
+				//porRep.save(nova);
 				
-				l.getListaPutnika().add(k);
+				l.getListaPorudzbina().add(nova);
 				letRep.save(l);
 				
 				k.getPorudzbine().add(nova);
