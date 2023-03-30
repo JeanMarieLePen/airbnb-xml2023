@@ -1,14 +1,14 @@
 <template>
-   <h1> let:{{this.let.id}}</h1>
+   <!--<h1> let:{{this.let.id}}</h1>-->
    <!--  <h3>{{this.letString}}</h3>-->
-    <div  class="container">
+    <div  class="container" style="margin-top: 30px;">
         <form>
             <ul id="services" class="list-group">
                 <li class="list-group-item" >
                         <h5 class="header5">Adresa polaska</h5>
-                        <h4>{{this.let.lokOd.adresa}}</h4>
+                        <h4>{{this.let.lokOd}}</h4>
                         <h5 class="header5">Adresa dolaska</h5>
-                        <h4>{{this.let.lokDo.adresa}}</h4>
+                        <h4>{{this.let.lokDo}}</h4>
                         <h5 class="header5">Broj leta</h5>
                         <h4>{{this.let.brojLeta}}</h4>
                         <h5 class="header5">Kapacitet</h5>
@@ -21,8 +21,8 @@
             </ul>
         </form>
         <!--Formu ispred treba sakriti ako je admin ili nije registrovan-->
-        <h5 class="header5">Nova Rezervacija:</h5>
-        <form>
+        <form v-if="this.userObj.role=='REG_KOR'">
+            <h5 class="header5"  v-if="this.userObj.role=='REG_KOR'">Nova Rezervacija:</h5>
             <ul id="services" class="list-group">
                 <li class="list-group-item" >
                     <h5 class="header5">BrojKarata:</h5>
@@ -33,10 +33,12 @@
                     <h4>{{this.let.cena}}e* {{this.rez.brojKarata}}={{cenaUk}}e</h4>
                     <button class="btn  btn-danger marg float-center" @click="novaRez()">Rezervisi</button>
                 </li>
-                
-
             </ul>
-
+        </form>
+        <form v-if="this.userObj.role=='ADMINISTRATOR'">
+            <div  class="container">
+                <button v-if="userObj.role=='ADMINISTRATOR'" style="margin-top: 30px;" v-on:click="ObrisiLet(this.userObj.id,this.let.id)" class="btn btn-primary">Ukloni</button>
+            </div>
         </form>
 
         
@@ -103,6 +105,10 @@ import parserMixin from '@/mixins/mixin'
                 }catch(error){
                     console.log("GRESKA PRI REZERVACIJI: " + error.message);
                 }
+            },
+            ObrisiLet(idUser, idLet){
+                dataService.ukloniLet(idLet);
+                this.$router.go();
             },
 
         }
