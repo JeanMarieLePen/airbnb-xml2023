@@ -57,6 +57,9 @@ axios.interceptors.request.use(request => {
     searchQuery(pretraga){
         return axios.post(`${API_URL}/let/pretraga`,pretraga)
     }
+    ukloniLet(id){
+        return axios.put(`${API_URL}/let/deleteLet/${id}`)
+    }
 }
 
 

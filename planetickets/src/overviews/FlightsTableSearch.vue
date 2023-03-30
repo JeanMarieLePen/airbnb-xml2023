@@ -26,15 +26,22 @@
                     <img v-if='currentSortDir == "asc" && currentSort== "brSlobM"' src='../assets/up-arrow1.1.png'>
                     <img v-if='currentSortDir == "desc" && currentSort== "brSlobM" ' src='../assets/down-arrow1.1.png'>
                 </th>
+                <th v-if="userObj.role=='ADMINISTRATOR'">   Opcije 
+
+                </th>
             </thead>
             <tbody>
                 <tr v-for="letT in sortEntities" >
                     <td>{{letT.datumIVreme}}</td>
                     <td>{{letT.lokOd}}</td>
                     <td>{{letT.lokDo}}</td>
-                    <td>{{letT.brojLeta}}</td>
+                    <td><a href="" v-on:click="flightDetails(letT.id)">{{letT.brojLeta}}</a></td>
                     <td>{{letT.cena}}</td>
                     <td>{{letT.brSlobMesta}}</td>
+                    <td v-if="userObj.role=='ADMINISTRATOR'"> 
+                        <button v-if="userObj.role=='ADMINISTRATOR'" style="margin-left:30px;" v-on:click="ObrisiLet(this.userObj.id,letT.id)" class="btn btn-primary">Ukloni</button>
+                       <!-- <button v-if="userObj.role=='REG_KOR'" style="margin-left:30px;" v-on:click="brzaREz(letT.id)" class="btn btn-primary">BrzaRez</button>-->
+                    </td>
                 </tr>
             </tbody>
         </table>
@@ -52,12 +59,30 @@
         ],
         data(){
             return {
+                userObj:{},
                 currentSortDir: 'asc',
                 currentSort:'polazakIz',
+                rezDTO:{
+                    let:'',
+                    kupac:'',
+                    brojKarata:''
+                }
             }
 
         },
         methods:{
+            brzaREz(letId){
+                this.
+                this.rezDTO.let=letId
+                dataService.rezervisi(this.rezDTO)
+            },
+            flightDetails(id){
+               this.$router.push(`/flight/${id}` );
+            },
+            ObrisiLet(idUser, idLet){
+                dataService.ukloniLet(idLet);
+                this.$router.go();
+            },
             tempSort(s){
                 if (s === this.currentSort) {
                     this.currentSortDir = this.currentSortDir === 'asc' ? 'desc' : 'asc';
@@ -126,7 +151,12 @@
             }
             
         },
-        created(){},
+        created(){
+            parserMixin.methods.checkLoginStatus();
+            this.userObj = parserMixin.methods.parseXmlJwt();
+            console.log("ID KORISNIKA: " + this.userObj.id);
+            this.rezDTO.kupac=this.userObj.id;
+        },
         computed:{
             sortEntities(){
                 let sortirani=this.sortiranje(this.listaLetova)
