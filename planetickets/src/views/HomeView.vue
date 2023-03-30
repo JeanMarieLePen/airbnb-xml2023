@@ -27,7 +27,7 @@
               <button
                 type="submit"
                 style="margin-left: 30px; font-weight: 500"
-                class="btn btn-white my-0"
+                class="btn btn-warning my-0"
               >
                 Registracija
               </button>

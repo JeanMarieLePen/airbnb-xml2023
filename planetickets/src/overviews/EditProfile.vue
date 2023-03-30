@@ -34,7 +34,21 @@
                     <label><font color="#1E90FF">Datum Rodjenja</font></label>
                     <input type="text" class="form-control" v-model="profile.datumRodjenja" disabled/>
                 </fieldset> -->
-
+                <fieldset class="form-group">
+                    <div>
+                        <vueperslides id="slajdovi"  fixed-height="600px">
+                            <vueperslide v-for="(slide, i) in profile.slike" :key="i">
+                                <template v-slot:content>
+                                    <img :src="slide" style="width:100%;height:600px">
+                                </template>
+                            </vueperslide>
+                        </vueperslides>
+                    </div>
+                    <div style="display: flex; justify-content: flex-end">
+                        <input id="file-input" @change="uploadImage" multiple style="margin-top:20px;margin-bottom:20px;" type="file">
+                        <button class="btn btn-primary" style="margin:10px; height:35px; font-weight:400" @click="ponistiIzbor()">Undo</button>
+                    </div>
+                </fieldset>
                 <hr>
                 
                 <h4>Promena lozinke</h4>
@@ -73,11 +87,16 @@ import dataService from '../services/dataService';
 import VueDatePicker from '@vuepic/vue-datepicker';
 import parserMixin from '@/mixins/mixin'
 
+import { VueperSlides, VueperSlide } from 'vueperslides'
+import 'vueperslides/dist/vueperslides.css'
+
     export default{
         data(){
             return{
                 btnEnabled:false,
                 profile: {
+                    slike:[],
+                    adresa:{},
                 },
                 ownerId : '',
 			    changedPassword: {
@@ -85,6 +104,8 @@ import parserMixin from '@/mixins/mixin'
                     newPassword: '',
                     newPasswordRepeat: '',
                 },
+                slike:[],
+
                 messages:{
                     errorUsername:'',
                     errorFirstName: '',
@@ -103,13 +124,17 @@ import parserMixin from '@/mixins/mixin'
                 }
             }
         },
-        created(){
+        async created(){
             parserMixin.methods.checkLoginStatus();
             this.userObj = parserMixin.methods.parseXmlJwt();
             console.log("ID KORISNIKA: " + this.userObj.id);
-            this.getUserProfileData(this.userObj.id);
+            await this.getUserProfileData(this.userObj.id);
         },
         methods:{
+            ponistiIzbor(){
+                this.slike.pop();
+                this.profile.slike.pop();
+            },
             getUserProfileData(id){
                 try{
                     dataService.getUser(id).then(response => {
@@ -124,10 +149,26 @@ import parserMixin from '@/mixins/mixin'
                             }
                             this.profile.slike = tempSlike;
                             console.log("SLIKA POSLE FORMATIRANJA: " + JSON.stringify(this.profile.slike[0]))
+                        }else{
+                            this.profile.slike = [];
                         }
                     });
                 }catch(error){
                     console.log("GRESKA: " + error.message);
+                }
+            },
+            uploadImage(e){
+                let images = [];
+                for(let i = 0; i < e.target.files.length; i++){
+                    images.push(e.target.files[i]);
+                }
+                for(let i = 0; i < images.length; i++){
+                    let reader = new FileReader();
+                    reader.readAsDataURL(images[i]);
+                    reader.onload = (() => {
+                        this.profile.slike.push(reader.result);
+                        this.slike.push(reader.result);
+                    });
                 }
             },
             updateProfile(){
@@ -206,11 +247,14 @@ import parserMixin from '@/mixins/mixin'
                             novaSifraDTO: tempObjekat
                         }
                         console.log("Objekat koji se salje na bek: " + JSON.stringify(objekat));
-                        dataService.updateUserProfile(objekat).then(Response => {
-                            this.messages.successResponse = `<h4>Vas profil je uspesno izmenjen!</h4>`;
-                            setTimeout(() => this.messages.successResponse = '', 5000);
-                            this.profile = Response.data;
-                            setTimeout(() => { this.$router.push(`/home`)}, 5050);
+                        dataService.updateUserProfile(objekat).then(response => {
+                            this.profile = response.data;
+                            setTimeout(() => {
+                                this.messages.successResponse = '';
+                            }, 5000);
+                            setTimeout(() => {
+                                this.$router.push(`/dash`);
+                            }, 5050);
                         })
                         .catch(error=>{
                             // && error.response.data.message === "Wrong password!"
@@ -251,6 +295,8 @@ import parserMixin from '@/mixins/mixin'
         },
         components:{
             datepicker:VueDatePicker,
+            vueperslides : VueperSlides,
+            vueperslide :VueperSlide,
         }
         
     }

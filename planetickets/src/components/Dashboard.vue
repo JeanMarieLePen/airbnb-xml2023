@@ -7,6 +7,22 @@
             </h1>
         </div>
 
+        <div v-show="role != 'REG_KOR' && role != 'ADMINISTRATOR'">
+            <div class="col-xl-3 col-md-6 mb-4" style="margin:20px;">
+                <div class="car border-0 shadow" style="height:100%; margin: 20px; min-width:300px;">
+                    <router-link style="text-decoration: none; c" to="/search" class="nav-link" exact>
+                        <img src="../assets/search-icon.png" class="card-img-top" alt="...">
+                        <div class="card-body text-center">
+                            <h5 class="card-title mb-0">Pretraga ponude</h5>
+                            <div class="card-text text-black-50" style="height:100px;">
+                                Pretrazite detaljno ponudu svih proizvoda...
+                            </div>
+                        </div>
+                    </router-link>
+                </div>
+            </div>
+        </div>
+
         <div v-show="role == 'REG_KOR'">
             <div class="row">
                 <div class="col-xl-3 col-md-6 mb-4" style="margin:20px;">
@@ -90,6 +106,19 @@
                             </div>
                         </router-link>
                     </div>
+                </div>
+            </div>
+            <div class="col-xl-3 col-md-6 mb-4" style="margin:20px;">
+                <div class="car border-0 shadow" style="height:100%; margin: 20px; min-width:300px;">
+                    <router-link style="text-decoration: none; c" to="/adminFlights" class="nav-link" exact>
+                        <img src="../assets/letovi.png" class="card-img-top" alt="...">
+                        <div class="card-body text-center">
+                            <h5 class="card-title mb-0">Pregled dodatih letova</h5>
+                            <div class="card-text text-black-50" style="height:100px;">
+                                Pregledajte podatke o letovima koje ste dodali...
+                            </div>
+                        </div>
+                    </router-link>
                 </div>
             </div>
             

@@ -49,6 +49,7 @@ import { defaultMaxListeners } from 'events';
 import VueDatePicker from '@vuepic/vue-datepicker';
 import dataService from '@/services/dataService';
 import LetoviTemplate from '../overviews/FlightsTableSearch.vue';
+import moment from 'moment';
 
     export default{
         components:{
@@ -108,6 +109,7 @@ import LetoviTemplate from '../overviews/FlightsTableSearch.vue';
             }
         },
         methods:{
+            
             search(){
                 this.parametriDTO.pocetak=this.parametri.pocetak;
                 this.parametriDTO.kraj=this.parametri.kraj;
@@ -115,13 +117,23 @@ import LetoviTemplate from '../overviews/FlightsTableSearch.vue';
                 this.parametriDTO.krajanjaLok=this.parametri.krajanjaLok;
                 if(this.parametri.minCena===''){
                     this.parametriDTO.minCena=-1;
+                }else{
+                    this.parametriDTO.minCena = this.parametri.minCena;
                 }
+
                 if(this.parametri.maxCena===''){
                     this.parametriDTO.maxCena=-1;
+                }else{
+                    this.parametriDTO.maxCena = this.parametri.maxCena;
                 }
+
                 if(this.parametri.brKarata===''){
                     this.parametriDTO.brKarata=-1;
+                }else{
+                    this.parametriDTO.brKarata = this.parametri.brKarata;
                 }
+                console.log(JSON.stringify(this.parametriDTO));
+                
                 dataService.searchQuery(this.parametriDTO).then(response =>{
                     console.log("Pretraga QUERY");
                     if(response.data == ''){

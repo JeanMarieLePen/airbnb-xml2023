@@ -11,7 +11,14 @@ import About from '../views/AboutView'
 import FlightsView from '../overviews/FlightsView'
 import FlightOvewview from '../overviews/FlightOverview'
 import Pretraga from '../components/Pretraga'
+import FlightsOverviewAdmin from '../overviews/FlightsOverviewAdmin'
+
 const routes = [
+  {
+    path:`/adminFlights`,
+    name:'FlightsOverviewAdmin',
+    component:FlightsOverviewAdmin
+  },
   {
     path:`/create`,
     name:'NoviLet',

@@ -1,6 +1,6 @@
 import axios from "axios"
 
-const API_URL = "http://localhost:7777";
+const API_URL = "http://localhost:8084";
 
 (function() {
     let xmljwt = localStorage.getItem('xmljwt');
@@ -42,6 +42,9 @@ axios.interceptors.request.use(request => {
     createNewFlight(flight){
         return axios.post(`${API_URL}/let/addNew`, flight);
     }
+    getAllFlights(){
+        return axios.get(`${API_URL}/let/getAll`);
+    }
     getUserFlights(id){
         return axios.get(`${API_URL}/regkor/getPorudzbineByUser/${id}`)
     }
@@ -59,6 +62,9 @@ axios.interceptors.request.use(request => {
     }
     ukloniLet(id){
         return axios.put(`${API_URL}/let/deleteLet/${id}`)
+    }
+    deleteUserProfile(id){
+        return axios.delete(`${API_URL}/regkor/deleteAccount/${id}`);
     }
 }
 

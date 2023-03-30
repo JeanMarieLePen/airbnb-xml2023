@@ -36,8 +36,8 @@
                 </th>
             </thead>
             <tbody>
-                <tr v-for="letT in sortEntities" >
-                    <td>{{letT.datumIVreme}}</td>
+                <tr v-for="(letT, index) in sortEntities" :key="index">
+                    <td>{{formatDate(letT.datumIVreme)}}</td>
                     <td>{{letT.lokOd}}</td>
                     <td>{{letT.lokDo}}</td>
                     <td><a href="" v-on:click="flightDetails(letT.id)">{{letT.brojLeta}}</a></td>
@@ -55,8 +55,9 @@
 
 </template>
 <script>
-    import dataService from '../services/dataService'
-    import parserMixin from '@/mixins/mixin'
+import moment from 'moment';
+import dataService from '../services/dataService'
+import parserMixin from '@/mixins/mixin'
 
     export default{
         components:{},
@@ -77,6 +78,10 @@
 
         },
         methods:{
+            formatDate(date){
+                let tempDate = moment(date).format('MMMM Do YYYY, h:mm:ss a')
+                return tempDate;
+            },
             brzaREz(letId){
                 this.rezDTO.brojKarata=this.getBrKarata();
                 this.rezDTO.let=letId
@@ -173,10 +178,11 @@
             
         },
         created(){
-            parserMixin.methods.checkLoginStatus();
-            this.userObj = parserMixin.methods.parseXmlJwt();
-            console.log("ID KORISNIKA: " + this.userObj.id);
-            this.rezDTO.kupac=this.userObj.id;
+            if(parserMixin.methods.checkLoginStatus() == true){
+                this.userObj = parserMixin.methods.parseXmlJwt();
+                console.log("ID KORISNIKA: " + this.userObj.id);
+                this.rezDTO.kupac=this.userObj.id;
+            }
         },
         computed:{
             sortEntities(){

@@ -16,7 +16,7 @@
                         <h5 class="header5">Br slobonih mesta</h5>
                         <h4>{{this.let.brSlobMesta}}</h4>
                         <h5 class="header5">Datum i vreme polaska</h5>
-                        <h4>{{this.let.datumIVreme}}</h4>
+                        <h4>{{formatDate(this.let.datumIVreme)}}</h4>
                 </li>
             </ul>
         </form>
@@ -50,7 +50,7 @@ import dataService from '../services/dataService'
 import { VueperSlides, VueperSlide } from 'vueperslides'
 import 'vueperslides/dist/vueperslides.css'
 import parserMixin from '@/mixins/mixin'
-
+import moment from 'moment';
 
     export default{
         components:{},
@@ -78,6 +78,10 @@ import parserMixin from '@/mixins/mixin'
             this.izracunaj();
         },
         methods:{
+            formatDate(date){
+                let tempDate = moment(date).format('MMMM Do YYYY, h:mm:ss a')
+                return tempDate;
+            },
             getFlight(id){
                 try{
                     dataService.getFlight(id).then(response=>{

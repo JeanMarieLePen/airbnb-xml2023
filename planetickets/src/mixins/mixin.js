@@ -5,9 +5,13 @@ const tempParser = {
     methods:{
         
         checkLoginStatus(){
-            if(JSON.parse(localStorage.getItem('xmljwt'))==null){
-                this.$router.push(`/login`);
-              }
+            try{
+                if(JSON.parse(localStorage.getItem('xmljwt'))==null){
+                    this.$router.push(`/login`);
+                }
+            }catch(error){
+                console.log("error: " + error);
+            }
         },
 
         parseXmlJwt(){

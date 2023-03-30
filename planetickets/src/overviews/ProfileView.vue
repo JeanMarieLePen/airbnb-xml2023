@@ -54,7 +54,7 @@
                         <h5 class="header5">Loyalty kategorija</h5>
                        <h4>{{profile.kategorija.naziv}}</h4>
                     </li> -->
-                    <li class="list-group-item">
+                    <li v-if="profile.slike" class="list-group-item">
                         <h5 class="header5">Slike</h5>
                         <div>
                             <vueperslides  fade fixed-height="600px">
@@ -75,6 +75,10 @@
                 </div>
                 
             </form>
+            <div v-if="messages.errorRemoval" v-html="messages.errorRemoval" class="alert alert-danger">
+            </div>
+            <div v-if="messages.successRemoval" v-html="messages.successRemoval" class="alert alert-success">
+            </div>
         </div>
 
     </div>
@@ -95,6 +99,10 @@ import axios from 'axios'
         },
         data(){
             return{
+                messages:{
+                    successRemoval:'',
+                    errorRemoval:'',
+                },
                 profile:{
                     kategorija:{},
                 },
@@ -144,10 +152,40 @@ import axios from 'axios'
                 this.$router.push(`/edit`);
             },
             deleteUser(id){ 
-                this.$router.push(`/deleteAccount/${id}`)
-            //   DataService.deleteUserProfile(id).then(response => {
-             //         this.profile = response.data;
-            //     })
+                // this.$router.push(`/deleteAccount/${id}`)
+                console.log("BRISANJE NALOGA ID-a: " + this.userObj.id);
+                dataService.deleteUserProfile(id).then(response => {
+                     this.profile = response.data;
+                     if(response.status === 200){
+                        this.messages.successRemoval = "<h4>Nalog uspesno obrisan!</h4>"
+                        setTimeout(() => {
+                            this.messages.successRemoval = '';
+                            this.emitter.emit("loggedIn", false);
+                            if(localStorage.getItem('xmljwt')){
+                                localStorage.removeItem('xmljwt');
+                                axios.defaults.headers.common['Authorization'] = undefined;
+                                this.loggedIn = false;
+                                this.$router.push("/");
+                                if(localStorage.getItem('parsedToken')){
+                                    localStorage.removeItem('parsedToken');
+                                }
+                            }else{
+                                localStorage.removeItem('xmljwt');
+                                axios.defaults.headers.common['Authorization'] = undefined;
+                                this.loggedIn = false;
+                                this.$router.push('/');
+                            }
+                        }, 5000);
+                        setTimeout(() => {
+                            this.$router.push(`/`);
+                        }, 5050);
+                     }else{
+                        this.messages.errorRemoval = "<h4>Ne mozete obrisati nalog jer imate aktivne rezervacije!</h4>"
+                        setTimeout(() => {
+                            this.messages.errorRemoval = '';
+                        }, 5050);
+                     }
+                })
             },
         },
         
