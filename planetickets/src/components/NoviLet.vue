@@ -38,7 +38,7 @@
                         </td>
                     </tr>
                     <tfoot>
-                        <tr>
+                        <tr style="background:white">
                             <td colspan="2">
                                 <div v-if="messages.successMessage" v-html="messages.successMessage" class="alert alert-success"></div>
                             <div v-if="messages.errorMessage" v-html="messages.errorMessage" class="alert alert-warning"></div>
@@ -61,15 +61,12 @@
 </template>
 
 <script>
-
 import parserMixin from '@/mixins/mixin' 
 import dataService from '../services/dataService'
 import VueDatePicker from '@vuepic/vue-datepicker';
 import moment from 'moment'
-
 import {YandexMap, YandexMarker} from "vue-yandex-maps"
 import { loadYmap } from "vue-yandex-maps";
-
 export default {
     components:{
         datepicker:VueDatePicker,
@@ -78,7 +75,6 @@ export default {
     data(){
         return{
             //Polja u Klasi Let
-
             // private String id;
 	
             // private Adresa lokOd;
@@ -125,7 +121,6 @@ export default {
         await loadYmap({ ...this.settings, format: "json", debug: true});
     },
     created(){
-
     },
     methods:{
         updateDatePicker(val1){
@@ -139,13 +134,10 @@ export default {
             await this.getCoordsFromAdresa(this.flight.lokOd.adresa);
             this.flight.lokOd.lat = this.lokacija.lat;
             this.flight.lokOd.lng = this.lokacija.lng;
-
             await this.getCoordsFromAdresa(this.flight.lokDo.adresa);
             this.flight.lokDo.lat = this.lokacija.lat;
             this.flight.lokDo.lng = this.lokacija.lng;
-
             console.log("RUTA: " + JSON.stringify(this.flight.lokOd));
-
             dataService.createNewFlight(this.flight).then(response => {
                 console.log("KREIRAN LET");
                 if(response.status === 200){
@@ -180,13 +172,19 @@ export default {
 
 
 <style scoped>
-
 .table{
     font-family: Arial, Helvetica, sans-serif;
     margin-left: 20px;
 }
 .table tr:nth-child(even){
-    background-color: aquamarine;
+    /* background-color: aquamarine; */
+}
+.table td:nth-child(even){
+    background: white;
+}
+.table tr:nth-child(odd){
+    color: white;
+    background-color: firebrick;
 }
 .table td:nth-child(1){
     width:30%;
@@ -199,5 +197,4 @@ export default {
 .table td>input{
     width:100%;
 }
-
 </style>

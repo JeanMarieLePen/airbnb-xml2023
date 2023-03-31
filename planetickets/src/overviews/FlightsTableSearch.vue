@@ -58,7 +58,6 @@
 import moment from 'moment';
 import dataService from '../services/dataService'
 import parserMixin from '@/mixins/mixin'
-
     export default{
         components:{},
         props:[ 
@@ -75,7 +74,6 @@ import parserMixin from '@/mixins/mixin'
                     brojKarata:''
                 }
             }
-
         },
         methods:{
             formatDate(date){
@@ -88,7 +86,8 @@ import parserMixin from '@/mixins/mixin'
                 dataService.rezervisi(this.rezDTO)
             },
             flightDetails(id){
-               this.$router.push(`/flight/${id}` );
+            //    this.$router.push(`/flight/${id}` );
+            this.$router.push(`/overview/${id}` );
             },
             ObrisiLet(idUser, idLet){
                 dataService.ukloniLet(idLet);
@@ -191,11 +190,9 @@ import parserMixin from '@/mixins/mixin'
             },
             
         }
-
     }
 </script>
 <style scoped>
-
 .table{
     font-family: Arial, Helvetica, sans-serif;
     margin-left: 20px;
@@ -209,9 +206,7 @@ import parserMixin from '@/mixins/mixin'
     font-size: 20px;
     font-weight: 600;
 }
-
 .table td>input{
     width:100%;
 }
-
 </style>

@@ -8,17 +8,18 @@
             <div>
                 <div class="row">
                     <div class="col-md-4" v-bind:key="index" v-for="(tempFlight, index) in flights">
-                        <div style="width:70%;height:450px; margin-bottom:100px;" class="card">
-                            <div class="card-body" style="font-weight:700px; font-size:20px; font-style:italic;">
+                        <div style="width:70%; margin-bottom:100px;" class="card bg-success text-white text-center p-3">
+                            <div class="card-body" style="font-weight:700px; height:400px; font-size:20px; font-style:italic;">
                                 <h4 class="card-title">Broj leta: {{tempFlight.brojLeta}}</h4>
                                 <p class="card-text">Kapacitet: {{tempFlight.kapacitet}}</p>
                                 <p class="card-text">Datum i vreme: {{formatDate(tempFlight.datumIVreme)}}</p>
                                 <p class="card-text">Mesto polaska: {{tempFlight.lokOd}}</p>
                                 <p class="card-text">Mesto dolaska: {{tempFlight.lokDo}}</p>
+                                <p class="card-text">Slobodnih mesta: {{tempFlight.brSlobMesta}}</p>
                                 <p class="card-text">Cena: {{tempFlight.cena}}</p>
                                 <!-- <p class="card-text">ID: {{tempFlight.id}}</p> -->
                             </div>
-                            <div style="margin-bottom:30px;margin-top:50px;" class="card-foot">
+                            <div style="margin-bottom:30px;margin-top:50px;" class="card-footer bg-white text-white text-center">
                                 <button style="margin-left:30px;" v-on:click="flightDetails(tempFlight.id)" class="btn btn-primary">Detalji</button>
                                 <button @click="removeFlight(tempFlight.id)" class="btn btn-danger" style="margin-left:5px;">Ukloni</button> 
                             </div>
@@ -56,7 +57,8 @@ export default {
     },
     methods:{
         flightDetails(flightId){
-            return this.$router.push(`/flight/${flightId}`);
+            // return this.$router.push(`/flight/${flightId}`);
+            return this.$router.push(`/overview/${flightId}`);
         },
         removeFlight(flightId){
             console.log("ID USERA: " + this.userObj.id)

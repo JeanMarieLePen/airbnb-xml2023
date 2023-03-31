@@ -9,7 +9,7 @@ import EntityOverview from '../overviews/EntityOverview'
 import NoviLet from '../components/NoviLet'
 import About from '../views/AboutView'
 import FlightsView from '../overviews/FlightsView'
-import FlightOvewview from '../overviews/FlightOverview'
+import FlightOverview from '../overviews/FlightOverview'
 import Pretraga from '../components/Pretraga'
 import FlightsOverviewAdmin from '../overviews/FlightsOverviewAdmin'
 
@@ -76,7 +76,7 @@ const routes = [
   {
     path:`/flight/:id`,
     name:'FlightOverview',
-    component:FlightOvewview
+    component:FlightOverview
   },
   {
     path:'/search',

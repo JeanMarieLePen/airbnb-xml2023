@@ -2,7 +2,7 @@
     <div style="width:100%" class="table">
         <h5 > Filtriranje prema statusu</h5>
         <select v-model="status">
-           <option v-for="s in statusi"  >{{s}}</option>
+           <option v-for="(s, index) in statusi" :key="index" >{{s}}</option>
         </select>
     </div>
     <div style="width:100%" >
@@ -29,7 +29,7 @@
                 <th >Opcije</th>
             </thead>
             <tbody>
-                    <tr v-for="porudz in sortEntities" v-show="porudz.status==this.status || this.status=='SVE'">
+                    <tr v-for="(porudz, index) in sortEntities" :key="index" v-show="porudz.status==this.status || this.status=='SVE'">
                     <td>{{porudz.id}}</td>
                     <td><a href="" v-on:click="flightDetails(porudz.let)">{{porudz.letBroj}}</a></td>
                     <td>{{porudz.brojKarata}}</td>
@@ -51,7 +51,6 @@
 import dataService from '../services/dataService'
 import parserMixin from '@/mixins/mixin'
 import { assertCallExpression } from '@babel/types';
-
     export default{
         components:{},
         props:[ 
@@ -71,12 +70,12 @@ import { assertCallExpression } from '@babel/types';
                 ],
                 currentSortDir: 'asc',
                 currentSort:'brojLeta',
-
             }
         },
         methods:{
             flightDetails(id){
-               this.$router.push(`/flight/${id}` );
+            //    this.$router.push(`/flight/${id}` );
+               this.$router.push(`/overview/${id}` );
             },
             ukloniNar(user, por){
                 dataService.ukloniRez(user,por)
@@ -144,13 +143,10 @@ import { assertCallExpression } from '@babel/types';
                 let sortirani=this.sortiranje(this.listaPorudzbina)
             return sortirani;
             },
-
         },
-
     }
 </script>
 <style scoped>
-
 .table{
     font-family: Arial, Helvetica, sans-serif;
     margin-left: 20px;
@@ -169,5 +165,4 @@ import { assertCallExpression } from '@babel/types';
 .table td>input{
     width:100%;
 }
-
 </style>
