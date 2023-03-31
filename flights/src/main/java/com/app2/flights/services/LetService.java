@@ -5,10 +5,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-<<<<<<< HEAD
 import java.util.regex.Pattern;
-=======
->>>>>>> 3c782cf9bde61cddf5be2e8f54beab5f87b111f8
 import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
@@ -21,7 +18,6 @@ import javax.persistence.criteria.JoinType;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
-<<<<<<< HEAD
 import org.bson.Document;
 import org.hibernate.criterion.Projection;
 import org.hibernate.query.criteria.internal.expression.function.AggregationFunction.SUM;
@@ -31,11 +27,6 @@ import org.springframework.data.mongodb.core.aggregation.Aggregation;
 import org.springframework.data.mongodb.core.aggregation.AggregationOperation;
 import org.springframework.data.mongodb.core.aggregation.MatchOperation;
 import org.springframework.data.mongodb.core.aggregation.ProjectionOperation;
-=======
-import org.hibernate.query.criteria.internal.expression.function.AggregationFunction.SUM;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.mongodb.core.MongoTemplate;
->>>>>>> 3c782cf9bde61cddf5be2e8f54beab5f87b111f8
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Service;
@@ -62,14 +53,14 @@ public class LetService {
 
 	@Autowired
 	private LetRep letRep;
-	@Autowired 
+	@Autowired
 	private LetMapper letMapper;
-	@Autowired 
+	@Autowired
 	private AdresaMapper adresaMapper;
 	@Autowired PorudzbinaRep pRep;
-	
+
 	@Inject MongoTemplate monTempl;
-	
+
 	public LetDTO addNew(LetDTO letDTO) {
 		// TODO Auto-generated method stub
 		//this.letRep.save(letMapper.fromDTO(letDTO));
@@ -100,23 +91,23 @@ public class LetService {
 			l.setDatumIVreme(ldto.getDatumIVreme());
 			l.setKapacitet(ldto.getKapacitet());
 //			l.setListaPutnika(ldto.getListaPutnika());
-			
-			
+
+
 			//Zakomentarisane dve linije jer sam menjao dto da bude string
 			//l.setLokDo(adresaMapper.fromDTO(ldto.getLokDo()));
 			//l.setLokOd(adresaMapper.fromDTO(ldto.getLokOd()));
-			
+
 			l.setLokOd(new Adresa(ldto.getLokOd()));
 			l.setLokDo(new Adresa(ldto.getLokDo()));
-			
-		//	l.setLokDoAddress(adresaMapper.fromDTO(ldto.getLokDo()));
-			
-			
+
+			//	l.setLokDoAddress(adresaMapper.fromDTO(ldto.getLokDo()));
+
+
 			letRep.save(l);
 			return letMapper.toDTO(l);
 		}
 	}
-	
+
 	public LetDTO removeLet(String id) {
 		System.out.println("BRISANJE LETA SA ID : "+id);
 		Let l = letRep.findById(id).orElse(null);
@@ -127,7 +118,7 @@ public class LetService {
 			LocalDateTime now = LocalDateTime.now();
 			Duration duration = Duration.between(now, l.getDatumIVreme());
 			long days = duration.toDays();
-			if(l.getListaPorudzbina().size() == 0 && days > 3) {
+			if(!l.getListaPorudzbina().stream().map(Porudzbina::getStatus).filter(StatusPorudzbine.REZERVISANA::equals).findFirst().isPresent() && days > 3) {
 				letRep.deleteById(id);
 				return letMapper.toDTO(l);
 			}else {
@@ -135,18 +126,18 @@ public class LetService {
 			}
 		}
 	}
-		
+
 	public List<LetDTOSimple> findAllLetovi()
 	{
 		List<Let> letovi = letRep.findAll();
-		
+
 		return letovi.stream()
 				.map(letMapper::toDTOSimple)
 				.collect(Collectors.toList());
 	}
-	
+
 	public int brojSlobodnihMesta(String id) {
-		
+
 		Let l= letRep.findById(id).orElse(null);
 		if (l==null) return -1;
 		int kapacitet=l.getKapacitet();
@@ -157,13 +148,13 @@ public class LetService {
 		for(Porudzbina por : allRez) {
 			if(por.getStatus().equals(StatusPorudzbine.REZERVISANA))
 				zauzeto+=por.getBrojKarata();
-			}
-		
+		}
+
 		slobMesta=kapacitet-zauzeto;
 		System.out.println("Kap - Zauz = brSlob  : "+kapacitet+" - "+zauzeto+" = "+slobMesta);
 		return slobMesta;
 	}
-	
+
 	@PersistenceContext private EntityManager entityManager;
 	/**
 	 * @param dto
@@ -197,13 +188,6 @@ public class LetService {
 			Criteria jeftinijeOd=Criteria.where("cena").lte(dto.getMaxCena());
 			query.addCriteria(jeftinijeOd);
 		}
-<<<<<<< HEAD
-=======
-		//if(dto.getBrKarata()>-1) { //vezati porudzbine za letove
-		//	Criteria potrebnoKarata=Criteria.where("listaPorudzbina").;
-			//)
-		//}
->>>>>>> 3c782cf9bde61cddf5be2e8f54beab5f87b111f8
 		/***LOKACIJE***/
 		if(dto.getPocetnaLok()!=null && !dto.getPocetnaLok().getAdresa().trim().equals("")) {
 			Criteria kreceIz= Criteria.where("lokOd.adresa") .regex(dto.getPocetnaLok().getAdresa().toLowerCase());
@@ -212,30 +196,25 @@ public class LetService {
 		if(dto.getKrajnjaLok()!=null && !dto.getKrajnjaLok().getAdresa().trim().equals("")) {
 			Criteria sleceU= Criteria.where("lokDo.adresa").regex(dto.getKrajnjaLok().getAdresa());
 			query.addCriteria(sleceU);
-		}	
+		}
 		List<Let> letovi= monTempl.find(query,Let.class);
-<<<<<<< HEAD
 		if(dto.getBrKarata()>-1) { //vezati porudzbine za letove
 			letovi=letovi.stream().filter(x-> x.getKapacitet()-x.brZauzetoihMesta()>=dto.getBrKarata()).collect(Collectors.toList());
 		}
 		List<Document> l=pretragaT(1);
 		return  letovi.stream().map(x->letMapper.toDTOSimple(x)).collect(Collectors.toList());
 	}
-	
+
 	public List<Document> pretragaT(int brK) {
 		//https://stackoverflow.com/questions/56376939/spring-data-mongo-get-sum-of-array-of-object
 		AggregationOperation  filterRez=Aggregation.match(Criteria.where("listaPorudzbina.status").is(StatusPorudzbine.REZERVISANA.toString()));
 		AggregationOperation  unwindPor=Aggregation.unwind("listaPorudzbina");
 		AggregationOperation  sumaKarata= Aggregation.group().sum("listaPorudzbina.brojKarata").as("brojKarata");
-		ProjectionOperation projectionOperation = Aggregation.project().andExclude("listaPorudzbina"); 
- 		Aggregation ag=  Aggregation.newAggregation(unwindPor,projectionOperation,sumaKarata);
+		ProjectionOperation projectionOperation = Aggregation.project().andExclude("listaPorudzbina");
+		Aggregation ag=  Aggregation.newAggregation(unwindPor,projectionOperation,sumaKarata);
 		monTempl.aggregate(ag, Let.class, Document.class).forEach(doc->System.out.println(doc.toJson()));
 		//System.out.println("DUZINA DTO2 : " + list.size());
 		return null;
-=======
-		return  letovi.stream().map(x->letMapper.toDTOSimple(x)).collect(Collectors.toList());
+
 	}
->>>>>>> 3c782cf9bde61cddf5be2e8f54beab5f87b111f8
-		
-	}		
 }
