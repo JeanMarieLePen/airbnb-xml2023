@@ -1,0 +1,19 @@
+services:
+  - type: pserv
+    name: mongodb
+    env: docker
+    autoDeploy: false
+    disk:
+      name: data
+      mountPath: /data/db
+      sizeGB: 1
+  - type: web
+    name: flights
+    env: docker
+    region: frankfurt
+    branch: master
+    rootDir: flights
+  - type: web
+    name: planetickets
+    env: static
+    buildCommand: npm run build
