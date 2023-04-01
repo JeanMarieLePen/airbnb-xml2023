@@ -118,7 +118,7 @@ public class LetService {
 			LocalDateTime now = LocalDateTime.now();
 			Duration duration = Duration.between(now, l.getDatumIVreme());
 			long days = duration.toDays();
-			if(!l.getListaPorudzbina().stream().map(Porudzbina::getStatus).filter(StatusPorudzbine.REZERVISANA::equals).findFirst().isPresent() && days > 3) {
+			if(!l.getListaPorudzbina().stream().map(Porudzbina::getStatus).filter(StatusPorudzbine.REZERVISANA::equals).findFirst().isPresent() && days > 3+1) {
 				letRep.deleteById(id);
 				return letMapper.toDTO(l);
 			}else {
