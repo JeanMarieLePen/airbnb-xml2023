@@ -1,0 +1,57 @@
+version: '3.8'
+services:
+    flights_mongodb:
+        image: "mongo:4.4.3"
+        restart: always
+        ports:
+          - 27017:27017
+    flights:
+        build: ./flights
+        restart: always
+        ports:
+            - 8084:8084
+        links:
+            - flights_mongodb:app_db
+    # flights_front:
+    #     build: ./planetickets
+    #     command: npm run serve
+    #     ports:
+    #         - 8080:8080
+    #     volumes:
+    #        - .:/usr/app/
+    #        - /usr/app/node_modules
+
+
+
+# version: '3.8'
+# services:
+#     mongo:
+#         ports:
+#             - '27017:27017'
+#         container_name: dkrcomp-mongo
+#         restart: always
+#         #logging:
+#         #    options:
+#         #        max-size: 1g
+#         #environment:
+#             #- MONGO_INITDB_ROOT_USERNAME=mongoadmin
+#             #- MONGO_INITDB_ROOT_PASSWORD=bdung
+#             #- MONGO_REPLICA_HOST= host.docker.internal
+#             #- MONGO_REPLICA_PORT= 27018
+#         image: mongo
+#     flights:
+#         build: ./flights
+#         ports:
+#             - '8084:8084'
+#         container_name: flight_cont
+#         restart: always
+#         logging:
+#             options:
+#                 max-size: 1g
+#         environment:
+#             - MONGO_URL=mongodb://mongo:27017/planetickets
+#         depends_on:
+#             - mongo
+#     flightsfront:
+#         build: ./planetickets
+#         command: "npm run serve"

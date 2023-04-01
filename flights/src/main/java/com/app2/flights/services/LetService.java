@@ -46,8 +46,6 @@ import com.app2.flights.repositories.LetRep;
 import com.app2.flights.repositories.PorudzbinaRep;
 import com.app2.flights.repositories.RegKorRep;
 
-import jakarta.inject.Inject;
-
 @Service
 public class LetService {
 
@@ -59,7 +57,7 @@ public class LetService {
 	private AdresaMapper adresaMapper;
 	@Autowired PorudzbinaRep pRep;
 
-	@Inject MongoTemplate monTempl;
+	@Autowired MongoTemplate monTempl;
 
 	public LetDTO addNew(LetDTO letDTO) {
 		// TODO Auto-generated method stub

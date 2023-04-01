@@ -36,6 +36,10 @@
 			<artifactId>spring-boot-starter-actuator</artifactId>
 		</dependency>
 		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-lang3</artifactId>
+		</dependency>
+		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-aop</artifactId>
 		</dependency>
@@ -86,10 +90,10 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-websocket</artifactId>
 		</dependency>
-		<dependency>
+		<!--dependency>
 			<groupId>org.springframework.cloud</groupId>
 			<artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
-		</dependency>
+		</dependency-->
 		
 		<!-- Da bi LocalDate mogao da se deserijalizuje za potrebe MQ-a mora se dodati ovo-->
 		<dependency>
@@ -195,17 +199,17 @@
 			    </configuration>
 			</plugin>
 		</plugins>
-		<finalName>mainapp</finalName>
+		<finalName>FlightsApp</finalName>
 	</build>
 	<repositories>
-		<repository>
+		<!--repository>
 			<id>netflix-candidates</id>
 			<name>Netflix Candidates</name>
 			<url>https://artifactory-oss.prod.netflix.net/artifactory/maven-oss-candidates</url>
 			<snapshots>
 				<enabled>false</enabled>
 			</snapshots>
-		</repository>
+		</repository-->
 	</repositories>
 
 </project>
