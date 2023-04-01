@@ -86,7 +86,8 @@ import parserMixin from '@/mixins/mixin'
                 dataService.rezervisi(this.rezDTO)
             },
             flightDetails(id){
-            //    this.$router.push(`/flight/${id}` );
+            //if(this.userObj.role==='REG_KOR')  {  this.$router.push(`/flight/${id}` );} 
+            //else 
             this.$router.push(`/overview/${id}` );
             },
             ObrisiLet(idUser, idLet){
@@ -158,7 +159,7 @@ import parserMixin from '@/mixins/mixin'
                 }
                 if(this.currentSort == 'polazakIz'){
                     if(this.currentSortDir == 'asc'){
-                        tempList = tmpLista.sort((a, b) => (a.lokOd > b.lokDo) ? 1 : -1);
+                        tempList = tmpLista.sort((a, b) => (a.lokOd > b.lokOd) ? 1 : -1);
                     }
                     else{
                         tempList = tmpLista.sort((a, b) => (a.lokOd < b.lokOd) ? 1 : -1)
@@ -177,11 +178,11 @@ import parserMixin from '@/mixins/mixin'
             
         },
         created(){
-            if(parserMixin.methods.checkLoginStatus() == true){
+            //if(parserMixin.methods.checkLoginStatus() == true){
                 this.userObj = parserMixin.methods.parseXmlJwt();
-                console.log("ID KORISNIKA: " + this.userObj.id);
+                console.log("ID KORISNIKA: " + this.userObj.role);
                 this.rezDTO.kupac=this.userObj.id;
-            }
+            //}
         },
         computed:{
             sortEntities(){

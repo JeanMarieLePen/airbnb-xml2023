@@ -23,11 +23,11 @@
             <ul id="services" class="list-group">
                 <li class="list-group-item" >
                     <h5 class="header5">BrojKarata:</h5>
-                    <input class="input-class" v-model="this.rez.brojKarata" type="number" min="1">
+                    <input class="input-class" v-model="this.rez.brojKarata" type="number" min="1" @input="this.izracunaj()">
                 </li>
                 <li class="list-group-item" >
                     <h5 class="header5">Ukupna cena:</h5>
-                    <h4>{{this.let.cena}}e* {{this.rez.brojKarata}}={{cenaUk}}e</h4>
+                    <h4>{{this.let.cena}}e* {{this.rez.brojKarata}}={{this.cenaUk}}e</h4>
                     <button class="btn  btn-danger marg float-center" @click="novaRez()">Rezervisi</button>
                 </li>
             </ul>

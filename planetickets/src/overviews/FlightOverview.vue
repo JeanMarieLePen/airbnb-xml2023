@@ -1,6 +1,6 @@
 <template>
    <!--<h1> let:{{this.let.id}}</h1>-->
-   <!--  <h3>{{this.letString}}</h3>-->
+   <!-- <h3>{{this.letString}}</h3>-->
     <div  class="container" style="margin-top: 30px;">
         <form>
             <ul id="services" class="list-group">
@@ -26,14 +26,17 @@
             <ul id="services" class="list-group">
                 <li class="list-group-item" >
                     <h5 class="header5">BrojKarata:</h5>
-                    <input class="input-class" v-model="this.rez.brojKarata" type="number" min="1" @input="izracunaj">
+                    <input class="input-class" v-model="this.rez.brojKarata" type="number" min="1"  @input="this.izracunaj()">
                 </li>
                 <li class="list-group-item" >
                     <h5 class="header5">Ukupna cena:</h5>
-                    <h4>{{this.let.cena}}e* {{this.rez.brojKarata}}={{cenaUk}}e</h4>
+                    <h4>{{this.let.cena}}e* {{this.rez.brojKarata}}={{this.cenaUk}}e</h4>
                     <button class="btn  btn-danger marg float-center" @click="novaRez()">Rezervisi</button>
                 </li>
             </ul>
+            <div v-if="this.messages.successMsg" v-html="messages.successMsg" class="alert alert-success"></div>
+            <div v-if="this.messages.failureMsg" v-html="messages.failureMsg" class="alert alert-danger"></div>
+
         </form>
         <form v-if="this.userObj.role=='ADMINISTRATOR'">
             <div  class="container">
@@ -68,6 +71,11 @@ import moment from 'moment';
                 },
                 cenaUk:"",
                 userObj:{},
+                messages:{
+                    successMsg:'',
+                    failureMsg:'',
+                }
+
             }
         },
         created(){
@@ -95,6 +103,9 @@ import moment from 'moment';
                 }
             },
             izracunaj(){
+                if(this.rez.brojKarata>this.let.brSlobMesta){
+                    this.rez.brojKarata=this.let.brSlobMesta;
+                }
                 this.cenaUk=this.let.cena*this.rez.brojKarata;
             },
             novaRez(){
@@ -102,9 +113,11 @@ import moment from 'moment';
                 this.rez.kupac=this.userObj.id;
                 try{
                     dataService.rezervisi(this.rez).then(response=>{
-                        this.message = `<h4>Vas izmenjeni termini!</h4>`;
-                        setTimeout(() => this.messages.successResponse = '', 5000);
+                       
                         console.log(response.data)
+                        if(response.data!=null)
+                        this.failPor();
+                        else this.uspehPor();
                     })
                 }catch(error){
                     console.log("GRESKA PRI REZERVACIJI: " + error.message);
@@ -114,6 +127,24 @@ import moment from 'moment';
                 dataService.ukloniLet(idLet);
                 this.$router.go();
             },
+            uspehPor(){
+                this.messages.successMsg = '<h2>Uspesno Dodavanje Rezervacije.</h2>';
+
+                            setTimeout(() => {
+                                this.messages.successMessage = '';
+                                this.$router.go();
+                                
+                            }, 4000)
+            },
+            failPor(){
+                this.messages.successMsg = '<h2>Neuspelo dodavnje rezervacije.</h2>';
+
+                            setTimeout(() => {
+                                this.messages.successMessage = '';
+                                this.$router.go();
+                                
+                            }, 4000)
+            }
 
         }
     }

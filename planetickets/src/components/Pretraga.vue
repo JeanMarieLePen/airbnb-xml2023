@@ -7,7 +7,7 @@
             <div style="display:inline-flex;">
                 <p style="margin-right: 10px;">Parametri lokacije: </p>
                 <input style="border-radius: 10rem;" type="text" placeholder="Unesite mesto polaska" v-model="parametri.pocetnaLok.adresa"/>
-                <input style="border-radius: 10rem;" type="text" placeholder="Unesite odrediste" v-model="parametri.krajanjaLok.adresa"/>
+                <input style="border-radius: 10rem;" type="text" placeholder="Unesite odrediste" v-model="parametri.krajnjaLok.adresa"/>
                
             </div>
         </div>
@@ -78,7 +78,7 @@ import moment from 'moment';
                         lat:0,
                         lng:0
                     },
-                    krajanjaLok:{
+                    krajnjaLok:{
                         id:'0',
                         adresa:'',
                         lat:0,
@@ -97,7 +97,7 @@ import moment from 'moment';
                         lat:0,
                         lng:0
                     },
-                    krajanjaLok:{
+                    krajnjaLok:{
                         id:'0',
                         adresa:'',
                         lat:0,
@@ -114,7 +114,7 @@ import moment from 'moment';
                 this.parametriDTO.pocetak=this.parametri.pocetak;
                 this.parametriDTO.kraj=this.parametri.kraj;
                 this.parametriDTO.pocetnaLok=this.parametri.pocetnaLok;
-                this.parametriDTO.krajanjaLok=this.parametri.krajanjaLok;
+                this.parametriDTO.krajnjaLok=this.parametri.krajnjaLok;
                 if(this.parametri.minCena===''){
                     this.parametriDTO.minCena=-1;
                 }else{
@@ -128,7 +128,7 @@ import moment from 'moment';
                 }
 
                 if(this.parametri.brKarata===''){
-                    this.parametriDTO.brKarata=-1;
+                    this.parametriDTO.brKarata='';
                 }else{
                     this.parametriDTO.brKarata = this.parametri.brKarata;
                 }
@@ -156,7 +156,7 @@ import moment from 'moment';
                 this.parametri.pocetak='';
                 this.parametri.kraj='';
                 this.parametri.pocetnaLok.adresa='';
-                this.parametri.krajanjaLok.adresa=''
+                this.parametri.krajnjaLok.adresa=''
             }
         },
         created(){
