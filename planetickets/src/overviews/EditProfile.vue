@@ -249,6 +249,7 @@ import 'vueperslides/dist/vueperslides.css'
                         console.log("Objekat koji se salje na bek: " + JSON.stringify(objekat));
                         dataService.updateUserProfile(objekat).then(response => {
                             this.profile = response.data;
+                            this.messages.successResponse = '<h4>Uspesno izmenjen profil.</h4>'
                             setTimeout(() => {
                                 this.messages.successResponse = '';
                             }, 5000);

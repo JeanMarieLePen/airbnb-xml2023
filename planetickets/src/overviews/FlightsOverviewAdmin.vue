@@ -21,7 +21,7 @@
                             </div>
                             <div style="margin-bottom:30px;margin-top:50px;" class="card-footer bg-white text-white text-center">
                                 <button style="margin-left:30px;" v-on:click="flightDetails(tempFlight.id)" class="btn btn-primary">Detalji</button>
-                                <button @click="removeFlight(tempFlight.id)" class="btn btn-danger" style="margin-left:5px;">Ukloni</button> 
+                                <button v-if="tempFlight.kapacitet === tempFlight.brSlobMesta" @click="removeFlight(tempFlight.id)" class="btn btn-danger" style="margin-left:5px;">Ukloni</button> 
                             </div>
                         </div>
                     </div>
@@ -62,7 +62,9 @@ export default {
         },
         removeFlight(flightId){
             console.log("ID USERA: " + this.userObj.id)
-            dataService.ukloniLet(flightId);
+            dataService.ukloniLet(flightId).then(response => {
+                this.getAllFlights();
+            });
         }
     },
     created(){

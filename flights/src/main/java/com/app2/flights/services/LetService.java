@@ -188,11 +188,11 @@ public class LetService {
 		}
 		/***LOKACIJE***/
 		if(dto.getPocetnaLok()!=null && !dto.getPocetnaLok().getAdresa().trim().equals("")) {
-			Criteria kreceIz= Criteria.where("lokOd.adresa") .regex(dto.getPocetnaLok().getAdresa().toLowerCase());
+			Criteria kreceIz= Criteria.where("lokOd.adresa").regex(dto.getPocetnaLok().getAdresa().toLowerCase());
 			query.addCriteria(kreceIz);
 		}
 		if(dto.getKrajnjaLok()!=null && !dto.getKrajnjaLok().getAdresa().trim().equals("")) {
-			Criteria sleceU= Criteria.where("lokDo.adresa").regex(dto.getKrajnjaLok().getAdresa());
+			Criteria sleceU= Criteria.where("lokDo.adresa").regex(dto.getKrajnjaLok().getAdresa().toLowerCase());
 			query.addCriteria(sleceU);
 		}
 		List<Let> letovi= monTempl.find(query,Let.class);
