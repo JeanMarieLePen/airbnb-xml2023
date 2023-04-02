@@ -42,6 +42,7 @@ import com.app2.flights.model.data.Let;
 import com.app2.flights.model.data.Porudzbina;
 import com.app2.flights.model.data.StatusPorudzbine;
 import com.app2.flights.model.user.Korisnik;
+import com.app2.flights.model.user.RegKor;
 import com.app2.flights.repositories.LetRep;
 import com.app2.flights.repositories.PorudzbinaRep;
 import com.app2.flights.repositories.RegKorRep;
@@ -56,7 +57,7 @@ public class LetService {
 	@Autowired
 	private AdresaMapper adresaMapper;
 	@Autowired PorudzbinaRep pRep;
-
+	@Autowired RegKorRep regRep;
 	@Autowired MongoTemplate monTempl;
 
 	public LetDTO addNew(LetDTO letDTO) {
@@ -117,6 +118,14 @@ public class LetService {
 			Duration duration = Duration.between(now, l.getDatumIVreme());
 			long days = duration.toDays();
 			if(!l.getListaPorudzbina().stream().map(Porudzbina::getStatus).filter(StatusPorudzbine.REZERVISANA::equals).findFirst().isPresent() && days > 3+1) {
+				for(Porudzbina p : l.getListaPorudzbina()){
+					RegKor rk= regRep.findById(p.getKupac().getId()).orElse(null);
+					if(rk!=null){
+						rk.getPorudzbine().remove(p);
+						regRep.save(rk);
+					}
+					pRep.deleteById(p.getId());
+				}
 				letRep.deleteById(id);
 				return letMapper.toDTO(l);
 			}else {
