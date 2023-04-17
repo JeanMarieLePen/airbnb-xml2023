@@ -1,0 +1,51 @@
+server:
+  port: 7777
+spring:
+  application:
+    name: API-GATEWAY
+  cloud:
+    gateway:
+      default-filters:
+        - DedupeResponseHeader=Access-Control-Allow-Credentials Access-Control-Allow-Origin
+      globalcors:
+        corsConfigurations:
+          '[/**]':
+            allowedOrigins: "*"
+            allowedHeaders: "*"
+            allowedMethods: "*"
+      routes:
+        - id: MAIN-APP-SERVICE
+          uri: lb://MAIN-APP-SERVICE
+          predicates:
+            - Path=/login/**, /korisnik/**, /main-app-websockets/**, /smestaj/**, /host/**
+          #filters:
+            #- name: CircuitBreaker
+              #args:
+                #name: MAIN-APP-SERVICE
+                #fallbackuri: forward:/mainAppServiceFallBack   
+        - id: FLIGHTS-SERVICE
+          uri: lb://FLIGHTS-SERVICE
+          predicates:
+          - Path=/login2/**, /korisnik2/**, /regkor/**, /admin/**, /let/**
+#hystrix:
+  #command:
+    #fallbackcmd:
+      #execution:
+        #isolation:
+          #thread:
+            #timeOutInMilliseconds: 4000
+#management:
+  #endpoints:
+    #web:
+      #exposure:
+        #include: hystrix.stream            
+eureka:
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      #defaultZone: http://eureka-service:8761/eureka/
+      defaultZone: http://localhost:8761/eureka/
+  instance:
+    #hostname: localhost
+    prefer-ip-address: true   
