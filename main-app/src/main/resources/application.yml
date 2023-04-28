@@ -1,0 +1,53 @@
+#eureka:
+  #client:
+    #register-with-eureka: true
+    #fetch-registry: true
+    #service-url:
+    #  defaultZone: http://eureka-service:8761/eureka
+   #   #defaultZone: http://localhost:8761/eureka/
+  #instance:
+ #   preferIpAddress: true
+#    #hostname: localhost
+
+management:
+  health:
+    circuitbreakers:
+      enabled: true
+  endpoints:
+    web:
+      exposure:
+        include: health
+  endpoint:
+    health:
+      show-details: always
+
+resilience4j.circuitbreaker:
+  instances:
+    reservationService:
+      registerHealthIndicator: true
+      eventConsumerBufferSize: 10
+      failureRateThreshold: 50
+      minimumNumberOfCalls: 5
+      automaticTransitionFromOpenToHalfOpenEnable: true
+      waitDurationInOpenState: 50s
+      permittedNumberOfCallsInHalfOpenState: 3
+      slidingWindowSize: 10
+      slidingWindowType: COUNT_BASED
+      
+      
+      
+      
+       
+resilience4j.retry:
+  instances:
+    reservationService:
+      registerHealthIndicator: true
+      maxRetryAtempts: 5
+      waitDuration: 5s  
+resilience4j.ratelimiter:
+  instances:
+    reservationService:
+      registerHealthIndicator: false
+      limitForPeriod: 10
+      limitRefreshPeriod: 10s
+      timeoutDuration: 3s      
