@@ -1,0 +1,113 @@
+version: '3.8'
+services:
+  cache:
+    image: redis:6.2-alpine
+    restart: always
+    ports:
+    -  '6379:6379'
+    command: redis-server --save 20 1 --loglevel warning --requirepass eYVX7EwVmmxKPCDmwMtyKVge8oLd2t81
+    volumes:
+    -  cache:/data 
+  rabbitmq3:
+    container_name: 'rabbitmq' 
+    image: rabbitmq:3-management
+    environment:
+      - RABBITMQ_DEFAULT_USER=guest2
+      - RABBITMQ_DEFAULT_PASS=guest2
+    ports:
+      - '5672:5672'
+      - '15672:15672'
+  postgresdb:
+    image: postgres
+    restart: unless-stopped
+    container_name: postgresdb
+    ports:
+      - 5432:5432
+    environment:
+      POSTGRES_PASSWORD: temp
+      POSTGRES_USER: postgres
+      POSTGRES_DB: xml2023-main
+  email-service:
+    image: emailapi
+    build: ./email-microservice
+    environment:
+      DB_PATH: jdbc:postgresql://postgresdb:5432/xml2023-main
+      DB_USER: postgres
+      DB_PASS: temp
+      EUREKA_PATH: http://eureka-service:8761/eureka
+    restart: unless-stopped
+    container_name: email
+    ports:
+      - 8083:8083
+    depends_on:
+      - eureka-service
+      - postgresdb
+      - rabbitmq3
+    links:
+      - postgresdb   
+      - eureka-service
+      - rabbitmq3
+  mainapp-service:
+    image: mainappservice
+    build: ./main-app
+    environment:
+      DB_PATH: jdbc:postgresql://postgresdb:5432/xml2023-main
+      DB_USER: postgres
+      DB_PASS: temp
+      EUREKA_PATH: http://eureka-service:8761/eureka
+      REDIS_HOST: cache
+      REDIS_PORT: 6379
+      REDIS_PASSWORD: eYVX7EwVmmxKPCDmwMtyKVge8oLd2t81
+    restart: unless-stopped
+    container_name: mainapp
+    ports:
+      - 8082:8082
+    depends_on:
+      - eureka-service
+      - postgresdb
+      - cache
+      - rabbitmq3
+      - reservation-service
+    links:
+      - postgresdb   
+      - eureka-service
+      - cache
+      - rabbitmq3
+      - reservation-service
+  reservation-service:
+    image: reservation
+    build: ./reservation-service
+    environment:
+      EUREKA_PATH: http://eureka-service:8761/eureka
+    restart: unless-stopped
+    container_name: reservation
+    depends_on:
+      - eureka-service
+    links:
+      - eureka-service
+    ports:
+      -  5000:5000 
+  gateway-service:
+    image: gateway-service
+    build: ./eureka-gateway
+    environment:
+      EUREKA_PATH: http://eureka-service:8761/eureka
+    restart: unless-stopped
+    container_name: gateway
+    ports:
+      - 7777:7777
+    depends_on:
+      - eureka-service
+    links:
+      - eureka-service
+  eureka-service:
+    image: eureka-service
+    build: ./eureka
+    restart: unless-stopped
+    container_name: eureka
+    ports:
+      - 8761:8761
+      
+volumes:
+  cache:
+    driver: local
