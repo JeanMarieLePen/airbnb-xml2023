@@ -1,0 +1,66 @@
+package com.xml.mainapp.dtos.data;
+
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+
+import com.xml.mainapp.dtos.user.KorisnikBasicDTO;
+import com.xml.mainapp.model.data.StatusRezervacije;
+
+public class RezervacijaDTO {
+	private Long id;
+	private SmestajDTO smestaj;
+	private KorisnikBasicDTO gost;
+	private LocalDateTime odDatum;
+	private LocalDateTime doDatum;
+	private int brojGostiju;
+	private StatusRezervacije status;
+	
+	
+	public RezervacijaDTO() {
+		super();
+	}
+	public Long getId() {
+		return id;
+	}
+	public void setId(Long id) {
+		this.id = id;
+	}
+	public SmestajDTO getSmestaj() {
+		return smestaj;
+	}
+	public void setSmestaj(SmestajDTO smestajDTO) {
+		this.smestaj = smestajDTO;
+	}
+	public KorisnikBasicDTO getGost() {
+		return gost;
+	}
+	public void setGost(KorisnikBasicDTO gost) {
+		this.gost = gost;
+	}
+	public LocalDateTime getOdDatum() {
+		return odDatum;
+	}
+	public void setOdDatum(LocalDateTime odDatum) {
+		this.odDatum = odDatum;
+	}
+	public LocalDateTime getDoDatum() {
+		return doDatum;
+	}
+	public void setDoDatum(LocalDateTime doDatum) {
+		this.doDatum = doDatum;
+	}
+	public int getBrojGostiju() {
+		return brojGostiju;
+	}
+	public void setBrojGostiju(int brojGostiju) {
+		this.brojGostiju = brojGostiju;
+	}
+	public StatusRezervacije getStatus() {
+		return status;
+	}
+	public void setStatus(StatusRezervacije status) {
+		this.status = status;
+	}
+
+	
+}
