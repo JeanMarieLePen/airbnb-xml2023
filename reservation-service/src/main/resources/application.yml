@@ -1,24 +1,24 @@
-server:
-  port: 5000
-spring:
-  application:
-    name: RESERVATION-SERVICE
+#server:
+  #port: 5000
+#spring:
+  #application:
+   # name: RESERVATION-SERVICE
     
-  cloud:
-    gateway:
-      routes:
-        - id: EMAIL-SERVICE
-          uri: lb://EMAIL-SERVICE
-          predicates:
-            - Path=/email/**
+ # cloud:
+ #   gateway:
+    #  routes:
+      #  - id: EMAIL-SERVICE
+         # uri: lb://EMAIL-SERVICE
+          #predicates:
+            #- Path=/email/**
     
-eureka:
-  client:
-    register-with-eureka: true
-    fetch-registry: true
-    service-url:
+#eureka:
+  #client:
+    #register-with-eureka: true
+    #fetch-registry: true
+    #service-url:
       #defaultZone: http://eureka-service:8761/eureka
-      defaultZone: http://localhost:8761/eureka/
-  instance:
-    preferIpAddress: true
+      #defaultZone: http://localhost:8761/eureka/
+  #instance:
+    #preferIpAddress: true
     #hostname: localhost
