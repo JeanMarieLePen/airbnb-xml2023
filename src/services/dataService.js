@@ -55,26 +55,29 @@ class DataService{
         return axios.get(`${API_URL}/smestaj/getAllPogodnosti`);
     }
     makeReservation(reservation, userId, smestajId){
-        return axios.post(`${API_URL}/korisnik/makeReservation/${userId}/${smestajId}`, reservation);
+        return axios.post(`${API_URL}/rezervacija/makeReservation/${userId}/${smestajId}`, reservation);
     }
 
     getRezervacijeByHost(id){
-        return axios.get(`${API_URL}/host/getAllReservationsByUser/${id}`);
+        return axios.get(`${API_URL}/rezervacija/getAllReservationsByUserHost/${id}`);
     }
     getRezervacijeByKorisnik(id){
-        return axios.get(`${API_URL}/korisnik/getAllReservationsByUser/${id}`);
+        return axios.get(`${API_URL}/rezervacija/getAllReservationsByUserGuest/${id}`);
     }
     getOwnerById(id){
-        return axios.get(`${API_URL}/host/getOwnerById/${id}`);
+        return axios.get(`${API_URL}/korisnik/${id}`);
+    }
+    getOwnerById(id){
+        return axios.get(`${API_URL}/korisnik/getHostById/${id}`);
     }
     cancelRezervaciju(userId, reservationId){
-        return axios.put(`${API_URL}/korisnik/cancelReservation/${userId}/${reservationId}`);
+        return axios.put(`${API_URL}/rezervacija/cancelReservation/${userId}/${reservationId}`);
     }
     approveReservation(reservationId, ownerId){
-        return axios.put(`${API_URL}/host/approveReservation/${ownerId}/${reservationId}`);
+        return axios.put(`${API_URL}/rezervacija/approveReservation/${ownerId}/${reservationId}`);
     }
     rejectReservation(reservationId, ownerId){
-        return axios.put(`${API_URL}/host/rejectReservation/${ownerId}/${reservationId}`);
+        return axios.put(`${API_URL}/rezervacija/rejectReservation/${ownerId}/${reservationId}`);
     }
     canGiveRating(userId, smestajId){
         return axios.get(`${API_URL}/korisnik/canGiveRating/${userId}/${smestajId}`);

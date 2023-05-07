@@ -109,7 +109,7 @@ export default {
         },
         cancelRezervaciju(rezervacija, index){
             try{
-                dataService.cancelRezervaciju(rezervacija.id, this.userId).then(response => {
+                dataService.cancelRezervaciju(this.userId, rezervacija.id).then(response => {
                     console.log("Otkazana rezervacija");
                     if(response.status === 200){
                         this.messages[index].successMessage = '<h4>Uspesno otkazana rezervacija.</h4>';
