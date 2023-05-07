@@ -3,7 +3,7 @@ package com.xml.mainapp.dtos.data;
 
 public class PogodnostBasicDTO {
 	
-	private Long id;
+	private String id;
 	private String naziv;
 	
 	public PogodnostBasicDTO() {
@@ -18,11 +18,11 @@ public class PogodnostBasicDTO {
 		this.naziv = naziv;
 	}
 
-	public Long getId() {
+	public String getId() {
 		return id;
 	}
 
-	public void setId(Long id) {
+	public void setId(String id) {
 		this.id = id;
 	}
 	

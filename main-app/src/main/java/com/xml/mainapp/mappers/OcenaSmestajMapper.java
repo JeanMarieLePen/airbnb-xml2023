@@ -6,6 +6,7 @@ import org.springframework.stereotype.Component;
 import com.xml.mainapp.dtos.data.OcenaSmestajaDTO;
 import com.xml.mainapp.model.data.OcenaSmestaj;
 
+
 @Component
 public class OcenaSmestajMapper {
 

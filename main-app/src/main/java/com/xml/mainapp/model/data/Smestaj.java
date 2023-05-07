@@ -3,33 +3,17 @@ package com.xml.mainapp.model.data;
 import java.io.Serializable;
 import java.util.Collection;
 
+import org.springframework.data.mongodb.core.mapping.DBRef;
+import org.springframework.data.mongodb.core.mapping.Document;
+
 import com.xml.mainapp.model.users.Host;
 
 import jakarta.annotation.Nullable;
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Column;
-import jakarta.persistence.ElementCollection;
-import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Inheritance;
-import jakarta.persistence.InheritanceType;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.JoinTable;
-import jakarta.persistence.ManyToMany;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.OneToOne;
-import jakarta.persistence.Table;
-import jakarta.persistence.Version;
+import javax.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 
-@Entity
-@Table
-@Inheritance(strategy = InheritanceType.JOINED)
+@Document("smestaj_db")
 public class Smestaj implements Serializable{
 
 	/**
@@ -38,24 +22,19 @@ public class Smestaj implements Serializable{
 	private static final long serialVersionUID = 6956429912337266684L;
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(columnDefinition="bigserial", name="id", updatable=false, unique=true)
-	private Long id;
+	private String id;
 	@Version
 	@Column(columnDefinition = "integer DEFAULT 0", nullable = false)
 	private Integer version;
 	
 	@NotNull
-	@ManyToOne(fetch = FetchType.LAZY)
+	@DBRef
 	private Host vlasnik;
 	
-	@OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-	@JoinColumn(name="adresa_id", referencedColumnName = "id")
+	@DBRef
 	private Adresa adresa;
 	
-	@ManyToMany(cascade = { CascadeType.ALL })
-	@JoinTable(name="smestaj_pogodnosti", joinColumns = @JoinColumn(name="pogodnost_id"),
-	inverseJoinColumns = @JoinColumn(name = "smestaj_id"))
+	@DBRef
 	private Collection<Pogodnost> pogodnosti;
 	
 	@ElementCollection
@@ -67,25 +46,20 @@ public class Smestaj implements Serializable{
 	@Positive
 	private int maxGosti;
 	
-	@OneToOne(fetch=FetchType.LAZY, cascade=CascadeType.ALL)
-	@JoinColumn(name="cenovnik_id", referencedColumnName="id")
+	@DBRef
 	private Cenovnik cenovnik;
 	
-	@OneToMany(cascade = CascadeType.ALL, mappedBy="smestaj",  orphanRemoval = true)
+	@DBRef
 	private Collection<Rezervacija> rezervacije;
 
-	@OneToMany(cascade = CascadeType.ALL, mappedBy = "smestaj",  orphanRemoval = true)
+	@DBRef
 	private Collection<OcenaSmestaj> listaOcena;
 	
 	@Nullable
-	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-//	@JoinTable(name = "smestaj_termini", joinColumns = {
-//			@JoinColumn(name = "smestaj_id", referencedColumnName = "id")}, inverseJoinColumns = {
-//					@JoinColumn(name = "termin_id", referencedColumnName = "id")})
-//	@JoinColumn(name="smestaj_id", referencedColumnName = "id")
+	@DBRef
 	private Collection<Termin> nedostupni;
 	
-	public Smestaj(Long id, Integer version, @NotNull Host vlasnik, Adresa adresa, Collection<Pogodnost> pogodnosti,
+	public Smestaj(String id, Integer version, @NotNull Host vlasnik, Adresa adresa, Collection<Pogodnost> pogodnosti,
 			Collection<byte[]> slike, @Positive int minGosti, @Positive int maxGosti, Cenovnik cenovnik,
 			Collection<Rezervacija> rezervacije, Collection<OcenaSmestaj> listaOcena, Collection<Termin> nedostupni) {
 		super();
@@ -139,11 +113,11 @@ public class Smestaj implements Serializable{
 		this.vlasnik = vlasnik;
 	}
 
-	public Long getId() {
+	public String getId() {
 		return id;
 	}
 
-	public void setId(Long id) {
+	public void setId(String id) {
 		this.id = id;
 	}
 

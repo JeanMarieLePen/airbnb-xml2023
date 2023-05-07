@@ -1,5 +1,11 @@
 FROM openjdk:17-jdk-oracle
+
+#WORKDIR /app
+
 EXPOSE 8082
-ADD target/mainapp.jar mainapp.jar
-ENTRYPOINT [ "java", "-jar", "/mainapp.jar"]
+
+#copy umesto add-a
+ADD target/reglog.jar /reglog.jar
+
+ENTRYPOINT [ "java", "-jar", "/reglog.jar"]
 

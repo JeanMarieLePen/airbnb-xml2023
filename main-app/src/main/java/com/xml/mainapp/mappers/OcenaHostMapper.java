@@ -6,6 +6,7 @@ import org.springframework.stereotype.Component;
 import com.xml.mainapp.dtos.user.OcenaHostDTO;
 import com.xml.mainapp.model.users.OcenaHost;
 
+
 @Component
 public class OcenaHostMapper {
 

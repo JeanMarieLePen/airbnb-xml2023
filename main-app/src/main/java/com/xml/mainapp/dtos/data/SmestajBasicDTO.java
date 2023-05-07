@@ -6,7 +6,7 @@ import java.util.Collection;
 import com.xml.mainapp.dtos.AdresaDTO;
 
 public class SmestajBasicDTO {
-	private Long id;
+	private String id;
 	private Long hostId;
 	private AdresaDTO adresa;
 	private Collection<PogodnostBasicDTO> pogodnosti;
@@ -17,13 +17,13 @@ public class SmestajBasicDTO {
 	//private Collection<Rezervacija> rezervacije;
 	//private Collection<OcenaSmestaj> listaOcena;
 	
-	public Long getId() {
+	public String getId() {
 		return id;
 	}
 	public SmestajBasicDTO() {
 		super();
 	}
-	public void setId(Long id) {
+	public void setId(String id) {
 		this.id = id;
 	}
 	public Long getHostId() {

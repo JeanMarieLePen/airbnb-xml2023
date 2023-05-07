@@ -7,7 +7,7 @@ import com.xml.mainapp.model.users.OcenaHost;
 
 public class HostBasicDTO {
 //	private KorisnikBasicDTO korisnik;
-	private Long id;
+	private String id;
 	private String email;
 	private String korIme;
 	private String ime;
@@ -23,10 +23,10 @@ public class HostBasicDTO {
 	public HostBasicDTO() {
 		super();
 	}
-	public Long getId() {
+	public String getId() {
 		return id;
 	}
-	public void setId(Long id) {
+	public void setId(String id) {
 		this.id = id;
 	}
 	

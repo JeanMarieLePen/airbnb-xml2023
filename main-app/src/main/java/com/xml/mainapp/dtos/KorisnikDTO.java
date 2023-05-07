@@ -1,7 +1,6 @@
 package com.xml.mainapp.dtos;
 
 import java.io.Serializable;
-import java.time.LocalDate;
 import java.util.Collection;
 
 import com.xml.mainapp.model.users.StatusNaloga;
@@ -14,7 +13,7 @@ public class KorisnikDTO implements Serializable{
 	 */
 	private static final long serialVersionUID = 935928709318268339L;
 	
-	private Long id;
+	private String id;
 	private String lozinka;
     private String korIme;
     private String email;
@@ -32,11 +31,11 @@ public class KorisnikDTO implements Serializable{
 		super();
 	}
 
-	public Long getId() {
+	public String getId() {
 		return id;
 	}
 
-	public void setId(Long id) {
+	public void setId(String id) {
 		this.id = id;
 	}
 

@@ -2,16 +2,15 @@ package com.xml.mainapp.model.data;
 
 import java.io.Serializable;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Version;
+import org.springframework.data.mongodb.core.mapping.Document;
+
+import javax.persistence.*;
+
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 
-@Entity
+
+@Document(collection = "cenovnik_db")
 public class Cenovnik implements Serializable{
 
 	/**
@@ -21,8 +20,7 @@ public class Cenovnik implements Serializable{
 
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
+	private String id;
 	@Version
 	@Column(columnDefinition = "integer DEFAULT 0", nullable = false)
 	private Integer version;
@@ -42,13 +40,13 @@ public class Cenovnik implements Serializable{
 	//private LocalDateTime pocetakLeta;
 	//private LocalDateTime krajLeta;
 	
-	public Long getId() {
+	public String getId() {
 		return id;
 	}
 	public Cenovnik() {
 		super();
 	}
-	public Cenovnik(Long id, @NotNull boolean poSmestaju, @Positive Long cena, @Positive Long cenaPraznik,
+	public Cenovnik(String id, @NotNull boolean poSmestaju, @Positive Long cena, @Positive Long cenaPraznik,
 			@Positive Long cenaVikend, @Positive Long cenaLeto) {
 		super();
 		this.id = id;
@@ -58,7 +56,7 @@ public class Cenovnik implements Serializable{
 		this.cenaVikend = cenaVikend;
 		this.cenaLeto = cenaLeto;
 	}
-	public void setId(Long id) {
+	public void setId(String id) {
 		this.id = id;
 	}
 	public boolean isPoSmestaju() {

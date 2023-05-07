@@ -5,6 +5,8 @@ import java.util.Base64;
 import java.util.Collection;
 import java.util.Optional;
 
+import javax.transaction.Transactional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
@@ -16,7 +18,9 @@ import com.xml.mainapp.dtos.KorisnikDTO;
 import com.xml.mainapp.dtos.UpdateProfileDTO;
 import com.xml.mainapp.dtos.data.OcenaSmestajaDTO;
 import com.xml.mainapp.dtos.data.RezervacijaDTO;
+import com.xml.mainapp.dtos.user.HostDTO;
 import com.xml.mainapp.mappers.AdresaMapper;
+import com.xml.mainapp.mappers.HostMapper;
 import com.xml.mainapp.mappers.KorisnikMapper;
 import com.xml.mainapp.mappers.OcenaSmestajMapper;
 import com.xml.mainapp.mappers.RezervacijaMapper;
@@ -25,13 +29,13 @@ import com.xml.mainapp.model.data.OcenaSmestaj;
 import com.xml.mainapp.model.data.Rezervacija;
 import com.xml.mainapp.model.data.Smestaj;
 import com.xml.mainapp.model.users.Guest;
+import com.xml.mainapp.model.users.Host;
 import com.xml.mainapp.model.users.Korisnik;
 import com.xml.mainapp.repositories.AdresaRep;
 import com.xml.mainapp.repositories.GuestRepository;
+import com.xml.mainapp.repositories.HostRepository;
 import com.xml.mainapp.repositories.KorisnikRep;
 import com.xml.mainapp.repositories.SmestajRep;
-
-import jakarta.transaction.Transactional;
 
 @Service
 public class KorisnikService {
@@ -52,9 +56,12 @@ public class KorisnikService {
 	private SmestajRep smestajRep;
 	@Autowired
 	private OcenaSmestajMapper osMapper;
-	
+	@Autowired
+	private HostRepository hostRep;
+	@Autowired
+	private HostMapper hostMapper;
 	@Cacheable(key="#id", value = "Korisnik")
-	public KorisnikDTO getUserById(Long id) {
+	public KorisnikDTO getUserById(String id) {
 		// TODO Auto-generated method stub
 		Korisnik k = this.korisnikRep.findById(id).orElse(null);
 		if(k == null) {
@@ -65,9 +72,18 @@ public class KorisnikService {
 		}
 	}
 
+	public HostDTO findHostById(String id) {
+		// TODO Auto-generated method stub
+		Host h = this.hostRep.findById(id).orElse(null);
+		if(h == null) {
+			return null;
+		}
+		HostDTO retVal = this.hostMapper.toDTO(h);
+		return retVal;
+	}
 	@Transactional
 	@CachePut(value="Korisnik", key="#id")
-	public KorisnikDTO updateProfileById(Long id, UpdateProfileDTO udto) {
+	public KorisnikDTO updateProfileById(String id, UpdateProfileDTO udto) {
 		// TODO Auto-generated method stub
 		Korisnik k = this.korisnikRep.findById(id).orElse(null);
 		if(k == null) {
@@ -96,21 +112,21 @@ public class KorisnikService {
 			k.setIme(udto.getKorisnikDTO().getIme());
 			k.setPrezime(udto.getKorisnikDTO().getPrezime());
 //			k.setAdresa(aMapper.fromDTO(udto.getKorisnikDTO().getAdresa()));
-			Collection<byte[]> tempList = new ArrayList<byte[]>();
-			for(String s : udto.getKorisnikDTO().getSlike()) {
-				byte[] data = Base64.getDecoder().decode(s.split(",")[1]);
-				tempList.add(data);
+			if(k.getSlike() != null) {
+				Collection<byte[]> tempList = new ArrayList<byte[]>();
+				for(String s : udto.getKorisnikDTO().getSlike()) {
+					byte[] data = Base64.getDecoder().decode(s.split(",")[1]);
+					tempList.add(data);
+				}
+				k.setSlike(tempList);
 			}
-			k.setSlike(tempList);
-			
-			
-			korisnikRep.saveAndFlush(k);
+			korisnikRep.save(k);
 			KorisnikDTO retVal = this.korisnikMapper.toDTO(k);
 			return retVal;
 		}
 	}
 
-	public Collection<RezervacijaDTO> getAllReservationByUserId(Long id) {
+	public Collection<RezervacijaDTO> getAllReservationByUserId(String id) {
 		// TODO Auto-generated method stub
 		Guest g = guestRep.findById(id).orElse(null);
 		if(g == null)
@@ -124,7 +140,7 @@ public class KorisnikService {
 		return retList;
 	}
 
-	public OcenaSmestajaDTO giveRatingToSmestaj(Long userId, Long smestajId, OcenaSmestajaDTO ocena) {
+	public OcenaSmestajaDTO giveRatingToSmestaj(String userId, String smestajId, OcenaSmestajaDTO ocena) {
 		// TODO Auto-generated method stub
 		Guest g = this.guestRep.findById(userId).orElse(null);
 		Smestaj s = this.smestajRep.findById(smestajId).orElse(null);
@@ -138,7 +154,7 @@ public class KorisnikService {
 		return osMapper.toDTO(os);
 	}
 
-	public boolean canGiveRating(Long userId, Long smestajId) {
+	public boolean canGiveRating(String userId, String smestajId) {
 		// TODO Auto-generated method stub
 		Guest g = this.guestRep.findById(userId).orElse(null);
 		if(g == null) {

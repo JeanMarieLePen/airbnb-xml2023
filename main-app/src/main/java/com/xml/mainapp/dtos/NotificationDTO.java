@@ -3,7 +3,7 @@ package com.xml.mainapp.dtos;
 import java.time.LocalDateTime;
 
 public class NotificationDTO {
-	private Long idSmestaja;
+	private String idSmestaja;
 	private LocalDateTime vreme;
 	private String ime;
 	private String prezime;
@@ -13,10 +13,10 @@ public class NotificationDTO {
 		super();
 	}
 	
-	public Long getIdSmestaja() {
+	public String getIdSmestaja() {
 		return idSmestaja;
 	}
-	public void setIdSmestaja(Long idSmestaja) {
+	public void setIdSmestaja(String idSmestaja) {
 		this.idSmestaja = idSmestaja;
 	}
 	public LocalDateTime getVreme() {

@@ -3,12 +3,11 @@ package com.xml.mainapp.dtos.data;
 import java.util.Collection;
 
 import com.xml.mainapp.dtos.AdresaDTO;
-import com.xml.mainapp.dtos.user.HostDTO;
 
 public class SmestajDTO {
-	private Long id;
+	private String id;
 //	private HostDTO vlasnik;
-	private Long vlasnikId;
+	private String vlasnikId;
 	private AdresaDTO adresa;
 	private Collection<PogodnostDTO> pogodnosti;
 	private Collection<String> slike;
@@ -24,19 +23,19 @@ public class SmestajDTO {
 		super();
 	}
 
-	public Long getId() {
+	public String getId() {
 		return id;
 	}
 
-	public Long getVlasnikId() {
+	public String getVlasnikId() {
 		return vlasnikId;
 	}
 
-	public void setVlasnikId(Long vlasnikId) {
+	public void setVlasnikId(String vlasnikId) {
 		this.vlasnikId = vlasnikId;
 	}
 
-	public void setId(Long id) {
+	public void setId(String id) {
 		this.id = id;
 	}
 

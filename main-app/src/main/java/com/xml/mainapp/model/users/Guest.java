@@ -2,16 +2,16 @@ package com.xml.mainapp.model.users;
 
 import java.util.Collection;
 
+import org.springframework.data.mongodb.core.mapping.DBRef;
+import org.springframework.data.mongodb.core.mapping.Document;
+
 import com.xml.mainapp.model.data.OcenaSmestaj;
 import com.xml.mainapp.model.data.Rezervacija;
 
 import jakarta.annotation.Nullable;
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Entity;
-import jakarta.persistence.OneToMany;
 import jakarta.validation.constraints.PositiveOrZero;
 
-@Entity
+@Document(collection = "guests_db")
 public class Guest extends Korisnik{
 
 	/**
@@ -23,15 +23,15 @@ public class Guest extends Korisnik{
 	private int brojOtkazivanja;
 	
 	@Nullable
-	@OneToMany(cascade = CascadeType.ALL, mappedBy="gost")
+	@DBRef
 	private Collection<Rezervacija> rezervacije;
 
 	@Nullable
-	@OneToMany(cascade = CascadeType.ALL, mappedBy = "gost")
+	@DBRef
 	private Collection<OcenaSmestaj> oceneSmestaja;
 	
 	@Nullable
-	@OneToMany(cascade = CascadeType.ALL, mappedBy = "gost")
+	@DBRef
 	private Collection<OcenaHost> oceneVlasnika;
 	
 	public Guest() {

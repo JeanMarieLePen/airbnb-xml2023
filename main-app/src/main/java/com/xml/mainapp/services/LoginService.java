@@ -32,8 +32,6 @@ public class LoginService {
 	@Autowired
 	private KorisnikMapper korMapper;
 	
-	@Autowired 
-	private EmailService emailService;
 	
 	@Autowired
 	private AdresaRep adrRep;
@@ -68,7 +66,7 @@ public class LoginService {
 			newUser.setStatusNaloga(StatusNaloga.NA_CEKANJU);
 			newUser.setLozinka(new String(enc.encode(regDTO.getLozinka())));
 //			newUser.setAdresa(a);
-			korisnikRep.saveAndFlush(newUser);
+			korisnikRep.save(newUser);
 			this.template.convertAndSend(MessageQueueConfig.EXCHANGE, MessageQueueConfig.ROUTING_KEY, regDTO);
 			System.out.println("POSLATO NA QUEUE");
 			
@@ -86,8 +84,7 @@ public class LoginService {
 
 	public String activateAccount(String id, String pw, String exptime) {
 		// TODO Auto-generated method stub
-		
-		Long tempId = Long.parseLong(id);
+		String tempId = id;
 		LocalDateTime temp = LocalDateTime.now();
 		LocalDateTime exp = LocalDateTime.parse(exptime);
 		Duration duration = Duration.between(exp, temp);

@@ -65,12 +65,16 @@ public class KorisnikMapper {
 		kdto.setLozinka(k.getLozinka());
 		kdto.setTipKorisnika(k.getTipKorisnika());
 		kdto.setStatusNaloga(k.getStatusNaloga());
-		Collection<String> tempSlike = new ArrayList<String>();
-		for(byte[] s : k.getSlike()) {
-			String tempSlika = Base64.getEncoder().encodeToString(s);
-			tempSlike.add(tempSlika);
+		if(k.getSlike() != null) {
+			Collection<String> tempSlike = new ArrayList<String>();
+			for(byte[] s : k.getSlike()) {
+				String tempSlika = Base64.getEncoder().encodeToString(s);
+				tempSlike.add(tempSlika);
+			}
+			kdto.setSlike(tempSlike);
+		}else {
+			kdto.setSlike(null);
 		}
-		kdto.setSlike(tempSlike);
 		return kdto;
 	}
 }

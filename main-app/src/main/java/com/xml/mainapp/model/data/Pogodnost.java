@@ -3,16 +3,13 @@ package com.xml.mainapp.model.data;
 import java.io.Serializable;
 import java.util.Collection;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.ManyToMany;
-import jakarta.persistence.Version;
+import org.springframework.data.mongodb.core.mapping.DBRef;
+import org.springframework.data.mongodb.core.mapping.Document;
+
+import javax.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 
-@Entity
+@Document(collection = "pogodnosti_db")
 public class Pogodnost implements Serializable{
 
 	/**
@@ -20,32 +17,31 @@ public class Pogodnost implements Serializable{
 	 */
 	private static final long serialVersionUID = -776142387481773478L;
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
+	private String id;
 	@Version
 	@Column(columnDefinition = "integer DEFAULT 0", nullable = false)
 	private Integer version;
 	@NotBlank
 	private String naziv;
 
-	@ManyToMany(mappedBy = "pogodnosti")
+	@DBRef
 	private Collection<Smestaj> listaSmestaja;
 	
 	public Pogodnost() {
 		super();
 	}
 
-	public Pogodnost(Long id, @NotBlank String naziv) {
+	public Pogodnost(String id, @NotBlank String naziv) {
 		super();
 		this.id = id;
 		this.naziv = naziv;
 	}
 
-	public Long getId() {
+	public String getId() {
 		return id;
 	}
 
-	public void setId(Long id) {
+	public void setId(String id) {
 		this.id = id;
 	}
 

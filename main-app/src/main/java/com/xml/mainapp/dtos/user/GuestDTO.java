@@ -7,6 +7,7 @@ import com.xml.mainapp.dtos.KorisnikDTO;
 import com.xml.mainapp.dtos.data.OcenaSmestajaDTO;
 import com.xml.mainapp.dtos.data.RezervacijaDTO;
 
+
 public class GuestDTO extends KorisnikDTO{
 	/**
 	 * 

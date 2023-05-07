@@ -2,13 +2,13 @@ package com.xml.mainapp.model.users;
 
 import java.util.Collection;
 
+import org.springframework.data.mongodb.core.mapping.DBRef;
+import org.springframework.data.mongodb.core.mapping.Document;
+
+import com.beust.jcommander.internal.Nullable;
 import com.xml.mainapp.model.data.Smestaj;
 
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Entity;
-import jakarta.persistence.OneToMany;
-
-@Entity
+@Document(collection = "hosts_db")
 public class Host extends Korisnik{
 
 	/**
@@ -19,10 +19,12 @@ public class Host extends Korisnik{
 	private boolean rezAutomatski;
 	
 	private boolean istaknuti;
-	@OneToMany(cascade = CascadeType.ALL, mappedBy = "vlasnik")
+	@DBRef
+	@Nullable
 	private Collection<Smestaj> smestajList;
 	
-	@OneToMany(cascade = CascadeType.ALL, mappedBy = "vlasnik")
+	@DBRef
+	@Nullable
 	private Collection<OcenaHost> ocene;
 	
 	public Host() {

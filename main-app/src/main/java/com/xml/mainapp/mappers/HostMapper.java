@@ -96,13 +96,15 @@ public class HostMapper {
 			}
 		}
 		dto.setOcene(tempOceneHost);
-		
-		Collection<String> tempSlike = new ArrayList<String>();
-		for(byte[] s : h.getSlike()) {
-			String tempSlika = Base64.getEncoder().encodeToString(s);
-			tempSlike.add(tempSlika);
+		if(h.getSlike() != null) {
+			Collection<String> tempSlike = new ArrayList<String>();
+			for(byte[] s : h.getSlike()) {
+				String tempSlika = Base64.getEncoder().encodeToString(s);
+				tempSlike.add(tempSlika);
+			}
+			dto.setSlike(tempSlike);
 		}
-		dto.setSlike(tempSlike);
+		
 		dto.setProsecnaOcena(calcOcena(h.getOcene()));
 		return dto;
 	}

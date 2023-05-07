@@ -8,7 +8,6 @@ import org.springframework.stereotype.Component;
 
 import com.xml.mainapp.dtos.data.PogodnostBasicDTO;
 import com.xml.mainapp.dtos.data.PogodnostDTO;
-import com.xml.mainapp.dtos.data.SmestajDTO;
 import com.xml.mainapp.model.data.Pogodnost;
 import com.xml.mainapp.model.data.Smestaj;
 
@@ -35,9 +34,10 @@ public class PogodnostMapper {
 		PogodnostDTO dto = new PogodnostDTO();
 		dto.setId(p.getId());
 		dto.setNaziv(p.getNaziv());
-		Collection<Long> tempSmestaj = new ArrayList<Long>();
+		Collection<String> tempSmestaj = new ArrayList<String>();
 		if(p.getListaSmestaja() != null) {
 			for(Smestaj s: p.getListaSmestaja()) {
+				tempSmestaj.add(s.getId());
 				tempSmestaj.add(s.getId());
 			}
 		}

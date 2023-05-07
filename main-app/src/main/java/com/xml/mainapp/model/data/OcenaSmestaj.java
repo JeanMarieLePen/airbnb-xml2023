@@ -3,25 +3,16 @@ package com.xml.mainapp.model.data;
 import java.io.Serializable;
 import java.time.LocalDate;
 
+import org.springframework.data.mongodb.core.mapping.DBRef;
+import org.springframework.data.mongodb.core.mapping.Document;
+
 import com.xml.mainapp.model.users.Guest;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Inheritance;
-import jakarta.persistence.InheritanceType;
-import jakarta.persistence.ManyToMany;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToOne;
-import jakarta.persistence.Version;
+import javax.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.PositiveOrZero;
 
-@Entity
-@Inheritance(strategy = InheritanceType.JOINED)
+@Document(collection = "ocenasmestaj_db")
 public class OcenaSmestaj implements Serializable{
 
 	/**
@@ -29,16 +20,15 @@ public class OcenaSmestaj implements Serializable{
 	 */
 	private static final long serialVersionUID = 3146125669257521835L;
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
+	private String id;
 	@Version
 	@Column(columnDefinition = "integer DEFAULT 0", nullable = false)
 	private Integer version;
 	
-	@ManyToOne(fetch = FetchType.LAZY)
+	@DBRef
 	private Smestaj smestaj;
 	
-	@ManyToOne(fetch = FetchType.LAZY)
+	@DBRef
 	private Guest gost;
 	
 	@PositiveOrZero
@@ -52,7 +42,7 @@ public class OcenaSmestaj implements Serializable{
 		super();
 	}
 
-	public OcenaSmestaj(Long id, Integer version, Smestaj smestaj, Guest gost, @PositiveOrZero int ocena,
+	public OcenaSmestaj(String id, Integer version, Smestaj smestaj, Guest gost, @PositiveOrZero int ocena,
 			@NotNull LocalDate datum) {
 		super();
 		this.id = id;
@@ -63,11 +53,11 @@ public class OcenaSmestaj implements Serializable{
 		this.datum = datum;
 	}
 
-	public Long getId() {
+	public String getId() {
 		return id;
 	}
 
-	public void setId(Long id) {
+	public void setId(String id) {
 		this.id = id;
 	}
 

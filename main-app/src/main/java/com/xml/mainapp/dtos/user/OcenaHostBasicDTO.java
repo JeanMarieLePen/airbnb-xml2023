@@ -4,7 +4,7 @@ package com.xml.mainapp.dtos.user;
 import java.time.LocalDate;
 
 public class OcenaHostBasicDTO {
-	private Long id;
+	private String id;
 	//private KorisnikBasicDTO vlasnik;
 	private KorisnikBasicDTO gost;
 	private LocalDate datum;
@@ -13,10 +13,10 @@ public class OcenaHostBasicDTO {
 	public OcenaHostBasicDTO() {
 		super();
 	}
-	public Long getId() {
+	public String getId() {
 		return id;
 	}
-	public void setId(Long id) {
+	public void setId(String id) {
 		this.id = id;
 	}
 	public KorisnikBasicDTO getGost() {

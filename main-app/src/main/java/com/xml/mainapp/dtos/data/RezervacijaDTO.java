@@ -1,13 +1,12 @@
 package com.xml.mainapp.dtos.data;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 import com.xml.mainapp.dtos.user.KorisnikBasicDTO;
 import com.xml.mainapp.model.data.StatusRezervacije;
 
 public class RezervacijaDTO {
-	private Long id;
+	private String id;
 	private SmestajDTO smestaj;
 	private KorisnikBasicDTO gost;
 	private LocalDateTime odDatum;
@@ -19,10 +18,10 @@ public class RezervacijaDTO {
 	public RezervacijaDTO() {
 		super();
 	}
-	public Long getId() {
+	public String getId() {
 		return id;
 	}
-	public void setId(Long id) {
+	public void setId(String id) {
 		this.id = id;
 	}
 	public SmestajDTO getSmestaj() {

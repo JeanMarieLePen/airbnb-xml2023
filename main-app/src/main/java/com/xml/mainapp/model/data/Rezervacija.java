@@ -1,31 +1,18 @@
 package com.xml.mainapp.model.data;
 
 import java.io.Serializable;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
-import com.xml.mainapp.model.users.Guest;
-import com.xml.mainapp.model.users.Korisnik;
+import org.springframework.data.mongodb.core.mapping.DBRef;
+import org.springframework.data.mongodb.core.mapping.Document;
 
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Inheritance;
-import jakarta.persistence.InheritanceType;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToOne;
-import jakarta.persistence.Version;
+import com.xml.mainapp.model.users.Guest;
+
+import javax.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.PositiveOrZero;
 
-@Entity
-@Inheritance(strategy = InheritanceType.JOINED)
+@Document(collection = "rezervacije_db")
 public class Rezervacija implements Serializable{
 	/**
 	 * 
@@ -33,15 +20,13 @@ public class Rezervacija implements Serializable{
 	private static final long serialVersionUID = 7006531226274487692L;
 
 	@Id
-	@GeneratedValue(strategy=GenerationType.IDENTITY)
-	@Column(columnDefinition = "bigserial", name = "id", updatable = false, unique = true)	
-	private Long id;
+	private String id;
 	
 	@Version
 	@Column(columnDefinition = "integer DEFAULT 0", nullable = false)
 	private Integer version;
 	
-	@ManyToOne(fetch = FetchType.LAZY)
+	@DBRef
 	private Smestaj smestaj;
 	
 //	@OneToOne(fetch = FetchType.LAZY)
@@ -63,7 +48,7 @@ public class Rezervacija implements Serializable{
 	}
 
 	
-	public Rezervacija(Long id, Integer version, Smestaj smestaj, Guest gost, @NotNull LocalDateTime odDatum,
+	public Rezervacija(String id, Integer version, Smestaj smestaj, Guest gost, @NotNull LocalDateTime odDatum,
 			@NotNull LocalDateTime doDatum, @PositiveOrZero int brojGostiju, StatusRezervacije status) {
 		super();
 		this.id = id;
@@ -77,11 +62,11 @@ public class Rezervacija implements Serializable{
 	}
 
 
-	public Long getId() {
+	public String getId() {
 		return id;
 	}
 
-	public void setId(Long id) {
+	public void setId(String id) {
 		this.id = id;
 	}
 

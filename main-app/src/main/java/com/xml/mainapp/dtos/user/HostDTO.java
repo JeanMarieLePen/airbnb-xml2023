@@ -4,7 +4,6 @@ package com.xml.mainapp.dtos.user;
 import java.util.Collection;
 
 import com.xml.mainapp.dtos.KorisnikDTO;
-import com.xml.mainapp.dtos.data.SmestajBasicDTO;
 import com.xml.mainapp.dtos.data.SmestajDTO;
 
 

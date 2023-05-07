@@ -3,17 +3,17 @@ package com.xml.mainapp.dtos.data;
 import java.util.Collection;
 
 public class PogodnostDTO {
-	private Long id;
+	private String id;
 	private String naziv;
-	private Collection<Long> listaSmestajaIds;
+	private Collection<String> listaSmestajaIds;
 	
 	public PogodnostDTO() {
 		super();
 	}
-	public Long getId() {
+	public String getId() {
 		return id;
 	}
-	public void setId(Long id) {
+	public void setId(String id) {
 		this.id = id;
 	}
 	public String getNaziv() {
@@ -22,10 +22,10 @@ public class PogodnostDTO {
 	public void setNaziv(String naziv) {
 		this.naziv = naziv;
 	}
-	public Collection<Long> getListaSmestajaIds() {
+	public Collection<String> getListaSmestajaIds() {
 		return listaSmestajaIds;
 	}
-	public void setListaSmestajaIds(Collection<Long> listaSmestajaIds) {
+	public void setListaSmestajaIds(Collection<String> listaSmestajaIds) {
 		this.listaSmestajaIds = listaSmestajaIds;
 	}
 	

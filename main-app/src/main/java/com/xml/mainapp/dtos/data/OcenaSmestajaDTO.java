@@ -4,10 +4,10 @@ package com.xml.mainapp.dtos.data;
 import java.time.LocalDate;
 
 import com.xml.mainapp.dtos.user.GuestDTO;
-import com.xml.mainapp.dtos.user.KorisnikBasicDTO;
+
 
 public class OcenaSmestajaDTO {
-	private Long id;
+	private String id;
 	private SmestajBasicDTO smestaj;
 	private GuestDTO gost;
 	private int ocena;
@@ -17,10 +17,10 @@ public class OcenaSmestajaDTO {
 	public OcenaSmestajaDTO() {
 		super();
 	}
-	public Long getId() {
+	public String getId() {
 		return id;
 	}
-	public void setId(Long id) {
+	public void setId(String id) {
 		this.id = id;
 	}
 	public SmestajBasicDTO getSmestaj() {

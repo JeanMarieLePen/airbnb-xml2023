@@ -17,7 +17,9 @@ spring:
         - id: MAIN-APP-SERVICE
           uri: lb://MAIN-APP-SERVICE
           predicates:
-            - Path=/login/**, /korisnik/**, /main-app-websockets/**, /smestaj/**, /host/**
+            - Path=/login/**, /korisnik/**, /main-app-websockets/**, /host/**
+          #filters:
+          #- AuthenticationFilter
           #filters:
             #- name: CircuitBreaker
               #args:
@@ -27,6 +29,20 @@ spring:
           uri: lb://FLIGHTS-SERVICE
           predicates:
           - Path=/login2/**, /korisnik2/**, /regkor/**, /admin/**, /let/**
+          filters:
+          - AuthenticationFilter
+        - id: SMESTAJ-SERVICE
+          uri: lb://SMESTAJ-SERVICE
+          predicates:
+          - Path=/smestaj/**
+          filters:
+          - AuthenticationFilter
+        - id: RESERVATION-SERVICE
+          uri: lb://RESERVATION-SERVICE
+          predicates:
+          - Path=/rezervacija/**
+          filters:
+          - AuthenticationFilter
 #hystrix:
   #command:
     #fallbackcmd:
@@ -44,8 +60,8 @@ eureka:
     register-with-eureka: true
     fetch-registry: true
     service-url:
-      #defaultZone: http://eureka-service:8761/eureka/
-      defaultZone: http://localhost:8761/eureka/
+      defaultZone: http://eureka-service:8761/eureka/
+      #defaultZone: http://localhost:8761/eureka/
   instance:
     #hostname: localhost
     prefer-ip-address: true   

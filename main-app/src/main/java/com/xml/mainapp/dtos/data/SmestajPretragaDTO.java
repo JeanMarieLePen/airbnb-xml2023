@@ -5,7 +5,7 @@ import java.util.Collection;
 import com.xml.mainapp.dtos.AdresaDTO;
 
 public class SmestajPretragaDTO {
-	private Long id;
+	private String id;
 	private Long hostId;
 	private AdresaDTO adresa;
 	private Collection<PogodnostBasicDTO> pogodnosti;
@@ -19,10 +19,10 @@ public class SmestajPretragaDTO {
 	public SmestajPretragaDTO() {
 		super();
 	}
-	public Long getId() {
+	public String getId() {
 		return id;
 	}
-	public void setId(Long id) {
+	public void setId(String id) {
 		this.id = id;
 	}
 	public Long getHostId() {

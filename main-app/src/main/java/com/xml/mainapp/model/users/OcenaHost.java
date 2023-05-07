@@ -3,19 +3,13 @@ package com.xml.mainapp.model.users;
 import java.io.Serializable;
 import java.time.LocalDate;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToOne;
-import jakarta.persistence.Version;
+import org.springframework.data.mongodb.core.mapping.DBRef;
+import org.springframework.data.mongodb.core.mapping.Document;
+import javax.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.PositiveOrZero;
 
-@Entity
+@Document(collection = "ocenahost_db")
 public class OcenaHost implements Serializable{
 
 	/**
@@ -24,15 +18,14 @@ public class OcenaHost implements Serializable{
 	private static final long serialVersionUID = 2627107159354986096L;
 	
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
+	private String id;
 	@Version
 	@Column(columnDefinition = "integer DEFAULT 0", nullable = false)
 	private Integer version;
 	
-	@ManyToOne(fetch = FetchType.LAZY)
+	@DBRef
 	private Host vlasnik;
-	@ManyToOne(fetch = FetchType.LAZY)
+	@DBRef
 	private Guest gost;
 	@PositiveOrZero
 	private int ocena;
@@ -40,10 +33,10 @@ public class OcenaHost implements Serializable{
 	private LocalDate datum;
 	
 	
-	public Long getId() {
+	public String getId() {
 		return id;
 	}
-	public void setId(Long id) {
+	public void setId(String id) {
 		this.id = id;
 	}
 	public Integer getVersion() {

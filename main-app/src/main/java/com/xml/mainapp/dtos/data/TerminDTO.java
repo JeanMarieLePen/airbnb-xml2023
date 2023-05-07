@@ -4,7 +4,7 @@ import java.time.LocalDateTime;
 
 public class TerminDTO {
 
-	private Long id;
+	private String id;
 	private LocalDateTime pocetak;
 	private LocalDateTime kraj;
 	private SmestajDTO smestaj;
@@ -22,10 +22,10 @@ public class TerminDTO {
 		this.version = version;
 	}
 
-	public Long getId() {
+	public String getId() {
 		return id;
 	}
-	public void setId(Long id) {
+	public void setId(String id) {
 		this.id = id;
 	}
 	public LocalDateTime getPocetak() {

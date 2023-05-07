@@ -1,9 +1,9 @@
 package com.xml.mainapp.repositories;
 
-import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.mongodb.repository.MongoRepository;
 
 import com.xml.mainapp.model.data.Smestaj;
 
-public interface SmestajRep extends JpaRepository<Smestaj, Long> {
+public interface SmestajRep extends MongoRepository<Smestaj, String> {
 
 }

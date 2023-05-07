@@ -6,6 +6,11 @@ import java.util.Collection;
 
 public class UpdateProfileDTO implements Serializable{
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -1269785345731781974L;
+	
 	private KorisnikDTO korisnikDTO;
 	private NewSifraDTO novaSifraDTO;
 	

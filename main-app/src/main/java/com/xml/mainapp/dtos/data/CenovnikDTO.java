@@ -2,7 +2,7 @@ package com.xml.mainapp.dtos.data;
 
 
 public class CenovnikDTO {
-	private Long id;
+	private String id;
 	private boolean poSmestaju;
 	private Long cena;
 	private Long cenaPraznik;
@@ -13,13 +13,13 @@ public class CenovnikDTO {
 	//private LocalDateTime krajLeta;
 	
 	
-	public Long getId() {
+	public String getId() {
 		return id;
 	}
 	public CenovnikDTO() {
 		super();
 	}
-	public void setId(Long id) {
+	public void setId(String id) {
 		this.id = id;
 	}
 	public boolean isPoSmestaju() {

@@ -1,9 +1,10 @@
 package com.xml.mainapp.repositories;
 
-import org.springframework.data.jpa.repository.JpaRepository;
+
+import org.springframework.data.mongodb.repository.MongoRepository;
 
 import com.xml.mainapp.model.data.Adresa;
 
-public interface AdresaRep extends JpaRepository<Adresa, Long> {
+public interface AdresaRep extends MongoRepository<Adresa, String> {
 
 }

@@ -5,7 +5,6 @@ import org.springframework.stereotype.Component;
 
 import com.xml.mainapp.dtos.data.RezervacijaDTO;
 import com.xml.mainapp.model.data.Rezervacija;
-import com.xml.mainapp.model.data.StatusRezervacije;
 
 @Component
 public class RezervacijaMapper {

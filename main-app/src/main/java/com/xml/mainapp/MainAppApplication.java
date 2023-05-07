@@ -8,10 +8,13 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.web.client.RestTemplate;
 
+import com.github.cloudyrock.spring.v5.EnableMongock;
+
 @SpringBootApplication
 @EnableDiscoveryClient
 @EnableScheduling
 @EnableCaching
+@EnableMongock
 public class MainAppApplication {
 
 	public static void main(String[] args) {

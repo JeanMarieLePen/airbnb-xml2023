@@ -4,7 +4,6 @@ import java.util.Collection;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,10 +19,8 @@ import com.xml.mainapp.dtos.UpdateProfileDTO;
 import com.xml.mainapp.dtos.data.OcenaSmestajaDTO;
 import com.xml.mainapp.dtos.data.RezervacijaDTO;
 import com.xml.mainapp.services.KorisnikService;
-import com.xml.mainapp.services.RezervacijaService;
-
-import jakarta.transaction.Transactional;
-import jakarta.websocket.server.PathParam;
+import javax.persistence.*;
+import javax.transaction.Transactional;
 
 @RestController
 @RequestMapping("/korisnik")
@@ -31,13 +28,21 @@ public class KorisnikCtrl {
 	
 	@Autowired
 	private KorisnikService korisnikService;
-	@Autowired
-	private RezervacijaService rezervacijaService;
 	
 	@PreAuthorize("hasAnyAuthority('GUEST', 'HOST')")
 	@GetMapping("/{id}")
-	public ResponseEntity<KorisnikDTO> getProfileById(@PathVariable(name="id") Long id){
-		KorisnikDTO retVal = this.korisnikService.getUserById(id);
+	public ResponseEntity<KorisnikDTO> getProfileById(@PathVariable(name="id") String id){
+		KorisnikDTO retVal = this.korisnikService.getUserById(id.substring(1, id.length() - 1));
+		if(retVal == null) {
+			return new ResponseEntity<KorisnikDTO>(HttpStatus.NO_CONTENT);
+		}else {
+			return new ResponseEntity<KorisnikDTO>(retVal, HttpStatus.OK);
+		}
+	}
+	@PreAuthorize("hasAnyAuthority('GUEST', 'HOST')")
+	@GetMapping("/getHostById/{id}")
+	public ResponseEntity<KorisnikDTO> getHostById(@PathVariable(name="id") String id){
+		KorisnikDTO retVal = this.korisnikService.findHostById(id);
 		if(retVal == null) {
 			return new ResponseEntity<KorisnikDTO>(HttpStatus.NO_CONTENT);
 		}else {
@@ -63,44 +68,8 @@ public class KorisnikCtrl {
 	
 	@PreAuthorize("hasAuthority('GUEST')")
 	@Transactional
-	@PostMapping("/makeReservation/{userId}/{smestajId}")
-	public ResponseEntity<RezervacijaDTO> makeReservation(@PathVariable(value = "userId") Long userId, @PathVariable(value = "smestajId") Long smestajId, @RequestBody RezervacijaDTO r){
-		RezervacijaDTO retVal = this.rezervacijaService.makeReservation(userId, smestajId, r);
-		if(retVal == null) {
-			return new ResponseEntity<RezervacijaDTO>(HttpStatus.NO_CONTENT);
-		}else {
-			return new ResponseEntity<RezervacijaDTO>(retVal, HttpStatus.OK);
-		}
-	}
-	
-	@PreAuthorize("hasAuthority('GUEST')")
-	@Transactional
-	@PutMapping("/editReservation")
-	public ResponseEntity<RezervacijaDTO> editReservation(@RequestBody RezervacijaDTO dto){
-		RezervacijaDTO retVal = this.rezervacijaService.editReservation(dto);
-		if(retVal == null) {
-			return new ResponseEntity<RezervacijaDTO>(HttpStatus.NO_CONTENT);
-		}else {
-			return new ResponseEntity<RezervacijaDTO>(retVal, HttpStatus.OK);
-		}
-	}
-	
-	@PreAuthorize("hasAuthority('GUEST')")
-	@Transactional
-	@PutMapping("/cancelReservation/{userId}/{rezervacijaId}")
-	public ResponseEntity<RezervacijaDTO> cancelReservation(@PathVariable(value = "userId") Long userId, @PathVariable(value = "rezervacijaId") Long rezervacijaId){
-		RezervacijaDTO retVal = this.rezervacijaService.cancelReservation(userId, rezervacijaId);
-		if(retVal == null) {
-			return new ResponseEntity<RezervacijaDTO>(HttpStatus.NO_CONTENT);
-		}else {
-			return new ResponseEntity<RezervacijaDTO>(retVal, HttpStatus.OK);
-		}
-	}
-	
-	@PreAuthorize("hasAuthority('GUEST')")
-	@Transactional
 	@GetMapping("/getAllReservationsByUser/{id}")
-	public ResponseEntity<Collection<RezervacijaDTO>> getAllByUser(@PathVariable(value = "id") Long id){
+	public ResponseEntity<Collection<RezervacijaDTO>> getAllByUser(@PathVariable(value = "id") String id){
 		Collection<RezervacijaDTO> retList = this.korisnikService.getAllReservationByUserId(id);
 		if(retList == null) {
 			return new ResponseEntity<>(HttpStatus.NO_CONTENT);
@@ -112,7 +81,7 @@ public class KorisnikCtrl {
 	@PreAuthorize("hasAuthority('GUEST')")
 	@Transactional
 	@PostMapping("/giveRatingToSmestaj/{userId}/{smestajId}")
-	public ResponseEntity<?> giveRatingToSmestaj(@PathVariable(value = "userId") Long userId, @PathVariable(value = "smestajId") Long smestajId, @RequestBody OcenaSmestajaDTO ocena){
+	public ResponseEntity<?> giveRatingToSmestaj(@PathVariable(value = "userId") String userId, @PathVariable(value = "smestajId") String smestajId, @RequestBody OcenaSmestajaDTO ocena){
 		OcenaSmestajaDTO retVal = this.korisnikService.giveRatingToSmestaj(userId, smestajId, ocena);
 		if(retVal == null) {
 			return new ResponseEntity<>(HttpStatus.NO_CONTENT);
@@ -124,7 +93,7 @@ public class KorisnikCtrl {
 	@PreAuthorize("hasAuthority('GUEST')")
 	@Transactional
 	@GetMapping("/canGiveRating/{userId}/{smestajId}")
-	public ResponseEntity<?> canGiveRating(@PathVariable(value = "userId") Long userId, @PathVariable(value = "smestajId") Long smestajId){
+	public ResponseEntity<?> canGiveRating(@PathVariable(value = "userId") String userId, @PathVariable(value = "smestajId") String smestajId){
 		boolean retVal = this.korisnikService.canGiveRating(userId, smestajId);
 		return new ResponseEntity<Boolean>(retVal, HttpStatus.OK);
 	}

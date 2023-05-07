@@ -16,6 +16,7 @@ import com.xml.mainapp.model.data.Rezervacija;
 import com.xml.mainapp.model.users.Guest;
 import com.xml.mainapp.model.users.OcenaHost;
 
+
 @Component
 public class GuestMapper {
 

@@ -5,6 +5,7 @@ import org.springframework.stereotype.Component;
 import com.xml.mainapp.dtos.data.CenovnikDTO;
 import com.xml.mainapp.model.data.Cenovnik;
 
+
 @Component
 public class CenovnikMapper {
 
