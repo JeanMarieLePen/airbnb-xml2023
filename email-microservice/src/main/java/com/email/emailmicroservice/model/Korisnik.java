@@ -1,82 +1,77 @@
 package com.email.emailmicroservice.model;
 
-
 import jakarta.annotation.Nullable;
-import jakarta.persistence.*;
+import javax.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-
 import java.io.Serializable;
-import java.time.LocalDate;
 import java.util.Collection;
 
 import org.hibernate.validator.constraints.Length;
-@Entity
-//@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
-@Inheritance(strategy = InheritanceType.JOINED)
-//@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
+import org.springframework.data.mongodb.core.mapping.DBRef;
+import org.springframework.data.mongodb.core.mapping.Document;
+
+
+@Document(collection = "korisnici_db")
 public class Korisnik implements Serializable {
 
-  /**
+    /**
 	 * 
 	 */
 	private static final long serialVersionUID = 5966705918219356582L;
 
 	@Id
-//	@GeneratedValue(strategy = GenerationType.TABLE)
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-  @Column(columnDefinition="bigserial", name="id", updatable=false, unique=true)
-  private Long id;
+    private String id;
 
-  @Version
-  @Column(columnDefinition = "integer DEFAULT 0", nullable = false)
-  private Integer version;
+    @Version
+    @Column(columnDefinition = "integer DEFAULT 0", nullable = false)
+    private Integer version;
 
-  @NotNull
+    @NotNull
 	@NotBlank
 	@Length(min=6, max=100)
-  private String lozinka;
-  @NotNull
+    private String lozinka;
+    @NotNull
 	@NotBlank
 	@Length(min=3, max=100)
-  private String korIme;
-  @NotNull
+    private String korIme;
+    @NotNull
 	@NotBlank
 	@Email
-  private String email;
-  @NotNull
+    private String email;
+    @NotNull
 	@NotBlank
 	@Length(min=2, max=100)
-  private String ime;
-  @NotNull
+    private String ime;
+    @NotNull
 	@NotBlank
 	@Length(min=2, max=100)
-  private String prezime;
-  @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, targetEntity = Adresa.class)
-  @JoinColumn(name="adresa_id", referencedColumnName="id")
-  @NotNull
-  private Adresa adresa;
+    private String prezime;
+    @DBRef
+    @NotNull
+    private Adresa adresa;
 
-  @Enumerated
-  private StatusNaloga statusNaloga;
-  @Enumerated
-  private TipKorisnika tipKorisnika;
+    @Enumerated
+    private StatusNaloga statusNaloga;
+    @Enumerated
+    private TipKorisnika tipKorisnika;
 
-  @ElementCollection
-  private Collection<byte[]> slike;
+    @ElementCollection
+    @Nullable
+    private Collection<byte[]> slike;
 
-  @Nullable
-  private String activationLink;
-  
-  
+    @Nullable
+    private String activationLink;
+    
+    
 	public Korisnik() {
 		super();
 	}
 	
 
 
-	public Korisnik(Long id, Integer version, @NotNull @NotBlank @Length(min = 6, max = 100) String lozinka,
+	public Korisnik(String id, Integer version, @NotNull @NotBlank @Length(min = 6, max = 100) String lozinka,
 			@NotNull @NotBlank @Length(min = 3, max = 100) String korIme, @NotNull @NotBlank @Email String email,
 			@NotNull @NotBlank @Length(min = 2, max = 100) String ime,
 			@NotNull @NotBlank @Length(min = 2, max = 100) String prezime, @NotNull Adresa adresa,
@@ -106,11 +101,11 @@ public class Korisnik implements Serializable {
 		this.activationLink = activationLink;
 	}
 
-	public Long getId() {
+	public String getId() {
 		return id;
 	}
 
-	public void setId(Long id) {
+	public void setId(String id) {
 		this.id = id;
 	}
 

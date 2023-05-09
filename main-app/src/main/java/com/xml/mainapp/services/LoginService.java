@@ -55,11 +55,12 @@ public class LoginService {
 			return null;
 		}
 		Korisnik newUser = this.korMapper.fromDTOReg(regDTO);
-//		Adresa a = new Adresa();
-//		a.setAdresa(regDTO.getAdresa().getAdresa());
-//		a.setLat(regDTO.getAdresa().getLat());
-//		a.setLng(regDTO.getAdresa().getLng());
-//		adrRep.save(a);
+		Adresa a = new Adresa();
+		a.setAdresa(regDTO.getAdresa().getAdresa());
+		a.setLat(regDTO.getAdresa().getLat());
+		a.setLng(regDTO.getAdresa().getLng());
+		adrRep.save(a);
+		newUser.setAdresa(a);
 		if(newUser != null) {
 			BCryptPasswordEncoder enc = new BCryptPasswordEncoder();
 			newUser.setTipKorisnika(TipKorisnika.GUEST);

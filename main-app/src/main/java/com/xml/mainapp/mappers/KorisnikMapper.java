@@ -38,19 +38,21 @@ public class KorisnikMapper {
 	
 	public Korisnik fromDTOReg(RegisterDTO kdto) {
 		Korisnik k = new Korisnik();
-		k.setAdresa(aMapper.fromDTO(kdto.getAdresa()));
+//		k.setAdresa(aMapper.fromDTO(kdto.getAdresa()));
 		k.setEmail(kdto.getEmail());
 		k.setIme(kdto.getIme());
 		k.setPrezime(kdto.getPrezime());
 		k.setKorIme(kdto.getKorIme());
 		k.setLozinka(kdto.getLozinka());
 		k.setTipKorisnika(kdto.getTipKorisnika());
-		Collection<byte[]> tempSlike = new ArrayList<byte[]>();
-		for(String s: kdto.getSlike()) {
-			byte[] data = Base64.getDecoder().decode(s.split(",")[1]);
-			tempSlike.add(data);
+		if(kdto.getSlike() != null) {
+			Collection<byte[]> tempSlike = new ArrayList<byte[]>();
+			for(String s: kdto.getSlike()) {
+				byte[] data = Base64.getDecoder().decode(s.split(",")[1]);
+				tempSlike.add(data);
+			}
+			k.setSlike(tempSlike);
 		}
-		k.setSlike(tempSlike);
 		return k;
 	}
 	

@@ -7,7 +7,7 @@ public enum StatusNaloga implements Serializable {
     AKTIVAN(0),
     NA_CEKANJU(1),
     OBRISAN(2),
-    BANOVAN(3);
+    SUSPENDOVAN(3);
 
     private final int status;
 

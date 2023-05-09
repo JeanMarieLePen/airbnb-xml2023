@@ -16,7 +16,7 @@ public class RegisterDTO implements Serializable{
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 857559850351366828L;
+	private static final long serialVersionUID = 7846570012464075658L;
 	@NotNull
 	@NotBlank
 	@Length(min=6, max=30)

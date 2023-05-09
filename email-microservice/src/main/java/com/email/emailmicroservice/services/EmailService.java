@@ -2,7 +2,7 @@ package com.email.emailmicroservice.services;
 
 import java.time.LocalDateTime;
 
-import org.apache.commons.lang.RandomStringUtils;
+import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.mail.SimpleMailMessage;
@@ -66,7 +66,7 @@ public class EmailService {
 //		randomString += ";";
 //		randomString += exptime;
 		k.setActivationLink(randomString);
-		korRep.saveAndFlush(k);
+		korRep.save(k);
 		body = "Postovani  " + k.getIme() + " " + k.getPrezime()
 		+ ",\nDa biste aktivirali svoj nalog, potrebno je da kliknete na sledeci link: "
 		+ host+"/login/activateAccount" + "?id=" + k.getId() + "&secret="
@@ -88,7 +88,7 @@ public class EmailService {
 //		randomString += ";";
 //		randomString += exptime;
 		k.setActivationLink(randomString);
-		korRep.saveAndFlush(k);
+		korRep.save(k);
 		body = "Postovani  " + k.getIme() + " " + k.getPrezime()
 		+ ",\nDa biste aktivirali svoj nalog, potrebno je da kliknete na sledeci link: "
 		+ host+"/login/activateAccount" + "?id=" + k.getId() + "&secret="

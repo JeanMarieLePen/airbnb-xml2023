@@ -10,13 +10,11 @@ import jakarta.validation.constraints.PositiveOrZero;
 
 public class AdresaDTO implements Serializable{
 
-	
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = -6482333765402254022L;
-	@PositiveOrZero
-	private Long id;
+	private static final long serialVersionUID = -8603719579936684827L;
+	private String id;
 	@PositiveOrZero
 	private Integer version;
 	
@@ -31,10 +29,10 @@ public class AdresaDTO implements Serializable{
 	public AdresaDTO() {
 		super();
 	}
-	public Long getId() {
+	public String getId() {
 		return id;
 	}
-	public void setId(Long id) {
+	public void setId(String id) {
 		this.id = id;
 	}
 	public Integer getVersion() {
