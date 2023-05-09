@@ -14,8 +14,8 @@ spring:
             allowedHeaders: "*"
             allowedMethods: "*"
       routes:
-        - id: MAIN-APP-SERVICE
-          uri: lb://MAIN-APP-SERVICE
+        - id: REGLOG-SERVICE
+          uri: lb://REGLOG-SERVICE
           predicates:
             - Path=/login/**, /korisnik/**, /main-app-websockets/**, /host/**
           #filters:
@@ -60,8 +60,8 @@ eureka:
     register-with-eureka: true
     fetch-registry: true
     service-url:
-      defaultZone: http://eureka-service:8761/eureka/
-      #defaultZone: http://localhost:8761/eureka/
+      #defaultZone: http://eureka-service:8761/eureka/
+      defaultZone: http://localhost:8761/eureka/
   instance:
     #hostname: localhost
     prefer-ip-address: true   

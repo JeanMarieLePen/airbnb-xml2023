@@ -33,8 +33,8 @@ public class EurekaGatewayApplication {
 		return "TEST GATEWAY";
 	}
 	
-	@Autowired
-	private RedisHashComponent redisHashComponent;
+//	@Autowired
+//	private RedisHashComponent redisHashComponent;
 	
 	
 //	@PostConstruct
