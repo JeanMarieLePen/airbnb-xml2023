@@ -1,20 +1,34 @@
 package com.xml2023.smestajmicroservice.services;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoField;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Service;
 
 import com.xml2023.smestajmicroservice.dtos.PogodnostDTO;
+import com.xml2023.smestajmicroservice.dtos.PretragaDTO;
 import com.xml2023.smestajmicroservice.dtos.SmestajDTO;
+import com.xml2023.smestajmicroservice.dtos.SmestajPretragaDTO;
 import com.xml2023.smestajmicroservice.mappers.PogodnostMapper;
 import com.xml2023.smestajmicroservice.mappers.SmestajBasicMapper;
 import com.xml2023.smestajmicroservice.model.data.Host;
+import com.xml2023.smestajmicroservice.model.data.OcenaSmestaj;
 import com.xml2023.smestajmicroservice.model.data.Pogodnost;
 import com.xml2023.smestajmicroservice.model.data.Rezervacija;
 import com.xml2023.smestajmicroservice.model.data.Smestaj;
 import com.xml2023.smestajmicroservice.model.data.StatusRezervacije;
+import com.xml2023.smestajmicroservice.model.data.Termin;
 import com.xml2023.smestajmicroservice.repositories.HostRepository;
 import com.xml2023.smestajmicroservice.repositories.PogodnostRepository;
 import com.xml2023.smestajmicroservice.repositories.RezervacijaRep;
@@ -36,7 +50,8 @@ public class SmestajService {
 	private PogodnostRepository pogRep;
 	@Autowired
 	private PogodnostMapper pogMap;
-	
+	@Autowired MongoTemplate monTempl;
+
 	public SmestajDTO createNew(SmestajDTO s) {
 		//u maperu se definisu i cuvaju svi objekti koji su ugnjezdeni u objekat smestaj
 		Smestaj tmp = smestajMapper.fromDTO(s);
@@ -129,4 +144,13 @@ public class SmestajService {
 		}
 		return retList;
 	}
+	public float getProsecnaOcena(Smestaj s) {
+		Collection<OcenaSmestaj> ocene= s.getListaOcena();
+		float uk=0;
+		for(OcenaSmestaj o : ocene) {
+			uk+=o.getOcena();
+		}
+		return uk/ocene.size();	
+	}
+	
 }

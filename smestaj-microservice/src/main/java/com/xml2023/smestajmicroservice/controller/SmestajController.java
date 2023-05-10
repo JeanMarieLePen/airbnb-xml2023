@@ -1,6 +1,7 @@
 package com.xml2023.smestajmicroservice.controller;
 
 import java.util.Collection;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -15,7 +16,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.xml2023.smestajmicroservice.dtos.PogodnostDTO;
+import com.xml2023.smestajmicroservice.dtos.PretragaDTO;
 import com.xml2023.smestajmicroservice.dtos.SmestajDTO;
+import com.xml2023.smestajmicroservice.dtos.SmestajPretragaDTO;
+import com.xml2023.smestajmicroservice.services.PretragaService;
 import com.xml2023.smestajmicroservice.services.SmestajService;
 
 
@@ -25,6 +29,7 @@ public class SmestajController {
 
 	@Autowired
 	private SmestajService smestajService;
+	@Autowired PretragaService pServ;
 	
 	@PostMapping("/create")
 	public ResponseEntity<SmestajDTO> createNew(@RequestBody SmestajDTO smestaj){
@@ -81,5 +86,12 @@ public class SmestajController {
 			return new ResponseEntity<Collection<PogodnostDTO>>(HttpStatus.NO_CONTENT);
 		else
 			return new ResponseEntity<Collection<PogodnostDTO>>(retList, HttpStatus.OK);
+	}
+	
+	@PostMapping("/pretraga")
+	public ResponseEntity<Collection<SmestajPretragaDTO>> pretraga(@RequestBody PretragaDTO dto){
+		System.out.println("Pretraga");
+		Collection<SmestajPretragaDTO> lista=pServ.pretraga(dto);
+		return new ResponseEntity<Collection<SmestajPretragaDTO>>(lista,HttpStatus.OK);
 	}
 }

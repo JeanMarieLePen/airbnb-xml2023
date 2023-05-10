@@ -3,6 +3,7 @@ package com.example.reservationservice.services;
 import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoField;
 import java.util.ArrayList;
 import java.util.Collection;
 
@@ -200,7 +201,5 @@ public class RezervacijaService {
 		}
 		return retList;
 	}
-	
-	
-	
+
 }
