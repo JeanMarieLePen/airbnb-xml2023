@@ -13,7 +13,7 @@ import Reservation from '../components/Reservation'
 import PregledRezervacija from '../overviews/PregledRezervacija'
 import EditSmestaj from '../components/EditSmestaj'
 import Moderacija from '../overviews/ModeracijaRezervacija'
-
+import Pretraga from '../components/Pretraga'
 const routes = [
   {
     path:`/moderate`,
@@ -92,6 +92,11 @@ const routes = [
     // this generates a separate chunk (about.[hash].js) for this route
     // which is lazy-loaded when the route is visited.
     component: () => import(/* webpackChunkName: "about" */ '../views/AboutView.vue')
+  },
+  {
+    path:'/search',
+    name:'search',
+    component:Pretraga
   }
 ]
 

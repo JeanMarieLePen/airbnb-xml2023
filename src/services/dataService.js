@@ -85,6 +85,9 @@ class DataService{
     giveRatingToSmestaj(userId, smestajId, ocenaObj){
         return axios.post(`${API_URL}/korisnik/giveRatingToSmestaj/${userId}/${smestajId}`, ocenaObj);
     }
+    search(parametri){
+        return axios.post(`${API_URL}/smestaj/pretraga`, parametri)
+    }
 
 }
 
