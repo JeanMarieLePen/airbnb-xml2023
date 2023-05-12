@@ -86,7 +86,10 @@ public class KorisnikService {
 	public KorisnikDTO updateProfileById(String id, UpdateProfileDTO udto) {
 		// TODO Auto-generated method stub
 		Korisnik k = this.korisnikRep.findById(id).orElse(null);
-		if(k == null) {
+		if(udto.getKorisnikDTO().getKorIme().equals(k.getKorIme())) {
+			
+		}
+		if(k == null || (korisnikRep.findByEmail(udto.getKorisnikDTO().getEmail()) != null) || (korisnikRep.findByKorIme(udto.getKorisnikDTO().getKorIme()) != null)) {
 			return null;
 		}else {
 			//izmena sifre ako je menjao

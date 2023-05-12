@@ -25,6 +25,13 @@ import com.example.reservationservice.repositories.KorisnikRep;
 import com.example.reservationservice.repositories.RezervacijaRep;
 import com.example.reservationservice.repositories.SmestajRep;
 import com.example.reservationservice.repositories.TerminRepository;
+import com.xml2023.mainapp.GreetingServiceGrpc;
+import com.xml2023.mainapp.GreetingServiceGrpc.GreetingServiceBlockingStub;
+import com.xml2023.mainapp.KorisnikRequest;
+import com.xml2023.mainapp.KorisnikResponse;
+
+import io.grpc.ManagedChannel;
+import io.grpc.ManagedChannelBuilder;
 
 @Service
 public class RezervacijaService {
@@ -53,6 +60,14 @@ public class RezervacijaService {
 	public RezervacijaDTO makeReservation(String userId, String smestajId, RezervacijaDTO r) {
 		// TODO Auto-generated method stub
 		Korisnik k = korRep.findById(userId).orElse(null);
+		
+		ManagedChannel channel = ManagedChannelBuilder.forAddress("localhost", 8082).usePlaintext().build();
+		
+		GreetingServiceBlockingStub greetServBlockStub = GreetingServiceGrpc.newBlockingStub(channel);
+		
+		KorisnikRequest zahtev = KorisnikRequest.newBuilder().setId(userId).build();
+		
+		KorisnikResponse odgovor = greetServBlockStub.greeting(zahtev);
 		if(k==null) {
 			return null;
 		}

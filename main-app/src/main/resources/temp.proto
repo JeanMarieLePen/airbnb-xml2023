@@ -1,0 +1,17 @@
+syntax = "proto3";
+
+package com.xml2023.mainapp;
+option java_multiple_files = true;
+
+message KorisnikRequest{
+	string id = 1;
+}
+
+message KorisnikResponse{
+	string responsemessage = 1;
+	int32 responseCode = 2;
+}
+
+service GreetingService {
+	rpc greeting(KorisnikRequest) returns (KorisnikResponse);
+}

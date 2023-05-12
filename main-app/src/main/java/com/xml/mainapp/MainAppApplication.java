@@ -1,5 +1,7 @@
 package com.xml.mainapp;
 
+import java.io.IOException;
+
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cache.annotation.EnableCaching;
@@ -17,8 +19,11 @@ import com.github.cloudyrock.spring.v5.EnableMongock;
 @EnableMongock
 public class MainAppApplication {
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws IOException, Exception {
 		SpringApplication.run(MainAppApplication.class, args);
+		GrpcServer server = new GrpcServer(7979);
+		server.start();
+		server.blockUntilShutdown();
 	}
 	
 	@Bean
