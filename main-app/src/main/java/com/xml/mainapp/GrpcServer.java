@@ -2,6 +2,9 @@ package com.xml.mainapp;
 
 import java.io.IOException;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
 import com.xml.mainapp.services.GreetingServiceImpl;
 
 import io.grpc.Server;
@@ -11,7 +14,6 @@ public class GrpcServer {
 
 	private final int port;
 	private final Server server;
-	
 	public GrpcServer(int port) throws IOException {
 	    this.port = port;
 	    this.server = ServerBuilder.forPort(port)
