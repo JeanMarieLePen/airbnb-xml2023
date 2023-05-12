@@ -30,6 +30,11 @@ public class AdresaDTO implements Serializable{
 	public AdresaDTO() {
 		super();
 	}
+	public AdresaDTO(AdresaDTO adresa2) {
+		this.adresa=adresa2.getAdresa();
+		this.lat=adresa2.getLat();
+		this.lng=adresa2.getLng();
+	}
 	public String getId() {
 		return id;
 	}
