@@ -62,7 +62,7 @@ public class RezervacijaService {
 		// TODO Auto-generated method stub
 		Korisnik k = korRep.findById(userId).orElse(null);
 		
-		ManagedChannel channel = ManagedChannelBuilder.forAddress("localhost", 8082).usePlaintext().build();
+		ManagedChannel channel = ManagedChannelBuilder.forAddress("localhost", 7979).usePlaintext().build();
 		
 		GreetingServiceBlockingStub greetServBlockStub = GreetingServiceGrpc.newBlockingStub(channel);
 		
