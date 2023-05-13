@@ -29,7 +29,7 @@ public class Smestaj implements Serializable{
 	@DBRef
 	private Host vlasnik;
 	
-	@DBRef
+	@DBRef()
 	private Adresa adresa;
 	
 	@DBRef

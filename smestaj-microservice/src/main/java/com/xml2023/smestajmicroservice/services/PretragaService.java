@@ -95,6 +95,7 @@ public class PretragaService {
 	}
 	
 	private boolean preklop(LocalDateTime p1, LocalDateTime k1, LocalDateTime p2, LocalDateTime k2) {
+		if(p1==null || k1==null || p2==null || k2==null) return false;
 		boolean p1UnutarT2= p1.plusSeconds(1).isAfter(p2) && p1.plusSeconds(1).isBefore(k2);
 		boolean k1UnutarT2= k1.plusSeconds(1).isAfter(p2) && k1.plusSeconds(1).isBefore(k2);
 		return p1UnutarT2 || k1UnutarT2;

@@ -15,8 +15,7 @@ import com.xml2023.smestajmicroservice.model.data.Smestaj;
 @Component
 public class PogodnostMapper {
 
-	@Autowired
-	private SmestajBasicMapper sMapper;
+	
 	
 	public Pogodnost fromDTO(PogodnostBasicDTO dto) {
 		Pogodnost p = new Pogodnost();

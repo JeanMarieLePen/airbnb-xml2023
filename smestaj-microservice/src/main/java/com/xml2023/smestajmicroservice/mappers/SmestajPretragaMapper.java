@@ -55,7 +55,9 @@ public class SmestajPretragaMapper {
 		return uk/ocene.size();	
 	}
 	//https://www.baeldung.com/java-between-dates
+	//TODO provera praznika, leta i neradnih dana
 	public float ukupnaCena(Smestaj s, LocalDateTime pocetak, LocalDateTime kraj) {
+		if(pocetak==null || kraj==null) return 0;
 		float uk=0;
 	    List<LocalDate> dani= pocetak.toLocalDate().datesUntil(kraj.toLocalDate()).collect(Collectors.toList());
 	    dani.add(kraj.toLocalDate());
