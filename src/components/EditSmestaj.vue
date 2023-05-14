@@ -183,7 +183,7 @@
                                 <tbody>
                                     <tr>
                                         <td>
-                                            <datepicker no-disabled-range :disabled-dates="disabledDates" @update:model-value="updateDatePicker" v-model="termin" range>
+                                            <datepicker :min-date="new Date()" no-disabled-range :disabled-dates="disabledDates" @update:model-value="updateDatePicker" v-model="termin" range>
 
                                             </datepicker>
                                         </td>

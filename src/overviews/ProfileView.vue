@@ -155,6 +155,14 @@ import axios from 'axios'
             this.getUserProfileData(this.userObj.id);
         },
         methods:{
+            smestajRemove(id){
+                dataService.removeSmestaj(id, this.userObj.id).then(response => {
+                    if(response.status === 200){
+                        console.log("USPESNO OBRISANO");
+                        this.$router.push(`/dash`);
+                    }
+                })
+            },
             smestajEdit(id){
                 this.$router.push(`/editSmestaj/${id}`);
             },

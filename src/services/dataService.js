@@ -91,7 +91,9 @@ class DataService{
     deleteUserProfile(id){
         return axios.delete(`${API_URL}/korisnik/deleteAccount/${id}`);
     }
-
+    removeSmestaj(smestajId, vlasnikId){
+        return axios.delete(`${API_URL}/smestaj/remove/${smestajId}/${vlasnikId}`);
+    }
 }
 
 
