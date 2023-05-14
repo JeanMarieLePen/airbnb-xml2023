@@ -88,6 +88,9 @@ class DataService{
     search(parametri){
         return axios.post(`${API_URL}/smestaj/pretraga`, parametri)
     }
+    deleteUserProfile(id){
+        return axios.delete(`${API_URL}/korisnik/deleteAccount/${id}`);
+    }
 
 }
 

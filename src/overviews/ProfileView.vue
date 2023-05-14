@@ -4,7 +4,7 @@
             <h1 style="margin-top:10px;color:#35424a;"><span id='titleEffect'>Pregled naloga</span></h1>
             <hr style='background:#35424a;height:1px'>
         </div>
-        <div  class="container">
+        <div  class="container" style="margin-bottom:200px;">
             <form>
                 <ul id="services" class="list-group">
                 <!-- Osoba -->
@@ -28,7 +28,7 @@
                         <h5 class="header5">Prezime</h5>
                         <h4>{{profile.prezime}}</h4>
                     </li>
-                    <li class="list-group-item" >
+                    <li v-if="profile.adresa" class="list-group-item" >
                         <h5 class="header5">Adresa</h5>
                         <h4>{{profile.adresa.adresa}}</h4>
                     </li>
@@ -75,8 +75,41 @@
                 </div>
                 
             </form>
+            <div >
+                <div v-if="messages.errorRemoval" v-html="messages.errorRemoval" class="alert alert-danger">
+                </div>
+                <div v-if="messages.successRemoval" v-html="messages.successRemoval" class="alert alert-success">
+                </div>
+            </div>
+            
         </div>
-
+        <section v-if="userObj.role == 'HOST'" style="margin-left: 10px; margin-bottom:40px;">
+            <div>
+                <div v-show="profile.smestajList.length > 0" class="row">
+                    <div class="col-md-3" style="min-height:600px;" v-bind:key="index" v-for="(tempSmestaj, index) in profile.smestajList.slice(0,15)">
+                        <div style="width:90%;height:90%" class="card  text-center">
+                            <img class="card-img-top" style="width:90%;height:50%; margin-left:auto; margin-right:auto; margin-top:10px;" :src="getAnImage(tempSmestaj)" alt="card image collar">
+                            <div class="card-body">
+                                <p class="card-text">Smestaj {{tempSmestaj.naziv}} - {{tempSmestaj.cena}}</p>
+                                <p class="card-text">{{tempSmestaj.adresa.adresa}}</p>
+                                
+                                <div class="starClass">
+                                    <starrating style="margin-bottom:10px" read-only v-model="tempSmestaj.ocena" :star-size="30"/>
+                                </div>
+                                <div class="options-buttons">
+                                    <button v-on:click="smestajDetails(tempSmestaj.id)" class="btn btn-primary">Detalji</button>
+                                    <button v-on:click="smestajEdit(tempSmestaj.id)" class="btn btn-primary">Izmeni</button>
+                                    <button v-on:click="smestajRemove(tempSmestaj.id)" class="btn btn-primary">Ukloni</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div v-show="profile.smestajList.length == 0">
+                    <h1 style="font-style:italic; font-family:Verdana">KORISNIK NEMA NISTA U PONUDI...</h1>
+                </div>
+            </div>
+        </section>
     </div>
 
 </template>
@@ -95,8 +128,13 @@ import axios from 'axios'
         },
         data(){
             return{
+                messages:{
+                    successRemoval:'',
+                    errorRemoval:'',
+                },
                 profile:{
                     kategorija:{},
+                    smestajList:[]
                 },
                 btnEnabled:false,
                 userId : '',
@@ -117,21 +155,45 @@ import axios from 'axios'
             this.getUserProfileData(this.userObj.id);
         },
         methods:{
+            smestajEdit(id){
+                this.$router.push(`/editSmestaj/${id}`);
+            },
+            smestajDetails(id){
+                this.$router.push(`/pregled/${id}`);
+                // this.$router.push(`/overview/${id}`);
+            },
+            getAnImage(smestaj){
+                let tmpImg = 'data:image/png;base64,';
+                for(let i = 0; i < smestaj.slike.length; i++){
+                    tmpImg += smestaj.slike[i];
+                    break;
+                }
+                console.log(tmpImg);
+                return tmpImg;
+            },
             getUserProfileData(id){
                 try{
                         // const response = axios.get('http://localhost:8082/korisnik/1');
                         // console.log("STIGAO ODGOVOR");
                     dataService.getUser(id).then(response => {
-                        console.log("USER PROFILE: " + JSON.stringify(response.data));
+                        // console.log("USER PROFILE: " + JSON.stringify(response.data));
                         this.profile = response.data;
-                        console.log("BROJ SLIKA: " + this.profile.slike.length);
-                        let tempSlike = [];
-                        for(let i = 0; i < this.profile.slike.length; i++){
-                            console.log("AAA")
-                            tempSlike.push('data:image/png;base64,' + this.profile.slike[i]);
+                        if(this.profile.slike){
+                            if(this.userObj.role === 'HOST'){
+                                console.log("BROJ SMESTAJA: " + this.profile.smestajList.length);
+                            }
+                            // console.log("BROJ SLIKA: " + this.profile.slike.length);
+                            let tempSlike = [];
+                            for(let i = 0; i < this.profile.slike.length; i++){
+                                // console.log("AAA")
+                                tempSlike.push('data:image/png;base64,' + this.profile.slike[i]);
+                            }
+                            this.profile.slike = tempSlike;
+                            // console.log("SLIKA POSLE FORMATIRANJA: " + JSON.stringify(this.profile.slike[0]))
+                        }else{
+                            this.profile.slike = [];
                         }
-                        this.profile.slike = tempSlike;
-                        console.log("SLIKA POSLE FORMATIRANJA: " + JSON.stringify(this.profile.slike[0]))
+                        
                     });
                 }catch(error){
                     console.log("GRESKA: " + error.message);
@@ -142,10 +204,40 @@ import axios from 'axios'
                 this.$router.push(`/edit`);
             },
             deleteUser(id){ 
-                this.$router.push(`/deleteAccount/${id}`)
-            //   DataService.deleteUserProfile(id).then(response => {
-             //         this.profile = response.data;
-            //     })
+                // this.$router.push(`/deleteAccount/${id}`)
+                console.log("BRISANJE NALOGA ID-a: " + this.userObj.id);
+                dataService.deleteUserProfile(id).then(response => {
+                     //this.profile = response.data;
+                     if(response.status === 200){
+                        this.messages.successRemoval = "<h4>Nalog uspesno obrisan!</h4>"
+                        setTimeout(() => {
+                            this.messages.successRemoval = '';
+                            this.emitter.emit("loggedIn", false);
+                            if(localStorage.getItem('xmljwt')){
+                                localStorage.removeItem('xmljwt');
+                                axios.defaults.headers.common['Authorization'] = undefined;
+                                this.loggedIn = false;
+                                this.$router.push("/");
+                                if(localStorage.getItem('parsedToken')){
+                                    localStorage.removeItem('parsedToken');
+                                }
+                            }else{
+                                localStorage.removeItem('xmljwt');
+                                axios.defaults.headers.common['Authorization'] = undefined;
+                                this.loggedIn = false;
+                                this.$router.push('/');
+                            }
+                        }, 5000);
+                        setTimeout(() => {
+                            this.$router.push(`/`);
+                        }, 5050);
+                     }else{
+                        this.messages.errorRemoval = "<h4>Ne mozete obrisati nalog jer imate aktivne rezervacije!</h4>"
+                        setTimeout(() => {
+                            this.messages.errorRemoval = '';
+                        }, 5050);
+                     }
+                })
             },
         },
         
@@ -154,6 +246,11 @@ import axios from 'axios'
 </script>
 
 <style scoped>
+
+.options-buttons button{
+    margin-left: 5px;
+    margin-right: 5px;
+}
 
 #titleEffect{
   color:#1E90FF;

@@ -15,7 +15,24 @@
                     <div id='message-box' class="alert alert-success" v-if='messages.successMessage' v-html="messages.successMessage"> </div>
                     <div v-if='!this.submitted'>
                     <form class="form-signin">
-
+                        <table style="font-size:25px;" id="tblTip">
+                            <tr>
+                                <td>
+                                    REGISTROVANI KORISNIK
+                                </td>
+                                <td>
+                                    <input type="checkbox" @change="selectTip1()" v-model="isGuest"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    VLASNIK SMESTAJA
+                                </td>
+                                <td>
+                                    <input type="checkbox" @change="selectTip2()" v-model="isHost"/>
+                                </td>
+                            </tr>
+                        </table>
                         <div v-if='messages.errorFirstName' id='testError' class="alert alert-danger" v-html="messages.errorFirstName"></div>
                         <div class="form-label-group">
                         <input v-model="form.ime" type="text" id="inputName" class="form-control" placeholder="Insert name" required autofocus>
@@ -141,6 +158,8 @@ export default{
 	
 	        // private TipKorisnika tipKorisnika;
             
+            isHost: false,
+            isGuest: true,
             submitted : false,
             confirmPassword : '',
             form:{
@@ -187,6 +206,16 @@ export default{
         await loadYmap({ ...this.settings, format: "json", debug: true});
     },
     methods:{
+        selectTip1(){
+            this.isHost = !this.isHost;
+            console.log("HOST: " + this.isHost);
+            console.log("GUEST: " + this.isGuest);
+        },
+        selectTip2(){
+            this.isGuest = !this.isGuest;
+            console.log("HOST: " + this.isHost);
+            console.log("GUEST: " + this.isGuest);
+        },
         async getCoordsFromAdresa(adresa){
             return ymaps.geocode(adresa).then((result) => {
                 let locationCoords = {
@@ -282,6 +311,13 @@ export default{
                         }, 4000);
                 }else{
                     console.log("PRE POZIVA")
+                    let tmpTip = null;
+                    if(this.isGuest == true){
+                        tmpTip = "GUEST";
+                    }else{
+                        tmpTip = "HOST";
+                    }
+                    this.form.tipKorisnika = tmpTip;
                     await this.getCoordsFromAdresa(this.form.adresa.adresa);
                     console.log("REGISTRUJE SE KORISNIK: " + JSON.stringify(this.form));
                     dataService.register(this.form).then(response => {
@@ -315,6 +351,15 @@ export default{
 
 
 <style scoped>
+
+#tblTip td{
+    margin: 30px;
+    padding: 10px;
+}
+#tblTip{
+    margin-bottom:50px;
+}
+
 .form-signin .btn {
   font-size: 80%;
   border-radius: 5rem;

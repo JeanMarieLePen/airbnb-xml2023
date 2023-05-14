@@ -69,11 +69,13 @@ export default {
         approve(r, index){
             dataService.approveReservation(r.id, this.userId).then(response => {
                 console.log("ODOBRENA REZERVACIJA");
+                this.getRezervacije();
             });
         },
         reject(r, index){
             dataService.rejectReservation(r.id, this.userId).then(response => {
                 console.log("ODBIJENA REZERVACIJA");
+                this.getRezervacije();
             });
         },
         getAnImage(smestaj){

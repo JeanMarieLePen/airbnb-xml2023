@@ -6,14 +6,27 @@
 			    <hr style='background:#1E90FF;height:1px;'>
 			</div>
             <div class="container">
+                <div v-if='messages.errorEmail' class="alert alert-danger" v-html="messages.errorEmail"></div>
                 <fieldset class="form-group">
 					<label><font color="#1E90FF">Email</font></label>
-					<input type="text" class="form-control" v-model="profile.email" disabled />
+					<input type="text" class="form-control" v-model="profile.email"/>
+				</fieldset>
+                <fieldset v-if="userObj.role=='HOST'" class="form-group">
+                    <table style="font-size:20px;">
+                        <tr>
+                            <td>
+                                <label><font color="#1E90FF">Automatska obrada:</font></label>
+                            </td>
+                            <td>
+                                <input type="checkbox" @change="selectRezAutomatski()" v-model="profile.rezAutomatski"/>
+                            </td>
+                        </tr>
+                    </table>
 				</fieldset>
                 <div v-if='messages.errorUsername' id='testError' class="alert alert-danger" v-html="messages.errorUsername"></div>
                 <fieldset class="form-group">
                     <label><font color="#1E90FF">Korisnicko ime</font></label>
-                    <input type="text" class="form-control" v-model="profile.korIme"  disabled/>
+                    <input type="text" class="form-control" v-model="profile.korIme"/>
                 </fieldset>
                 <div v-if='messages.errorFirstName' id='testError' class="alert alert-danger" v-html="messages.errorFirstName"></div>
                 <fieldset class="form-group">
@@ -29,6 +42,21 @@
                 <fieldset class="form-group">
                     <label><font color="#1E90FF">Adresa</font></label>
                     <input type="text" class="form-control" v-model="profile.adresa.adresa" />
+                </fieldset>
+                <fieldset class="form-group">
+                    <div>
+                        <vueperslides id="slajdovi"  fixed-height="600px">
+                            <vueperslide v-for="(slide, i) in profile.slike" :key="i">
+                                <template v-slot:content>
+                                    <img :src="slide" style="width:100%;height:600px">
+                                </template>
+                            </vueperslide>
+                        </vueperslides>
+                    </div>
+                    <div style="display: flex; justify-content: flex-end">
+                        <input id="file-input" @change="uploadImage" multiple style="margin-top:20px;margin-bottom:20px;" type="file">
+                        <button class="btn btn-primary" style="margin:10px; height:35px; font-weight:400" @click="ponistiIzbor()">Undo</button>
+                    </div>
                 </fieldset>
                 <!-- <fieldset class="form-group">
                     <label><font color="#1E90FF">Datum Rodjenja</font></label>
@@ -73,11 +101,16 @@ import dataService from '../services/dataService';
 import VueDatePicker from '@vuepic/vue-datepicker';
 import parserMixin from '@/mixins/mixin'
 
+import { VueperSlides, VueperSlide } from 'vueperslides'
+import 'vueperslides/dist/vueperslides.css'
+
     export default{
         data(){
             return{
                 btnEnabled:false,
                 profile: {
+                    slike:[],
+                    adresa:{},
                 },
                 ownerId : '',
 			    changedPassword: {
@@ -85,8 +118,11 @@ import parserMixin from '@/mixins/mixin'
                     newPassword: '',
                     newPasswordRepeat: '',
                 },
+                slike:[],
+
                 messages:{
                     errorUsername:'',
+                    errorEmail:'',
                     errorFirstName: '',
                     errorLastName: '',
                     errorAdresa:'',
@@ -103,37 +139,67 @@ import parserMixin from '@/mixins/mixin'
                 }
             }
         },
-        created(){
+        async created(){
             parserMixin.methods.checkLoginStatus();
             this.userObj = parserMixin.methods.parseXmlJwt();
             console.log("ID KORISNIKA: " + this.userObj.id);
             this.getUserProfileData(this.userObj.id);
         },
         methods:{
+            selectRezAutomatski(){
+                console.log("AUTOMATSKI: " + this.profile.rezAutomatski)
+            },
+            ponistiIzbor(){
+                this.slike.pop();
+                this.profile.slike.pop();
+            },
             getUserProfileData(id){
                 try{
                     dataService.getUser(id).then(response => {
-                        console.log("USER PROFILE: " + JSON.stringify(response.data));
+                        // console.log("USER PROFILE: " + JSON.stringify(response.data));
                         this.profile = response.data;
-                        console.log("BROJ SLIKA: " + this.profile.slike.length);
-                        let tempSlike = [];
-                        for(let i = 0; i < this.profile.slike.length; i++){
-                            console.log("AAA")
-                            tempSlike.push('data:image/png;base64,' + this.profile.slike[i]);
-                        }
-                        this.profile.slike = tempSlike;
-                        console.log("SLIKA POSLE FORMATIRANJA: " + JSON.stringify(this.profile.slike[0]))
+                        console.log("AUTOMATSKA OBRADA: " + this.profile.rezAutomatski)
+                        if(this.profile.slike){
+                            console.log("BROJ SLIKA: " + this.profile.slike.length);
+                            let tempSlike = [];
+                            for(let i = 0; i < this.profile.slike.length; i++){
+                                // console.log("AAA")
+                                tempSlike.push('data:image/png;base64,' + this.profile.slike[i]);
+                            }
+                            this.profile.slike = tempSlike;
+                            // console.log("SLIKA POSLE FORMATIRANJA: " + JSON.stringify(this.profile.slike[0]));
+                        }else{
+                            this.profile.slike = [];
+                        } 
                     });
                 }catch(error){
                     console.log("GRESKA: " + error.message);
                 }
             },
+            uploadImage(e){
+                let images = [];
+                for(let i = 0; i < e.target.files.length; i++){
+                    images.push(e.target.files[i]);
+                }
+                for(let i = 0; i < images.length; i++){
+                    let reader = new FileReader();
+                    reader.readAsDataURL(images[i]);
+                    reader.onload = (() => {
+                        this.profile.slike.push(reader.result);
+                        this.slike.push(reader.result);
+                    });
+                }
+            },
             updateProfile(){
                  // First name i last name se u paru gledaju da li su popunjeni
                 // Ako su oba prazna u isto vreme ce za oba izbaciti error
-                if (this.profile.korisnickoIme == '') {
+                if (this.profile.korIme == '') {
                     this.messages.errorUsername = `<h4>Polje korisnicko ime ne moze biti prazno!</h4>`;
                     setTimeout(() => this.messages.errorUsername = '', 5000);
+                }
+                else if(this.profile.email == ''){
+                    this.messages.errorEmail = `<h4>Polje email ne moze biti prazno!</h4>`;
+                    setTimeout(() => this.messages.errorEmail = '', 5000);
                 }
                 else if (this.profile.ime == '' && this.profile.prezime != '') {
                     his.messages.errorFirstName = `<h4>Polje ime ne moze biti prazno!</h4>`;
@@ -208,8 +274,7 @@ import parserMixin from '@/mixins/mixin'
                             if(response.status === 200){
                                 this.messages.successResponse = `<h4>Vas profil je uspesno izmenjen!</h4>`;
                                 setTimeout(() => this.messages.successResponse = '', 5000);
-                                this.profile = response.data;
-                                setTimeout(() => { this.$router.push(`/home`)}, 5050);
+                                setTimeout(() => { this.$router.push(`/dash`)}, 5050);
                             }
                         })
                         .catch(error=>{
@@ -237,6 +302,7 @@ import parserMixin from '@/mixins/mixin'
                     dataService.updateUserProfile(objekat).then(response => {
                         this.messages.successResponse = `<h4>Vas profil je uspesno izmenjen!</h4>`;
                         setTimeout(() => this.messages.successResponse = '', 5000);
+                        setTimeout(() => { this.$router.push(`/dash`)}, 5050);
                         console.log(response.data)
                         this.profile = response.data;
                     })
@@ -251,6 +317,8 @@ import parserMixin from '@/mixins/mixin'
         },
         components:{
             datepicker:VueDatePicker,
+            vueperslides : VueperSlides,
+            vueperslide :VueperSlide,
         }
         
     }

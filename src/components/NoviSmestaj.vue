@@ -220,8 +220,8 @@
                     <tfoot style="margin-top:100px;">
                         <tr>
                             <td colspan="2">
-                                <div v-if="messages.successMessage" v-html="messages.successMessage" class="alert alert-success"></div>
-                                <div v-if="messages.errorMessage" v-html="messages.errorMessage" class="alert alert-warning"></div>
+                                <div v-if="messages.successResponse" v-html="messages.successResponse" class="alert alert-success"></div>
+                                <div v-if="messages.errorResponse" v-html="messages.errorResponse" class="alert alert-warning"></div>
                             </td>
                         </tr>
                         <tr>
@@ -611,8 +611,14 @@ export default {
                     console.log("KREIRAN SMESTAJ");
                     if(response.status === 200){
                         this.messages.successResponse = "<h4>Uspesno kreiran smestaj</h4>";
+                        setTimeout(() => {
+                            this.messages.successResponse = '';
+                        }, 3500);
                     }else{
                         this.messages.errorResponse = "<h4>Doslo je do greske</h4>";
+                        setTimeout(() => {
+                            this.messages.errorResponse = '';
+                        }, 3500);
                     }
                 });
             }catch(error){
