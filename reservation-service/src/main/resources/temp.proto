@@ -15,3 +15,46 @@ message KorisnikResponse{
 service GreetingService {
 	rpc greeting(KorisnikRequest) returns (KorisnikResponse);
 }
+
+message SmestajExistsRequest{
+	string id=1;
+}
+
+message SmestajExistsResponse{
+	string responsemessage = 1;
+	int32 responseCode = 2;
+}
+
+message RezervacijaExistsRequest{
+	string id=1;
+}
+
+message RezervacijaExistsResponse{
+	string responsemessage = 1;
+	int32 responseCode = 2;
+}
+
+service SmestajGrpc{
+	rpc exists(SmestajExistsRequest) returns (SmestajExistsResponse);
+	rpc getSmestajIdsForHost(SmestajIdsForHostRequest) returns  (SmestajIdsForHostResponse);
+}
+
+service RezervacijaGrpc{
+	rpc exists(RezervacijaExistsRequest) returns (RezervacijaExistsResponse);
+	rpc reservationsForUserExists(ActiveResExistsRequest) returns (ActiveResExistsResponse);
+}
+
+message ActiveResExistsRequest{
+	string userId=1;
+	string tip=2;
+}
+message ActiveResExistsResponse{
+	int32 exists=1;
+}
+
+message SmestajIdsForHostRequest{
+	string userId=1;
+}
+message SmestajIdsForHostResponse{
+	repeated string smestajIds=1;
+}

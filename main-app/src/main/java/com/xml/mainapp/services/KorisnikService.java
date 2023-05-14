@@ -40,6 +40,13 @@ import com.xml.mainapp.repositories.GuestRepository;
 import com.xml.mainapp.repositories.HostRepository;
 import com.xml.mainapp.repositories.KorisnikRep;
 import com.xml.mainapp.repositories.SmestajRep;
+import com.xml2023.mainapp.ActiveResExistsRequest;
+import com.xml2023.mainapp.ActiveResExistsResponse;
+import com.xml2023.mainapp.RezervacijaGrpcGrpc;
+import com.xml2023.mainapp.RezervacijaGrpcGrpc.RezervacijaGrpcBlockingStub;
+
+import io.grpc.ManagedChannel;
+import io.grpc.ManagedChannelBuilder;
 
 @Service
 public class KorisnikService {
@@ -221,15 +228,28 @@ public class KorisnikService {
 		
 		if(k.getTipKorisnika().equals(TipKorisnika.GUEST)) {
 			Guest g = guestRep.findById(id).orElse(null);
-			if(g.getRezervacije().stream().anyMatch(r -> r.getStatus().equals(StatusRezervacije.REZERVISANA))){
+			ManagedChannel channel = ManagedChannelBuilder.forAddress("localhost", 7978).usePlaintext().build();
+			RezervacijaGrpcBlockingStub blockStub= RezervacijaGrpcGrpc.newBlockingStub(channel);
+			ActiveResExistsRequest req=ActiveResExistsRequest.newBuilder().setUserId(g.getId()).build();
+			ActiveResExistsResponse res=blockStub.reservationsForUserExists(req);
+			
+			if(res.getExists()==1) {
+				System.out.println("Grpc rezulatat : Za korisnika postoje aktivne rezervacije!");
 				return null;
-			}else if(g.getRezervacije().stream().anyMatch(r -> r.getStatus().equals(StatusRezervacije.PENDING))) {
-				return null;
-			}else {
-				this.korisnikRep.delete(k);
-				this.guestRep.delete(g);
-				return korisnikMapper.toDTO(k);
 			}
+			this.korisnikRep.delete(k);
+			this.guestRep.delete(g);
+			return korisnikMapper.toDTO(k);
+			
+			//if(g.getRezervacije().stream().anyMatch(r -> r.getStatus().equals(StatusRezervacije.REZERVISANA))){
+			//	return null;
+			//}else if(g.getRezervacije().stream().anyMatch(r -> r.getStatus().equals(StatusRezervacije.PENDING))) {
+			//	return null;
+			//}else {
+			//	this.korisnikRep.delete(k);
+			//	this.guestRep.delete(g);
+			//	return korisnikMapper.toDTO(k);
+			//}
 		}
 		
 		if(k.getTipKorisnika().equals(TipKorisnika.HOST)) {

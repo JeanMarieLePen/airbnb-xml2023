@@ -59,8 +59,11 @@ public class SmestajPretragaMapper {
 	public float ukupnaCena(Smestaj s, LocalDateTime pocetak, LocalDateTime kraj) {
 		if(pocetak==null || kraj==null) return 0;
 		float uk=0;
-	    List<LocalDate> dani= pocetak.toLocalDate().datesUntil(kraj.toLocalDate()).collect(Collectors.toList());
-	    dani.add(kraj.toLocalDate());
+		LocalDate pocDate=pocetak.toLocalDate();
+		LocalDate krajDate=kraj.toLocalDate();
+		
+	    List<LocalDate> dani= pocDate.datesUntil(krajDate).collect(Collectors.toList());
+	    dani.add(krajDate);
 		System.out.println("Pocetni : kranji : broj dana = "+pocetak.toLocalDate()+" : "+" : "+kraj.toLocalDate()+" : "+dani.size());
 		for(LocalDate dan : dani) {
 			if(isWeekend(dan)) {

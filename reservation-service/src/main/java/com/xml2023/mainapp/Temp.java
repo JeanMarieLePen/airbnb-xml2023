@@ -24,6 +24,46 @@ public final class Temp {
   static final 
     com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internal_static_com_xml2023_mainapp_KorisnikResponse_fieldAccessorTable;
+  static final com.google.protobuf.Descriptors.Descriptor
+    internal_static_com_xml2023_mainapp_SmestajExistsRequest_descriptor;
+  static final 
+    com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+      internal_static_com_xml2023_mainapp_SmestajExistsRequest_fieldAccessorTable;
+  static final com.google.protobuf.Descriptors.Descriptor
+    internal_static_com_xml2023_mainapp_SmestajExistsResponse_descriptor;
+  static final 
+    com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+      internal_static_com_xml2023_mainapp_SmestajExistsResponse_fieldAccessorTable;
+  static final com.google.protobuf.Descriptors.Descriptor
+    internal_static_com_xml2023_mainapp_RezervacijaExistsRequest_descriptor;
+  static final 
+    com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+      internal_static_com_xml2023_mainapp_RezervacijaExistsRequest_fieldAccessorTable;
+  static final com.google.protobuf.Descriptors.Descriptor
+    internal_static_com_xml2023_mainapp_RezervacijaExistsResponse_descriptor;
+  static final 
+    com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+      internal_static_com_xml2023_mainapp_RezervacijaExistsResponse_fieldAccessorTable;
+  static final com.google.protobuf.Descriptors.Descriptor
+    internal_static_com_xml2023_mainapp_ActiveResExistsRequest_descriptor;
+  static final 
+    com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+      internal_static_com_xml2023_mainapp_ActiveResExistsRequest_fieldAccessorTable;
+  static final com.google.protobuf.Descriptors.Descriptor
+    internal_static_com_xml2023_mainapp_ActiveResExistsResponse_descriptor;
+  static final 
+    com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+      internal_static_com_xml2023_mainapp_ActiveResExistsResponse_fieldAccessorTable;
+  static final com.google.protobuf.Descriptors.Descriptor
+    internal_static_com_xml2023_mainapp_SmestajIdsForHostRequest_descriptor;
+  static final 
+    com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+      internal_static_com_xml2023_mainapp_SmestajIdsForHostRequest_fieldAccessorTable;
+  static final com.google.protobuf.Descriptors.Descriptor
+    internal_static_com_xml2023_mainapp_SmestajIdsForHostResponse_descriptor;
+  static final 
+    com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+      internal_static_com_xml2023_mainapp_SmestajIdsForHostResponse_fieldAccessorTable;
 
   public static com.google.protobuf.Descriptors.FileDescriptor
       getDescriptor() {
@@ -36,10 +76,32 @@ public final class Temp {
       "\n\ntemp.proto\022\023com.xml2023.mainapp\"\035\n\017Kor" +
       "isnikRequest\022\n\n\002id\030\001 \001(\t\"A\n\020KorisnikResp" +
       "onse\022\027\n\017responsemessage\030\001 \001(\t\022\024\n\014respons" +
-      "eCode\030\002 \001(\0052j\n\017GreetingService\022W\n\010greeti" +
-      "ng\022$.com.xml2023.mainapp.KorisnikRequest" +
-      "\032%.com.xml2023.mainapp.KorisnikResponseB" +
-      "\002P\001b\006proto3"
+      "eCode\030\002 \001(\005\"\"\n\024SmestajExistsRequest\022\n\n\002i" +
+      "d\030\001 \001(\t\"F\n\025SmestajExistsResponse\022\027\n\017resp" +
+      "onsemessage\030\001 \001(\t\022\024\n\014responseCode\030\002 \001(\005\"" +
+      "&\n\030RezervacijaExistsRequest\022\n\n\002id\030\001 \001(\t\"" +
+      "J\n\031RezervacijaExistsResponse\022\027\n\017response" +
+      "message\030\001 \001(\t\022\024\n\014responseCode\030\002 \001(\005\"5\n\026A" +
+      "ctiveResExistsRequest\022\016\n\006userId\030\001 \001(\t\022\013\n" +
+      "\003tip\030\002 \001(\t\")\n\027ActiveResExistsResponse\022\016\n" +
+      "\006exists\030\001 \001(\005\"*\n\030SmestajIdsForHostReques" +
+      "t\022\016\n\006userId\030\001 \001(\t\"/\n\031SmestajIdsForHostRe" +
+      "sponse\022\022\n\nsmestajIds\030\001 \003(\t2j\n\017GreetingSe" +
+      "rvice\022W\n\010greeting\022$.com.xml2023.mainapp." +
+      "KorisnikRequest\032%.com.xml2023.mainapp.Ko" +
+      "risnikResponse2\345\001\n\013SmestajGrpc\022_\n\006exists" +
+      "\022).com.xml2023.mainapp.SmestajExistsRequ" +
+      "est\032*.com.xml2023.mainapp.SmestajExistsR" +
+      "esponse\022u\n\024getSmestajIdsForHost\022-.com.xm" +
+      "l2023.mainapp.SmestajIdsForHostRequest\032." +
+      ".com.xml2023.mainapp.SmestajIdsForHostRe" +
+      "sponse2\362\001\n\017RezervacijaGrpc\022g\n\006exists\022-.c" +
+      "om.xml2023.mainapp.RezervacijaExistsRequ" +
+      "est\032..com.xml2023.mainapp.RezervacijaExi" +
+      "stsResponse\022v\n\031reservationsForUserExists" +
+      "\022+.com.xml2023.mainapp.ActiveResExistsRe" +
+      "quest\032,.com.xml2023.mainapp.ActiveResExi" +
+      "stsResponseB\002P\001b\006proto3"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
         new com.google.protobuf.Descriptors.FileDescriptor.    InternalDescriptorAssigner() {
@@ -65,6 +127,54 @@ public final class Temp {
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_com_xml2023_mainapp_KorisnikResponse_descriptor,
         new java.lang.String[] { "Responsemessage", "ResponseCode", });
+    internal_static_com_xml2023_mainapp_SmestajExistsRequest_descriptor =
+      getDescriptor().getMessageTypes().get(2);
+    internal_static_com_xml2023_mainapp_SmestajExistsRequest_fieldAccessorTable = new
+      com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
+        internal_static_com_xml2023_mainapp_SmestajExistsRequest_descriptor,
+        new java.lang.String[] { "Id", });
+    internal_static_com_xml2023_mainapp_SmestajExistsResponse_descriptor =
+      getDescriptor().getMessageTypes().get(3);
+    internal_static_com_xml2023_mainapp_SmestajExistsResponse_fieldAccessorTable = new
+      com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
+        internal_static_com_xml2023_mainapp_SmestajExistsResponse_descriptor,
+        new java.lang.String[] { "Responsemessage", "ResponseCode", });
+    internal_static_com_xml2023_mainapp_RezervacijaExistsRequest_descriptor =
+      getDescriptor().getMessageTypes().get(4);
+    internal_static_com_xml2023_mainapp_RezervacijaExistsRequest_fieldAccessorTable = new
+      com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
+        internal_static_com_xml2023_mainapp_RezervacijaExistsRequest_descriptor,
+        new java.lang.String[] { "Id", });
+    internal_static_com_xml2023_mainapp_RezervacijaExistsResponse_descriptor =
+      getDescriptor().getMessageTypes().get(5);
+    internal_static_com_xml2023_mainapp_RezervacijaExistsResponse_fieldAccessorTable = new
+      com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
+        internal_static_com_xml2023_mainapp_RezervacijaExistsResponse_descriptor,
+        new java.lang.String[] { "Responsemessage", "ResponseCode", });
+    internal_static_com_xml2023_mainapp_ActiveResExistsRequest_descriptor =
+      getDescriptor().getMessageTypes().get(6);
+    internal_static_com_xml2023_mainapp_ActiveResExistsRequest_fieldAccessorTable = new
+      com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
+        internal_static_com_xml2023_mainapp_ActiveResExistsRequest_descriptor,
+        new java.lang.String[] { "UserId", "Tip", });
+    internal_static_com_xml2023_mainapp_ActiveResExistsResponse_descriptor =
+      getDescriptor().getMessageTypes().get(7);
+    internal_static_com_xml2023_mainapp_ActiveResExistsResponse_fieldAccessorTable = new
+      com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
+        internal_static_com_xml2023_mainapp_ActiveResExistsResponse_descriptor,
+        new java.lang.String[] { "Exists", });
+    internal_static_com_xml2023_mainapp_SmestajIdsForHostRequest_descriptor =
+      getDescriptor().getMessageTypes().get(8);
+    internal_static_com_xml2023_mainapp_SmestajIdsForHostRequest_fieldAccessorTable = new
+      com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
+        internal_static_com_xml2023_mainapp_SmestajIdsForHostRequest_descriptor,
+        new java.lang.String[] { "UserId", });
+    internal_static_com_xml2023_mainapp_SmestajIdsForHostResponse_descriptor =
+      getDescriptor().getMessageTypes().get(9);
+    internal_static_com_xml2023_mainapp_SmestajIdsForHostResponse_fieldAccessorTable = new
+      com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
+        internal_static_com_xml2023_mainapp_SmestajIdsForHostResponse_descriptor,
+        new java.lang.String[] { "SmestajIds", });
   }
 
   // @@protoc_insertion_point(outer_class_scope)
