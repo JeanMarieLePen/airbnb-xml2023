@@ -47,8 +47,8 @@ public class PretragaService {
 	public Collection<SmestajPretragaDTO> pretraga(PretragaDTO dto){
 		Query query = new Query();
 		if(dto.getAdresa()!=null && !dto.getAdresa().getAdresa().trim().equals("")) {
-			Criteria adresa= Criteria.where("adresa.adresa").regex(dto.getAdresa().getAdresa().toLowerCase());
-			query.addCriteria(adresa);
+			//Criteria adresa= Criteria.where("adresa.adresa").regex(dto.getAdresa().getAdresa().toLowerCase());
+			//query.addCriteria(adresa);
 		}
 		if(dto.getBrGosti()>0) {
 			Criteria minGosti= Criteria.where("minGosti").lte(dto.getBrGosti());
@@ -59,7 +59,10 @@ public class PretragaService {
 		//query
 		List<Smestaj> pronadjeni=monTempl.find(query, Smestaj.class);
 		System.out.println("Prondajenih u bazi :"+pronadjeni.size());
-
+		//filter adrese
+		String trazenaAdresa=dto.getAdresa().toString().toLowerCase().trim();
+		pronadjeni=pronadjeni.stream().filter(x->x.getAdresa().getAdresa().toLowerCase().contains(trazenaAdresa)).collect(Collectors.toList());
+		
 		//filter datumi rez i nedostupni datumi
 		if(dto.getPocetak()!=null && dto.getKraj()!=null) {
 			pronadjeni=pronadjeni.stream().filter(x-> isSlobodan(x, dto.getPocetak(), dto.getKraj())).collect(Collectors.toList());
