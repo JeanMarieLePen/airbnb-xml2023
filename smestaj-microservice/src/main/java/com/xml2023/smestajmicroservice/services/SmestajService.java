@@ -102,18 +102,47 @@ public class SmestajService {
 		// TODO Auto-generated method stub
 		Smestaj s = smestajRep.findById(smestajId).orElse(null);
 		//da li postoji smestaj sa tim id-om?
+		Host h = hostRep.findById(vlasnikId).orElse(null);
+		if(h == null) {
+			return null;
+		}
 		if(s == null) {
 			return null;
 		}
 		//da li smestaj pripada vlasniku sa id-om vlasnikId 
-		if(s.getVlasnik().getId() != vlasnikId) {
+		if(!s.getVlasnik().getId().equals(vlasnikId)) {
 			return null;
 		}
 		//da li ima trenutno aktivnih rezervacija prema tom smestaju
-		Collection<Rezervacija> listaRezervacija = rezRep.findBySmestajIdAndStatus(vlasnikId, StatusRezervacije.REZERVISANA).orElse(null);
-		if(listaRezervacija == null) {
+		if(s.getRezervacije().stream().map(Rezervacija::getStatus).filter(StatusRezervacije.REZERVISANA::equals).findFirst().isPresent()) {
 			return null;
 		}
+		
+		for(Pogodnost tempPogodnost : s.getPogodnosti()) {
+			Pogodnost pgd = pogRep.findById(tempPogodnost.getId()).orElse(null);
+			if(pgd != null) {
+//				pgd.getListaSmestaja().remove(s);
+				for(Smestaj sTemp : pgd.getListaSmestaja()){
+					if(sTemp.getId().equals(smestajId)) {
+						pgd.getListaSmestaja().remove(sTemp);
+						break;
+					}
+				}
+				pogRep.save(pgd);
+			}
+		}
+		
+		for(Smestaj tmp : h.getSmestajList()) {
+			if(tmp.getId().equals(smestajId)) {
+				h.getSmestajList().remove(tmp);
+				break;
+			}
+		}
+		hostRep.save(h);
+//		Collection<Rezervacija> listaRezervacija = rezRep.findBySmestajIdAndStatus(vlasnikId, StatusRezervacije.REZERVISANA).orElse(null);
+//		if(listaRezervacija != null) {
+//			return null;
+//		}
 		smestajRep.delete(s);
 		return smestajMapper.toDTO(s);
 	}

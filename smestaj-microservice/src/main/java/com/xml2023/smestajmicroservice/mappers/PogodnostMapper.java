@@ -27,6 +27,7 @@ public class PogodnostMapper {
 	public Pogodnost fromDTO(PogodnostDTO dto) {
 		Pogodnost p = new Pogodnost();
 		p.setNaziv(dto.getNaziv());
+		p.setListaSmestaja(new ArrayList<Smestaj>());
 //		p.setListaSmestaja(null);
 		return p;
 	}

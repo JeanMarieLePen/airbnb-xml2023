@@ -113,6 +113,38 @@ public class SmestajBasicMapper {
 	
 	public Smestaj editSmestaj(Smestaj s, SmestajDTO dto) {
 		
+		//ADRESA I CENOVNIK NEMAJU DVOSTRANU REFERENCU
+		adrRep.delete(s.getAdresa());
+		cenRep.delete(s.getCenovnik());
+		if(s.getNedostupni() != null) {
+			terRep.deleteAll(s.getNedostupni());
+		}
+		
+		for(Pogodnost tempPogodnost : s.getPogodnosti()) {
+			Pogodnost pgd = pogRep.findById(tempPogodnost.getId()).orElse(null);
+			if(pgd != null) {
+//				pgd.getListaSmestaja().remove(s);
+				for(Smestaj sTemp : pgd.getListaSmestaja()){
+					if(sTemp.getId().equals(s.getId())) {
+						pgd.getListaSmestaja().remove(sTemp);
+						break;
+					}
+				}
+				pogRep.save(pgd);
+				
+			}
+		}
+		
+		
+		s.setAdresa(null);
+		s.setCenovnik(null);
+//		s.setListaOcena(null);
+		s.setNedostupni(new ArrayList<Termin>());
+		s.setPogodnosti(new ArrayList<Pogodnost>());
+		s.setRezervacije(new ArrayList<Rezervacija>());
+		s.setSlike(new ArrayList<byte[]>());
+		
+		smestajRep.save(s);
 		Adresa a = aMapper.fromDTO(dto.getAdresa());
 		adrRep.save(a);
 		s.setAdresa(a);
@@ -124,21 +156,37 @@ public class SmestajBasicMapper {
 		s.setMinGosti(dto.getMinGosti());
 		s.setMaxGosti(dto.getMaxGosti());
 		
-		Collection<Pogodnost> tempPogodnosti = new ArrayList<Pogodnost>();
-		for(PogodnostDTO pdto : dto.getPogodnosti()) {
-			Pogodnost tmp = pogodnostMapper.fromDTO(pdto);
-			tmp.setId(pdto.getId());
-			tempPogodnosti.add(tmp);
+		Collection<Pogodnost> svePogodnosti = pogRep.findAll();
+		Collection<Pogodnost> setPogodnosti = new ArrayList<Pogodnost>();
+		for(Pogodnost p: svePogodnosti) {
+			for(PogodnostDTO tmpPgd : dto.getPogodnosti()) {
+				if(tmpPgd.getNaziv().equals(p.getNaziv())) {
+					p.getListaSmestaja().add(s);
+					pogRep.save(p);
+					setPogodnosti.add(p);
+				}
+			}
 		}
-		s.setPogodnosti(tempPogodnosti);
+		s.setPogodnosti(setPogodnosti);
+//		Collection<Pogodnost> tempPogodnosti = new ArrayList<Pogodnost>();
+//		for(PogodnostDTO pdto : dto.getPogodnosti()) {
+//			Pogodnost tmp = pogodnostMapper.fromDTO(pdto);
+//			tmp.setId(pdto.getId());
+//			tmp.getListaSmestaja().add(s);
+//			pogRep.save(tmp);
+//			tempPogodnosti.add(tmp);
+//		}
+//		s.setPogodnosti(tempPogodnosti);
 		
 		
-		
-		s.getNedostupni().removeAll(s.getNedostupni());
+		if(s.getNedostupni() != null) {
+			s.getNedostupni().removeAll(s.getNedostupni());
+		}
 		for(TerminDTO tdto : dto.getNedostupni()) {
 			Termin t = new Termin();
 			t.setKraj(tdto.getKraj());
 			t.setPocetak(tdto.getPocetak());
+			t.setSmestaj(s);
 			terRep.save(t);
 			s.getNedostupni().add(t);
 		}

@@ -25,18 +25,22 @@ public class Smestaj implements Serializable{
 	@Column(columnDefinition = "integer DEFAULT 0", nullable = false)
 	private Integer version;
 	
-	@NotNull
+	@Nullable
 	@DBRef
 	private Host vlasnik;
 	
+	@Nullable
 	@DBRef()
 	private Adresa adresa;
 	
+	@Nullable
 	@DBRef
 	private Collection<Pogodnost> pogodnosti;
 	
+	@Nullable
 	@ElementCollection
 	private Collection<byte[]> slike;
+	
 	
 	@Positive
 	private int minGosti;
@@ -44,12 +48,15 @@ public class Smestaj implements Serializable{
 	@Positive
 	private int maxGosti;
 	
+	@Nullable
 	@DBRef
 	private Cenovnik cenovnik;
 	
+	@Nullable
 	@DBRef
 	private Collection<Rezervacija> rezervacije;
 
+	@Nullable
 	@DBRef
 	private Collection<OcenaSmestaj> listaOcena;
 	

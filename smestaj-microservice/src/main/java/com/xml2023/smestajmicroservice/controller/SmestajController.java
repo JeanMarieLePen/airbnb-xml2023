@@ -53,7 +53,7 @@ public class SmestajController {
 	
 	@DeleteMapping("/remove/{smestajId}/{vlasnikId}")
 	public ResponseEntity<SmestajDTO> removeSmestaj(@PathVariable(value = "smestajId") String smestajId, @PathVariable(value = "vlasnikId") String vlasnikId){
-		SmestajDTO retVal = this.smestajService.removeSmestaj(smestajId, vlasnikId);
+		SmestajDTO retVal = this.smestajService.removeSmestaj(smestajId, vlasnikId.substring(1, vlasnikId.length()-1));
 		if(retVal == null) {
 			return new ResponseEntity<SmestajDTO>(HttpStatus.NO_CONTENT);
 		}else {
