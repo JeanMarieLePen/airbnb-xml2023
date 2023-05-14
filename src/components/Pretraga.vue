@@ -41,8 +41,8 @@
     </div>
 
     <div v-if="smestaj.length > 0">
-        <!-- <LetTemplate v-bind:listaLetova="prop"></LetTemplate>  -->
-        <p>{{ this.smestajString }}</p>
+        <Template v-bind:listaSmestaja="prop"></Template> 
+        <!--<p>{{ this.smestajString }}</p>-->
     </div>
     <div v-if="smestaj.length == 0">
         <p style="font-family:Verdana;font-size:30px;font-style: italic;">LISTA SMESTAJA JE PRAZNA</p>
@@ -51,14 +51,18 @@
 <script>
 import VueDatePicker from '@vuepic/vue-datepicker';
 import dataService from '@/services/dataService';
-
+import PretragaTemplate from './PretragaTemplate.vue'
 export default {
     components: {
         datepicker:VueDatePicker,
-
+        Template: PretragaTemplate,
     },
     data() {
         return {
+            prop:{
+                brojDana:'1',
+                listaSmestaja:[]
+            },
             smestaj: [],
             smestajString: '',
 
@@ -98,7 +102,14 @@ export default {
         }
     },
     methods: {
+        getDani(date1, date2){
+            let d1=new Date(date1);
+            let d2=new Date(date2);
+            return 	Math.floor((d2.getTime()-d1.getTime()) / (1000 * 60 * 60 * 24));
+
+        },
         search() {
+            this.prop.brojDana=this.getDani(this.parametriDTO.kraj,this.parametriDTO.pocetak);
             this.parametriDTO.pocetak = this.parametri.pocetak;
             this.parametriDTO.kraj = this.parametri.kraj;
             this.parametriDTO.adresa = this.parametri.adresa;
@@ -134,12 +145,13 @@ export default {
                 console.log("Pretraga QUERY");
                 if (response.data == '') {
                     console.log("ODGOVOR NULL");
-                    this.letovi = [];
-                    this.letoviString = [];
+                    this.smestaj = [];
+                    this.smestajString = [];
                 } else {
                     console.log("Broj Pronadjenih:" + response.data.length);
                     this.smestaj = response.data;
                     this.smestajString = JSON.stringify(response.data);
+                    this.prop.listaSmestaja=response.data;
                     // this.prop.listaLetova=response.data
                     //this.prop.brKarata=this.parametri.brKarata;
                 }
