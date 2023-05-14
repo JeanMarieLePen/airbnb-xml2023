@@ -70,6 +70,7 @@ public class SmestajService {
 				}
 			}
 		}
+		tmp.setListaOcena(new ArrayList<OcenaSmestaj>());
 		tmp.setPogodnosti(setPogodnosti);
 		this.smestajRep.save(tmp);
 		Host vlasnik = hostRep.findById(s.getVlasnikId().substring(1, s.getVlasnikId().length() - 1)).orElse(null);
@@ -86,7 +87,7 @@ public class SmestajService {
 			return null;
 		}
 		//Da li je vlasnikId vlasnik tog smestaja?
-		if(s.getVlasnik().getId() != vlasnikId) {
+		if(!s.getVlasnik().getId().equals(vlasnikId)) {
 			return null;
 		}
 		

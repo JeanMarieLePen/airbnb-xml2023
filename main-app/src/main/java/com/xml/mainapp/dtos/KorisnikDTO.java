@@ -3,6 +3,8 @@ package com.xml.mainapp.dtos;
 import java.io.Serializable;
 import java.util.Collection;
 
+import com.xml.mainapp.dtos.data.SmestajDTO;
+import com.xml.mainapp.model.data.Smestaj;
 import com.xml.mainapp.model.users.StatusNaloga;
 import com.xml.mainapp.model.users.TipKorisnika;
 
@@ -26,9 +28,39 @@ public class KorisnikDTO implements Serializable{
     private TipKorisnika tipKorisnika;
     
     private Collection<String> slike;
-
+    
+    private boolean rezAutomatski;
+	
+	private boolean istaknuti;
+	
+	private Collection<SmestajDTO> smestajList;
+    
 	public KorisnikDTO() {
 		super();
+	}
+	
+	public Collection<SmestajDTO> getSmestajList() {
+		return smestajList;
+	}
+
+	public void setSmestajList(Collection<SmestajDTO> smestajList) {
+		this.smestajList = smestajList;
+	}
+
+	public boolean isRezAutomatski() {
+		return rezAutomatski;
+	}
+
+	public void setRezAutomatski(boolean rezAutomatski) {
+		this.rezAutomatski = rezAutomatski;
+	}
+
+	public boolean isIstaknuti() {
+		return istaknuti;
+	}
+
+	public void setIstaknuti(boolean istaknuti) {
+		this.istaknuti = istaknuti;
 	}
 
 	public String getId() {

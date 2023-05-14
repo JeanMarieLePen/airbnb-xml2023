@@ -112,25 +112,34 @@ public class SmestajBasicMapper {
 	}
 	
 	public Smestaj editSmestaj(Smestaj s, SmestajDTO dto) {
-		s.setAdresa(aMapper.fromDTO(dto.getAdresa()));
-		s.setCenovnik(cenovnikMapper.fromDTO(dto.getCenovnik()));
+		
+		Adresa a = aMapper.fromDTO(dto.getAdresa());
+		adrRep.save(a);
+		s.setAdresa(a);
+		
+		Cenovnik c = cenovnikMapper.fromDTO(dto.getCenovnik());
+		cenRep.save(c);
+		s.setCenovnik(c);
+		
 		s.setMinGosti(dto.getMinGosti());
 		s.setMaxGosti(dto.getMaxGosti());
-		
-		
 		
 		Collection<Pogodnost> tempPogodnosti = new ArrayList<Pogodnost>();
 		for(PogodnostDTO pdto : dto.getPogodnosti()) {
 			Pogodnost tmp = pogodnostMapper.fromDTO(pdto);
+			tmp.setId(pdto.getId());
 			tempPogodnosti.add(tmp);
 		}
 		s.setPogodnosti(tempPogodnosti);
 		
 		
+		
 		s.getNedostupni().removeAll(s.getNedostupni());
 		for(TerminDTO tdto : dto.getNedostupni()) {
-			Termin t = terminMapper.fromDTO(tdto);
-			t.setSmestaj(s);
+			Termin t = new Termin();
+			t.setKraj(tdto.getKraj());
+			t.setPocetak(tdto.getPocetak());
+			terRep.save(t);
 			s.getNedostupni().add(t);
 		}
 		

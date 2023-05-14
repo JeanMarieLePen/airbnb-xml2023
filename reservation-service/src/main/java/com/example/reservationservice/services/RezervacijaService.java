@@ -76,12 +76,12 @@ public class RezervacijaService {
 		if(s==null) {
 			return null;
 		}
-		Termin t = new Termin(r.getOdDatum(), r.getDoDatum());
-		t.setSmestaj(s);
-		terminRep.save(t);
-		
-		s.getNedostupni().add(t);
-		smestajRep.save(s);
+//		Termin t = new Termin(r.getOdDatum(), r.getDoDatum());
+//		t.setSmestaj(s);
+//		terminRep.save(t);
+//		
+//		s.getNedostupni().add(t);
+//		smestajRep.save(s);
 		
 		Rezervacija rez = rezMapper.fromDTO(r);
 		rez.setGost(guestRep.findById(userId).orElse(null));
@@ -180,8 +180,20 @@ public class RezervacijaService {
 		if(h == null) {
 			return null;
 		}
+		Smestaj s = this.smestajRep.findById(r.getSmestaj().getId()).orElse(null);
+		if(s == null) {
+			return null;
+		}
 		if(r.getSmestaj().getVlasnik().getId().equals(ownerId)) {
+			Termin t = new Termin(r.getOdDatum(), r.getDoDatum());
+			t.setSmestaj(s);
+			terminRep.save(t);
+			
+			s.getNedostupni().add(t);
+			smestajRep.save(s);
+			
 			r.setStatus(StatusRezervacije.REZERVISANA);
+			
 		}
 		rezervacijaRep.save(r);
 		return rezMapper.toDTO(r);

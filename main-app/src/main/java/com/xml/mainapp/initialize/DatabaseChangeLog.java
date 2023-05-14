@@ -89,6 +89,7 @@ public class DatabaseChangeLog {
 	
 	public Korisnik makeNewKorisnik(String email, String ime, String kor_ime, String lozinka, String prezime, StatusNaloga status_naloga, TipKorisnika tip_korisnika, Adresa adresa) {
 		Korisnik k = new Korisnik();
+		k.setSlike(new ArrayList<byte[]>());
 		k.setEmail(email);
 		k.setIme(ime);
 		k.setPrezime(prezime);
@@ -103,6 +104,7 @@ public class DatabaseChangeLog {
 	public Guest makeNewGuest(Korisnik k, int brojOtkazivanja, String id) {
 		Guest g = new Guest();
 		
+		k.setSlike(new ArrayList<byte[]>());
 		g.setEmail(k.getEmail());
 		g.setIme(k.getIme());
 		g.setPrezime(k.getPrezime());
@@ -127,7 +129,7 @@ public class DatabaseChangeLog {
 		h.setStatusNaloga(k.getStatusNaloga());
 		h.setTipKorisnika(k.getTipKorisnika());
 		h.setAdresa(k.getAdresa());
-		
+		k.setSlike(new ArrayList<byte[]>());
 		h.setIstaknuti(istaknuti);
 		h.setRezAutomatski(rez_automatski);
 		h.setOcene(new ArrayList<OcenaHost>());

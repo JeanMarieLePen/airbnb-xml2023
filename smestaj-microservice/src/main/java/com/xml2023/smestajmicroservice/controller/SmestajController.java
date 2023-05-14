@@ -37,13 +37,13 @@ public class SmestajController {
 		if(retVal == null) {
 			return new ResponseEntity<SmestajDTO>(HttpStatus.NO_CONTENT);
 		}else {
-			return new ResponseEntity<SmestajDTO>(retVal, HttpStatus.NO_CONTENT);
+			return new ResponseEntity<SmestajDTO>(retVal, HttpStatus.OK);
 		}
 	}
 	
 	@PutMapping("/edit/{smestajId}/{vlasnikId}")
 	public ResponseEntity<SmestajDTO> editSmestaj(@RequestBody SmestajDTO smestaj, @PathVariable(value = "smestajId") String smestajId, @PathVariable(value = "vlasnikId") String vlasnikId){
-		SmestajDTO retVal = this.smestajService.editSmestaj(smestaj, smestajId, vlasnikId);
+		SmestajDTO retVal = this.smestajService.editSmestaj(smestaj, smestajId, vlasnikId.substring(1, vlasnikId.length()-1));
 		if(retVal == null) {
 			return new ResponseEntity<SmestajDTO>(HttpStatus.NO_CONTENT);
 		}else {

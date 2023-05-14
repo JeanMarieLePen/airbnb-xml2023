@@ -2,6 +2,7 @@ package com.xml.mainapp.services;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Optional;
 
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
@@ -15,10 +16,18 @@ import com.xml.mainapp.dtos.LoginDTO;
 import com.xml.mainapp.dtos.RegisterDTO;
 import com.xml.mainapp.mappers.KorisnikMapper;
 import com.xml.mainapp.model.data.Adresa;
+import com.xml.mainapp.model.data.OcenaSmestaj;
+import com.xml.mainapp.model.data.Rezervacija;
+import com.xml.mainapp.model.data.Smestaj;
+import com.xml.mainapp.model.users.Guest;
+import com.xml.mainapp.model.users.Host;
 import com.xml.mainapp.model.users.Korisnik;
+import com.xml.mainapp.model.users.OcenaHost;
 import com.xml.mainapp.model.users.StatusNaloga;
 import com.xml.mainapp.model.users.TipKorisnika;
 import com.xml.mainapp.repositories.AdresaRep;
+import com.xml.mainapp.repositories.GuestRepository;
+import com.xml.mainapp.repositories.HostRepository;
 import com.xml.mainapp.repositories.KorisnikRep;
 import com.xml.mainapp.security.MessageQueueConfig;
 
@@ -38,6 +47,11 @@ public class LoginService {
 	
 	@Autowired
 	private RabbitTemplate template;
+	
+	@Autowired 
+	private GuestRepository guestRep;
+	@Autowired 
+	private HostRepository hostRep;
 	
 	public LoginDTO login(LoginDTO logDTO) {
 		Korisnik k = this.korisnikRep.findByEmail(logDTO.getEmail());
@@ -63,11 +77,31 @@ public class LoginService {
 		newUser.setAdresa(a);
 		if(newUser != null) {
 			BCryptPasswordEncoder enc = new BCryptPasswordEncoder();
-			newUser.setTipKorisnika(TipKorisnika.GUEST);
+			newUser.setTipKorisnika(regDTO.getTipKorisnika());
 			newUser.setStatusNaloga(StatusNaloga.NA_CEKANJU);
 			newUser.setLozinka(new String(enc.encode(regDTO.getLozinka())));
 //			newUser.setAdresa(a);
 			korisnikRep.save(newUser);
+			
+			if(newUser.getTipKorisnika().equals(TipKorisnika.HOST)) {
+				Host h = new Host();
+				h.setId(newUser.getId());
+				h.setRezAutomatski(false);
+				h.setIstaknuti(false);
+				h.setOcene(new ArrayList<OcenaHost>());
+				h.setSmestajList(new ArrayList<Smestaj>());
+				hostRep.save(h);
+			}
+			if(newUser.getTipKorisnika().equals(TipKorisnika.GUEST)) {
+				Guest g = new Guest();
+				g.setId(newUser.getId());
+				g.setBrojOtkazivanja(0);
+				g.setRezervacije(new ArrayList<Rezervacija>());
+				g.setOceneSmestaja(new ArrayList<OcenaSmestaj>());
+				g.setOceneVlasnika(new ArrayList<OcenaHost>());
+				guestRep.save(g);
+			}
+			
 			this.template.convertAndSend(MessageQueueConfig.EXCHANGE, MessageQueueConfig.ROUTING_KEY, regDTO);
 			System.out.println("POSLATO NA QUEUE");
 			
