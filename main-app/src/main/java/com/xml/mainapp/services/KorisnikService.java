@@ -42,8 +42,12 @@ import com.xml.mainapp.repositories.KorisnikRep;
 import com.xml.mainapp.repositories.SmestajRep;
 import com.xml2023.mainapp.ActiveResExistsRequest;
 import com.xml2023.mainapp.ActiveResExistsResponse;
+import com.xml2023.mainapp.DeleteSmestajsForHostRequest;
+import com.xml2023.mainapp.DeleteSmestajsForHostResponse;
 import com.xml2023.mainapp.RezervacijaGrpcGrpc;
 import com.xml2023.mainapp.RezervacijaGrpcGrpc.RezervacijaGrpcBlockingStub;
+import com.xml2023.mainapp.SmestajGrpcGrpc;
+import com.xml2023.mainapp.SmestajGrpcGrpc.SmestajGrpcBlockingStub;
 
 import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
@@ -230,7 +234,7 @@ public class KorisnikService {
 			Guest g = guestRep.findById(id).orElse(null);
 			ManagedChannel channel = ManagedChannelBuilder.forAddress("localhost", 7978).usePlaintext().build();
 			RezervacijaGrpcBlockingStub blockStub= RezervacijaGrpcGrpc.newBlockingStub(channel);
-			ActiveResExistsRequest req=ActiveResExistsRequest.newBuilder().setUserId(g.getId()).build();
+			ActiveResExistsRequest req=ActiveResExistsRequest.newBuilder().setUserId(g.getId()).setTip("gost").build();
 			ActiveResExistsResponse res=blockStub.reservationsForUserExists(req);
 			
 			if(res.getExists()==1) {
@@ -254,20 +258,42 @@ public class KorisnikService {
 		
 		if(k.getTipKorisnika().equals(TipKorisnika.HOST)) {
 			Host h = hostRep.findById(id).orElse(null);
-			if(h.getSmestajList().stream().anyMatch(s -> s.getRezervacije().stream().anyMatch(r -> r.getStatus().equals(StatusRezervacije.REZERVISANA)))) {
+			ManagedChannel channel = ManagedChannelBuilder.forAddress("localhost", 7978).usePlaintext().build();
+			RezervacijaGrpcBlockingStub blockStub= RezervacijaGrpcGrpc.newBlockingStub(channel);
+			ActiveResExistsRequest req=ActiveResExistsRequest.newBuilder().setUserId(h.getId()).setTip("host").build();
+			ActiveResExistsResponse res=blockStub.reservationsForUserExists(req);
+			
+			if(res.getExists()==1) {
+				System.out.println("Grpc rezulatat : Za smestaje hosta postoje aktivne rezervacije!");
 				return null;
 			}
-			else if(h.getSmestajList().stream().anyMatch(s -> s.getRezervacije().stream().anyMatch(r -> r.getStatus().equals(StatusRezervacije.PENDING)))) {
+			
+			//TODO: posalji zahtev smestaju za brisanje korisnikovih smestaja
+			ManagedChannel channelSmestaj = ManagedChannelBuilder.forAddress("localhost", 7977).usePlaintext().build();
+			SmestajGrpcBlockingStub blockStubSm= SmestajGrpcGrpc.newBlockingStub(channelSmestaj);
+			DeleteSmestajsForHostRequest delReq= DeleteSmestajsForHostRequest.newBuilder().setHostId(id).build();
+			DeleteSmestajsForHostResponse delRes= blockStubSm.deketeSnestajsForHost(delReq);
+			if(delRes.getSuccess()==0) {
+				System.out.println("Grpc rezulatat : Neuspelo brisnaje smestaja za hosta");
 				return null;
-			}else {
-				this.korisnikRep.delete(k);
-				this.hostRep.delete(h);
-				return korisnikMapper.toDTO(k);
-			}
+			}			
+			this.korisnikRep.delete(k);
+			this.hostRep.delete(h);
+			return korisnikMapper.toDTO(k);
+			
+			
+			/*
+			 * if(h.getSmestajList().stream().anyMatch(s ->
+			 * s.getRezervacije().stream().anyMatch(r ->
+			 * r.getStatus().equals(StatusRezervacije.REZERVISANA)))) { return null; } else
+			 * if(h.getSmestajList().stream().anyMatch(s ->
+			 * s.getRezervacije().stream().anyMatch(r ->
+			 * r.getStatus().equals(StatusRezervacije.PENDING)))) { return null; }else {
+			 * this.korisnikRep.delete(k); this.hostRep.delete(h); return
+			 * korisnikMapper.toDTO(k); }
+			 */
 		}
 		return null;
-	}
-	
-	
+	}	
 	
 }

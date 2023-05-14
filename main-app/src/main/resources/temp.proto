@@ -37,6 +37,7 @@ message RezervacijaExistsResponse{
 service SmestajGrpc{
 	rpc exists(SmestajExistsRequest) returns (SmestajExistsResponse);
 	rpc getSmestajIdsForHost(SmestajIdsForHostRequest) returns  (SmestajIdsForHostResponse);
+	rpc deketeSnestajsForHost(DeleteSmestajsForHostRequest) returns (DeleteSmestajsForHostResponse);
 }
 
 service RezervacijaGrpc{
@@ -57,4 +58,11 @@ message SmestajIdsForHostRequest{
 }
 message SmestajIdsForHostResponse{
 	repeated string smestajIds=1;
+}
+
+message DeleteSmestajsForHostRequest{
+	string hostId=1;
+}
+message DeleteSmestajsForHostResponse{
+	int32 success=1;
 }

@@ -91,6 +91,38 @@ public final class SmestajGrpcGrpc {
      return getGetSmestajIdsForHostMethod;
   }
 
+  private static volatile io.grpc.MethodDescriptor<com.xml2023.mainapp.DeleteSmestajsForHostRequest,
+      com.xml2023.mainapp.DeleteSmestajsForHostResponse> getDeketeSnestajsForHostMethod;
+
+  @io.grpc.stub.annotations.RpcMethod(
+      fullMethodName = SERVICE_NAME + '/' + "deketeSnestajsForHost",
+      requestType = com.xml2023.mainapp.DeleteSmestajsForHostRequest.class,
+      responseType = com.xml2023.mainapp.DeleteSmestajsForHostResponse.class,
+      methodType = io.grpc.MethodDescriptor.MethodType.UNARY)
+  public static io.grpc.MethodDescriptor<com.xml2023.mainapp.DeleteSmestajsForHostRequest,
+      com.xml2023.mainapp.DeleteSmestajsForHostResponse> getDeketeSnestajsForHostMethod() {
+    io.grpc.MethodDescriptor<com.xml2023.mainapp.DeleteSmestajsForHostRequest, com.xml2023.mainapp.DeleteSmestajsForHostResponse> getDeketeSnestajsForHostMethod;
+    if ((getDeketeSnestajsForHostMethod = SmestajGrpcGrpc.getDeketeSnestajsForHostMethod) == null) {
+      synchronized (SmestajGrpcGrpc.class) {
+        if ((getDeketeSnestajsForHostMethod = SmestajGrpcGrpc.getDeketeSnestajsForHostMethod) == null) {
+          SmestajGrpcGrpc.getDeketeSnestajsForHostMethod = getDeketeSnestajsForHostMethod = 
+              io.grpc.MethodDescriptor.<com.xml2023.mainapp.DeleteSmestajsForHostRequest, com.xml2023.mainapp.DeleteSmestajsForHostResponse>newBuilder()
+              .setType(io.grpc.MethodDescriptor.MethodType.UNARY)
+              .setFullMethodName(generateFullMethodName(
+                  "com.xml2023.mainapp.SmestajGrpc", "deketeSnestajsForHost"))
+              .setSampledToLocalTracing(true)
+              .setRequestMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(
+                  com.xml2023.mainapp.DeleteSmestajsForHostRequest.getDefaultInstance()))
+              .setResponseMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(
+                  com.xml2023.mainapp.DeleteSmestajsForHostResponse.getDefaultInstance()))
+                  .setSchemaDescriptor(new SmestajGrpcMethodDescriptorSupplier("deketeSnestajsForHost"))
+                  .build();
+          }
+        }
+     }
+     return getDeketeSnestajsForHostMethod;
+  }
+
   /**
    * Creates a new async stub that supports all call types for the service
    */
@@ -132,6 +164,13 @@ public final class SmestajGrpcGrpc {
       asyncUnimplementedUnaryCall(getGetSmestajIdsForHostMethod(), responseObserver);
     }
 
+    /**
+     */
+    public void deketeSnestajsForHost(com.xml2023.mainapp.DeleteSmestajsForHostRequest request,
+        io.grpc.stub.StreamObserver<com.xml2023.mainapp.DeleteSmestajsForHostResponse> responseObserver) {
+      asyncUnimplementedUnaryCall(getDeketeSnestajsForHostMethod(), responseObserver);
+    }
+
     @java.lang.Override public final io.grpc.ServerServiceDefinition bindService() {
       return io.grpc.ServerServiceDefinition.builder(getServiceDescriptor())
           .addMethod(
@@ -148,6 +187,13 @@ public final class SmestajGrpcGrpc {
                 com.xml2023.mainapp.SmestajIdsForHostRequest,
                 com.xml2023.mainapp.SmestajIdsForHostResponse>(
                   this, METHODID_GET_SMESTAJ_IDS_FOR_HOST)))
+          .addMethod(
+            getDeketeSnestajsForHostMethod(),
+            asyncUnaryCall(
+              new MethodHandlers<
+                com.xml2023.mainapp.DeleteSmestajsForHostRequest,
+                com.xml2023.mainapp.DeleteSmestajsForHostResponse>(
+                  this, METHODID_DEKETE_SNESTAJS_FOR_HOST)))
           .build();
     }
   }
@@ -185,6 +231,14 @@ public final class SmestajGrpcGrpc {
       asyncUnaryCall(
           getChannel().newCall(getGetSmestajIdsForHostMethod(), getCallOptions()), request, responseObserver);
     }
+
+    /**
+     */
+    public void deketeSnestajsForHost(com.xml2023.mainapp.DeleteSmestajsForHostRequest request,
+        io.grpc.stub.StreamObserver<com.xml2023.mainapp.DeleteSmestajsForHostResponse> responseObserver) {
+      asyncUnaryCall(
+          getChannel().newCall(getDeketeSnestajsForHostMethod(), getCallOptions()), request, responseObserver);
+    }
   }
 
   /**
@@ -217,6 +271,13 @@ public final class SmestajGrpcGrpc {
     public com.xml2023.mainapp.SmestajIdsForHostResponse getSmestajIdsForHost(com.xml2023.mainapp.SmestajIdsForHostRequest request) {
       return blockingUnaryCall(
           getChannel(), getGetSmestajIdsForHostMethod(), getCallOptions(), request);
+    }
+
+    /**
+     */
+    public com.xml2023.mainapp.DeleteSmestajsForHostResponse deketeSnestajsForHost(com.xml2023.mainapp.DeleteSmestajsForHostRequest request) {
+      return blockingUnaryCall(
+          getChannel(), getDeketeSnestajsForHostMethod(), getCallOptions(), request);
     }
   }
 
@@ -253,10 +314,19 @@ public final class SmestajGrpcGrpc {
       return futureUnaryCall(
           getChannel().newCall(getGetSmestajIdsForHostMethod(), getCallOptions()), request);
     }
+
+    /**
+     */
+    public com.google.common.util.concurrent.ListenableFuture<com.xml2023.mainapp.DeleteSmestajsForHostResponse> deketeSnestajsForHost(
+        com.xml2023.mainapp.DeleteSmestajsForHostRequest request) {
+      return futureUnaryCall(
+          getChannel().newCall(getDeketeSnestajsForHostMethod(), getCallOptions()), request);
+    }
   }
 
   private static final int METHODID_EXISTS = 0;
   private static final int METHODID_GET_SMESTAJ_IDS_FOR_HOST = 1;
+  private static final int METHODID_DEKETE_SNESTAJS_FOR_HOST = 2;
 
   private static final class MethodHandlers<Req, Resp> implements
       io.grpc.stub.ServerCalls.UnaryMethod<Req, Resp>,
@@ -282,6 +352,10 @@ public final class SmestajGrpcGrpc {
         case METHODID_GET_SMESTAJ_IDS_FOR_HOST:
           serviceImpl.getSmestajIdsForHost((com.xml2023.mainapp.SmestajIdsForHostRequest) request,
               (io.grpc.stub.StreamObserver<com.xml2023.mainapp.SmestajIdsForHostResponse>) responseObserver);
+          break;
+        case METHODID_DEKETE_SNESTAJS_FOR_HOST:
+          serviceImpl.deketeSnestajsForHost((com.xml2023.mainapp.DeleteSmestajsForHostRequest) request,
+              (io.grpc.stub.StreamObserver<com.xml2023.mainapp.DeleteSmestajsForHostResponse>) responseObserver);
           break;
         default:
           throw new AssertionError();
@@ -346,6 +420,7 @@ public final class SmestajGrpcGrpc {
               .setSchemaDescriptor(new SmestajGrpcFileDescriptorSupplier())
               .addMethod(getExistsMethod())
               .addMethod(getGetSmestajIdsForHostMethod())
+              .addMethod(getDeketeSnestajsForHostMethod())
               .build();
         }
       }

@@ -64,6 +64,16 @@ public final class Temp {
   static final 
     com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internal_static_com_xml2023_mainapp_SmestajIdsForHostResponse_fieldAccessorTable;
+  static final com.google.protobuf.Descriptors.Descriptor
+    internal_static_com_xml2023_mainapp_DeleteSmestajsForHostRequest_descriptor;
+  static final 
+    com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+      internal_static_com_xml2023_mainapp_DeleteSmestajsForHostRequest_fieldAccessorTable;
+  static final com.google.protobuf.Descriptors.Descriptor
+    internal_static_com_xml2023_mainapp_DeleteSmestajsForHostResponse_descriptor;
+  static final 
+    com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+      internal_static_com_xml2023_mainapp_DeleteSmestajsForHostResponse_fieldAccessorTable;
 
   public static com.google.protobuf.Descriptors.FileDescriptor
       getDescriptor() {
@@ -86,22 +96,28 @@ public final class Temp {
       "\003tip\030\002 \001(\t\")\n\027ActiveResExistsResponse\022\016\n" +
       "\006exists\030\001 \001(\005\"*\n\030SmestajIdsForHostReques" +
       "t\022\016\n\006userId\030\001 \001(\t\"/\n\031SmestajIdsForHostRe" +
-      "sponse\022\022\n\nsmestajIds\030\001 \003(\t2j\n\017GreetingSe" +
-      "rvice\022W\n\010greeting\022$.com.xml2023.mainapp." +
-      "KorisnikRequest\032%.com.xml2023.mainapp.Ko" +
-      "risnikResponse2\345\001\n\013SmestajGrpc\022_\n\006exists" +
-      "\022).com.xml2023.mainapp.SmestajExistsRequ" +
-      "est\032*.com.xml2023.mainapp.SmestajExistsR" +
-      "esponse\022u\n\024getSmestajIdsForHost\022-.com.xm" +
-      "l2023.mainapp.SmestajIdsForHostRequest\032." +
-      ".com.xml2023.mainapp.SmestajIdsForHostRe" +
-      "sponse2\362\001\n\017RezervacijaGrpc\022g\n\006exists\022-.c" +
-      "om.xml2023.mainapp.RezervacijaExistsRequ" +
-      "est\032..com.xml2023.mainapp.RezervacijaExi" +
-      "stsResponse\022v\n\031reservationsForUserExists" +
-      "\022+.com.xml2023.mainapp.ActiveResExistsRe" +
-      "quest\032,.com.xml2023.mainapp.ActiveResExi" +
-      "stsResponseB\002P\001b\006proto3"
+      "sponse\022\022\n\nsmestajIds\030\001 \003(\t\".\n\034DeleteSmes" +
+      "tajsForHostRequest\022\016\n\006hostId\030\001 \001(\t\"0\n\035De" +
+      "leteSmestajsForHostResponse\022\017\n\007success\030\001" +
+      " \001(\0052j\n\017GreetingService\022W\n\010greeting\022$.co" +
+      "m.xml2023.mainapp.KorisnikRequest\032%.com." +
+      "xml2023.mainapp.KorisnikResponse2\345\002\n\013Sme" +
+      "stajGrpc\022_\n\006exists\022).com.xml2023.mainapp" +
+      ".SmestajExistsRequest\032*.com.xml2023.main" +
+      "app.SmestajExistsResponse\022u\n\024getSmestajI" +
+      "dsForHost\022-.com.xml2023.mainapp.SmestajI" +
+      "dsForHostRequest\032..com.xml2023.mainapp.S" +
+      "mestajIdsForHostResponse\022~\n\025deketeSnesta" +
+      "jsForHost\0221.com.xml2023.mainapp.DeleteSm" +
+      "estajsForHostRequest\0322.com.xml2023.maina" +
+      "pp.DeleteSmestajsForHostResponse2\362\001\n\017Rez" +
+      "ervacijaGrpc\022g\n\006exists\022-.com.xml2023.mai" +
+      "napp.RezervacijaExistsRequest\032..com.xml2" +
+      "023.mainapp.RezervacijaExistsResponse\022v\n" +
+      "\031reservationsForUserExists\022+.com.xml2023" +
+      ".mainapp.ActiveResExistsRequest\032,.com.xm" +
+      "l2023.mainapp.ActiveResExistsResponseB\002P" +
+      "\001b\006proto3"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
         new com.google.protobuf.Descriptors.FileDescriptor.    InternalDescriptorAssigner() {
@@ -175,6 +191,18 @@ public final class Temp {
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_com_xml2023_mainapp_SmestajIdsForHostResponse_descriptor,
         new java.lang.String[] { "SmestajIds", });
+    internal_static_com_xml2023_mainapp_DeleteSmestajsForHostRequest_descriptor =
+      getDescriptor().getMessageTypes().get(10);
+    internal_static_com_xml2023_mainapp_DeleteSmestajsForHostRequest_fieldAccessorTable = new
+      com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
+        internal_static_com_xml2023_mainapp_DeleteSmestajsForHostRequest_descriptor,
+        new java.lang.String[] { "HostId", });
+    internal_static_com_xml2023_mainapp_DeleteSmestajsForHostResponse_descriptor =
+      getDescriptor().getMessageTypes().get(11);
+    internal_static_com_xml2023_mainapp_DeleteSmestajsForHostResponse_fieldAccessorTable = new
+      com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
+        internal_static_com_xml2023_mainapp_DeleteSmestajsForHostResponse_descriptor,
+        new java.lang.String[] { "Success", });
   }
 
   // @@protoc_insertion_point(outer_class_scope)
