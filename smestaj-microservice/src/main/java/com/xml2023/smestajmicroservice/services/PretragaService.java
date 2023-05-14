@@ -3,6 +3,7 @@ package com.xml2023.smestajmicroservice.services;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoField;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -59,9 +60,6 @@ public class PretragaService {
 		//query
 		List<Smestaj> pronadjeni=monTempl.find(query, Smestaj.class);
 		System.out.println("Prondajenih u bazi :"+pronadjeni.size());
-		//filter adrese
-		String trazenaAdresa=dto.getAdresa().toString().toLowerCase().trim();
-		pronadjeni=pronadjeni.stream().filter(x->x.getAdresa().getAdresa().toLowerCase().contains(trazenaAdresa)).collect(Collectors.toList());
 		
 		//filter datumi rez i nedostupni datumi
 		if(dto.getPocetak()!=null && dto.getKraj()!=null) {
@@ -75,7 +73,13 @@ public class PretragaService {
 		if(dto.getMaxCena()>-1) {
 			dtos=dtos.stream().filter(x-> x.getUkCena()<=dto.getMaxCena()).collect(Collectors.toList());
 		}
-		
+		//filter adrese
+		if(dto.getAdresa()!=null && !dto.getAdresa().getAdresa().trim().equals("")) {
+			String trazenaAdresa=dto.getAdresa().getAdresa().toLowerCase().trim();
+			dtos=dtos.stream().filter(x->x.getAdresa().getAdresa().toLowerCase().contains(trazenaAdresa)).collect(Collectors.toList());
+		}
+		if(dtos.isEmpty()) return new ArrayList<SmestajPretragaDTO>();
+		else
 		return dtos;
 	}
 	public float getProsecnaOcena(Smestaj s) {
