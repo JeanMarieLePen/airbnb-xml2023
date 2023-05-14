@@ -78,5 +78,43 @@ public class SmestajExistsServiceImpl extends SmestajGrpcImplBase{
 	}
 	
 	
-	
+	/*
+	 * @Override public void getSmestaj(GetSmestajiForHostRequest request,
+	 * StreamObserver<ListaSmestajaResponse> responseObserver) { // TODO
+	 * Auto-generated method stub String id = request.getUserId();
+	 * ArrayList<Smestaj> lista = new ArrayList<Smestaj>(); lista =
+	 * (ArrayList<Smestaj>) this.sRep.findAllByVlasnikId(id);
+	 * ListaSmestajaResponse.Builder response = ListaSmestajaResponse.newBuilder();
+	 * if(lista!= null && lista.size() > 0) {
+	 * 
+	 * for(int i = 0; i < lista.size(); i++) { SmestajDTO.Builder retVal =
+	 * SmestajDTO.newBuilder(); AdresaDTO.Builder adrRetVal =
+	 * AdresaDTO.newBuilder();
+	 * adrRetVal.setAdresa(lista.get(i).getAdresa().getAdresa());
+	 * adrRetVal.setId(lista.get(i).getAdresa().getId());
+	 * adrRetVal.setLat(lista.get(i).getAdresa().getLat());
+	 * adrRetVal.setLng(lista.get(i).getAdresa().getLng());
+	 * retVal.setAdresa(adrRetVal);
+	 * 
+	 * Cenovnik.Builder cenRetVal = Cenovnik.newBuilder();
+	 * cenRetVal.setCena(lista.get(i).getCenovnik().getCena());
+	 * cenRetVal.setCenaLeto(lista.get(i).getCenovnik().getCenaLeto());
+	 * cenRetVal.setCenaVikend(lista.get(i).getCenovnik().getCenaVikend());
+	 * cenRetVal.setCenaPraznik(lista.get(i).getCenovnik().getCenaPraznik());
+	 * retVal.setCenovnik(cenRetVal);
+	 * 
+	 * Pogodnosti.Builder pogodnosti = Pogodnosti.newBuilder(); for(Pogodnost p :
+	 * lista.get(i).getPogodnosti()) { PogodnostDTO.Builder pdto =
+	 * PogodnostDTO.newBuilder(); pdto.setNaziv(p.getNaziv());
+	 * pdto.setId(p.getId()); pogodnosti.addPogodnosti(pdto); }
+	 * retVal.setPogodnosti(pogodnosti);
+	 * 
+	 * for(byte[] img : lista.get(i).getSlike()) { slika.Builder slk =
+	 * slika.newBuilder(); slk.setSlika(img.toString()); retVal.addSlike(slk); }
+	 * 
+	 * retVal.setMaxGosti(lista.get(i).getMaxGosti());
+	 * retVal.setMinGosti(lista.get(i).getMinGosti());
+	 * 
+	 * response.setSmestajList(i, retVal); } } responseObserver.onCompleted(); }
+	 */
 }
