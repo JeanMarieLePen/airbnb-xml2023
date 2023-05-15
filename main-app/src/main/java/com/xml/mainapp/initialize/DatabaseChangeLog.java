@@ -81,9 +81,17 @@ public class DatabaseChangeLog {
 	}
 	
 	public Pogodnost makeNewPogodnost(String naziv) {
-		Pogodnost p = new Pogodnost();
-		p.setNaziv(naziv);
-		p.setListaSmestaja(new ArrayList<Smestaj>());
+		List<String> pogodnosti= new ArrayList<String>();
+		pogodnosti.add("air conditioning");
+		pogodnosti.add("room service");
+		pogodnosti.add("hairdresser");
+		pogodnosti.add("gym");
+		pogodnosti.add("luggage locker");
+		pogodnosti.add("safety deposit box");
+		pogodnosti.add("safety deposit box");
+		pogodnosti.add("doctor on call");
+
+		Pogodnost p = new Pogodnost(pogodnosti);
 		return p;
 	}
 	
@@ -114,7 +122,6 @@ public class DatabaseChangeLog {
 		g.setTipKorisnika(k.getTipKorisnika());
 		g.setAdresa(k.getAdresa());
 		g.setBrojOtkazivanja(brojOtkazivanja);
-		g.setRezervacije(new ArrayList<Rezervacija>());
 		g.setId(id);
 		return g;
 	}
@@ -132,8 +139,6 @@ public class DatabaseChangeLog {
 		k.setSlike(new ArrayList<byte[]>());
 		h.setIstaknuti(istaknuti);
 		h.setRezAutomatski(rez_automatski);
-		h.setOcene(new ArrayList<OcenaHost>());
-		h.setSmestajList(new ArrayList<Smestaj>());
 		h.setId(id);
 		return h;
 	}

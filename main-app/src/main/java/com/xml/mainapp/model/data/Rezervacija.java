@@ -21,18 +21,10 @@ public class Rezervacija implements Serializable{
 
 	@Id
 	private String id;
+
 	
-	@Version
-	@Column(columnDefinition = "integer DEFAULT 0", nullable = false)
-	private Integer version;
-	
-	@DBRef
-	private Smestaj smestaj;
-	
-//	@OneToOne(fetch = FetchType.LAZY)
-//	@JoinColumn(name="rezervisao_id", referencedColumnName = "id")
-	@ManyToOne(fetch = FetchType.LAZY)
-	private Guest gost;
+	private String smestaj;	
+	private String gost;
 	
 	@NotNull
 	private LocalDateTime odDatum;
@@ -47,12 +39,10 @@ public class Rezervacija implements Serializable{
 		super();
 	}
 
-	
-	public Rezervacija(String id, Integer version, Smestaj smestaj, Guest gost, @NotNull LocalDateTime odDatum,
+	public Rezervacija(String id, String smestaj, String gost, @NotNull LocalDateTime odDatum,
 			@NotNull LocalDateTime doDatum, @PositiveOrZero int brojGostiju, StatusRezervacije status) {
 		super();
 		this.id = id;
-		this.version = version;
 		this.smestaj = smestaj;
 		this.gost = gost;
 		this.odDatum = odDatum;
@@ -60,7 +50,6 @@ public class Rezervacija implements Serializable{
 		this.brojGostiju = brojGostiju;
 		this.status = status;
 	}
-
 
 	public String getId() {
 		return id;
@@ -70,27 +59,19 @@ public class Rezervacija implements Serializable{
 		this.id = id;
 	}
 
-	public Integer getVersion() {
-		return version;
-	}
-
-	public void setVersion(Integer version) {
-		this.version = version;
-	}
-
-	public Smestaj getSmestaj() {
+	public String getSmestaj() {
 		return smestaj;
 	}
 
-	public void setSmestaj(Smestaj smestaj) {
+	public void setSmestaj(String smestaj) {
 		this.smestaj = smestaj;
 	}
 
-	public Guest getGost() {
+	public String getGost() {
 		return gost;
 	}
 
-	public void setGost(Guest gost) {
+	public void setGost(String gost) {
 		this.gost = gost;
 	}
 
@@ -125,4 +106,9 @@ public class Rezervacija implements Serializable{
 	public void setStatus(StatusRezervacije status) {
 		this.status = status;
 	}
+
+	public static long getSerialversionuid() {
+		return serialVersionUID;
+	}
+	
 }

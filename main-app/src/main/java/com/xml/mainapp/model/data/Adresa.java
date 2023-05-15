@@ -8,7 +8,6 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import javax.persistence.*;
-@Document(collection = "adresa_db")
 public class Adresa implements Serializable{
 
 	/**
@@ -18,10 +17,6 @@ public class Adresa implements Serializable{
 
 	@Id
 	private String id;
-	
-	@Version
-	@Column(columnDefinition = "integer DEFAULT 0", nullable = false)
-	private Integer version;
 	
 	@NotBlank
 	@Length(min = 5, max = 100)

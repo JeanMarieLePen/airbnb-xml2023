@@ -10,7 +10,6 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 
 
-@Document(collection = "cenovnik_db")
 public class Cenovnik implements Serializable{
 
 	/**
@@ -21,9 +20,7 @@ public class Cenovnik implements Serializable{
 
 	@Id
 	private String id;
-	@Version
-	@Column(columnDefinition = "integer DEFAULT 0", nullable = false)
-	private Integer version;
+
 	
 	// true- cena za ceo smestaj, false cena po gostu
 	@NotNull

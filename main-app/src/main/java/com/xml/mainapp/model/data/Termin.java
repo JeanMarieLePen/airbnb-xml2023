@@ -8,27 +8,15 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 import javax.persistence.*;
 
-@Document("termini_db")
 public class Termin implements Serializable{
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 334341200024100711L;
-
-	@Id
-	private String id;
-	
-	@Version
-	@Column(columnDefinition = "integer DEFAULT 0", nullable = false)
-	private Integer version;
-	
 	private LocalDateTime pocetak;
 	private LocalDateTime kraj;
-	
-	@DBRef
-	private Smestaj smestaj;
-	
+		
 	public Termin() {
 		super();
 	}
@@ -37,22 +25,6 @@ public class Termin implements Serializable{
 		// TODO Auto-generated constructor stub
 		this.pocetak = odDatum;
 		this.kraj = doDatum;
-	}
-
-	public String getId() {
-		return id;
-	}
-
-	public void setId(String id) {
-		this.id = id;
-	}
-
-	public Integer getVersion() {
-		return version;
-	}
-
-	public void setVersion(Integer version) {
-		this.version = version;
 	}
 
 	public LocalDateTime getPocetak() {
@@ -71,14 +43,7 @@ public class Termin implements Serializable{
 		this.kraj = kraj;
 	}
 
-	public Smestaj getSmestaj() {
-		return smestaj;
-	}
 
-	public void setSmestaj(Smestaj smestaj) {
-		this.smestaj = smestaj;
-	}
-	
 	// komparatori//////////////////////////////////////////////////////////////////////////////////////
 		public boolean zavrsen() {
 			return kraj.isBefore(LocalDateTime.now());

@@ -10,7 +10,6 @@ import java.io.Serializable;
 import java.util.Collection;
 
 import org.hibernate.validator.constraints.Length;
-import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import com.xml.mainapp.model.data.Adresa;
@@ -50,7 +49,6 @@ public class Korisnik implements Serializable {
 	@NotBlank
 	@Length(min=2, max=100)
     private String prezime;
-    @DBRef
     @NotNull
     private Adresa adresa;
 
