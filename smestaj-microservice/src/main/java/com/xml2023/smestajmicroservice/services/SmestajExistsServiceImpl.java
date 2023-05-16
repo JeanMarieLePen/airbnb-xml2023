@@ -14,6 +14,10 @@ import com.xml2023.mainapp.SmestajExistsResponse;
 import com.xml2023.mainapp.SmestajGrpcGrpc.SmestajGrpcImplBase;
 import com.xml2023.mainapp.SmestajIdsForHostRequest;
 import com.xml2023.mainapp.SmestajIdsForHostResponse;
+import com.xml2023.mainapp.getListaSmestajaByUserIdRequest;
+import com.xml2023.mainapp.getListaSmestajaByUserIdResponse;
+import com.xml2023.mainapp.getSmestajByIdRequest;
+import com.xml2023.mainapp.getSmestajByIdResponse;
 import com.xml2023.smestajmicroservice.model.data.Smestaj;
 import com.xml2023.smestajmicroservice.repositories.SmestajRep;
 
@@ -75,6 +79,19 @@ public class SmestajExistsServiceImpl extends SmestajGrpcImplBase{
 		}else res.setSuccess(1);
 		responseObserver.onNext(res.build());
 		responseObserver.onCompleted();
+	}
+
+	@Override
+	public void getSmestajById(getSmestajByIdRequest request, StreamObserver<getSmestajByIdResponse> responseObserver) {
+		// TODO Auto-generated method stub
+		super.getSmestajById(request, responseObserver);
+	}
+
+	@Override
+	public void getListaSmestajaByUserId(getListaSmestajaByUserIdRequest request,
+			StreamObserver<getListaSmestajaByUserIdResponse> responseObserver) {
+		// TODO Auto-generated method stub
+		super.getListaSmestajaByUserId(request, responseObserver);
 	}
 	
 	

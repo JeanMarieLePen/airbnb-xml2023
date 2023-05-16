@@ -91,6 +91,70 @@ public final class RezervacijaGrpcGrpc {
      return getReservationsForUserExistsMethod;
   }
 
+  private static volatile io.grpc.MethodDescriptor<com.xml2023.mainapp.getRezervacijaByIdRequest,
+      com.xml2023.mainapp.getRezervacijaByIdResponse> getGetRezervacijaByIdMethod;
+
+  @io.grpc.stub.annotations.RpcMethod(
+      fullMethodName = SERVICE_NAME + '/' + "getRezervacijaById",
+      requestType = com.xml2023.mainapp.getRezervacijaByIdRequest.class,
+      responseType = com.xml2023.mainapp.getRezervacijaByIdResponse.class,
+      methodType = io.grpc.MethodDescriptor.MethodType.UNARY)
+  public static io.grpc.MethodDescriptor<com.xml2023.mainapp.getRezervacijaByIdRequest,
+      com.xml2023.mainapp.getRezervacijaByIdResponse> getGetRezervacijaByIdMethod() {
+    io.grpc.MethodDescriptor<com.xml2023.mainapp.getRezervacijaByIdRequest, com.xml2023.mainapp.getRezervacijaByIdResponse> getGetRezervacijaByIdMethod;
+    if ((getGetRezervacijaByIdMethod = RezervacijaGrpcGrpc.getGetRezervacijaByIdMethod) == null) {
+      synchronized (RezervacijaGrpcGrpc.class) {
+        if ((getGetRezervacijaByIdMethod = RezervacijaGrpcGrpc.getGetRezervacijaByIdMethod) == null) {
+          RezervacijaGrpcGrpc.getGetRezervacijaByIdMethod = getGetRezervacijaByIdMethod = 
+              io.grpc.MethodDescriptor.<com.xml2023.mainapp.getRezervacijaByIdRequest, com.xml2023.mainapp.getRezervacijaByIdResponse>newBuilder()
+              .setType(io.grpc.MethodDescriptor.MethodType.UNARY)
+              .setFullMethodName(generateFullMethodName(
+                  "com.xml2023.mainapp.RezervacijaGrpc", "getRezervacijaById"))
+              .setSampledToLocalTracing(true)
+              .setRequestMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(
+                  com.xml2023.mainapp.getRezervacijaByIdRequest.getDefaultInstance()))
+              .setResponseMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(
+                  com.xml2023.mainapp.getRezervacijaByIdResponse.getDefaultInstance()))
+                  .setSchemaDescriptor(new RezervacijaGrpcMethodDescriptorSupplier("getRezervacijaById"))
+                  .build();
+          }
+        }
+     }
+     return getGetRezervacijaByIdMethod;
+  }
+
+  private static volatile io.grpc.MethodDescriptor<com.xml2023.mainapp.getListaRezervacijaByUserIdRequest,
+      com.xml2023.mainapp.getListaRezervacijaByUserIdResponse> getGetListaRezervacijaByUserIdMethod;
+
+  @io.grpc.stub.annotations.RpcMethod(
+      fullMethodName = SERVICE_NAME + '/' + "getListaRezervacijaByUserId",
+      requestType = com.xml2023.mainapp.getListaRezervacijaByUserIdRequest.class,
+      responseType = com.xml2023.mainapp.getListaRezervacijaByUserIdResponse.class,
+      methodType = io.grpc.MethodDescriptor.MethodType.UNARY)
+  public static io.grpc.MethodDescriptor<com.xml2023.mainapp.getListaRezervacijaByUserIdRequest,
+      com.xml2023.mainapp.getListaRezervacijaByUserIdResponse> getGetListaRezervacijaByUserIdMethod() {
+    io.grpc.MethodDescriptor<com.xml2023.mainapp.getListaRezervacijaByUserIdRequest, com.xml2023.mainapp.getListaRezervacijaByUserIdResponse> getGetListaRezervacijaByUserIdMethod;
+    if ((getGetListaRezervacijaByUserIdMethod = RezervacijaGrpcGrpc.getGetListaRezervacijaByUserIdMethod) == null) {
+      synchronized (RezervacijaGrpcGrpc.class) {
+        if ((getGetListaRezervacijaByUserIdMethod = RezervacijaGrpcGrpc.getGetListaRezervacijaByUserIdMethod) == null) {
+          RezervacijaGrpcGrpc.getGetListaRezervacijaByUserIdMethod = getGetListaRezervacijaByUserIdMethod = 
+              io.grpc.MethodDescriptor.<com.xml2023.mainapp.getListaRezervacijaByUserIdRequest, com.xml2023.mainapp.getListaRezervacijaByUserIdResponse>newBuilder()
+              .setType(io.grpc.MethodDescriptor.MethodType.UNARY)
+              .setFullMethodName(generateFullMethodName(
+                  "com.xml2023.mainapp.RezervacijaGrpc", "getListaRezervacijaByUserId"))
+              .setSampledToLocalTracing(true)
+              .setRequestMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(
+                  com.xml2023.mainapp.getListaRezervacijaByUserIdRequest.getDefaultInstance()))
+              .setResponseMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(
+                  com.xml2023.mainapp.getListaRezervacijaByUserIdResponse.getDefaultInstance()))
+                  .setSchemaDescriptor(new RezervacijaGrpcMethodDescriptorSupplier("getListaRezervacijaByUserId"))
+                  .build();
+          }
+        }
+     }
+     return getGetListaRezervacijaByUserIdMethod;
+  }
+
   /**
    * Creates a new async stub that supports all call types for the service
    */
@@ -132,6 +196,20 @@ public final class RezervacijaGrpcGrpc {
       asyncUnimplementedUnaryCall(getReservationsForUserExistsMethod(), responseObserver);
     }
 
+    /**
+     */
+    public void getRezervacijaById(com.xml2023.mainapp.getRezervacijaByIdRequest request,
+        io.grpc.stub.StreamObserver<com.xml2023.mainapp.getRezervacijaByIdResponse> responseObserver) {
+      asyncUnimplementedUnaryCall(getGetRezervacijaByIdMethod(), responseObserver);
+    }
+
+    /**
+     */
+    public void getListaRezervacijaByUserId(com.xml2023.mainapp.getListaRezervacijaByUserIdRequest request,
+        io.grpc.stub.StreamObserver<com.xml2023.mainapp.getListaRezervacijaByUserIdResponse> responseObserver) {
+      asyncUnimplementedUnaryCall(getGetListaRezervacijaByUserIdMethod(), responseObserver);
+    }
+
     @java.lang.Override public final io.grpc.ServerServiceDefinition bindService() {
       return io.grpc.ServerServiceDefinition.builder(getServiceDescriptor())
           .addMethod(
@@ -148,6 +226,20 @@ public final class RezervacijaGrpcGrpc {
                 com.xml2023.mainapp.ActiveResExistsRequest,
                 com.xml2023.mainapp.ActiveResExistsResponse>(
                   this, METHODID_RESERVATIONS_FOR_USER_EXISTS)))
+          .addMethod(
+            getGetRezervacijaByIdMethod(),
+            asyncUnaryCall(
+              new MethodHandlers<
+                com.xml2023.mainapp.getRezervacijaByIdRequest,
+                com.xml2023.mainapp.getRezervacijaByIdResponse>(
+                  this, METHODID_GET_REZERVACIJA_BY_ID)))
+          .addMethod(
+            getGetListaRezervacijaByUserIdMethod(),
+            asyncUnaryCall(
+              new MethodHandlers<
+                com.xml2023.mainapp.getListaRezervacijaByUserIdRequest,
+                com.xml2023.mainapp.getListaRezervacijaByUserIdResponse>(
+                  this, METHODID_GET_LISTA_REZERVACIJA_BY_USER_ID)))
           .build();
     }
   }
@@ -185,6 +277,22 @@ public final class RezervacijaGrpcGrpc {
       asyncUnaryCall(
           getChannel().newCall(getReservationsForUserExistsMethod(), getCallOptions()), request, responseObserver);
     }
+
+    /**
+     */
+    public void getRezervacijaById(com.xml2023.mainapp.getRezervacijaByIdRequest request,
+        io.grpc.stub.StreamObserver<com.xml2023.mainapp.getRezervacijaByIdResponse> responseObserver) {
+      asyncUnaryCall(
+          getChannel().newCall(getGetRezervacijaByIdMethod(), getCallOptions()), request, responseObserver);
+    }
+
+    /**
+     */
+    public void getListaRezervacijaByUserId(com.xml2023.mainapp.getListaRezervacijaByUserIdRequest request,
+        io.grpc.stub.StreamObserver<com.xml2023.mainapp.getListaRezervacijaByUserIdResponse> responseObserver) {
+      asyncUnaryCall(
+          getChannel().newCall(getGetListaRezervacijaByUserIdMethod(), getCallOptions()), request, responseObserver);
+    }
   }
 
   /**
@@ -217,6 +325,20 @@ public final class RezervacijaGrpcGrpc {
     public com.xml2023.mainapp.ActiveResExistsResponse reservationsForUserExists(com.xml2023.mainapp.ActiveResExistsRequest request) {
       return blockingUnaryCall(
           getChannel(), getReservationsForUserExistsMethod(), getCallOptions(), request);
+    }
+
+    /**
+     */
+    public com.xml2023.mainapp.getRezervacijaByIdResponse getRezervacijaById(com.xml2023.mainapp.getRezervacijaByIdRequest request) {
+      return blockingUnaryCall(
+          getChannel(), getGetRezervacijaByIdMethod(), getCallOptions(), request);
+    }
+
+    /**
+     */
+    public com.xml2023.mainapp.getListaRezervacijaByUserIdResponse getListaRezervacijaByUserId(com.xml2023.mainapp.getListaRezervacijaByUserIdRequest request) {
+      return blockingUnaryCall(
+          getChannel(), getGetListaRezervacijaByUserIdMethod(), getCallOptions(), request);
     }
   }
 
@@ -253,10 +375,28 @@ public final class RezervacijaGrpcGrpc {
       return futureUnaryCall(
           getChannel().newCall(getReservationsForUserExistsMethod(), getCallOptions()), request);
     }
+
+    /**
+     */
+    public com.google.common.util.concurrent.ListenableFuture<com.xml2023.mainapp.getRezervacijaByIdResponse> getRezervacijaById(
+        com.xml2023.mainapp.getRezervacijaByIdRequest request) {
+      return futureUnaryCall(
+          getChannel().newCall(getGetRezervacijaByIdMethod(), getCallOptions()), request);
+    }
+
+    /**
+     */
+    public com.google.common.util.concurrent.ListenableFuture<com.xml2023.mainapp.getListaRezervacijaByUserIdResponse> getListaRezervacijaByUserId(
+        com.xml2023.mainapp.getListaRezervacijaByUserIdRequest request) {
+      return futureUnaryCall(
+          getChannel().newCall(getGetListaRezervacijaByUserIdMethod(), getCallOptions()), request);
+    }
   }
 
   private static final int METHODID_EXISTS = 0;
   private static final int METHODID_RESERVATIONS_FOR_USER_EXISTS = 1;
+  private static final int METHODID_GET_REZERVACIJA_BY_ID = 2;
+  private static final int METHODID_GET_LISTA_REZERVACIJA_BY_USER_ID = 3;
 
   private static final class MethodHandlers<Req, Resp> implements
       io.grpc.stub.ServerCalls.UnaryMethod<Req, Resp>,
@@ -282,6 +422,14 @@ public final class RezervacijaGrpcGrpc {
         case METHODID_RESERVATIONS_FOR_USER_EXISTS:
           serviceImpl.reservationsForUserExists((com.xml2023.mainapp.ActiveResExistsRequest) request,
               (io.grpc.stub.StreamObserver<com.xml2023.mainapp.ActiveResExistsResponse>) responseObserver);
+          break;
+        case METHODID_GET_REZERVACIJA_BY_ID:
+          serviceImpl.getRezervacijaById((com.xml2023.mainapp.getRezervacijaByIdRequest) request,
+              (io.grpc.stub.StreamObserver<com.xml2023.mainapp.getRezervacijaByIdResponse>) responseObserver);
+          break;
+        case METHODID_GET_LISTA_REZERVACIJA_BY_USER_ID:
+          serviceImpl.getListaRezervacijaByUserId((com.xml2023.mainapp.getListaRezervacijaByUserIdRequest) request,
+              (io.grpc.stub.StreamObserver<com.xml2023.mainapp.getListaRezervacijaByUserIdResponse>) responseObserver);
           break;
         default:
           throw new AssertionError();
@@ -346,6 +494,8 @@ public final class RezervacijaGrpcGrpc {
               .setSchemaDescriptor(new RezervacijaGrpcFileDescriptorSupplier())
               .addMethod(getExistsMethod())
               .addMethod(getReservationsForUserExistsMethod())
+              .addMethod(getGetRezervacijaByIdMethod())
+              .addMethod(getGetListaRezervacijaByUserIdMethod())
               .build();
         }
       }

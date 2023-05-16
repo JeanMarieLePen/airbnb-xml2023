@@ -1,5 +1,7 @@
 syntax = "proto3";
 
+import "google/protobuf/timestamp.proto";
+
 package com.xml2023.mainapp;
 option java_multiple_files = true;
 
@@ -38,11 +40,15 @@ service SmestajGrpc{
 	rpc exists(SmestajExistsRequest) returns (SmestajExistsResponse);
 	rpc getSmestajIdsForHost(SmestajIdsForHostRequest) returns  (SmestajIdsForHostResponse);
 	rpc deketeSnestajsForHost(DeleteSmestajsForHostRequest) returns (DeleteSmestajsForHostResponse);
+	rpc getSmestajById(getSmestajByIdRequest) returns (getSmestajByIdResponse);
+	rpc getListaSmestajaByUserId(getListaSmestajaByUserIdRequest) returns (getListaSmestajaByUserIdResponse);
 }
 
 service RezervacijaGrpc{
 	rpc exists(RezervacijaExistsRequest) returns (RezervacijaExistsResponse);
 	rpc reservationsForUserExists(ActiveResExistsRequest) returns (ActiveResExistsResponse);
+	rpc getRezervacijaById(getRezervacijaByIdRequest) returns (getRezervacijaByIdResponse);
+	rpc getListaRezervacijaByUserId(getListaRezervacijaByUserIdRequest) returns (getListaRezervacijaByUserIdResponse);
 }
 
 message ActiveResExistsRequest{
@@ -66,3 +72,82 @@ message DeleteSmestajsForHostRequest{
 message DeleteSmestajsForHostResponse{
 	int32 success=1;
 }
+
+message getListaSmestajaByUserIdRequest{
+	string id = 1;
+}
+message getListaSmestajaByUserIdResponse{
+	repeated SmestajDTO listaSmestaja = 1;
+}
+message getSmestajByIdRequest{
+	string smestajId = 1;
+}
+message getSmestajByIdResponse{
+	SmestajDTO odgovor = 1;
+}
+message SmestajDTO{
+	string id = 1;
+	string vlasnik = 2;
+	repeated string pogodnosti = 3;
+	repeated SlikaDTO slika = 4;
+	int32 minGosti = 5;
+	int32 maxGost = 6;
+	repeated string nedostupni = 7;
+}
+
+
+
+message getListaRezervacijaByUserIdRequest{
+	string id = 1;
+}
+message getListaRezervacijaByUserIdResponse{
+	repeated RezervacijaDTO listaRezervacija = 1;
+}
+message getRezervacijaByIdRequest{
+	string rezervacijaId = 1;
+}
+message getRezervacijaByIdResponse{
+	RezervacijaDTO odgovor = 1;
+}
+message RezervacijaDTO{
+	string id = 1;
+	string smestaj = 2;
+	string gost = 3;
+	google.protobuf.Timestamp odDatum = 4;
+	google.protobuf.Timestamp doDatum = 5;
+	int32 brojGostiju = 6;
+	StatusRezervacije status = 7;
+	
+	enum StatusRezervacije{
+		PENDING = 0;
+		REZERVISANA = 1;
+		ODBIJENA = 2;
+		OTKAZANA = 3;	
+	}
+}
+
+
+message AdresaDTO{
+	string id = 1;
+	string adresa = 2;
+	double lat = 3;
+	double lng = 4;
+}
+
+message CenovnikDTO{
+	bool poSmestaju = 1;
+	int64 cena = 2;
+	int64 cenaPraznik = 3;
+	int64 cenaVikend = 4;
+	int64 cenaLeto = 5;
+}
+
+message SlikaDTO{
+	string slika = 1;
+}
+message TerminDTO{
+	google.protobuf.Timestamp pocetak = 1;
+	google.protobuf.Timestamp kraj = 2;
+}
+
+

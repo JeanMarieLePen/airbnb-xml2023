@@ -18,6 +18,10 @@ import com.xml2023.mainapp.SmestajGrpcGrpc;
 import com.xml2023.mainapp.SmestajGrpcGrpc.SmestajGrpcBlockingStub;
 import com.xml2023.mainapp.SmestajIdsForHostRequest;
 import com.xml2023.mainapp.SmestajIdsForHostResponse;
+import com.xml2023.mainapp.getListaRezervacijaByUserIdRequest;
+import com.xml2023.mainapp.getListaRezervacijaByUserIdResponse;
+import com.xml2023.mainapp.getRezervacijaByIdRequest;
+import com.xml2023.mainapp.getRezervacijaByIdResponse;
 
 import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
@@ -86,5 +90,19 @@ public class RezervacijaExistsServiceImpl extends RezervacijaGrpcImplBase {
 		responseObserver.onCompleted();
 		
 	}
+	@Override
+	public void getRezervacijaById(getRezervacijaByIdRequest request,
+			StreamObserver<getRezervacijaByIdResponse> responseObserver) {
+		// TODO Auto-generated method stub
+		super.getRezervacijaById(request, responseObserver);
+	}
+	@Override
+	public void getListaRezervacijaByUserId(getListaRezervacijaByUserIdRequest request,
+			StreamObserver<getListaRezervacijaByUserIdResponse> responseObserver) {
+		// TODO Auto-generated method stub
+		super.getListaRezervacijaByUserId(request, responseObserver);
+	}
+	
+	
 	
 }

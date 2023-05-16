@@ -123,6 +123,70 @@ public final class SmestajGrpcGrpc {
      return getDeketeSnestajsForHostMethod;
   }
 
+  private static volatile io.grpc.MethodDescriptor<com.xml2023.mainapp.getSmestajByIdRequest,
+      com.xml2023.mainapp.getSmestajByIdResponse> getGetSmestajByIdMethod;
+
+  @io.grpc.stub.annotations.RpcMethod(
+      fullMethodName = SERVICE_NAME + '/' + "getSmestajById",
+      requestType = com.xml2023.mainapp.getSmestajByIdRequest.class,
+      responseType = com.xml2023.mainapp.getSmestajByIdResponse.class,
+      methodType = io.grpc.MethodDescriptor.MethodType.UNARY)
+  public static io.grpc.MethodDescriptor<com.xml2023.mainapp.getSmestajByIdRequest,
+      com.xml2023.mainapp.getSmestajByIdResponse> getGetSmestajByIdMethod() {
+    io.grpc.MethodDescriptor<com.xml2023.mainapp.getSmestajByIdRequest, com.xml2023.mainapp.getSmestajByIdResponse> getGetSmestajByIdMethod;
+    if ((getGetSmestajByIdMethod = SmestajGrpcGrpc.getGetSmestajByIdMethod) == null) {
+      synchronized (SmestajGrpcGrpc.class) {
+        if ((getGetSmestajByIdMethod = SmestajGrpcGrpc.getGetSmestajByIdMethod) == null) {
+          SmestajGrpcGrpc.getGetSmestajByIdMethod = getGetSmestajByIdMethod = 
+              io.grpc.MethodDescriptor.<com.xml2023.mainapp.getSmestajByIdRequest, com.xml2023.mainapp.getSmestajByIdResponse>newBuilder()
+              .setType(io.grpc.MethodDescriptor.MethodType.UNARY)
+              .setFullMethodName(generateFullMethodName(
+                  "com.xml2023.mainapp.SmestajGrpc", "getSmestajById"))
+              .setSampledToLocalTracing(true)
+              .setRequestMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(
+                  com.xml2023.mainapp.getSmestajByIdRequest.getDefaultInstance()))
+              .setResponseMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(
+                  com.xml2023.mainapp.getSmestajByIdResponse.getDefaultInstance()))
+                  .setSchemaDescriptor(new SmestajGrpcMethodDescriptorSupplier("getSmestajById"))
+                  .build();
+          }
+        }
+     }
+     return getGetSmestajByIdMethod;
+  }
+
+  private static volatile io.grpc.MethodDescriptor<com.xml2023.mainapp.getListaSmestajaByUserIdRequest,
+      com.xml2023.mainapp.getListaSmestajaByUserIdResponse> getGetListaSmestajaByUserIdMethod;
+
+  @io.grpc.stub.annotations.RpcMethod(
+      fullMethodName = SERVICE_NAME + '/' + "getListaSmestajaByUserId",
+      requestType = com.xml2023.mainapp.getListaSmestajaByUserIdRequest.class,
+      responseType = com.xml2023.mainapp.getListaSmestajaByUserIdResponse.class,
+      methodType = io.grpc.MethodDescriptor.MethodType.UNARY)
+  public static io.grpc.MethodDescriptor<com.xml2023.mainapp.getListaSmestajaByUserIdRequest,
+      com.xml2023.mainapp.getListaSmestajaByUserIdResponse> getGetListaSmestajaByUserIdMethod() {
+    io.grpc.MethodDescriptor<com.xml2023.mainapp.getListaSmestajaByUserIdRequest, com.xml2023.mainapp.getListaSmestajaByUserIdResponse> getGetListaSmestajaByUserIdMethod;
+    if ((getGetListaSmestajaByUserIdMethod = SmestajGrpcGrpc.getGetListaSmestajaByUserIdMethod) == null) {
+      synchronized (SmestajGrpcGrpc.class) {
+        if ((getGetListaSmestajaByUserIdMethod = SmestajGrpcGrpc.getGetListaSmestajaByUserIdMethod) == null) {
+          SmestajGrpcGrpc.getGetListaSmestajaByUserIdMethod = getGetListaSmestajaByUserIdMethod = 
+              io.grpc.MethodDescriptor.<com.xml2023.mainapp.getListaSmestajaByUserIdRequest, com.xml2023.mainapp.getListaSmestajaByUserIdResponse>newBuilder()
+              .setType(io.grpc.MethodDescriptor.MethodType.UNARY)
+              .setFullMethodName(generateFullMethodName(
+                  "com.xml2023.mainapp.SmestajGrpc", "getListaSmestajaByUserId"))
+              .setSampledToLocalTracing(true)
+              .setRequestMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(
+                  com.xml2023.mainapp.getListaSmestajaByUserIdRequest.getDefaultInstance()))
+              .setResponseMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(
+                  com.xml2023.mainapp.getListaSmestajaByUserIdResponse.getDefaultInstance()))
+                  .setSchemaDescriptor(new SmestajGrpcMethodDescriptorSupplier("getListaSmestajaByUserId"))
+                  .build();
+          }
+        }
+     }
+     return getGetListaSmestajaByUserIdMethod;
+  }
+
   /**
    * Creates a new async stub that supports all call types for the service
    */
@@ -171,6 +235,20 @@ public final class SmestajGrpcGrpc {
       asyncUnimplementedUnaryCall(getDeketeSnestajsForHostMethod(), responseObserver);
     }
 
+    /**
+     */
+    public void getSmestajById(com.xml2023.mainapp.getSmestajByIdRequest request,
+        io.grpc.stub.StreamObserver<com.xml2023.mainapp.getSmestajByIdResponse> responseObserver) {
+      asyncUnimplementedUnaryCall(getGetSmestajByIdMethod(), responseObserver);
+    }
+
+    /**
+     */
+    public void getListaSmestajaByUserId(com.xml2023.mainapp.getListaSmestajaByUserIdRequest request,
+        io.grpc.stub.StreamObserver<com.xml2023.mainapp.getListaSmestajaByUserIdResponse> responseObserver) {
+      asyncUnimplementedUnaryCall(getGetListaSmestajaByUserIdMethod(), responseObserver);
+    }
+
     @java.lang.Override public final io.grpc.ServerServiceDefinition bindService() {
       return io.grpc.ServerServiceDefinition.builder(getServiceDescriptor())
           .addMethod(
@@ -194,6 +272,20 @@ public final class SmestajGrpcGrpc {
                 com.xml2023.mainapp.DeleteSmestajsForHostRequest,
                 com.xml2023.mainapp.DeleteSmestajsForHostResponse>(
                   this, METHODID_DEKETE_SNESTAJS_FOR_HOST)))
+          .addMethod(
+            getGetSmestajByIdMethod(),
+            asyncUnaryCall(
+              new MethodHandlers<
+                com.xml2023.mainapp.getSmestajByIdRequest,
+                com.xml2023.mainapp.getSmestajByIdResponse>(
+                  this, METHODID_GET_SMESTAJ_BY_ID)))
+          .addMethod(
+            getGetListaSmestajaByUserIdMethod(),
+            asyncUnaryCall(
+              new MethodHandlers<
+                com.xml2023.mainapp.getListaSmestajaByUserIdRequest,
+                com.xml2023.mainapp.getListaSmestajaByUserIdResponse>(
+                  this, METHODID_GET_LISTA_SMESTAJA_BY_USER_ID)))
           .build();
     }
   }
@@ -239,6 +331,22 @@ public final class SmestajGrpcGrpc {
       asyncUnaryCall(
           getChannel().newCall(getDeketeSnestajsForHostMethod(), getCallOptions()), request, responseObserver);
     }
+
+    /**
+     */
+    public void getSmestajById(com.xml2023.mainapp.getSmestajByIdRequest request,
+        io.grpc.stub.StreamObserver<com.xml2023.mainapp.getSmestajByIdResponse> responseObserver) {
+      asyncUnaryCall(
+          getChannel().newCall(getGetSmestajByIdMethod(), getCallOptions()), request, responseObserver);
+    }
+
+    /**
+     */
+    public void getListaSmestajaByUserId(com.xml2023.mainapp.getListaSmestajaByUserIdRequest request,
+        io.grpc.stub.StreamObserver<com.xml2023.mainapp.getListaSmestajaByUserIdResponse> responseObserver) {
+      asyncUnaryCall(
+          getChannel().newCall(getGetListaSmestajaByUserIdMethod(), getCallOptions()), request, responseObserver);
+    }
   }
 
   /**
@@ -278,6 +386,20 @@ public final class SmestajGrpcGrpc {
     public com.xml2023.mainapp.DeleteSmestajsForHostResponse deketeSnestajsForHost(com.xml2023.mainapp.DeleteSmestajsForHostRequest request) {
       return blockingUnaryCall(
           getChannel(), getDeketeSnestajsForHostMethod(), getCallOptions(), request);
+    }
+
+    /**
+     */
+    public com.xml2023.mainapp.getSmestajByIdResponse getSmestajById(com.xml2023.mainapp.getSmestajByIdRequest request) {
+      return blockingUnaryCall(
+          getChannel(), getGetSmestajByIdMethod(), getCallOptions(), request);
+    }
+
+    /**
+     */
+    public com.xml2023.mainapp.getListaSmestajaByUserIdResponse getListaSmestajaByUserId(com.xml2023.mainapp.getListaSmestajaByUserIdRequest request) {
+      return blockingUnaryCall(
+          getChannel(), getGetListaSmestajaByUserIdMethod(), getCallOptions(), request);
     }
   }
 
@@ -322,11 +444,29 @@ public final class SmestajGrpcGrpc {
       return futureUnaryCall(
           getChannel().newCall(getDeketeSnestajsForHostMethod(), getCallOptions()), request);
     }
+
+    /**
+     */
+    public com.google.common.util.concurrent.ListenableFuture<com.xml2023.mainapp.getSmestajByIdResponse> getSmestajById(
+        com.xml2023.mainapp.getSmestajByIdRequest request) {
+      return futureUnaryCall(
+          getChannel().newCall(getGetSmestajByIdMethod(), getCallOptions()), request);
+    }
+
+    /**
+     */
+    public com.google.common.util.concurrent.ListenableFuture<com.xml2023.mainapp.getListaSmestajaByUserIdResponse> getListaSmestajaByUserId(
+        com.xml2023.mainapp.getListaSmestajaByUserIdRequest request) {
+      return futureUnaryCall(
+          getChannel().newCall(getGetListaSmestajaByUserIdMethod(), getCallOptions()), request);
+    }
   }
 
   private static final int METHODID_EXISTS = 0;
   private static final int METHODID_GET_SMESTAJ_IDS_FOR_HOST = 1;
   private static final int METHODID_DEKETE_SNESTAJS_FOR_HOST = 2;
+  private static final int METHODID_GET_SMESTAJ_BY_ID = 3;
+  private static final int METHODID_GET_LISTA_SMESTAJA_BY_USER_ID = 4;
 
   private static final class MethodHandlers<Req, Resp> implements
       io.grpc.stub.ServerCalls.UnaryMethod<Req, Resp>,
@@ -356,6 +496,14 @@ public final class SmestajGrpcGrpc {
         case METHODID_DEKETE_SNESTAJS_FOR_HOST:
           serviceImpl.deketeSnestajsForHost((com.xml2023.mainapp.DeleteSmestajsForHostRequest) request,
               (io.grpc.stub.StreamObserver<com.xml2023.mainapp.DeleteSmestajsForHostResponse>) responseObserver);
+          break;
+        case METHODID_GET_SMESTAJ_BY_ID:
+          serviceImpl.getSmestajById((com.xml2023.mainapp.getSmestajByIdRequest) request,
+              (io.grpc.stub.StreamObserver<com.xml2023.mainapp.getSmestajByIdResponse>) responseObserver);
+          break;
+        case METHODID_GET_LISTA_SMESTAJA_BY_USER_ID:
+          serviceImpl.getListaSmestajaByUserId((com.xml2023.mainapp.getListaSmestajaByUserIdRequest) request,
+              (io.grpc.stub.StreamObserver<com.xml2023.mainapp.getListaSmestajaByUserIdResponse>) responseObserver);
           break;
         default:
           throw new AssertionError();
@@ -421,6 +569,8 @@ public final class SmestajGrpcGrpc {
               .addMethod(getExistsMethod())
               .addMethod(getGetSmestajIdsForHostMethod())
               .addMethod(getDeketeSnestajsForHostMethod())
+              .addMethod(getGetSmestajByIdMethod())
+              .addMethod(getGetListaSmestajaByUserIdMethod())
               .build();
         }
       }
