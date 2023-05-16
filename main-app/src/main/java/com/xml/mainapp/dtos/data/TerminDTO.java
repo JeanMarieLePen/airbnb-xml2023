@@ -7,7 +7,6 @@ public class TerminDTO {
 	private String id;
 	private LocalDateTime pocetak;
 	private LocalDateTime kraj;
-	private SmestajDTO smestaj;
 	private Integer version;
 	
 	
@@ -39,11 +38,5 @@ public class TerminDTO {
 	}
 	public void setKraj(LocalDateTime kraj) {
 		this.kraj = kraj;
-	}
-	public SmestajDTO getSmestaj() {
-		return smestaj;
-	}
-	public void setSmestaj(SmestajDTO smestaj) {
-		this.smestaj = smestaj;
 	}
 }

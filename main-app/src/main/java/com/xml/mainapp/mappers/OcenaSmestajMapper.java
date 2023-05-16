@@ -17,7 +17,7 @@ public class OcenaSmestajMapper {
 	
 	public OcenaSmestaj fromDTO(OcenaSmestajaDTO dto) {
 		OcenaSmestaj os = new OcenaSmestaj();
-		os.setSmestaj(sbMapper.fromBasicDTO(dto.getSmestaj()));
+		//os.setSmestaj(sbMapper.fromBasicDTO(dto.getSmestaj()));
 		return os;
 	}
 	
@@ -27,7 +27,7 @@ public class OcenaSmestajMapper {
 		dto.setId(os.getId());
 		dto.setOcena(os.getOcena());
 //		dto.setSmestaj(sbMapper.toDTO(os.getSmestaj()));
-		dto.setGost(guestMapper.toDTO(os.getGost()));
+		//dto.setGost(guestMapper.toDTO(os.getGost()));
 		return dto;
 	}
 }

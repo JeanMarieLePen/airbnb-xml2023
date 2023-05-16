@@ -3,14 +3,9 @@ package com.xml.mainapp.model.data;
 import java.io.Serializable;
 import java.util.Collection;
 
-import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
-
-import com.xml.mainapp.model.users.Host;
-
 import jakarta.annotation.Nullable;
 import javax.persistence.*;
-import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 
 @Document("smestaj_db")
@@ -23,10 +18,6 @@ public class Smestaj implements Serializable{
 
 	@Id
 	private String id;
-	@Version
-	@Column(columnDefinition = "integer DEFAULT 0", nullable = false)
-	private Integer version;
-	
 
 	private String vlasnik;
 	private Adresa adresa;
@@ -48,12 +39,10 @@ public class Smestaj implements Serializable{
 	private Collection<Termin> nedostupni;
 
 
-	public Smestaj(String id, Integer version, String vlasnik, Adresa adresa, Collection<String> pogodnosti,
+	public Smestaj( String vlasnik, Adresa adresa, Collection<String> pogodnosti,
 			Collection<byte[]> slike, @Positive int minGosti, @Positive int maxGosti, Cenovnik cenovnik,
 			Collection<Termin> nedostupni) {
 		super();
-		this.id = id;
-		this.version = version;
 		this.vlasnik = vlasnik;
 		this.adresa = adresa;
 		this.pogodnosti = pogodnosti;
@@ -62,6 +51,12 @@ public class Smestaj implements Serializable{
 		this.maxGosti = maxGosti;
 		this.cenovnik = cenovnik;
 		this.nedostupni = nedostupni;
+	}
+
+
+	public Smestaj() {
+		super();
+		// TODO Auto-generated constructor stub
 	}
 
 
@@ -75,14 +70,6 @@ public class Smestaj implements Serializable{
 	}
 
 
-	public Integer getVersion() {
-		return version;
-	}
-
-
-	public void setVersion(Integer version) {
-		this.version = version;
-	}
 
 
 	public String getVlasnik() {

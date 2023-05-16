@@ -27,7 +27,7 @@ public class RezervacijaMapper {
 		dto.setDoDatum(r.getDoDatum());
 		dto.setOdDatum(r.getOdDatum());
 		dto.setId(r.getId());
-		dto.setSmestaj(smestajMapper.toDTO(r.getSmestaj()));
+		//dto.setSmestaj(smestajMapper.toDTO(r.getSmestaj()));
 		dto.setStatus(r.getStatus());
 		return dto;
 	}

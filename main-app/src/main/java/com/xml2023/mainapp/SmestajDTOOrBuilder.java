@@ -98,4 +98,17 @@ public interface SmestajDTOOrBuilder extends
    */
   com.google.protobuf.ByteString
       getNedostupniBytes(int index);
+
+  /**
+   * <code>.com.xml2023.mainapp.CenovnikDTO cenovnik = 8;</code>
+   */
+  boolean hasCenovnik();
+  /**
+   * <code>.com.xml2023.mainapp.CenovnikDTO cenovnik = 8;</code>
+   */
+  com.xml2023.mainapp.CenovnikDTO getCenovnik();
+  /**
+   * <code>.com.xml2023.mainapp.CenovnikDTO cenovnik = 8;</code>
+   */
+  com.xml2023.mainapp.CenovnikDTOOrBuilder getCenovnikOrBuilder();
 }

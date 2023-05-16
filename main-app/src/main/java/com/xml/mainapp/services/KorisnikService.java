@@ -47,6 +47,10 @@ import com.xml2023.mainapp.DeleteSmestajsForHostResponse;
 import com.xml2023.mainapp.RezervacijaGrpcGrpc;
 import com.xml2023.mainapp.RezervacijaGrpcGrpc.RezervacijaGrpcBlockingStub;
 import com.xml2023.mainapp.SmestajGrpcGrpc;
+import com.xml2023.mainapp.getListaRezervacijaByUserIdRequest;
+import com.xml2023.mainapp.getListaRezervacijaByUserIdResponse;
+import com.xml2023.mainapp.getListaSmestajaByUserIdRequest;
+import com.xml2023.mainapp.getListaSmestajaByUserIdResponse;
 import com.xml2023.mainapp.SmestajGrpcGrpc.SmestajGrpcBlockingStub;
 
 import io.grpc.ManagedChannel;
@@ -91,15 +95,9 @@ public class KorisnikService {
 				Host h = this.hostRep.findById(id).orElse(null);
 				retVal.setIstaknuti(h.isIstaknuti());
 				retVal.setRezAutomatski(h.isRezAutomatski());
-				Collection<SmestajDTO> smestajList = new ArrayList<SmestajDTO>();
-				if(h.getSmestajList() != null) {
-					for(Smestaj s : h.getSmestajList()) {
-						smestajList.add(smestajBasicMapper.toDTO(s));
-					}
-				}
-				retVal.setSmestajList(smestajList);
-			}
-			return retVal;
+				Collection<com.xml2023.mainapp.SmestajDTO> smestajList = getAllSmestajForHost(h.getId());		
+			}	
+		return retVal;
 		}
 	}
 
@@ -109,7 +107,7 @@ public class KorisnikService {
 		if(h == null) {
 			return null;
 		}
-		HostDTO retVal = this.hostMapper.toDTO(h);
+		HostDTO retVal = this.hostMapper.toDTO(h, getAllSmestajForHost(id));
 		return retVal;
 	}
 //	@Transactional
@@ -178,30 +176,29 @@ public class KorisnikService {
 		}
 	}
 
-	public Collection<RezervacijaDTO> getAllReservationByUserId(String id) {
-		// TODO Auto-generated method stub
-		Guest g = guestRep.findById(id).orElse(null);
-		if(g == null)
-			return null;
-		Collection<RezervacijaDTO> retList = new ArrayList<RezervacijaDTO>();
-		if(retList != null) {
-			for(Rezervacija r : g.getRezervacije()) {
-				retList.add(rezMapper.toDTO(r));
-			}
-		}
-		return retList;
-	}
+	
+	  public Collection<RezervacijaDTO> getAllReservationByUserId(String id) { 
+		  Guest g = guestRep.findById(id).orElse(null);
+		  if(g == null) return null; 
+		  Collection<RezervacijaDTO> retList = new ArrayList<RezervacijaDTO>();
+//		  if(retList != null) { for(Rezervacija r : g.getRezervacije()) { 
+//			  retList.add(rezMapper.toDTO(r)); 
+//			  } 
+//		  } 
+		  return retList; 
+	  }
+	 
 
 	public OcenaSmestajaDTO giveRatingToSmestaj(String userId, String smestajId, OcenaSmestajaDTO ocena) {
 		// TODO Auto-generated method stub
 		Guest g = this.guestRep.findById(userId).orElse(null);
 		Smestaj s = this.smestajRep.findById(smestajId).orElse(null);
 		OcenaSmestaj os = new OcenaSmestaj();
-		os.setGost(g);
-		os.setSmestaj(s);
+		//os.setGost(g);
+		//os.setSmestaj(s);
 		os.setDatum(ocena.getDatum());
 		os.setOcena(ocena.getOcena());
-		s.getListaOcena().add(os);
+		//s.getListaOcena().add(os);
 		smestajRep.save(s);
 		return osMapper.toDTO(os);
 	}
@@ -219,7 +216,7 @@ public class KorisnikService {
 //		s.getListaOcena().stream().map(OcenaSmestaj::getGost).filter(g::equals);
 		boolean retVal = false;
 		
-		retVal = s.getRezervacije().stream().map(Rezervacija::getGost).filter(g::equals).findFirst().isPresent() && s.getListaOcena().stream().filter(p -> p.getGost().getId().equals(userId)).findFirst().isPresent();
+		//retVal = s.getRezervacije().stream().map(Rezervacija::getGost).filter(g::equals).findFirst().isPresent() && s.getListaOcena().stream().filter(p -> p.getGost().getId().equals(userId)).findFirst().isPresent();
 		return !retVal;
 	}
 
@@ -295,5 +292,21 @@ public class KorisnikService {
 		}
 		return null;
 	}	
+	private Collection<com.xml2023.mainapp.SmestajDTO>getAllSmestajForHost(String hostId) {
+		ManagedChannel channelSmestaj = ManagedChannelBuilder.forAddress("localhost", 7977).usePlaintext().build();
+		SmestajGrpcBlockingStub blockStubSm= SmestajGrpcGrpc.newBlockingStub(channelSmestaj);
+		getListaSmestajaByUserIdRequest reqLista= getListaSmestajaByUserIdRequest.newBuilder().setId(hostId).build();
+		getListaSmestajaByUserIdResponse resLista= blockStubSm.getListaSmestajaByUserId(reqLista);
+		return resLista.getListaSmestajaList();
+	}
 	
+	private Collection<com.xml2023.mainapp.RezervacijaDTO> getAllRezervacijaForGuest(String guestId){
+		ManagedChannel channelRez = ManagedChannelBuilder.forAddress("localhost", 7977).usePlaintext().build();
+		RezervacijaGrpcBlockingStub blockStubRez= RezervacijaGrpcGrpc.newBlockingStub(channelRez);
+		getListaRezervacijaByUserIdRequest reqRez= getListaRezervacijaByUserIdRequest.newBuilder().setId(guestId).build();
+		getListaRezervacijaByUserIdResponse resRez= blockStubRez.getListaRezervacijaByUserId(reqRez);
+		if(resRez.getListaRezervacijaList()==null) {
+			return new ArrayList<com.xml2023.mainapp.RezervacijaDTO>();
+		}else return resRez.getListaRezervacijaList();
+	}
 }

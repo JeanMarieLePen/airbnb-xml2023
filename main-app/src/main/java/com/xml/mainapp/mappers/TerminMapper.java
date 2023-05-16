@@ -6,13 +6,10 @@ import org.springframework.stereotype.Component;
 import com.xml.mainapp.dtos.data.TerminDTO;
 import com.xml.mainapp.model.data.Termin;
 import com.xml.mainapp.repositories.SmestajRep;
-import com.xml.mainapp.repositories.TerminRepository;
 
 @Component
 public class TerminMapper {
 
-	@Autowired
-	private TerminRepository terminRep;
 	@Autowired
 	private SmestajBasicMapper smestajMapper;
 	@Autowired
@@ -31,7 +28,6 @@ public class TerminMapper {
 		tdto.setKraj(t.getKraj());
 		tdto.setPocetak(t.getPocetak());
 //		tdto.setSmestaj(smestajMapper.toDTO(t.getSmestaj()));
-		tdto.setId(t.getId());
 		return tdto;
 	}
 

@@ -8,13 +8,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.xml.mainapp.dtos.data.OcenaSmestajaDTO;
-import com.xml.mainapp.dtos.data.RezervacijaDTO;
 import com.xml.mainapp.dtos.user.GuestDTO;
-import com.xml.mainapp.dtos.user.OcenaHostDTO;
 import com.xml.mainapp.model.data.OcenaSmestaj;
-import com.xml.mainapp.model.data.Rezervacija;
 import com.xml.mainapp.model.users.Guest;
-import com.xml.mainapp.model.users.OcenaHost;
+
 
 
 @Component
@@ -51,12 +48,12 @@ public class GuestMapper {
 			OcenaSmestaj tmp = osMapper.fromDTO(odto);
 			tempOcene.add(tmp);
 		}
-		g.setOceneSmestaja(tempOcene);
+		//g.setOceneSmestaja(tempOcene);
 		
 		return g;
 	}
 	
-	public GuestDTO toDTO(Guest g) {
+	public GuestDTO toDTO(Guest g, Collection<com.xml2023.mainapp.RezervacijaDTO> allRez) {
 		GuestDTO dto = new GuestDTO();
 		dto.setAdresa(aMapper.toDTO(g.getAdresa()));
 		dto.setBrojOtkazivanja(g.getBrojOtkazivanja());
@@ -68,33 +65,6 @@ public class GuestMapper {
 		dto.setTipKorisnika(g.getTipKorisnika());
 		dto.setStatusNaloga(g.getStatusNaloga());
 		
-		//ocene smestaja, kopirati ako zatreba negde
-		Collection<OcenaSmestajaDTO> tempOceneSmestaja = new ArrayList<OcenaSmestajaDTO>();
-		if(g.getOceneSmestaja()!=null) {
-			for(OcenaSmestaj o: g.getOceneSmestaja()) {
-				tempOceneSmestaja.add(osMapper.toDTO(o));
-			}
-		}
-		dto.setOceneSmestaja(tempOceneSmestaja);
-		
-		//ocene hosta, kopirati ako zatreba negde
-		Collection<OcenaHostDTO> tempOceneHost = new ArrayList<OcenaHostDTO>();
-		if(g.getOceneVlasnika()!=null) {
-			for(OcenaHost o: g.getOceneVlasnika()) {
-				tempOceneHost.add(ohMapper.toDTO(o));
-			}
-		}
-		dto.setOceneVlasnika(tempOceneHost);
-		
-		//rezervacije, kopirati ako zatreba negde
-		Collection<RezervacijaDTO> tempRezervacije = new ArrayList<RezervacijaDTO>();
-		if(g.getRezervacije()!=null) {
-			for(Rezervacija r:g.getRezervacije()) {
-				tempRezervacije.add(rMapper.toDTO(r));
-			}
-		}
-		dto.setRezervacije(tempRezervacije);
-		
 		Collection<String> tempSlike = new ArrayList<String>();
 		for(byte[] s : g.getSlike()) {
 			String tempSlika = Base64.getEncoder().encodeToString(s);
@@ -102,6 +72,32 @@ public class GuestMapper {
 		}
 		dto.setSlike(tempSlike);
 		
+		
+		dto.setRezervacije(allRez);
+		//ocene smestaja, kopirati ako zatreba negde
+		/*
+		 * Collection<OcenaSmestajaDTO> tempOceneSmestaja = new
+		 * ArrayList<OcenaSmestajaDTO>(); if(g.getOceneSmestaja()!=null) {
+		 * for(OcenaSmestaj o: g.getOceneSmestaja()) {
+		 * tempOceneSmestaja.add(osMapper.toDTO(o)); } }
+		 * dto.setOceneSmestaja(tempOceneSmestaja);
+		 */
+		
+		//ocene hosta, kopirati ako zatreba negde
+		/*
+		 * Collection<OcenaHostDTO> tempOceneHost = new ArrayList<OcenaHostDTO>();
+		 * if(g.getOceneVlasnika()!=null) { for(OcenaHost o: g.getOceneVlasnika()) {
+		 * tempOceneHost.add(ohMapper.toDTO(o)); } }
+		 * dto.setOceneVlasnika(tempOceneHost);
+		 */
+		
+		/*
+		 * //rezervacije, kopirati ako zatreba negde Collection<RezervacijaDTO>
+		 * tempRezervacije = new ArrayList<RezervacijaDTO>();
+		 * if(g.getRezervacije()!=null) { for(Rezervacija r:g.getRezervacije()) {
+		 * tempRezervacije.add(rMapper.toDTO(r)); } }
+		 * dto.setRezervacije(tempRezervacije);
+		 */
 		return dto;
 	}
 }

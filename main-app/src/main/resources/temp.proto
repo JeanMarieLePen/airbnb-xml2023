@@ -93,6 +93,7 @@ message SmestajDTO{
 	int32 minGosti = 5;
 	int32 maxGost = 6;
 	repeated string nedostupni = 7;
+	CenovnikDTO cenovnik = 8;
 }
 
 

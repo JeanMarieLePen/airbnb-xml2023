@@ -10,9 +10,6 @@ import jakarta.validation.constraints.NotNull;
 import javax.persistence.*;
 public class Adresa implements Serializable{
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 3844742117528552755L;
 
 	@Id

@@ -98,6 +98,19 @@ private static final long serialVersionUID = 0L;
             nedostupni_.add(s);
             break;
           }
+          case 66: {
+            com.xml2023.mainapp.CenovnikDTO.Builder subBuilder = null;
+            if (cenovnik_ != null) {
+              subBuilder = cenovnik_.toBuilder();
+            }
+            cenovnik_ = input.readMessage(com.xml2023.mainapp.CenovnikDTO.parser(), extensionRegistry);
+            if (subBuilder != null) {
+              subBuilder.mergeFrom(cenovnik_);
+              cenovnik_ = subBuilder.buildPartial();
+            }
+
+            break;
+          }
           default: {
             if (!parseUnknownFieldProto3(
                 input, unknownFields, extensionRegistry, tag)) {
@@ -319,6 +332,27 @@ private static final long serialVersionUID = 0L;
     return nedostupni_.getByteString(index);
   }
 
+  public static final int CENOVNIK_FIELD_NUMBER = 8;
+  private com.xml2023.mainapp.CenovnikDTO cenovnik_;
+  /**
+   * <code>.com.xml2023.mainapp.CenovnikDTO cenovnik = 8;</code>
+   */
+  public boolean hasCenovnik() {
+    return cenovnik_ != null;
+  }
+  /**
+   * <code>.com.xml2023.mainapp.CenovnikDTO cenovnik = 8;</code>
+   */
+  public com.xml2023.mainapp.CenovnikDTO getCenovnik() {
+    return cenovnik_ == null ? com.xml2023.mainapp.CenovnikDTO.getDefaultInstance() : cenovnik_;
+  }
+  /**
+   * <code>.com.xml2023.mainapp.CenovnikDTO cenovnik = 8;</code>
+   */
+  public com.xml2023.mainapp.CenovnikDTOOrBuilder getCenovnikOrBuilder() {
+    return getCenovnik();
+  }
+
   private byte memoizedIsInitialized = -1;
   @java.lang.Override
   public final boolean isInitialized() {
@@ -353,6 +387,9 @@ private static final long serialVersionUID = 0L;
     }
     for (int i = 0; i < nedostupni_.size(); i++) {
       com.google.protobuf.GeneratedMessageV3.writeString(output, 7, nedostupni_.getRaw(i));
+    }
+    if (cenovnik_ != null) {
+      output.writeMessage(8, getCenovnik());
     }
     unknownFields.writeTo(output);
   }
@@ -397,6 +434,10 @@ private static final long serialVersionUID = 0L;
       size += dataSize;
       size += 1 * getNedostupniList().size();
     }
+    if (cenovnik_ != null) {
+      size += com.google.protobuf.CodedOutputStream
+        .computeMessageSize(8, getCenovnik());
+    }
     size += unknownFields.getSerializedSize();
     memoizedSize = size;
     return size;
@@ -427,6 +468,11 @@ private static final long serialVersionUID = 0L;
         == other.getMaxGost());
     result = result && getNedostupniList()
         .equals(other.getNedostupniList());
+    result = result && (hasCenovnik() == other.hasCenovnik());
+    if (hasCenovnik()) {
+      result = result && getCenovnik()
+          .equals(other.getCenovnik());
+    }
     result = result && unknownFields.equals(other.unknownFields);
     return result;
   }
@@ -457,6 +503,10 @@ private static final long serialVersionUID = 0L;
     if (getNedostupniCount() > 0) {
       hash = (37 * hash) + NEDOSTUPNI_FIELD_NUMBER;
       hash = (53 * hash) + getNedostupniList().hashCode();
+    }
+    if (hasCenovnik()) {
+      hash = (37 * hash) + CENOVNIK_FIELD_NUMBER;
+      hash = (53 * hash) + getCenovnik().hashCode();
     }
     hash = (29 * hash) + unknownFields.hashCode();
     memoizedHashCode = hash;
@@ -610,6 +660,12 @@ private static final long serialVersionUID = 0L;
 
       nedostupni_ = com.google.protobuf.LazyStringArrayList.EMPTY;
       bitField0_ = (bitField0_ & ~0x00000040);
+      if (cenovnikBuilder_ == null) {
+        cenovnik_ = null;
+      } else {
+        cenovnik_ = null;
+        cenovnikBuilder_ = null;
+      }
       return this;
     }
 
@@ -661,6 +717,11 @@ private static final long serialVersionUID = 0L;
         bitField0_ = (bitField0_ & ~0x00000040);
       }
       result.nedostupni_ = nedostupni_;
+      if (cenovnikBuilder_ == null) {
+        result.cenovnik_ = cenovnik_;
+      } else {
+        result.cenovnik_ = cenovnikBuilder_.build();
+      }
       result.bitField0_ = to_bitField0_;
       onBuilt();
       return result;
@@ -769,6 +830,9 @@ private static final long serialVersionUID = 0L;
           nedostupni_.addAll(other.nedostupni_);
         }
         onChanged();
+      }
+      if (other.hasCenovnik()) {
+        mergeCenovnik(other.getCenovnik());
       }
       this.mergeUnknownFields(other.unknownFields);
       onChanged();
@@ -1416,6 +1480,123 @@ private static final long serialVersionUID = 0L;
       nedostupni_.add(value);
       onChanged();
       return this;
+    }
+
+    private com.xml2023.mainapp.CenovnikDTO cenovnik_ = null;
+    private com.google.protobuf.SingleFieldBuilderV3<
+        com.xml2023.mainapp.CenovnikDTO, com.xml2023.mainapp.CenovnikDTO.Builder, com.xml2023.mainapp.CenovnikDTOOrBuilder> cenovnikBuilder_;
+    /**
+     * <code>.com.xml2023.mainapp.CenovnikDTO cenovnik = 8;</code>
+     */
+    public boolean hasCenovnik() {
+      return cenovnikBuilder_ != null || cenovnik_ != null;
+    }
+    /**
+     * <code>.com.xml2023.mainapp.CenovnikDTO cenovnik = 8;</code>
+     */
+    public com.xml2023.mainapp.CenovnikDTO getCenovnik() {
+      if (cenovnikBuilder_ == null) {
+        return cenovnik_ == null ? com.xml2023.mainapp.CenovnikDTO.getDefaultInstance() : cenovnik_;
+      } else {
+        return cenovnikBuilder_.getMessage();
+      }
+    }
+    /**
+     * <code>.com.xml2023.mainapp.CenovnikDTO cenovnik = 8;</code>
+     */
+    public Builder setCenovnik(com.xml2023.mainapp.CenovnikDTO value) {
+      if (cenovnikBuilder_ == null) {
+        if (value == null) {
+          throw new NullPointerException();
+        }
+        cenovnik_ = value;
+        onChanged();
+      } else {
+        cenovnikBuilder_.setMessage(value);
+      }
+
+      return this;
+    }
+    /**
+     * <code>.com.xml2023.mainapp.CenovnikDTO cenovnik = 8;</code>
+     */
+    public Builder setCenovnik(
+        com.xml2023.mainapp.CenovnikDTO.Builder builderForValue) {
+      if (cenovnikBuilder_ == null) {
+        cenovnik_ = builderForValue.build();
+        onChanged();
+      } else {
+        cenovnikBuilder_.setMessage(builderForValue.build());
+      }
+
+      return this;
+    }
+    /**
+     * <code>.com.xml2023.mainapp.CenovnikDTO cenovnik = 8;</code>
+     */
+    public Builder mergeCenovnik(com.xml2023.mainapp.CenovnikDTO value) {
+      if (cenovnikBuilder_ == null) {
+        if (cenovnik_ != null) {
+          cenovnik_ =
+            com.xml2023.mainapp.CenovnikDTO.newBuilder(cenovnik_).mergeFrom(value).buildPartial();
+        } else {
+          cenovnik_ = value;
+        }
+        onChanged();
+      } else {
+        cenovnikBuilder_.mergeFrom(value);
+      }
+
+      return this;
+    }
+    /**
+     * <code>.com.xml2023.mainapp.CenovnikDTO cenovnik = 8;</code>
+     */
+    public Builder clearCenovnik() {
+      if (cenovnikBuilder_ == null) {
+        cenovnik_ = null;
+        onChanged();
+      } else {
+        cenovnik_ = null;
+        cenovnikBuilder_ = null;
+      }
+
+      return this;
+    }
+    /**
+     * <code>.com.xml2023.mainapp.CenovnikDTO cenovnik = 8;</code>
+     */
+    public com.xml2023.mainapp.CenovnikDTO.Builder getCenovnikBuilder() {
+      
+      onChanged();
+      return getCenovnikFieldBuilder().getBuilder();
+    }
+    /**
+     * <code>.com.xml2023.mainapp.CenovnikDTO cenovnik = 8;</code>
+     */
+    public com.xml2023.mainapp.CenovnikDTOOrBuilder getCenovnikOrBuilder() {
+      if (cenovnikBuilder_ != null) {
+        return cenovnikBuilder_.getMessageOrBuilder();
+      } else {
+        return cenovnik_ == null ?
+            com.xml2023.mainapp.CenovnikDTO.getDefaultInstance() : cenovnik_;
+      }
+    }
+    /**
+     * <code>.com.xml2023.mainapp.CenovnikDTO cenovnik = 8;</code>
+     */
+    private com.google.protobuf.SingleFieldBuilderV3<
+        com.xml2023.mainapp.CenovnikDTO, com.xml2023.mainapp.CenovnikDTO.Builder, com.xml2023.mainapp.CenovnikDTOOrBuilder> 
+        getCenovnikFieldBuilder() {
+      if (cenovnikBuilder_ == null) {
+        cenovnikBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<
+            com.xml2023.mainapp.CenovnikDTO, com.xml2023.mainapp.CenovnikDTO.Builder, com.xml2023.mainapp.CenovnikDTOOrBuilder>(
+                getCenovnik(),
+                getParentForChildren(),
+                isClean());
+        cenovnik_ = null;
+      }
+      return cenovnikBuilder_;
     }
     @java.lang.Override
     public final Builder setUnknownFields(

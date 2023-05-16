@@ -4,7 +4,6 @@ package com.xml.mainapp.dtos.user;
 import java.util.Collection;
 
 import com.xml.mainapp.dtos.KorisnikDTO;
-import com.xml.mainapp.dtos.data.SmestajDTO;
 
 
 public class HostDTO extends KorisnikDTO{
@@ -15,7 +14,7 @@ public class HostDTO extends KorisnikDTO{
 
 	private boolean istaknuti;
 	
-	private Collection<SmestajDTO> smestajList;
+	private Collection<com.xml2023.mainapp.SmestajDTO> smestajList;
 	private Collection<OcenaHostDTO> ocene;
 	private boolean rezAutomatski;
 	private int prosecnaOcena;
@@ -48,11 +47,11 @@ public class HostDTO extends KorisnikDTO{
 		this.istaknuti = istaknuti;
 	}
 
-	public Collection<SmestajDTO> getSmestajList() {
+	public Collection<com.xml2023.mainapp.SmestajDTO> getSmestajList() {
 		return smestajList;
 	}
 
-	public void setSmestajList(Collection<SmestajDTO> smestajList) {
+	public void setSmestajList(Collection<com.xml2023.mainapp.SmestajDTO> smestajList) {
 		this.smestajList = smestajList;
 	}
 

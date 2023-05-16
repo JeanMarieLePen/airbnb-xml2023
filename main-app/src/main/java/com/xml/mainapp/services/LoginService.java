@@ -88,17 +88,17 @@ public class LoginService {
 				h.setId(newUser.getId());
 				h.setRezAutomatski(false);
 				h.setIstaknuti(false);
-				h.setOcene(new ArrayList<OcenaHost>());
-				h.setSmestajList(new ArrayList<Smestaj>());
+			//	h.setOcene(new ArrayList<OcenaHost>());
+			//	h.setSmestajList(new ArrayList<Smestaj>());
 				hostRep.save(h);
 			}
 			if(newUser.getTipKorisnika().equals(TipKorisnika.GUEST)) {
 				Guest g = new Guest();
 				g.setId(newUser.getId());
 				g.setBrojOtkazivanja(0);
-				g.setRezervacije(new ArrayList<Rezervacija>());
-				g.setOceneSmestaja(new ArrayList<OcenaSmestaj>());
-				g.setOceneVlasnika(new ArrayList<OcenaHost>());
+				//g.setRezervacije(new ArrayList<Rezervacija>());
+				//g.setOceneSmestaja(new ArrayList<OcenaSmestaj>());
+				//g.setOceneVlasnika(new ArrayList<OcenaHost>());
 				guestRep.save(g);
 			}
 			

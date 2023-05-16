@@ -3,7 +3,6 @@ package com.xml.mainapp.dtos;
 import java.io.Serializable;
 import java.util.Collection;
 
-import com.xml.mainapp.dtos.data.SmestajDTO;
 import com.xml.mainapp.model.data.Smestaj;
 import com.xml.mainapp.model.users.StatusNaloga;
 import com.xml.mainapp.model.users.TipKorisnika;
@@ -33,17 +32,17 @@ public class KorisnikDTO implements Serializable{
 	
 	private boolean istaknuti;
 	
-	private Collection<SmestajDTO> smestajList;
+	private Collection<com.xml2023.mainapp.SmestajDTO> smestajList;
     
 	public KorisnikDTO() {
 		super();
 	}
 	
-	public Collection<SmestajDTO> getSmestajList() {
+	public Collection<com.xml2023.mainapp.SmestajDTO> getSmestajList() {
 		return smestajList;
 	}
 
-	public void setSmestajList(Collection<SmestajDTO> smestajList) {
+	public void setSmestajList(Collection<com.xml2023.mainapp.SmestajDTO> smestajList) {
 		this.smestajList = smestajList;
 	}
 

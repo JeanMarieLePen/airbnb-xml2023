@@ -2,8 +2,8 @@ package com.xml.mainapp.dtos.user;
 
 import java.util.Collection;
 
-import com.xml.mainapp.dtos.data.SmestajDTO;
 import com.xml.mainapp.model.users.OcenaHost;
+import com.xml2023.mainapp.SmestajDTO;
 
 public class HostBasicDTO {
 //	private KorisnikBasicDTO korisnik;

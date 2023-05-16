@@ -19,17 +19,17 @@ public class OcenaHostMapper {
 		OcenaHost o = new OcenaHost();
 		o.setDatum(dto.getDatum());
 		o.setOcena(dto.getOcena());
-		o.setGost(guestMapper.fromDTO(dto.getGost()));
-		o.setVlasnik(hostMapper.fromDTO(dto.getVlasnik()));
+	//	o.setGost(guestMapper.fromDTO(dto.getGost()));
+	//	o.setVlasnik(hostMapper.fromDTO(dto.getVlasnik()));
 		return o;
 	}
 	
 	public OcenaHostDTO toDTO(OcenaHost o) {
 		OcenaHostDTO dto = new OcenaHostDTO();
 		dto.setDatum(o.getDatum());
-		dto.setGost(guestMapper.toDTO(o.getGost()));
+		//dto.setGost(guestMapper.toDTO(o.getGost()));
 		dto.setId(o.getId());
-		dto.setVlasnik(hostMapper.toDTO(o.getVlasnik()));
+		//dto.setVlasnik(hostMapper.toDTO(o.getVlasnik()));
 		return dto;
 	}
 }

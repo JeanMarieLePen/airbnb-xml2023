@@ -12,9 +12,7 @@ import jakarta.validation.constraints.Positive;
 
 public class Cenovnik implements Serializable{
 
-	/**
-	 * 
-	 */
+
 	private static final long serialVersionUID = -2589512847403223300L;
 
 

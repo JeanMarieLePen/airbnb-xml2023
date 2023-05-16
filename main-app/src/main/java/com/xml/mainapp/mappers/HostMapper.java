@@ -7,12 +7,19 @@ import java.util.Collection;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.xml.mainapp.dtos.data.SmestajDTO;
 import com.xml.mainapp.dtos.user.HostDTO;
 import com.xml.mainapp.dtos.user.OcenaHostDTO;
 import com.xml.mainapp.model.data.Smestaj;
 import com.xml.mainapp.model.users.Host;
 import com.xml.mainapp.model.users.OcenaHost;
+import com.xml2023.mainapp.SmestajDTO;
+import com.xml2023.mainapp.SmestajGrpcGrpc;
+import com.xml2023.mainapp.SmestajGrpcGrpc.SmestajGrpcBlockingStub;
+import com.xml2023.mainapp.getListaSmestajaByUserIdRequest;
+import com.xml2023.mainapp.getListaSmestajaByUserIdResponse;
+
+import io.grpc.ManagedChannel;
+import io.grpc.ManagedChannelBuilder;
 
 @Component
 public class HostMapper {
@@ -47,14 +54,13 @@ public class HostMapper {
 				tempOcene.add(ohMapper.fromDTO(o));
 			}
 		}
-		h.setOcene(tempOcene);
+		//h.setOcene(tempOcene);
 		
-		Collection<Smestaj> tempSmestaj = new ArrayList<Smestaj>();
-		if(dto.getSmestajList() != null) {
-			for(SmestajDTO s:dto.getSmestajList()) {
-				tempSmestaj.add(smestajMapper.fromDTO(s));
-			}
-		}
+		/*
+		 * Collection<Smestaj> tempSmestaj = new ArrayList<Smestaj>();
+		 * if(dto.getSmestajList() != null) { for(SmestajDTO s:dto.getSmestajList()) {
+		 * tempSmestaj.add(smestajMapper.fromDTO(s)); } }
+		 */
 		
 		
 		
@@ -66,7 +72,7 @@ public class HostMapper {
 		return h;
 	}
 	
-	public HostDTO toDTO(Host h) {
+	public HostDTO toDTO(Host h, Collection<SmestajDTO> smestajList) {
 		HostDTO dto = new HostDTO();
 		dto.setAdresa(aMapper.toDTO(h.getAdresa()));
 		dto.setEmail(h.getEmail());
@@ -80,22 +86,6 @@ public class HostMapper {
 		dto.setIstaknuti(h.isIstaknuti());
 		dto.setRezAutomatski(h.isRezAutomatski());
 		
-		Collection<SmestajDTO> smestajList = new ArrayList<SmestajDTO>();
-		if(h.getSmestajList() != null) {
-			for(Smestaj tmp : h.getSmestajList()) {
-				smestajList.add(smestajMapper.toDTO(tmp));
-			}
-		}
-		dto.setSmestajList(smestajList);
-		
-		//ocene hosta, kopirati ako zatreba negde
-		Collection<OcenaHostDTO> tempOceneHost = new ArrayList<OcenaHostDTO>();
-		if(h.getOcene()!=null) {
-			for(OcenaHost o: h.getOcene()) {
-				tempOceneHost.add(ohMapper.toDTO(o));
-			}
-		}
-		dto.setOcene(tempOceneHost);
 		if(h.getSlike() != null) {
 			Collection<String> tempSlike = new ArrayList<String>();
 			for(byte[] s : h.getSlike()) {
@@ -104,8 +94,25 @@ public class HostMapper {
 			}
 			dto.setSlike(tempSlike);
 		}
+				
+		dto.setSmestajList(smestajList);
 		
-		dto.setProsecnaOcena(calcOcena(h.getOcene()));
+		/*
+		 * if(h.getSmestajList() != null) { for(Smestaj tmp : h.getSmestajList()) {
+		 * smestajList.add(smestajMapper.toDTO(tmp)); } }
+		 * dto.setSmestajList(smestajList);
+		 */
+		
+		
+		//ocene hosta, kopirati ako zatreba negde
+		/*
+		 * Collection<OcenaHostDTO> tempOceneHost = new ArrayList<OcenaHostDTO>();
+		 * if(h.getOcene()!=null) { for(OcenaHost o: h.getOcene()) {
+		 * tempOceneHost.add(ohMapper.toDTO(o)); } }
+		 *dto.setOcene(tempOceneHost);
+		 **/
+		dto.setOcene(new ArrayList<OcenaHostDTO>());
+		dto.setProsecnaOcena(0);
 		return dto;
 	}
 	

@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 
 import com.xml.mainapp.dtos.user.KorisnikBasicDTO;
 import com.xml.mainapp.model.data.StatusRezervacije;
+import com.xml2023.mainapp.SmestajDTO;
 
 public class RezervacijaDTO {
 	private String id;

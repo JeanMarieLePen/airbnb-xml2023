@@ -28,8 +28,8 @@ public class SmestajBasicMapper {
 	private AdresaMapper aMapper;
 	@Autowired
 	private CenovnikMapper cenovnikMapper;
-	@Autowired
-	private PogodnostMapper pogodnostMapper;
+//	@Autowired
+//	private PogodnostMapper pogodnostMapper;
 	@Autowired
 	private OcenaSmestajMapper ocenaSmestajMapper;
 	@Autowired
@@ -50,12 +50,7 @@ public class SmestajBasicMapper {
 		s.setId(dto.getId());
 		s.setMinGosti(dto.getMinGosti());
 		s.setMaxGosti(dto.getMaxGosti());
-		Collection<Pogodnost> tempPogodnosti = new ArrayList<Pogodnost>();
-		for(PogodnostBasicDTO pdto : dto.getPogodnosti()) {
-			Pogodnost tmp = pogodnostMapper.fromDTO(pdto);
-			tempPogodnosti.add(tmp);
-		}
-		s.setPogodnosti(tempPogodnosti);
+		s.setPogodnosti(dto.getPogodnosti());
 		
 		return s;
 	}
@@ -79,7 +74,6 @@ public class SmestajBasicMapper {
 		Collection<Termin> tempTermini = new ArrayList<Termin>();
 		for(TerminDTO tdto : dto.getNedostupni()) {
 			Termin t = terminMapper.fromDTO(tdto);
-			t.setSmestaj(s);
 			tempTermini.add(t);
 		}
 		s.setNedostupni(tempTermini);
@@ -101,18 +95,13 @@ public class SmestajBasicMapper {
 		
 		
 		
-		Collection<Pogodnost> tempPogodnosti = new ArrayList<Pogodnost>();
-		for(PogodnostDTO pdto : dto.getPogodnosti()) {
-			Pogodnost tmp = pogodnostMapper.fromDTO(pdto);
-			tempPogodnosti.add(tmp);
-		}
-		s.setPogodnosti(tempPogodnosti);
+	
+		s.setPogodnosti(dto.getPogodnosti());
 		
 		
 		s.getNedostupni().removeAll(s.getNedostupni());
 		for(TerminDTO tdto : dto.getNedostupni()) {
 			Termin t = terminMapper.fromDTO(tdto);
-			t.setSmestaj(s);
 			s.getNedostupni().add(t);
 		}
 		
@@ -127,19 +116,19 @@ public class SmestajBasicMapper {
 	
 	public SmestajDTO toDTO(Smestaj s) {
 		SmestajDTO dto = new SmestajDTO();
+		dto.setVlasnikId(s.getVlasnik());
+
 		dto.setAdresa(aMapper.toDTO(s.getAdresa()));
 		dto.setCenovnik(cenovnikMapper.toDTO(s.getCenovnik()));
 		dto.setId(s.getId());
 		dto.setMaxGosti(s.getMaxGosti());
 		dto.setMinGosti(s.getMinGosti());
-		Collection<OcenaSmestajaDTO> tempLista = new ArrayList<OcenaSmestajaDTO>();
-		if(s.getListaOcena() != null) {
-			for(OcenaSmestaj o: s.getListaOcena()) {
-				tempLista.add(ocenaSmestajMapper.toDTO(o));
-			}
-		}
-		dto.setVlasnikId(s.getVlasnik().getId());
-		dto.setListaOcena(tempLista);
+		/*
+		 * Collection<OcenaSmestajaDTO> tempLista = new ArrayList<OcenaSmestajaDTO>();
+		 * if(s.getListaOcena() != null) { for(OcenaSmestaj o: s.getListaOcena()) {
+		 * tempLista.add(ocenaSmestajMapper.toDTO(o)); } }
+		 */
+		//dto.setListaOcena(tempLista);
 		
 		Collection<TerminDTO> tempTermini = new ArrayList<TerminDTO>();
 		if(s.getNedostupni() != null) {
@@ -158,13 +147,8 @@ public class SmestajBasicMapper {
 		}
 		dto.setSlike(tempSlike);
 		
-		Collection<PogodnostDTO> tempPogodnosti = new ArrayList<PogodnostDTO>();
-		if(s.getPogodnosti() != null) {
-			for(Pogodnost p : s.getPogodnosti()) {
-				tempPogodnosti.add(pogodnostMapper.toDTO(p));
-			}
-		}
-		dto.setPogodnosti(tempPogodnosti);
+		
+		dto.setPogodnosti(s.getPogodnosti());
 		
 		
 		return dto;

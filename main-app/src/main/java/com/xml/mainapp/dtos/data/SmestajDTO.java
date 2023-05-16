@@ -9,7 +9,7 @@ public class SmestajDTO {
 //	private HostDTO vlasnik;
 	private String vlasnikId;
 	private AdresaDTO adresa;
-	private Collection<PogodnostDTO> pogodnosti;
+	private Collection<String> pogodnosti;
 	private Collection<String> slike;
 	private int minGosti;
 	private int maxGosti;
@@ -71,11 +71,11 @@ public class SmestajDTO {
 		this.adresa = adresa;
 	}
 
-	public Collection<PogodnostDTO> getPogodnosti() {
+	public Collection<String> getPogodnosti() {
 		return pogodnosti;
 	}
 
-	public void setPogodnosti(Collection<PogodnostDTO> pogodnosti) {
+	public void setPogodnosti(Collection<String> pogodnosti) {
 		this.pogodnosti = pogodnosti;
 	}
 

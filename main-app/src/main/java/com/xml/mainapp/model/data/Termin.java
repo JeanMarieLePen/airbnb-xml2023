@@ -10,9 +10,7 @@ import javax.persistence.*;
 
 public class Termin implements Serializable{
 
-	/**
-	 * 
-	 */
+
 	private static final long serialVersionUID = 334341200024100711L;
 	private LocalDateTime pocetak;
 	private LocalDateTime kraj;

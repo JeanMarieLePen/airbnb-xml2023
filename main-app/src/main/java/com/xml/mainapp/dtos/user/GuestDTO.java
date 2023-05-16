@@ -5,7 +5,6 @@ import java.util.Collection;
 
 import com.xml.mainapp.dtos.KorisnikDTO;
 import com.xml.mainapp.dtos.data.OcenaSmestajaDTO;
-import com.xml.mainapp.dtos.data.RezervacijaDTO;
 
 
 public class GuestDTO extends KorisnikDTO{
@@ -15,7 +14,7 @@ public class GuestDTO extends KorisnikDTO{
 	private static final long serialVersionUID = 4820560307064911979L;
 	private int brojOtkazivanja;
 	private Collection<OcenaSmestajaDTO> oceneSmestaja;
-	private Collection<RezervacijaDTO> rezervacije;
+	private Collection<com.xml2023.mainapp.RezervacijaDTO> rezervacije;
 	private Collection<OcenaHostDTO> oceneVlasnika;
 	
 	
@@ -34,10 +33,10 @@ public class GuestDTO extends KorisnikDTO{
 	public void setOceneSmestaja(Collection<OcenaSmestajaDTO> oceneSmestaja) {
 		this.oceneSmestaja = oceneSmestaja;
 	}
-	public Collection<RezervacijaDTO> getRezervacije() {
+	public Collection<com.xml2023.mainapp.RezervacijaDTO> getRezervacije() {
 		return rezervacije;
 	}
-	public void setRezervacije(Collection<RezervacijaDTO> rezervacije) {
+	public void setRezervacije(Collection<com.xml2023.mainapp.RezervacijaDTO> rezervacije) {
 		this.rezervacije = rezervacije;
 	}
 	public Collection<OcenaHostDTO> getOceneVlasnika() {
