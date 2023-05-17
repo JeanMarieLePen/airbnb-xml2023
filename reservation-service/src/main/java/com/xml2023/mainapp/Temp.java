@@ -45,6 +45,26 @@ public final class Temp {
     com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internal_static_com_xml2023_mainapp_RezervacijaExistsResponse_fieldAccessorTable;
   static final com.google.protobuf.Descriptors.Descriptor
+    internal_static_com_xml2023_mainapp_ActiveReservationsRequest_descriptor;
+  static final 
+    com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+      internal_static_com_xml2023_mainapp_ActiveReservationsRequest_fieldAccessorTable;
+  static final com.google.protobuf.Descriptors.Descriptor
+    internal_static_com_xml2023_mainapp_ActiveReservationsResponse_descriptor;
+  static final 
+    com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+      internal_static_com_xml2023_mainapp_ActiveReservationsResponse_fieldAccessorTable;
+  static final com.google.protobuf.Descriptors.Descriptor
+    internal_static_com_xml2023_mainapp_ActiveResExistsForSmestajRequest_descriptor;
+  static final 
+    com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+      internal_static_com_xml2023_mainapp_ActiveResExistsForSmestajRequest_fieldAccessorTable;
+  static final com.google.protobuf.Descriptors.Descriptor
+    internal_static_com_xml2023_mainapp_ActiveResExistsForSmestajResponse_descriptor;
+  static final 
+    com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+      internal_static_com_xml2023_mainapp_ActiveResExistsForSmestajResponse_fieldAccessorTable;
+  static final com.google.protobuf.Descriptors.Descriptor
     internal_static_com_xml2023_mainapp_ActiveResExistsRequest_descriptor;
   static final 
     com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
@@ -162,79 +182,94 @@ public final class Temp {
       "sage\030\001 \001(\t\022\024\n\014responseCode\030\002 \001(\005\"&\n\030Reze" +
       "rvacijaExistsRequest\022\n\n\002id\030\001 \001(\t\"J\n\031Reze" +
       "rvacijaExistsResponse\022\027\n\017responsemessage" +
-      "\030\001 \001(\t\022\024\n\014responseCode\030\002 \001(\005\"5\n\026ActiveRe" +
-      "sExistsRequest\022\016\n\006userId\030\001 \001(\t\022\013\n\003tip\030\002 " +
-      "\001(\t\")\n\027ActiveResExistsResponse\022\016\n\006exists" +
-      "\030\001 \001(\005\"*\n\030SmestajIdsForHostRequest\022\016\n\006us" +
-      "erId\030\001 \001(\t\"/\n\031SmestajIdsForHostResponse\022" +
-      "\022\n\nsmestajIds\030\001 \003(\t\".\n\034DeleteSmestajsFor" +
-      "HostRequest\022\016\n\006hostId\030\001 \001(\t\"0\n\035DeleteSme" +
-      "stajsForHostResponse\022\017\n\007success\030\001 \001(\005\"-\n" +
-      "\037getListaSmestajaByUserIdRequest\022\n\n\002id\030\001" +
-      " \001(\t\"Z\n getListaSmestajaByUserIdResponse" +
-      "\0226\n\rlistaSmestaja\030\001 \003(\0132\037.com.xml2023.ma" +
-      "inapp.SmestajDTO\"*\n\025getSmestajByIdReques" +
-      "t\022\021\n\tsmestajId\030\001 \001(\t\"J\n\026getSmestajByIdRe" +
-      "sponse\0220\n\007odgovor\030\001 \001(\0132\037.com.xml2023.ma" +
-      "inapp.SmestajDTO\"\242\001\n\nSmestajDTO\022\n\n\002id\030\001 " +
-      "\001(\t\022\017\n\007vlasnik\030\002 \001(\t\022\022\n\npogodnosti\030\003 \003(\t" +
-      "\022,\n\005slika\030\004 \003(\0132\035.com.xml2023.mainapp.Sl" +
-      "ikaDTO\022\020\n\010minGosti\030\005 \001(\005\022\017\n\007maxGost\030\006 \001(" +
-      "\005\022\022\n\nnedostupni\030\007 \003(\t\"0\n\"getListaRezerva" +
-      "cijaByUserIdRequest\022\n\n\002id\030\001 \001(\t\"d\n#getLi" +
-      "staRezervacijaByUserIdResponse\022=\n\020listaR" +
-      "ezervacija\030\001 \003(\0132#.com.xml2023.mainapp.R" +
-      "ezervacijaDTO\"2\n\031getRezervacijaByIdReque" +
-      "st\022\025\n\rrezervacijaId\030\001 \001(\t\"R\n\032getRezervac" +
-      "ijaByIdResponse\0224\n\007odgovor\030\001 \001(\0132#.com.x" +
-      "ml2023.mainapp.RezervacijaDTO\"\300\002\n\016Rezerv" +
-      "acijaDTO\022\n\n\002id\030\001 \001(\t\022\017\n\007smestaj\030\002 \001(\t\022\014\n" +
-      "\004gost\030\003 \001(\t\022+\n\007odDatum\030\004 \001(\0132\032.google.pr" +
-      "otobuf.Timestamp\022+\n\007doDatum\030\005 \001(\0132\032.goog" +
-      "le.protobuf.Timestamp\022\023\n\013brojGostiju\030\006 \001" +
-      "(\005\022E\n\006status\030\007 \001(\01625.com.xml2023.mainapp" +
-      ".RezervacijaDTO.StatusRezervacije\"M\n\021Sta" +
-      "tusRezervacije\022\013\n\007PENDING\020\000\022\017\n\013REZERVISA" +
-      "NA\020\001\022\014\n\010ODBIJENA\020\002\022\014\n\010OTKAZANA\020\003\"A\n\tAdre" +
-      "saDTO\022\n\n\002id\030\001 \001(\t\022\016\n\006adresa\030\002 \001(\t\022\013\n\003lat" +
-      "\030\003 \001(\001\022\013\n\003lng\030\004 \001(\001\"j\n\013CenovnikDTO\022\022\n\npo" +
-      "Smestaju\030\001 \001(\010\022\014\n\004cena\030\002 \001(\003\022\023\n\013cenaPraz" +
-      "nik\030\003 \001(\003\022\022\n\ncenaVikend\030\004 \001(\003\022\020\n\010cenaLet" +
-      "o\030\005 \001(\003\"\031\n\010SlikaDTO\022\r\n\005slika\030\001 \001(\t\"b\n\tTe" +
-      "rminDTO\022+\n\007pocetak\030\001 \001(\0132\032.google.protob" +
-      "uf.Timestamp\022(\n\004kraj\030\002 \001(\0132\032.google.prot" +
-      "obuf.Timestamp2j\n\017GreetingService\022W\n\010gre" +
-      "eting\022$.com.xml2023.mainapp.KorisnikRequ" +
-      "est\032%.com.xml2023.mainapp.KorisnikRespon" +
-      "se2\332\004\n\013SmestajGrpc\022_\n\006exists\022).com.xml20" +
-      "23.mainapp.SmestajExistsRequest\032*.com.xm" +
-      "l2023.mainapp.SmestajExistsResponse\022u\n\024g" +
-      "etSmestajIdsForHost\022-.com.xml2023.mainap" +
-      "p.SmestajIdsForHostRequest\032..com.xml2023" +
-      ".mainapp.SmestajIdsForHostResponse\022~\n\025de" +
-      "keteSnestajsForHost\0221.com.xml2023.mainap" +
-      "p.DeleteSmestajsForHostRequest\0322.com.xml" +
-      "2023.mainapp.DeleteSmestajsForHostRespon" +
-      "se\022i\n\016getSmestajById\022*.com.xml2023.maina" +
-      "pp.getSmestajByIdRequest\032+.com.xml2023.m" +
-      "ainapp.getSmestajByIdResponse\022\207\001\n\030getLis" +
-      "taSmestajaByUserId\0224.com.xml2023.mainapp" +
-      ".getListaSmestajaByUserIdRequest\0325.com.x" +
+      "\030\001 \001(\t\022\024\n\014responseCode\030\002 \001(\005\"\205\001\n\031ActiveR" +
+      "eservationsRequest\022\021\n\tsmestajId\030\001 \001(\t\022+\n" +
+      "\007pocetak\030\002 \001(\0132\032.google.protobuf.Timesta" +
+      "mp\022(\n\004kraj\030\003 \001(\0132\032.google.protobuf.Times" +
+      "tamp\"[\n\032ActiveReservationsResponse\022=\n\020li" +
+      "staRezervacija\030\001 \003(\0132#.com.xml2023.maina" +
+      "pp.RezervacijaDTO\"2\n ActiveResExistsForS" +
+      "mestajRequest\022\016\n\006userId\030\001 \001(\t\"3\n!ActiveR" +
+      "esExistsForSmestajResponse\022\016\n\006exists\030\001 \001" +
+      "(\010\"5\n\026ActiveResExistsRequest\022\016\n\006userId\030\001" +
+      " \001(\t\022\013\n\003tip\030\002 \001(\t\")\n\027ActiveResExistsResp" +
+      "onse\022\016\n\006exists\030\001 \001(\005\"*\n\030SmestajIdsForHos" +
+      "tRequest\022\016\n\006userId\030\001 \001(\t\"/\n\031SmestajIdsFo" +
+      "rHostResponse\022\022\n\nsmestajIds\030\001 \003(\t\".\n\034Del" +
+      "eteSmestajsForHostRequest\022\016\n\006hostId\030\001 \001(" +
+      "\t\"0\n\035DeleteSmestajsForHostResponse\022\017\n\007su" +
+      "ccess\030\001 \001(\005\"-\n\037getListaSmestajaByUserIdR" +
+      "equest\022\n\n\002id\030\001 \001(\t\"Z\n getListaSmestajaBy" +
+      "UserIdResponse\0226\n\rlistaSmestaja\030\001 \003(\0132\037." +
+      "com.xml2023.mainapp.SmestajDTO\"*\n\025getSme" +
+      "stajByIdRequest\022\021\n\tsmestajId\030\001 \001(\t\"J\n\026ge" +
+      "tSmestajByIdResponse\0220\n\007odgovor\030\001 \001(\0132\037." +
+      "com.xml2023.mainapp.SmestajDTO\"\242\001\n\nSmest" +
+      "ajDTO\022\n\n\002id\030\001 \001(\t\022\017\n\007vlasnik\030\002 \001(\t\022\022\n\npo" +
+      "godnosti\030\003 \003(\t\022,\n\005slika\030\004 \003(\0132\035.com.xml2" +
+      "023.mainapp.SlikaDTO\022\020\n\010minGosti\030\005 \001(\005\022\017" +
+      "\n\007maxGost\030\006 \001(\005\022\022\n\nnedostupni\030\007 \003(\t\"0\n\"g" +
+      "etListaRezervacijaByUserIdRequest\022\n\n\002id\030" +
+      "\001 \001(\t\"d\n#getListaRezervacijaByUserIdResp" +
+      "onse\022=\n\020listaRezervacija\030\001 \003(\0132#.com.xml" +
+      "2023.mainapp.RezervacijaDTO\"2\n\031getRezerv" +
+      "acijaByIdRequest\022\025\n\rrezervacijaId\030\001 \001(\t\"" +
+      "R\n\032getRezervacijaByIdResponse\0224\n\007odgovor" +
+      "\030\001 \001(\0132#.com.xml2023.mainapp.Rezervacija" +
+      "DTO\"\300\002\n\016RezervacijaDTO\022\n\n\002id\030\001 \001(\t\022\017\n\007sm" +
+      "estaj\030\002 \001(\t\022\014\n\004gost\030\003 \001(\t\022+\n\007odDatum\030\004 \001" +
+      "(\0132\032.google.protobuf.Timestamp\022+\n\007doDatu" +
+      "m\030\005 \001(\0132\032.google.protobuf.Timestamp\022\023\n\013b" +
+      "rojGostiju\030\006 \001(\005\022E\n\006status\030\007 \001(\01625.com.x" +
+      "ml2023.mainapp.RezervacijaDTO.StatusReze" +
+      "rvacije\"M\n\021StatusRezervacije\022\013\n\007PENDING\020" +
+      "\000\022\017\n\013REZERVISANA\020\001\022\014\n\010ODBIJENA\020\002\022\014\n\010OTKA" +
+      "ZANA\020\003\"A\n\tAdresaDTO\022\n\n\002id\030\001 \001(\t\022\016\n\006adres" +
+      "a\030\002 \001(\t\022\013\n\003lat\030\003 \001(\001\022\013\n\003lng\030\004 \001(\001\"j\n\013Cen" +
+      "ovnikDTO\022\022\n\npoSmestaju\030\001 \001(\010\022\014\n\004cena\030\002 \001" +
+      "(\003\022\023\n\013cenaPraznik\030\003 \001(\003\022\022\n\ncenaVikend\030\004 " +
+      "\001(\003\022\020\n\010cenaLeto\030\005 \001(\003\"\031\n\010SlikaDTO\022\r\n\005sli" +
+      "ka\030\001 \001(\t\"b\n\tTerminDTO\022+\n\007pocetak\030\001 \001(\0132\032" +
+      ".google.protobuf.Timestamp\022(\n\004kraj\030\002 \001(\013" +
+      "2\032.google.protobuf.Timestamp2j\n\017Greeting" +
+      "Service\022W\n\010greeting\022$.com.xml2023.mainap" +
+      "p.KorisnikRequest\032%.com.xml2023.mainapp." +
+      "KorisnikResponse2\332\004\n\013SmestajGrpc\022_\n\006exis" +
+      "ts\022).com.xml2023.mainapp.SmestajExistsRe" +
+      "quest\032*.com.xml2023.mainapp.SmestajExist" +
+      "sResponse\022u\n\024getSmestajIdsForHost\022-.com." +
+      "xml2023.mainapp.SmestajIdsForHostRequest" +
+      "\032..com.xml2023.mainapp.SmestajIdsForHost" +
+      "Response\022~\n\025deketeSnestajsForHost\0221.com." +
+      "xml2023.mainapp.DeleteSmestajsForHostReq" +
+      "uest\0322.com.xml2023.mainapp.DeleteSmestaj" +
+      "sForHostResponse\022i\n\016getSmestajById\022*.com" +
+      ".xml2023.mainapp.getSmestajByIdRequest\032+" +
+      ".com.xml2023.mainapp.getSmestajByIdRespo" +
+      "nse\022\207\001\n\030getListaSmestajaByUserId\0224.com.x" +
       "ml2023.mainapp.getListaSmestajaByUserIdR" +
-      "esponse2\374\003\n\017RezervacijaGrpc\022g\n\006exists\022-." +
-      "com.xml2023.mainapp.RezervacijaExistsReq" +
-      "uest\032..com.xml2023.mainapp.RezervacijaEx" +
-      "istsResponse\022v\n\031reservationsForUserExist" +
-      "s\022+.com.xml2023.mainapp.ActiveResExistsR" +
-      "equest\032,.com.xml2023.mainapp.ActiveResEx" +
-      "istsResponse\022u\n\022getRezervacijaById\022..com" +
-      ".xml2023.mainapp.getRezervacijaByIdReque" +
-      "st\032/.com.xml2023.mainapp.getRezervacijaB" +
-      "yIdResponse\022\220\001\n\033getListaRezervacijaByUse" +
-      "rId\0227.com.xml2023.mainapp.getListaRezerv" +
-      "acijaByUserIdRequest\0328.com.xml2023.maina" +
-      "pp.getListaRezervacijaByUserIdResponseB\002" +
-      "P\001b\006proto3"
+      "equest\0325.com.xml2023.mainapp.getListaSme" +
+      "stajaByUserIdResponse2\375\005\n\017RezervacijaGrp" +
+      "c\022g\n\006exists\022-.com.xml2023.mainapp.Rezerv" +
+      "acijaExistsRequest\032..com.xml2023.mainapp" +
+      ".RezervacijaExistsResponse\022v\n\031reservatio" +
+      "nsForUserExists\022+.com.xml2023.mainapp.Ac" +
+      "tiveResExistsRequest\032,.com.xml2023.maina" +
+      "pp.ActiveResExistsResponse\022u\n\022getRezerva" +
+      "cijaById\022..com.xml2023.mainapp.getRezerv" +
+      "acijaByIdRequest\032/.com.xml2023.mainapp.g" +
+      "etRezervacijaByIdResponse\022\220\001\n\033getListaRe" +
+      "zervacijaByUserId\0227.com.xml2023.mainapp." +
+      "getListaRezervacijaByUserIdRequest\0328.com" +
+      ".xml2023.mainapp.getListaRezervacijaByUs" +
+      "erIdResponse\022\204\001\n\023resExistsForSmestaj\0225.c" +
+      "om.xml2023.mainapp.ActiveResExistsForSme" +
+      "stajRequest\0326.com.xml2023.mainapp.Active" +
+      "ResExistsForSmestajResponse\022x\n\025getActive" +
+      "Reservations\022..com.xml2023.mainapp.Activ" +
+      "eReservationsRequest\032/.com.xml2023.maina" +
+      "pp.ActiveReservationsResponseB\002P\001b\006proto" +
+      "3"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
         new com.google.protobuf.Descriptors.FileDescriptor.    InternalDescriptorAssigner() {
@@ -285,122 +320,146 @@ public final class Temp {
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_com_xml2023_mainapp_RezervacijaExistsResponse_descriptor,
         new java.lang.String[] { "Responsemessage", "ResponseCode", });
-    internal_static_com_xml2023_mainapp_ActiveResExistsRequest_descriptor =
+    internal_static_com_xml2023_mainapp_ActiveReservationsRequest_descriptor =
       getDescriptor().getMessageTypes().get(6);
+    internal_static_com_xml2023_mainapp_ActiveReservationsRequest_fieldAccessorTable = new
+      com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
+        internal_static_com_xml2023_mainapp_ActiveReservationsRequest_descriptor,
+        new java.lang.String[] { "SmestajId", "Pocetak", "Kraj", });
+    internal_static_com_xml2023_mainapp_ActiveReservationsResponse_descriptor =
+      getDescriptor().getMessageTypes().get(7);
+    internal_static_com_xml2023_mainapp_ActiveReservationsResponse_fieldAccessorTable = new
+      com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
+        internal_static_com_xml2023_mainapp_ActiveReservationsResponse_descriptor,
+        new java.lang.String[] { "ListaRezervacija", });
+    internal_static_com_xml2023_mainapp_ActiveResExistsForSmestajRequest_descriptor =
+      getDescriptor().getMessageTypes().get(8);
+    internal_static_com_xml2023_mainapp_ActiveResExistsForSmestajRequest_fieldAccessorTable = new
+      com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
+        internal_static_com_xml2023_mainapp_ActiveResExistsForSmestajRequest_descriptor,
+        new java.lang.String[] { "UserId", });
+    internal_static_com_xml2023_mainapp_ActiveResExistsForSmestajResponse_descriptor =
+      getDescriptor().getMessageTypes().get(9);
+    internal_static_com_xml2023_mainapp_ActiveResExistsForSmestajResponse_fieldAccessorTable = new
+      com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
+        internal_static_com_xml2023_mainapp_ActiveResExistsForSmestajResponse_descriptor,
+        new java.lang.String[] { "Exists", });
+    internal_static_com_xml2023_mainapp_ActiveResExistsRequest_descriptor =
+      getDescriptor().getMessageTypes().get(10);
     internal_static_com_xml2023_mainapp_ActiveResExistsRequest_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_com_xml2023_mainapp_ActiveResExistsRequest_descriptor,
         new java.lang.String[] { "UserId", "Tip", });
     internal_static_com_xml2023_mainapp_ActiveResExistsResponse_descriptor =
-      getDescriptor().getMessageTypes().get(7);
+      getDescriptor().getMessageTypes().get(11);
     internal_static_com_xml2023_mainapp_ActiveResExistsResponse_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_com_xml2023_mainapp_ActiveResExistsResponse_descriptor,
         new java.lang.String[] { "Exists", });
     internal_static_com_xml2023_mainapp_SmestajIdsForHostRequest_descriptor =
-      getDescriptor().getMessageTypes().get(8);
+      getDescriptor().getMessageTypes().get(12);
     internal_static_com_xml2023_mainapp_SmestajIdsForHostRequest_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_com_xml2023_mainapp_SmestajIdsForHostRequest_descriptor,
         new java.lang.String[] { "UserId", });
     internal_static_com_xml2023_mainapp_SmestajIdsForHostResponse_descriptor =
-      getDescriptor().getMessageTypes().get(9);
+      getDescriptor().getMessageTypes().get(13);
     internal_static_com_xml2023_mainapp_SmestajIdsForHostResponse_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_com_xml2023_mainapp_SmestajIdsForHostResponse_descriptor,
         new java.lang.String[] { "SmestajIds", });
     internal_static_com_xml2023_mainapp_DeleteSmestajsForHostRequest_descriptor =
-      getDescriptor().getMessageTypes().get(10);
+      getDescriptor().getMessageTypes().get(14);
     internal_static_com_xml2023_mainapp_DeleteSmestajsForHostRequest_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_com_xml2023_mainapp_DeleteSmestajsForHostRequest_descriptor,
         new java.lang.String[] { "HostId", });
     internal_static_com_xml2023_mainapp_DeleteSmestajsForHostResponse_descriptor =
-      getDescriptor().getMessageTypes().get(11);
+      getDescriptor().getMessageTypes().get(15);
     internal_static_com_xml2023_mainapp_DeleteSmestajsForHostResponse_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_com_xml2023_mainapp_DeleteSmestajsForHostResponse_descriptor,
         new java.lang.String[] { "Success", });
     internal_static_com_xml2023_mainapp_getListaSmestajaByUserIdRequest_descriptor =
-      getDescriptor().getMessageTypes().get(12);
+      getDescriptor().getMessageTypes().get(16);
     internal_static_com_xml2023_mainapp_getListaSmestajaByUserIdRequest_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_com_xml2023_mainapp_getListaSmestajaByUserIdRequest_descriptor,
         new java.lang.String[] { "Id", });
     internal_static_com_xml2023_mainapp_getListaSmestajaByUserIdResponse_descriptor =
-      getDescriptor().getMessageTypes().get(13);
+      getDescriptor().getMessageTypes().get(17);
     internal_static_com_xml2023_mainapp_getListaSmestajaByUserIdResponse_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_com_xml2023_mainapp_getListaSmestajaByUserIdResponse_descriptor,
         new java.lang.String[] { "ListaSmestaja", });
     internal_static_com_xml2023_mainapp_getSmestajByIdRequest_descriptor =
-      getDescriptor().getMessageTypes().get(14);
+      getDescriptor().getMessageTypes().get(18);
     internal_static_com_xml2023_mainapp_getSmestajByIdRequest_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_com_xml2023_mainapp_getSmestajByIdRequest_descriptor,
         new java.lang.String[] { "SmestajId", });
     internal_static_com_xml2023_mainapp_getSmestajByIdResponse_descriptor =
-      getDescriptor().getMessageTypes().get(15);
+      getDescriptor().getMessageTypes().get(19);
     internal_static_com_xml2023_mainapp_getSmestajByIdResponse_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_com_xml2023_mainapp_getSmestajByIdResponse_descriptor,
         new java.lang.String[] { "Odgovor", });
     internal_static_com_xml2023_mainapp_SmestajDTO_descriptor =
-      getDescriptor().getMessageTypes().get(16);
+      getDescriptor().getMessageTypes().get(20);
     internal_static_com_xml2023_mainapp_SmestajDTO_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_com_xml2023_mainapp_SmestajDTO_descriptor,
         new java.lang.String[] { "Id", "Vlasnik", "Pogodnosti", "Slika", "MinGosti", "MaxGost", "Nedostupni", });
     internal_static_com_xml2023_mainapp_getListaRezervacijaByUserIdRequest_descriptor =
-      getDescriptor().getMessageTypes().get(17);
+      getDescriptor().getMessageTypes().get(21);
     internal_static_com_xml2023_mainapp_getListaRezervacijaByUserIdRequest_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_com_xml2023_mainapp_getListaRezervacijaByUserIdRequest_descriptor,
         new java.lang.String[] { "Id", });
     internal_static_com_xml2023_mainapp_getListaRezervacijaByUserIdResponse_descriptor =
-      getDescriptor().getMessageTypes().get(18);
+      getDescriptor().getMessageTypes().get(22);
     internal_static_com_xml2023_mainapp_getListaRezervacijaByUserIdResponse_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_com_xml2023_mainapp_getListaRezervacijaByUserIdResponse_descriptor,
         new java.lang.String[] { "ListaRezervacija", });
     internal_static_com_xml2023_mainapp_getRezervacijaByIdRequest_descriptor =
-      getDescriptor().getMessageTypes().get(19);
+      getDescriptor().getMessageTypes().get(23);
     internal_static_com_xml2023_mainapp_getRezervacijaByIdRequest_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_com_xml2023_mainapp_getRezervacijaByIdRequest_descriptor,
         new java.lang.String[] { "RezervacijaId", });
     internal_static_com_xml2023_mainapp_getRezervacijaByIdResponse_descriptor =
-      getDescriptor().getMessageTypes().get(20);
+      getDescriptor().getMessageTypes().get(24);
     internal_static_com_xml2023_mainapp_getRezervacijaByIdResponse_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_com_xml2023_mainapp_getRezervacijaByIdResponse_descriptor,
         new java.lang.String[] { "Odgovor", });
     internal_static_com_xml2023_mainapp_RezervacijaDTO_descriptor =
-      getDescriptor().getMessageTypes().get(21);
+      getDescriptor().getMessageTypes().get(25);
     internal_static_com_xml2023_mainapp_RezervacijaDTO_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_com_xml2023_mainapp_RezervacijaDTO_descriptor,
         new java.lang.String[] { "Id", "Smestaj", "Gost", "OdDatum", "DoDatum", "BrojGostiju", "Status", });
     internal_static_com_xml2023_mainapp_AdresaDTO_descriptor =
-      getDescriptor().getMessageTypes().get(22);
+      getDescriptor().getMessageTypes().get(26);
     internal_static_com_xml2023_mainapp_AdresaDTO_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_com_xml2023_mainapp_AdresaDTO_descriptor,
         new java.lang.String[] { "Id", "Adresa", "Lat", "Lng", });
     internal_static_com_xml2023_mainapp_CenovnikDTO_descriptor =
-      getDescriptor().getMessageTypes().get(23);
+      getDescriptor().getMessageTypes().get(27);
     internal_static_com_xml2023_mainapp_CenovnikDTO_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_com_xml2023_mainapp_CenovnikDTO_descriptor,
         new java.lang.String[] { "PoSmestaju", "Cena", "CenaPraznik", "CenaVikend", "CenaLeto", });
     internal_static_com_xml2023_mainapp_SlikaDTO_descriptor =
-      getDescriptor().getMessageTypes().get(24);
+      getDescriptor().getMessageTypes().get(28);
     internal_static_com_xml2023_mainapp_SlikaDTO_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_com_xml2023_mainapp_SlikaDTO_descriptor,
         new java.lang.String[] { "Slika", });
     internal_static_com_xml2023_mainapp_TerminDTO_descriptor =
-      getDescriptor().getMessageTypes().get(25);
+      getDescriptor().getMessageTypes().get(29);
     internal_static_com_xml2023_mainapp_TerminDTO_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_com_xml2023_mainapp_TerminDTO_descriptor,

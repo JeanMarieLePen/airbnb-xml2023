@@ -49,6 +49,25 @@ service RezervacijaGrpc{
 	rpc reservationsForUserExists(ActiveResExistsRequest) returns (ActiveResExistsResponse);
 	rpc getRezervacijaById(getRezervacijaByIdRequest) returns (getRezervacijaByIdResponse);
 	rpc getListaRezervacijaByUserId(getListaRezervacijaByUserIdRequest) returns (getListaRezervacijaByUserIdResponse);
+	rpc resExistsForSmestaj(ActiveResExistsForSmestajRequest) returns (ActiveResExistsForSmestajResponse);
+	rpc getActiveReservations(ActiveReservationsRequest) returns (ActiveReservationsResponse);
+}
+
+message ActiveReservationsRequest{
+	string smestajId = 1;
+	google.protobuf.Timestamp pocetak = 2;
+	google.protobuf.Timestamp kraj = 3;
+}
+message ActiveReservationsResponse{
+	repeated RezervacijaDTO listaRezervacija = 1;
+}
+
+
+message ActiveResExistsForSmestajRequest{
+	string userId = 1;
+}
+message ActiveResExistsForSmestajResponse{
+	bool exists = 1;
 }
 
 message ActiveResExistsRequest{

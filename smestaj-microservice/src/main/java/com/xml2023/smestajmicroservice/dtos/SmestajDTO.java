@@ -7,14 +7,13 @@ public class SmestajDTO {
 //	private HostDTO vlasnik;
 	private String vlasnikId;
 	private AdresaDTO adresa;
-	private Collection<PogodnostDTO> pogodnosti;
+	private Collection<String> pogodnosti;
 	private Collection<String> slike;
 	private int minGosti;
 	private int maxGosti;
 	private CenovnikDTO cenovnik;
 	
 	private Collection<TerminDTO> nedostupni;
-	private Collection<RezervacijaDTO> rezervacije;
 	private Collection<OcenaSmestajaDTO> listaOcena;
 
 	public SmestajDTO() {
@@ -37,20 +36,12 @@ public class SmestajDTO {
 		this.id = id;
 	}
 
-	public Collection<RezervacijaDTO> getRezervacije() {
-		return rezervacije;
+	public Collection<String> getPogodnosti() {
+		return pogodnosti;
 	}
 
-//	public HostDTO getVlasnik() {
-//		return vlasnik;
-//	}
-//
-//	public void setVlasnik(HostDTO vlasnik) {
-//		this.vlasnik = vlasnik;
-//	}
-
-	public void setRezervacije(Collection<RezervacijaDTO> rezervacije) {
-		this.rezervacije = rezervacije;
+	public void setPogodnosti(Collection<String> pogodnosti) {
+		this.pogodnosti = pogodnosti;
 	}
 
 	public Collection<OcenaSmestajaDTO> getListaOcena() {
@@ -67,14 +58,6 @@ public class SmestajDTO {
 
 	public void setAdresa(AdresaDTO adresa) {
 		this.adresa = adresa;
-	}
-
-	public Collection<PogodnostDTO> getPogodnosti() {
-		return pogodnosti;
-	}
-
-	public void setPogodnosti(Collection<PogodnostDTO> pogodnosti) {
-		this.pogodnosti = pogodnosti;
 	}
 
 	public Collection<String> getSlike() {

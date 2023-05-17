@@ -12,22 +12,23 @@ public class OcenaSmestajMapper {
 
 	@Autowired
 	public SmestajBasicMapper sbMapper;
-	@Autowired
-	public GuestMapper guestMapper;
 	
 	public OcenaSmestaj fromDTO(OcenaSmestajaDTO dto) {
-		OcenaSmestaj os = new OcenaSmestaj();
-		os.setSmestaj(sbMapper.fromBasicDTO(dto.getSmestaj()));
-		return os;
+//		OcenaSmestaj os = new OcenaSmestaj();
+//		os.setSmestaj(dto.getS);
+//		os.setSmestaj(sbMapper.fromBasicDTO(dto.getSmestaj()));
+//		return os;
+		return null;
 	}
 	
 	public OcenaSmestajaDTO toDTO(OcenaSmestaj os) {
-		OcenaSmestajaDTO dto = new OcenaSmestajaDTO();
-		dto.setDatum(os.getDatum());
-		dto.setId(os.getId());
-		dto.setOcena(os.getOcena());
-//		dto.setSmestaj(sbMapper.toDTO(os.getSmestaj()));
-		dto.setGost(guestMapper.toDTO(os.getGost()));
-		return dto;
+//		OcenaSmestajaDTO dto = new OcenaSmestajaDTO();
+//		dto.setDatum(os.getDatum());
+//		dto.setId(os.getId());
+//		dto.setOcena(os.getOcena());
+////		dto.setSmestaj(sbMapper.toDTO(os.getSmestaj()));
+//		dto.setGost(guestMapper.toDTO(os.getGost()));
+//		return dto;
+		return null;
 	}
 }

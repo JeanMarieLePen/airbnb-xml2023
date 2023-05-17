@@ -155,6 +155,70 @@ public final class RezervacijaGrpcGrpc {
      return getGetListaRezervacijaByUserIdMethod;
   }
 
+  private static volatile io.grpc.MethodDescriptor<com.xml2023.mainapp.ActiveResExistsForSmestajRequest,
+      com.xml2023.mainapp.ActiveResExistsForSmestajResponse> getResExistsForSmestajMethod;
+
+  @io.grpc.stub.annotations.RpcMethod(
+      fullMethodName = SERVICE_NAME + '/' + "resExistsForSmestaj",
+      requestType = com.xml2023.mainapp.ActiveResExistsForSmestajRequest.class,
+      responseType = com.xml2023.mainapp.ActiveResExistsForSmestajResponse.class,
+      methodType = io.grpc.MethodDescriptor.MethodType.UNARY)
+  public static io.grpc.MethodDescriptor<com.xml2023.mainapp.ActiveResExistsForSmestajRequest,
+      com.xml2023.mainapp.ActiveResExistsForSmestajResponse> getResExistsForSmestajMethod() {
+    io.grpc.MethodDescriptor<com.xml2023.mainapp.ActiveResExistsForSmestajRequest, com.xml2023.mainapp.ActiveResExistsForSmestajResponse> getResExistsForSmestajMethod;
+    if ((getResExistsForSmestajMethod = RezervacijaGrpcGrpc.getResExistsForSmestajMethod) == null) {
+      synchronized (RezervacijaGrpcGrpc.class) {
+        if ((getResExistsForSmestajMethod = RezervacijaGrpcGrpc.getResExistsForSmestajMethod) == null) {
+          RezervacijaGrpcGrpc.getResExistsForSmestajMethod = getResExistsForSmestajMethod = 
+              io.grpc.MethodDescriptor.<com.xml2023.mainapp.ActiveResExistsForSmestajRequest, com.xml2023.mainapp.ActiveResExistsForSmestajResponse>newBuilder()
+              .setType(io.grpc.MethodDescriptor.MethodType.UNARY)
+              .setFullMethodName(generateFullMethodName(
+                  "com.xml2023.mainapp.RezervacijaGrpc", "resExistsForSmestaj"))
+              .setSampledToLocalTracing(true)
+              .setRequestMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(
+                  com.xml2023.mainapp.ActiveResExistsForSmestajRequest.getDefaultInstance()))
+              .setResponseMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(
+                  com.xml2023.mainapp.ActiveResExistsForSmestajResponse.getDefaultInstance()))
+                  .setSchemaDescriptor(new RezervacijaGrpcMethodDescriptorSupplier("resExistsForSmestaj"))
+                  .build();
+          }
+        }
+     }
+     return getResExistsForSmestajMethod;
+  }
+
+  private static volatile io.grpc.MethodDescriptor<com.xml2023.mainapp.ActiveReservationsRequest,
+      com.xml2023.mainapp.ActiveReservationsResponse> getGetActiveReservationsMethod;
+
+  @io.grpc.stub.annotations.RpcMethod(
+      fullMethodName = SERVICE_NAME + '/' + "getActiveReservations",
+      requestType = com.xml2023.mainapp.ActiveReservationsRequest.class,
+      responseType = com.xml2023.mainapp.ActiveReservationsResponse.class,
+      methodType = io.grpc.MethodDescriptor.MethodType.UNARY)
+  public static io.grpc.MethodDescriptor<com.xml2023.mainapp.ActiveReservationsRequest,
+      com.xml2023.mainapp.ActiveReservationsResponse> getGetActiveReservationsMethod() {
+    io.grpc.MethodDescriptor<com.xml2023.mainapp.ActiveReservationsRequest, com.xml2023.mainapp.ActiveReservationsResponse> getGetActiveReservationsMethod;
+    if ((getGetActiveReservationsMethod = RezervacijaGrpcGrpc.getGetActiveReservationsMethod) == null) {
+      synchronized (RezervacijaGrpcGrpc.class) {
+        if ((getGetActiveReservationsMethod = RezervacijaGrpcGrpc.getGetActiveReservationsMethod) == null) {
+          RezervacijaGrpcGrpc.getGetActiveReservationsMethod = getGetActiveReservationsMethod = 
+              io.grpc.MethodDescriptor.<com.xml2023.mainapp.ActiveReservationsRequest, com.xml2023.mainapp.ActiveReservationsResponse>newBuilder()
+              .setType(io.grpc.MethodDescriptor.MethodType.UNARY)
+              .setFullMethodName(generateFullMethodName(
+                  "com.xml2023.mainapp.RezervacijaGrpc", "getActiveReservations"))
+              .setSampledToLocalTracing(true)
+              .setRequestMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(
+                  com.xml2023.mainapp.ActiveReservationsRequest.getDefaultInstance()))
+              .setResponseMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(
+                  com.xml2023.mainapp.ActiveReservationsResponse.getDefaultInstance()))
+                  .setSchemaDescriptor(new RezervacijaGrpcMethodDescriptorSupplier("getActiveReservations"))
+                  .build();
+          }
+        }
+     }
+     return getGetActiveReservationsMethod;
+  }
+
   /**
    * Creates a new async stub that supports all call types for the service
    */
@@ -210,6 +274,20 @@ public final class RezervacijaGrpcGrpc {
       asyncUnimplementedUnaryCall(getGetListaRezervacijaByUserIdMethod(), responseObserver);
     }
 
+    /**
+     */
+    public void resExistsForSmestaj(com.xml2023.mainapp.ActiveResExistsForSmestajRequest request,
+        io.grpc.stub.StreamObserver<com.xml2023.mainapp.ActiveResExistsForSmestajResponse> responseObserver) {
+      asyncUnimplementedUnaryCall(getResExistsForSmestajMethod(), responseObserver);
+    }
+
+    /**
+     */
+    public void getActiveReservations(com.xml2023.mainapp.ActiveReservationsRequest request,
+        io.grpc.stub.StreamObserver<com.xml2023.mainapp.ActiveReservationsResponse> responseObserver) {
+      asyncUnimplementedUnaryCall(getGetActiveReservationsMethod(), responseObserver);
+    }
+
     @java.lang.Override public final io.grpc.ServerServiceDefinition bindService() {
       return io.grpc.ServerServiceDefinition.builder(getServiceDescriptor())
           .addMethod(
@@ -240,6 +318,20 @@ public final class RezervacijaGrpcGrpc {
                 com.xml2023.mainapp.getListaRezervacijaByUserIdRequest,
                 com.xml2023.mainapp.getListaRezervacijaByUserIdResponse>(
                   this, METHODID_GET_LISTA_REZERVACIJA_BY_USER_ID)))
+          .addMethod(
+            getResExistsForSmestajMethod(),
+            asyncUnaryCall(
+              new MethodHandlers<
+                com.xml2023.mainapp.ActiveResExistsForSmestajRequest,
+                com.xml2023.mainapp.ActiveResExistsForSmestajResponse>(
+                  this, METHODID_RES_EXISTS_FOR_SMESTAJ)))
+          .addMethod(
+            getGetActiveReservationsMethod(),
+            asyncUnaryCall(
+              new MethodHandlers<
+                com.xml2023.mainapp.ActiveReservationsRequest,
+                com.xml2023.mainapp.ActiveReservationsResponse>(
+                  this, METHODID_GET_ACTIVE_RESERVATIONS)))
           .build();
     }
   }
@@ -293,6 +385,22 @@ public final class RezervacijaGrpcGrpc {
       asyncUnaryCall(
           getChannel().newCall(getGetListaRezervacijaByUserIdMethod(), getCallOptions()), request, responseObserver);
     }
+
+    /**
+     */
+    public void resExistsForSmestaj(com.xml2023.mainapp.ActiveResExistsForSmestajRequest request,
+        io.grpc.stub.StreamObserver<com.xml2023.mainapp.ActiveResExistsForSmestajResponse> responseObserver) {
+      asyncUnaryCall(
+          getChannel().newCall(getResExistsForSmestajMethod(), getCallOptions()), request, responseObserver);
+    }
+
+    /**
+     */
+    public void getActiveReservations(com.xml2023.mainapp.ActiveReservationsRequest request,
+        io.grpc.stub.StreamObserver<com.xml2023.mainapp.ActiveReservationsResponse> responseObserver) {
+      asyncUnaryCall(
+          getChannel().newCall(getGetActiveReservationsMethod(), getCallOptions()), request, responseObserver);
+    }
   }
 
   /**
@@ -339,6 +447,20 @@ public final class RezervacijaGrpcGrpc {
     public com.xml2023.mainapp.getListaRezervacijaByUserIdResponse getListaRezervacijaByUserId(com.xml2023.mainapp.getListaRezervacijaByUserIdRequest request) {
       return blockingUnaryCall(
           getChannel(), getGetListaRezervacijaByUserIdMethod(), getCallOptions(), request);
+    }
+
+    /**
+     */
+    public com.xml2023.mainapp.ActiveResExistsForSmestajResponse resExistsForSmestaj(com.xml2023.mainapp.ActiveResExistsForSmestajRequest request) {
+      return blockingUnaryCall(
+          getChannel(), getResExistsForSmestajMethod(), getCallOptions(), request);
+    }
+
+    /**
+     */
+    public com.xml2023.mainapp.ActiveReservationsResponse getActiveReservations(com.xml2023.mainapp.ActiveReservationsRequest request) {
+      return blockingUnaryCall(
+          getChannel(), getGetActiveReservationsMethod(), getCallOptions(), request);
     }
   }
 
@@ -391,12 +513,30 @@ public final class RezervacijaGrpcGrpc {
       return futureUnaryCall(
           getChannel().newCall(getGetListaRezervacijaByUserIdMethod(), getCallOptions()), request);
     }
+
+    /**
+     */
+    public com.google.common.util.concurrent.ListenableFuture<com.xml2023.mainapp.ActiveResExistsForSmestajResponse> resExistsForSmestaj(
+        com.xml2023.mainapp.ActiveResExistsForSmestajRequest request) {
+      return futureUnaryCall(
+          getChannel().newCall(getResExistsForSmestajMethod(), getCallOptions()), request);
+    }
+
+    /**
+     */
+    public com.google.common.util.concurrent.ListenableFuture<com.xml2023.mainapp.ActiveReservationsResponse> getActiveReservations(
+        com.xml2023.mainapp.ActiveReservationsRequest request) {
+      return futureUnaryCall(
+          getChannel().newCall(getGetActiveReservationsMethod(), getCallOptions()), request);
+    }
   }
 
   private static final int METHODID_EXISTS = 0;
   private static final int METHODID_RESERVATIONS_FOR_USER_EXISTS = 1;
   private static final int METHODID_GET_REZERVACIJA_BY_ID = 2;
   private static final int METHODID_GET_LISTA_REZERVACIJA_BY_USER_ID = 3;
+  private static final int METHODID_RES_EXISTS_FOR_SMESTAJ = 4;
+  private static final int METHODID_GET_ACTIVE_RESERVATIONS = 5;
 
   private static final class MethodHandlers<Req, Resp> implements
       io.grpc.stub.ServerCalls.UnaryMethod<Req, Resp>,
@@ -430,6 +570,14 @@ public final class RezervacijaGrpcGrpc {
         case METHODID_GET_LISTA_REZERVACIJA_BY_USER_ID:
           serviceImpl.getListaRezervacijaByUserId((com.xml2023.mainapp.getListaRezervacijaByUserIdRequest) request,
               (io.grpc.stub.StreamObserver<com.xml2023.mainapp.getListaRezervacijaByUserIdResponse>) responseObserver);
+          break;
+        case METHODID_RES_EXISTS_FOR_SMESTAJ:
+          serviceImpl.resExistsForSmestaj((com.xml2023.mainapp.ActiveResExistsForSmestajRequest) request,
+              (io.grpc.stub.StreamObserver<com.xml2023.mainapp.ActiveResExistsForSmestajResponse>) responseObserver);
+          break;
+        case METHODID_GET_ACTIVE_RESERVATIONS:
+          serviceImpl.getActiveReservations((com.xml2023.mainapp.ActiveReservationsRequest) request,
+              (io.grpc.stub.StreamObserver<com.xml2023.mainapp.ActiveReservationsResponse>) responseObserver);
           break;
         default:
           throw new AssertionError();
@@ -496,6 +644,8 @@ public final class RezervacijaGrpcGrpc {
               .addMethod(getReservationsForUserExistsMethod())
               .addMethod(getGetRezervacijaByIdMethod())
               .addMethod(getGetListaRezervacijaByUserIdMethod())
+              .addMethod(getResExistsForSmestajMethod())
+              .addMethod(getGetActiveReservationsMethod())
               .build();
         }
       }

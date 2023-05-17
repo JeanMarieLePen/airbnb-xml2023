@@ -7,7 +7,7 @@ import java.time.LocalDate;
 public class OcenaSmestajaDTO {
 	private String id;
 	private SmestajBasicDTO smestaj;
-	private GuestDTO gost;
+	private String gost;
 	private int ocena;
 	private LocalDate datum;
 	
@@ -27,10 +27,10 @@ public class OcenaSmestajaDTO {
 	public void setSmestaj(SmestajBasicDTO smestaj) {
 		this.smestaj = smestaj;
 	}
-	public GuestDTO getGost() {
+	public String getGost() {
 		return gost;
 	}
-	public void setGost(GuestDTO gost) {
+	public void setGost(String gost) {
 		this.gost = gost;
 	}
 	public int getOcena() {

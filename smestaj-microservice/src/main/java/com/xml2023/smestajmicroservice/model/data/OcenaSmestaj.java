@@ -18,16 +18,9 @@ public class OcenaSmestaj implements Serializable{
 	 */
 	private static final long serialVersionUID = 3146125669257521835L;
 	@Id
-	private String id;
-	@Version
-	@Column(columnDefinition = "integer DEFAULT 0", nullable = false)
-	private Integer version;
-	
-	@DBRef
-	private Smestaj smestaj;
-	
-	@DBRef
-	private Guest gost;
+	private String id;	
+	private String smestaj;
+	private String gost;
 	
 	@PositiveOrZero
 	private int ocena;
@@ -40,63 +33,70 @@ public class OcenaSmestaj implements Serializable{
 		super();
 	}
 
-	public OcenaSmestaj(String id, Integer version, Smestaj smestaj, Guest gost, @PositiveOrZero int ocena,
-			@NotNull LocalDate datum) {
+
+	public OcenaSmestaj(String id, String smestaj, String gost, @PositiveOrZero int ocena, @NotNull LocalDate datum) {
 		super();
 		this.id = id;
-		this.version = version;
 		this.smestaj = smestaj;
 		this.gost = gost;
 		this.ocena = ocena;
 		this.datum = datum;
 	}
+
 
 	public String getId() {
 		return id;
 	}
 
+
 	public void setId(String id) {
 		this.id = id;
 	}
 
-	public Integer getVersion() {
-		return version;
-	}
 
-	public void setVersion(Integer version) {
-		this.version = version;
-	}
-
-	public Smestaj getSmestaj() {
+	public String getSmestaj() {
 		return smestaj;
 	}
 
-	public void setSmestaj(Smestaj smestaj) {
+
+	public void setSmestaj(String smestaj) {
 		this.smestaj = smestaj;
 	}
 
-	public Guest getGost() {
+
+	public String getGost() {
 		return gost;
 	}
 
-	public void setGost(Guest gost) {
+
+	public void setGost(String gost) {
 		this.gost = gost;
 	}
+
 
 	public int getOcena() {
 		return ocena;
 	}
 
+
 	public void setOcena(int ocena) {
 		this.ocena = ocena;
 	}
+
 
 	public LocalDate getDatum() {
 		return datum;
 	}
 
+
 	public void setDatum(LocalDate datum) {
 		this.datum = datum;
 	}
+
+
+	public static long getSerialversionuid() {
+		return serialVersionUID;
+	}
+
 	
 }

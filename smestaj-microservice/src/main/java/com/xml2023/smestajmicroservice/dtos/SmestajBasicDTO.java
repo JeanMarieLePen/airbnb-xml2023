@@ -7,7 +7,7 @@ public class SmestajBasicDTO {
 	private String id;
 	private Long hostId;
 	private AdresaDTO adresa;
-	private Collection<PogodnostBasicDTO> pogodnosti;
+	private Collection<String> pogodnosti;
 	private Collection<byte[]> slike;
 	private int minGosti;
 	private int maxGosti;
@@ -36,10 +36,10 @@ public class SmestajBasicDTO {
 	public void setAdresa(AdresaDTO adresa) {
 		this.adresa = adresa;
 	}
-	public Collection<PogodnostBasicDTO> getPogodnosti() {
+	public Collection<String> getPogodnosti() {
 		return pogodnosti;
 	}
-	public void setPogodnosti(Collection<PogodnostBasicDTO> pogodnosti) {
+	public void setPogodnosti(Collection<String> pogodnosti) {
 		this.pogodnosti = pogodnosti;
 	}
 	public Collection<byte[]> getSlike() {

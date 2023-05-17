@@ -4,7 +4,6 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import com.xml2023.smestajmicroservice.model.data.Adresa;
-import com.xml2023.smestajmicroservice.model.data.Host;
 
 public class PretragaDTO {
 	private String vlasnik;

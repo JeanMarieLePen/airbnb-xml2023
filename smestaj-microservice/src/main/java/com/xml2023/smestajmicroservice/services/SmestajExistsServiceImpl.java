@@ -8,7 +8,6 @@ import org.springframework.stereotype.Service;
 
 import com.xml2023.mainapp.DeleteSmestajsForHostRequest;
 import com.xml2023.mainapp.DeleteSmestajsForHostResponse;
-import com.xml2023.mainapp.RezervacijaExistsResponse;
 import com.xml2023.mainapp.SmestajExistsRequest;
 import com.xml2023.mainapp.SmestajExistsResponse;
 import com.xml2023.mainapp.SmestajGrpcGrpc.SmestajGrpcImplBase;
@@ -50,7 +49,7 @@ public class SmestajExistsServiceImpl extends SmestajGrpcImplBase{
 	public void getSmestajIdsForHost(SmestajIdsForHostRequest request,
 			StreamObserver<SmestajIdsForHostResponse> responseObserver) {
 		String hostId=request.getUserId();
-		List<String> ids= sRep.findAll().stream().filter(x->x.getVlasnik().getId().equals(hostId)).map(x->x.getId()).collect(Collectors.toList());
+		List<String> ids= sRep.findAll().stream().filter(x->x.getVlasnik().equals(hostId)).map(x->x.getId()).collect(Collectors.toList());
 
 		SmestajIdsForHostResponse.Builder res= SmestajIdsForHostResponse.newBuilder();
 		if(ids.size()>0) {
@@ -69,9 +68,9 @@ public class SmestajExistsServiceImpl extends SmestajGrpcImplBase{
 	public void deketeSnestajsForHost(DeleteSmestajsForHostRequest request,
 			StreamObserver<DeleteSmestajsForHostResponse> responseObserver) {
 		String hostId=request.getHostId();
-		List<String> smestajiIds=sRep.findAll().stream().filter(x->x.getVlasnik().getId().equals(hostId)).map(x->x.getId()).collect(Collectors.toList());
+		List<String> smestajiIds=sRep.findAll().stream().filter(x->x.getVlasnik().equals(hostId)).map(x->x.getId()).collect(Collectors.toList());
 		sRep.deleteAllById(smestajiIds);
-		List<String> smestajiIdsCheck=sRep.findAll().stream().filter(x->x.getVlasnik().getId().equals(hostId)).map(x->x.getId()).collect(Collectors.toList());
+		List<String> smestajiIdsCheck=sRep.findAll().stream().filter(x->x.getVlasnik().equals(hostId)).map(x->x.getId()).collect(Collectors.toList());
 		
 		DeleteSmestajsForHostResponse.Builder res= DeleteSmestajsForHostResponse.newBuilder();
 		if(smestajiIdsCheck.size()>0) {

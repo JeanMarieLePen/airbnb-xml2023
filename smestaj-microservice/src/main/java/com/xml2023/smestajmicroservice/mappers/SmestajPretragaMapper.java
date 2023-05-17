@@ -18,7 +18,6 @@ import com.xml2023.smestajmicroservice.model.data.Smestaj;
 
 @Component
 public class SmestajPretragaMapper {
-;
 	@Autowired 	private AdresaMapper aMapper;
 	
 	public SmestajPretragaDTO toDTO(Smestaj s, LocalDateTime pocetak, LocalDateTime kraj) {
@@ -29,7 +28,7 @@ public class SmestajPretragaMapper {
 		dto.setId(s.getId());
 		dto.setMaxGosti(s.getMaxGosti());
 		dto.setMinGosti(s.getMinGosti());
-		dto.setHostId(s.getVlasnik().getId());
+		dto.setHostId(s.getVlasnik());
 
 		Collection<String> tempSlike = new ArrayList<String>();
 		if(s.getSlike() != null) {
@@ -45,14 +44,15 @@ public class SmestajPretragaMapper {
 	} 
 	
 	public float getProsecnaOcena(Smestaj s) {
-		if(s.getListaOcena()==null) return 0;
-
-		Collection<OcenaSmestaj> ocene= s.getListaOcena();
-		float uk=0;
-		for(OcenaSmestaj o : ocene) {
-			uk+=o.getOcena();
-		}
-		return uk/ocene.size();	
+//		if(s.getListaOcena()==null) return 0;
+//
+//		Collection<OcenaSmestaj> ocene= s.getListaOcena();
+//		float uk=0;
+//		for(OcenaSmestaj o : ocene) {
+//			uk+=o.getOcena();
+//		}
+//		return uk/ocene.size();	
+		return 0f;
 	}
 	//https://www.baeldung.com/java-between-dates
 	//TODO provera praznika, leta i neradnih dana

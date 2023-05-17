@@ -1,8 +1,9 @@
 package com.xml2023.smestajmicroservice.services;
 
-import java.time.LocalDate;
+import java.time.Instant;
 import java.time.LocalDateTime;
-import java.time.temporal.ChronoField;
+import java.time.ZoneId;
+import java.time.ZoneOffset;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -14,37 +15,28 @@ import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Service;
 
+import com.google.protobuf.Timestamp;
+import com.xml2023.mainapp.ActiveReservationsRequest;
+import com.xml2023.mainapp.ActiveReservationsResponse;
+import com.xml2023.mainapp.RezervacijaDTO;
+import com.xml2023.mainapp.RezervacijaGrpcGrpc;
+import com.xml2023.mainapp.RezervacijaGrpcGrpc.RezervacijaGrpcBlockingStub;
 import com.xml2023.smestajmicroservice.dtos.PretragaDTO;
 import com.xml2023.smestajmicroservice.dtos.SmestajPretragaDTO;
-import com.xml2023.smestajmicroservice.mappers.PogodnostMapper;
-import com.xml2023.smestajmicroservice.mappers.SmestajBasicMapper;
 import com.xml2023.smestajmicroservice.mappers.SmestajPretragaMapper;
-import com.xml2023.smestajmicroservice.model.data.OcenaSmestaj;
-import com.xml2023.smestajmicroservice.model.data.Rezervacija;
 import com.xml2023.smestajmicroservice.model.data.Smestaj;
-import com.xml2023.smestajmicroservice.model.data.StatusRezervacije;
 import com.xml2023.smestajmicroservice.model.data.Termin;
-import com.xml2023.smestajmicroservice.repositories.HostRepository;
-import com.xml2023.smestajmicroservice.repositories.PogodnostRepository;
-import com.xml2023.smestajmicroservice.repositories.RezervacijaRep;
-import com.xml2023.smestajmicroservice.repositories.SmestajRep;
+
+import io.grpc.ManagedChannel;
+import io.grpc.ManagedChannelBuilder;
 
 @Service
 public class PretragaService {
-	@Autowired
-	private SmestajBasicMapper smestajMapper;
-	@Autowired
-	private SmestajRep smestajRep;
-	@Autowired
-	private RezervacijaRep rezRep;
-	@Autowired
-	private HostRepository hostRep;
-	@Autowired
-	private PogodnostRepository pogRep;
-	@Autowired
-	private PogodnostMapper pogMap;
-	@Autowired MongoTemplate monTempl;
-	@Autowired SmestajPretragaMapper smMap;
+	@Autowired 
+	private MongoTemplate monTempl;
+	@Autowired 
+	private SmestajPretragaMapper smMap;
+	
 	public Collection<SmestajPretragaDTO> pretraga(PretragaDTO dto){
 		Query query = new Query();
 		if(dto.getAdresa()!=null && !dto.getAdresa().getAdresa().trim().equals("")) {
@@ -65,7 +57,13 @@ public class PretragaService {
 		if(dto.getPocetak()!=null && dto.getKraj()!=null) {
 			pronadjeni=pronadjeni.stream().filter(x-> isSlobodan(x, dto.getPocetak(), dto.getKraj())).collect(Collectors.toList());
 		}
-		List<SmestajPretragaDTO> dtos=pronadjeni.stream().map(x-> smMap.toDTO(x, dto.getPocetak(), dto.getKraj())).collect(Collectors.toList());
+//		List<SmestajPretragaDTO> dtos = new ArrayList<SmestajPretragaDTO>();
+//		for(Smestaj s : pronadjeni) {
+//			dtos.add(smMap.toDTO(s, dto.getPocetak(), dto.getKraj()));
+//		}
+		
+		//iz nekog razloga puca, vrv bag; obrisati ovu gornju petlju kad spojimo
+		List<SmestajPretragaDTO> dtos = pronadjeni.stream().map(x-> smMap.toDTO(x, dto.getPocetak(), dto.getKraj())).collect(Collectors.toList());
 		//filter za cene
 		if(dto.getMinCena()>-1) {
 			dtos=dtos.stream().filter(x-> x.getUkCena()>=dto.getMinCena()).collect(Collectors.toList());
@@ -83,19 +81,37 @@ public class PretragaService {
 		return dtos;
 	}
 	public float getProsecnaOcena(Smestaj s) {
-		if(s.getListaOcena()==null) return 0;
-		Collection<OcenaSmestaj> ocene= s.getListaOcena();
-		float uk=0;
-		for(OcenaSmestaj o : ocene) {
-			uk+=o.getOcena();
-		}
-		return uk/ocene.size();	
+//		if(s.getListaOcena()==null) return 0;
+//		Collection<OcenaSmestaj> ocene= s.getListaOcena();
+//		float uk=0;
+//		for(OcenaSmestaj o : ocene) {
+//			uk+=o.getOcena();
+//		}
+//		return uk/ocene.size();	
+		return 0f;
 	}
 	
+	public Timestamp convertToTimeStamp(LocalDateTime ldt) {
+		return Timestamp.newBuilder().setSeconds(ldt.toEpochSecond(ZoneOffset.UTC))
+				.setNanos(ldt.getNano()).build();
+	}
+	public LocalDateTime convertFromTimeStamp(Timestamp t) {
+		return Instant.ofEpochSecond(t.getSeconds(),t.getNanos()).atZone(ZoneId.of("Europe/Belgrade")).toLocalDateTime();
+	}
 	//provera dostupnosti preko rezervacija i nedosupnih termina
 	public boolean isSlobodan(Smestaj s, LocalDateTime pocetak, LocalDateTime kraj) {
-		List<Rezervacija> rezervacijeAktIPreklop= s.getRezervacije().stream().filter(x->x.getStatus().equals(StatusRezervacije.REZERVISANA) && 
-				preklop(x.getOdDatum(),x.getDoDatum(),pocetak,kraj)).collect(Collectors.toList());
+//		List<Rezervacija> rezervacijeAktIPreklop= s.getRezervacije().stream().filter(x->x.getStatus().equals(StatusRezervacije.REZERVISANA) && 
+//				preklop(x.getOdDatum(),x.getDoDatum(),pocetak,kraj)).collect(Collectors.toList());
+		ManagedChannel channel = ManagedChannelBuilder.forAddress("localhost", 7978).usePlaintext().build();
+		RezervacijaGrpcBlockingStub rezServBlockStub = RezervacijaGrpcGrpc.newBlockingStub(channel);
+		
+		ActiveReservationsRequest.Builder req = ActiveReservationsRequest.newBuilder();
+		ActiveReservationsResponse rezervacijaAkt = rezServBlockStub.getActiveReservations(req.setSmestajId(s.getId()).setPocetak(convertToTimeStamp(pocetak)).setKraj(convertToTimeStamp(kraj)).build());
+		
+		List<RezervacijaDTO> rezervacijeAktIPreklop = rezervacijaAkt.getListaRezervacijaList().stream().filter(x -> 
+			this.preklop(convertFromTimeStamp(x.getOdDatum()), convertFromTimeStamp(x.getDoDatum()), pocetak, kraj)).collect(Collectors.toList());
+		
+		
 		List<Termin> preklopSaNedostupnima= s.getNedostupni().stream().filter(x->preklop(x.getPocetak(),x.getKraj(),pocetak,kraj)).collect(Collectors.toList());
 		if(rezervacijeAktIPreklop.size()>0 || preklopSaNedostupnima.size()>0) return false;
 		else return true;
