@@ -81,21 +81,39 @@ public interface SmestajDTOOrBuilder extends
   int getMaxGost();
 
   /**
-   * <code>repeated string nedostupni = 7;</code>
+   * <code>repeated .com.xml2023.mainapp.TerminDTO nedostupni = 7;</code>
    */
-  java.util.List<java.lang.String>
+  java.util.List<com.xml2023.mainapp.TerminDTO> 
       getNedostupniList();
   /**
-   * <code>repeated string nedostupni = 7;</code>
+   * <code>repeated .com.xml2023.mainapp.TerminDTO nedostupni = 7;</code>
+   */
+  com.xml2023.mainapp.TerminDTO getNedostupni(int index);
+  /**
+   * <code>repeated .com.xml2023.mainapp.TerminDTO nedostupni = 7;</code>
    */
   int getNedostupniCount();
   /**
-   * <code>repeated string nedostupni = 7;</code>
+   * <code>repeated .com.xml2023.mainapp.TerminDTO nedostupni = 7;</code>
    */
-  java.lang.String getNedostupni(int index);
+  java.util.List<? extends com.xml2023.mainapp.TerminDTOOrBuilder> 
+      getNedostupniOrBuilderList();
   /**
-   * <code>repeated string nedostupni = 7;</code>
+   * <code>repeated .com.xml2023.mainapp.TerminDTO nedostupni = 7;</code>
    */
-  com.google.protobuf.ByteString
-      getNedostupniBytes(int index);
+  com.xml2023.mainapp.TerminDTOOrBuilder getNedostupniOrBuilder(
+      int index);
+
+  /**
+   * <code>.com.xml2023.mainapp.CenovnikDTO cenovnik = 8;</code>
+   */
+  boolean hasCenovnik();
+  /**
+   * <code>.com.xml2023.mainapp.CenovnikDTO cenovnik = 8;</code>
+   */
+  com.xml2023.mainapp.CenovnikDTO getCenovnik();
+  /**
+   * <code>.com.xml2023.mainapp.CenovnikDTO cenovnik = 8;</code>
+   */
+  com.xml2023.mainapp.CenovnikDTOOrBuilder getCenovnikOrBuilder();
 }
