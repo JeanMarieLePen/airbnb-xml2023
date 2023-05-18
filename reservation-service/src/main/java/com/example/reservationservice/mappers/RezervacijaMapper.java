@@ -10,15 +10,18 @@ import com.example.reservationservice.model.Rezervacija;
 @Component
 public class RezervacijaMapper {
 	
-	@Autowired
-	private SmestajBasicMapper smestajMapper;
+
 
 	
 	public Rezervacija fromDTO(RezervacijaDTO dto) {
 		Rezervacija r = new Rezervacija();
+		//r.setId(dto.getId());
+		r.setGost(dto.getGost());
+		r.setSmestaj(dto.getSmestaj());
 		r.setBrojGostiju(dto.getBrojGostiju());
 		r.setDoDatum(dto.getDoDatum());
 		r.setOdDatum(dto.getOdDatum());
+		r.setStatus(dto.getStatus());
 		return r;
 	}
 	
@@ -28,7 +31,7 @@ public class RezervacijaMapper {
 		dto.setDoDatum(r.getDoDatum());
 		dto.setOdDatum(r.getOdDatum());
 		dto.setId(r.getId());
-		dto.setSmestaj(smestajMapper.toDTO(r.getSmestaj()));
+		//dto.setSmestaj(smestajMapper.toDTO(r.getSmestaj()));
 		dto.setStatus(r.getStatus());
 		return dto;
 	}

@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.reservationservice.dtos.OcenaSmestajaDTO;
 import com.example.reservationservice.dtos.RezervacijaDTO;
 import com.example.reservationservice.services.RezervacijaService;
 
@@ -35,15 +34,15 @@ public class ReservationController {
 		}
 	}
 	
-	@PutMapping("/editReservation")
-	public ResponseEntity<RezervacijaDTO> editReservation(@RequestBody RezervacijaDTO dto){
-		RezervacijaDTO retVal = this.rezervacijaService.editReservation(dto);
-		if(retVal == null) {
-			return new ResponseEntity<RezervacijaDTO>(HttpStatus.NO_CONTENT);
-		}else {
-			return new ResponseEntity<RezervacijaDTO>(retVal, HttpStatus.OK);
-		}
-	}
+//	@PutMapping("/editReservation")
+//	public ResponseEntity<RezervacijaDTO> editReservation(@RequestBody RezervacijaDTO dto){
+//		RezervacijaDTO retVal = this.rezervacijaService.editReservation(dto);
+//		if(retVal == null) {
+//			return new ResponseEntity<RezervacijaDTO>(HttpStatus.NO_CONTENT);
+//		}else {
+//			return new ResponseEntity<RezervacijaDTO>(retVal, HttpStatus.OK);
+//		}
+//	}
 	
 	@PutMapping("/cancelReservation/{userId}/{rezervacijaId}")
 	public ResponseEntity<RezervacijaDTO> cancelReservation(@PathVariable(value = "userId") String userId, @PathVariable(value = "rezervacijaId") String rezervacijaId){

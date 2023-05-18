@@ -22,7 +22,7 @@ private static final long serialVersionUID = 0L;
     slika_ = java.util.Collections.emptyList();
     minGosti_ = 0;
     maxGost_ = 0;
-    nedostupni_ = com.google.protobuf.LazyStringArrayList.EMPTY;
+    nedostupni_ = java.util.Collections.emptyList();
   }
 
   @java.lang.Override
@@ -90,12 +90,25 @@ private static final long serialVersionUID = 0L;
             break;
           }
           case 58: {
-            java.lang.String s = input.readStringRequireUtf8();
             if (!((mutable_bitField0_ & 0x00000040) == 0x00000040)) {
-              nedostupni_ = new com.google.protobuf.LazyStringArrayList();
+              nedostupni_ = new java.util.ArrayList<com.xml2023.mainapp.TerminDTO>();
               mutable_bitField0_ |= 0x00000040;
             }
-            nedostupni_.add(s);
+            nedostupni_.add(
+                input.readMessage(com.xml2023.mainapp.TerminDTO.parser(), extensionRegistry));
+            break;
+          }
+          case 66: {
+            com.xml2023.mainapp.CenovnikDTO.Builder subBuilder = null;
+            if (cenovnik_ != null) {
+              subBuilder = cenovnik_.toBuilder();
+            }
+            cenovnik_ = input.readMessage(com.xml2023.mainapp.CenovnikDTO.parser(), extensionRegistry);
+            if (subBuilder != null) {
+              subBuilder.mergeFrom(cenovnik_);
+              cenovnik_ = subBuilder.buildPartial();
+            }
+
             break;
           }
           default: {
@@ -120,7 +133,7 @@ private static final long serialVersionUID = 0L;
         slika_ = java.util.Collections.unmodifiableList(slika_);
       }
       if (((mutable_bitField0_ & 0x00000040) == 0x00000040)) {
-        nedostupni_ = nedostupni_.getUnmodifiableView();
+        nedostupni_ = java.util.Collections.unmodifiableList(nedostupni_);
       }
       this.unknownFields = unknownFields.build();
       makeExtensionsImmutable();
@@ -291,32 +304,59 @@ private static final long serialVersionUID = 0L;
   }
 
   public static final int NEDOSTUPNI_FIELD_NUMBER = 7;
-  private com.google.protobuf.LazyStringList nedostupni_;
+  private java.util.List<com.xml2023.mainapp.TerminDTO> nedostupni_;
   /**
-   * <code>repeated string nedostupni = 7;</code>
+   * <code>repeated .com.xml2023.mainapp.TerminDTO nedostupni = 7;</code>
    */
-  public com.google.protobuf.ProtocolStringList
-      getNedostupniList() {
+  public java.util.List<com.xml2023.mainapp.TerminDTO> getNedostupniList() {
     return nedostupni_;
   }
   /**
-   * <code>repeated string nedostupni = 7;</code>
+   * <code>repeated .com.xml2023.mainapp.TerminDTO nedostupni = 7;</code>
+   */
+  public java.util.List<? extends com.xml2023.mainapp.TerminDTOOrBuilder> 
+      getNedostupniOrBuilderList() {
+    return nedostupni_;
+  }
+  /**
+   * <code>repeated .com.xml2023.mainapp.TerminDTO nedostupni = 7;</code>
    */
   public int getNedostupniCount() {
     return nedostupni_.size();
   }
   /**
-   * <code>repeated string nedostupni = 7;</code>
+   * <code>repeated .com.xml2023.mainapp.TerminDTO nedostupni = 7;</code>
    */
-  public java.lang.String getNedostupni(int index) {
+  public com.xml2023.mainapp.TerminDTO getNedostupni(int index) {
     return nedostupni_.get(index);
   }
   /**
-   * <code>repeated string nedostupni = 7;</code>
+   * <code>repeated .com.xml2023.mainapp.TerminDTO nedostupni = 7;</code>
    */
-  public com.google.protobuf.ByteString
-      getNedostupniBytes(int index) {
-    return nedostupni_.getByteString(index);
+  public com.xml2023.mainapp.TerminDTOOrBuilder getNedostupniOrBuilder(
+      int index) {
+    return nedostupni_.get(index);
+  }
+
+  public static final int CENOVNIK_FIELD_NUMBER = 8;
+  private com.xml2023.mainapp.CenovnikDTO cenovnik_;
+  /**
+   * <code>.com.xml2023.mainapp.CenovnikDTO cenovnik = 8;</code>
+   */
+  public boolean hasCenovnik() {
+    return cenovnik_ != null;
+  }
+  /**
+   * <code>.com.xml2023.mainapp.CenovnikDTO cenovnik = 8;</code>
+   */
+  public com.xml2023.mainapp.CenovnikDTO getCenovnik() {
+    return cenovnik_ == null ? com.xml2023.mainapp.CenovnikDTO.getDefaultInstance() : cenovnik_;
+  }
+  /**
+   * <code>.com.xml2023.mainapp.CenovnikDTO cenovnik = 8;</code>
+   */
+  public com.xml2023.mainapp.CenovnikDTOOrBuilder getCenovnikOrBuilder() {
+    return getCenovnik();
   }
 
   private byte memoizedIsInitialized = -1;
@@ -352,7 +392,10 @@ private static final long serialVersionUID = 0L;
       output.writeInt32(6, maxGost_);
     }
     for (int i = 0; i < nedostupni_.size(); i++) {
-      com.google.protobuf.GeneratedMessageV3.writeString(output, 7, nedostupni_.getRaw(i));
+      output.writeMessage(7, nedostupni_.get(i));
+    }
+    if (cenovnik_ != null) {
+      output.writeMessage(8, getCenovnik());
     }
     unknownFields.writeTo(output);
   }
@@ -389,13 +432,13 @@ private static final long serialVersionUID = 0L;
       size += com.google.protobuf.CodedOutputStream
         .computeInt32Size(6, maxGost_);
     }
-    {
-      int dataSize = 0;
-      for (int i = 0; i < nedostupni_.size(); i++) {
-        dataSize += computeStringSizeNoTag(nedostupni_.getRaw(i));
-      }
-      size += dataSize;
-      size += 1 * getNedostupniList().size();
+    for (int i = 0; i < nedostupni_.size(); i++) {
+      size += com.google.protobuf.CodedOutputStream
+        .computeMessageSize(7, nedostupni_.get(i));
+    }
+    if (cenovnik_ != null) {
+      size += com.google.protobuf.CodedOutputStream
+        .computeMessageSize(8, getCenovnik());
     }
     size += unknownFields.getSerializedSize();
     memoizedSize = size;
@@ -427,6 +470,11 @@ private static final long serialVersionUID = 0L;
         == other.getMaxGost());
     result = result && getNedostupniList()
         .equals(other.getNedostupniList());
+    result = result && (hasCenovnik() == other.hasCenovnik());
+    if (hasCenovnik()) {
+      result = result && getCenovnik()
+          .equals(other.getCenovnik());
+    }
     result = result && unknownFields.equals(other.unknownFields);
     return result;
   }
@@ -457,6 +505,10 @@ private static final long serialVersionUID = 0L;
     if (getNedostupniCount() > 0) {
       hash = (37 * hash) + NEDOSTUPNI_FIELD_NUMBER;
       hash = (53 * hash) + getNedostupniList().hashCode();
+    }
+    if (hasCenovnik()) {
+      hash = (37 * hash) + CENOVNIK_FIELD_NUMBER;
+      hash = (53 * hash) + getCenovnik().hashCode();
     }
     hash = (29 * hash) + unknownFields.hashCode();
     memoizedHashCode = hash;
@@ -587,6 +639,7 @@ private static final long serialVersionUID = 0L;
       if (com.google.protobuf.GeneratedMessageV3
               .alwaysUseFieldBuilders) {
         getSlikaFieldBuilder();
+        getNedostupniFieldBuilder();
       }
     }
     @java.lang.Override
@@ -608,8 +661,18 @@ private static final long serialVersionUID = 0L;
 
       maxGost_ = 0;
 
-      nedostupni_ = com.google.protobuf.LazyStringArrayList.EMPTY;
-      bitField0_ = (bitField0_ & ~0x00000040);
+      if (nedostupniBuilder_ == null) {
+        nedostupni_ = java.util.Collections.emptyList();
+        bitField0_ = (bitField0_ & ~0x00000040);
+      } else {
+        nedostupniBuilder_.clear();
+      }
+      if (cenovnikBuilder_ == null) {
+        cenovnik_ = null;
+      } else {
+        cenovnik_ = null;
+        cenovnikBuilder_ = null;
+      }
       return this;
     }
 
@@ -656,11 +719,20 @@ private static final long serialVersionUID = 0L;
       }
       result.minGosti_ = minGosti_;
       result.maxGost_ = maxGost_;
-      if (((bitField0_ & 0x00000040) == 0x00000040)) {
-        nedostupni_ = nedostupni_.getUnmodifiableView();
-        bitField0_ = (bitField0_ & ~0x00000040);
+      if (nedostupniBuilder_ == null) {
+        if (((bitField0_ & 0x00000040) == 0x00000040)) {
+          nedostupni_ = java.util.Collections.unmodifiableList(nedostupni_);
+          bitField0_ = (bitField0_ & ~0x00000040);
+        }
+        result.nedostupni_ = nedostupni_;
+      } else {
+        result.nedostupni_ = nedostupniBuilder_.build();
       }
-      result.nedostupni_ = nedostupni_;
+      if (cenovnikBuilder_ == null) {
+        result.cenovnik_ = cenovnik_;
+      } else {
+        result.cenovnik_ = cenovnikBuilder_.build();
+      }
       result.bitField0_ = to_bitField0_;
       onBuilt();
       return result;
@@ -760,15 +832,34 @@ private static final long serialVersionUID = 0L;
       if (other.getMaxGost() != 0) {
         setMaxGost(other.getMaxGost());
       }
-      if (!other.nedostupni_.isEmpty()) {
-        if (nedostupni_.isEmpty()) {
-          nedostupni_ = other.nedostupni_;
-          bitField0_ = (bitField0_ & ~0x00000040);
-        } else {
-          ensureNedostupniIsMutable();
-          nedostupni_.addAll(other.nedostupni_);
+      if (nedostupniBuilder_ == null) {
+        if (!other.nedostupni_.isEmpty()) {
+          if (nedostupni_.isEmpty()) {
+            nedostupni_ = other.nedostupni_;
+            bitField0_ = (bitField0_ & ~0x00000040);
+          } else {
+            ensureNedostupniIsMutable();
+            nedostupni_.addAll(other.nedostupni_);
+          }
+          onChanged();
         }
-        onChanged();
+      } else {
+        if (!other.nedostupni_.isEmpty()) {
+          if (nedostupniBuilder_.isEmpty()) {
+            nedostupniBuilder_.dispose();
+            nedostupniBuilder_ = null;
+            nedostupni_ = other.nedostupni_;
+            bitField0_ = (bitField0_ & ~0x00000040);
+            nedostupniBuilder_ = 
+              com.google.protobuf.GeneratedMessageV3.alwaysUseFieldBuilders ?
+                 getNedostupniFieldBuilder() : null;
+          } else {
+            nedostupniBuilder_.addAllMessages(other.nedostupni_);
+          }
+        }
+      }
+      if (other.hasCenovnik()) {
+        mergeCenovnik(other.getCenovnik());
       }
       this.mergeUnknownFields(other.unknownFields);
       onChanged();
@@ -1324,98 +1415,361 @@ private static final long serialVersionUID = 0L;
       return this;
     }
 
-    private com.google.protobuf.LazyStringList nedostupni_ = com.google.protobuf.LazyStringArrayList.EMPTY;
+    private java.util.List<com.xml2023.mainapp.TerminDTO> nedostupni_ =
+      java.util.Collections.emptyList();
     private void ensureNedostupniIsMutable() {
       if (!((bitField0_ & 0x00000040) == 0x00000040)) {
-        nedostupni_ = new com.google.protobuf.LazyStringArrayList(nedostupni_);
+        nedostupni_ = new java.util.ArrayList<com.xml2023.mainapp.TerminDTO>(nedostupni_);
         bitField0_ |= 0x00000040;
        }
     }
+
+    private com.google.protobuf.RepeatedFieldBuilderV3<
+        com.xml2023.mainapp.TerminDTO, com.xml2023.mainapp.TerminDTO.Builder, com.xml2023.mainapp.TerminDTOOrBuilder> nedostupniBuilder_;
+
     /**
-     * <code>repeated string nedostupni = 7;</code>
+     * <code>repeated .com.xml2023.mainapp.TerminDTO nedostupni = 7;</code>
      */
-    public com.google.protobuf.ProtocolStringList
-        getNedostupniList() {
-      return nedostupni_.getUnmodifiableView();
+    public java.util.List<com.xml2023.mainapp.TerminDTO> getNedostupniList() {
+      if (nedostupniBuilder_ == null) {
+        return java.util.Collections.unmodifiableList(nedostupni_);
+      } else {
+        return nedostupniBuilder_.getMessageList();
+      }
     }
     /**
-     * <code>repeated string nedostupni = 7;</code>
+     * <code>repeated .com.xml2023.mainapp.TerminDTO nedostupni = 7;</code>
      */
     public int getNedostupniCount() {
-      return nedostupni_.size();
+      if (nedostupniBuilder_ == null) {
+        return nedostupni_.size();
+      } else {
+        return nedostupniBuilder_.getCount();
+      }
     }
     /**
-     * <code>repeated string nedostupni = 7;</code>
+     * <code>repeated .com.xml2023.mainapp.TerminDTO nedostupni = 7;</code>
      */
-    public java.lang.String getNedostupni(int index) {
-      return nedostupni_.get(index);
+    public com.xml2023.mainapp.TerminDTO getNedostupni(int index) {
+      if (nedostupniBuilder_ == null) {
+        return nedostupni_.get(index);
+      } else {
+        return nedostupniBuilder_.getMessage(index);
+      }
     }
     /**
-     * <code>repeated string nedostupni = 7;</code>
-     */
-    public com.google.protobuf.ByteString
-        getNedostupniBytes(int index) {
-      return nedostupni_.getByteString(index);
-    }
-    /**
-     * <code>repeated string nedostupni = 7;</code>
+     * <code>repeated .com.xml2023.mainapp.TerminDTO nedostupni = 7;</code>
      */
     public Builder setNedostupni(
-        int index, java.lang.String value) {
-      if (value == null) {
-    throw new NullPointerException();
-  }
-  ensureNedostupniIsMutable();
-      nedostupni_.set(index, value);
-      onChanged();
+        int index, com.xml2023.mainapp.TerminDTO value) {
+      if (nedostupniBuilder_ == null) {
+        if (value == null) {
+          throw new NullPointerException();
+        }
+        ensureNedostupniIsMutable();
+        nedostupni_.set(index, value);
+        onChanged();
+      } else {
+        nedostupniBuilder_.setMessage(index, value);
+      }
       return this;
     }
     /**
-     * <code>repeated string nedostupni = 7;</code>
+     * <code>repeated .com.xml2023.mainapp.TerminDTO nedostupni = 7;</code>
+     */
+    public Builder setNedostupni(
+        int index, com.xml2023.mainapp.TerminDTO.Builder builderForValue) {
+      if (nedostupniBuilder_ == null) {
+        ensureNedostupniIsMutable();
+        nedostupni_.set(index, builderForValue.build());
+        onChanged();
+      } else {
+        nedostupniBuilder_.setMessage(index, builderForValue.build());
+      }
+      return this;
+    }
+    /**
+     * <code>repeated .com.xml2023.mainapp.TerminDTO nedostupni = 7;</code>
+     */
+    public Builder addNedostupni(com.xml2023.mainapp.TerminDTO value) {
+      if (nedostupniBuilder_ == null) {
+        if (value == null) {
+          throw new NullPointerException();
+        }
+        ensureNedostupniIsMutable();
+        nedostupni_.add(value);
+        onChanged();
+      } else {
+        nedostupniBuilder_.addMessage(value);
+      }
+      return this;
+    }
+    /**
+     * <code>repeated .com.xml2023.mainapp.TerminDTO nedostupni = 7;</code>
      */
     public Builder addNedostupni(
-        java.lang.String value) {
-      if (value == null) {
-    throw new NullPointerException();
-  }
-  ensureNedostupniIsMutable();
-      nedostupni_.add(value);
-      onChanged();
+        int index, com.xml2023.mainapp.TerminDTO value) {
+      if (nedostupniBuilder_ == null) {
+        if (value == null) {
+          throw new NullPointerException();
+        }
+        ensureNedostupniIsMutable();
+        nedostupni_.add(index, value);
+        onChanged();
+      } else {
+        nedostupniBuilder_.addMessage(index, value);
+      }
       return this;
     }
     /**
-     * <code>repeated string nedostupni = 7;</code>
+     * <code>repeated .com.xml2023.mainapp.TerminDTO nedostupni = 7;</code>
+     */
+    public Builder addNedostupni(
+        com.xml2023.mainapp.TerminDTO.Builder builderForValue) {
+      if (nedostupniBuilder_ == null) {
+        ensureNedostupniIsMutable();
+        nedostupni_.add(builderForValue.build());
+        onChanged();
+      } else {
+        nedostupniBuilder_.addMessage(builderForValue.build());
+      }
+      return this;
+    }
+    /**
+     * <code>repeated .com.xml2023.mainapp.TerminDTO nedostupni = 7;</code>
+     */
+    public Builder addNedostupni(
+        int index, com.xml2023.mainapp.TerminDTO.Builder builderForValue) {
+      if (nedostupniBuilder_ == null) {
+        ensureNedostupniIsMutable();
+        nedostupni_.add(index, builderForValue.build());
+        onChanged();
+      } else {
+        nedostupniBuilder_.addMessage(index, builderForValue.build());
+      }
+      return this;
+    }
+    /**
+     * <code>repeated .com.xml2023.mainapp.TerminDTO nedostupni = 7;</code>
      */
     public Builder addAllNedostupni(
-        java.lang.Iterable<java.lang.String> values) {
-      ensureNedostupniIsMutable();
-      com.google.protobuf.AbstractMessageLite.Builder.addAll(
-          values, nedostupni_);
-      onChanged();
+        java.lang.Iterable<? extends com.xml2023.mainapp.TerminDTO> values) {
+      if (nedostupniBuilder_ == null) {
+        ensureNedostupniIsMutable();
+        com.google.protobuf.AbstractMessageLite.Builder.addAll(
+            values, nedostupni_);
+        onChanged();
+      } else {
+        nedostupniBuilder_.addAllMessages(values);
+      }
       return this;
     }
     /**
-     * <code>repeated string nedostupni = 7;</code>
+     * <code>repeated .com.xml2023.mainapp.TerminDTO nedostupni = 7;</code>
      */
     public Builder clearNedostupni() {
-      nedostupni_ = com.google.protobuf.LazyStringArrayList.EMPTY;
-      bitField0_ = (bitField0_ & ~0x00000040);
-      onChanged();
+      if (nedostupniBuilder_ == null) {
+        nedostupni_ = java.util.Collections.emptyList();
+        bitField0_ = (bitField0_ & ~0x00000040);
+        onChanged();
+      } else {
+        nedostupniBuilder_.clear();
+      }
       return this;
     }
     /**
-     * <code>repeated string nedostupni = 7;</code>
+     * <code>repeated .com.xml2023.mainapp.TerminDTO nedostupni = 7;</code>
      */
-    public Builder addNedostupniBytes(
-        com.google.protobuf.ByteString value) {
-      if (value == null) {
-    throw new NullPointerException();
-  }
-  checkByteStringIsUtf8(value);
-      ensureNedostupniIsMutable();
-      nedostupni_.add(value);
-      onChanged();
+    public Builder removeNedostupni(int index) {
+      if (nedostupniBuilder_ == null) {
+        ensureNedostupniIsMutable();
+        nedostupni_.remove(index);
+        onChanged();
+      } else {
+        nedostupniBuilder_.remove(index);
+      }
       return this;
+    }
+    /**
+     * <code>repeated .com.xml2023.mainapp.TerminDTO nedostupni = 7;</code>
+     */
+    public com.xml2023.mainapp.TerminDTO.Builder getNedostupniBuilder(
+        int index) {
+      return getNedostupniFieldBuilder().getBuilder(index);
+    }
+    /**
+     * <code>repeated .com.xml2023.mainapp.TerminDTO nedostupni = 7;</code>
+     */
+    public com.xml2023.mainapp.TerminDTOOrBuilder getNedostupniOrBuilder(
+        int index) {
+      if (nedostupniBuilder_ == null) {
+        return nedostupni_.get(index);  } else {
+        return nedostupniBuilder_.getMessageOrBuilder(index);
+      }
+    }
+    /**
+     * <code>repeated .com.xml2023.mainapp.TerminDTO nedostupni = 7;</code>
+     */
+    public java.util.List<? extends com.xml2023.mainapp.TerminDTOOrBuilder> 
+         getNedostupniOrBuilderList() {
+      if (nedostupniBuilder_ != null) {
+        return nedostupniBuilder_.getMessageOrBuilderList();
+      } else {
+        return java.util.Collections.unmodifiableList(nedostupni_);
+      }
+    }
+    /**
+     * <code>repeated .com.xml2023.mainapp.TerminDTO nedostupni = 7;</code>
+     */
+    public com.xml2023.mainapp.TerminDTO.Builder addNedostupniBuilder() {
+      return getNedostupniFieldBuilder().addBuilder(
+          com.xml2023.mainapp.TerminDTO.getDefaultInstance());
+    }
+    /**
+     * <code>repeated .com.xml2023.mainapp.TerminDTO nedostupni = 7;</code>
+     */
+    public com.xml2023.mainapp.TerminDTO.Builder addNedostupniBuilder(
+        int index) {
+      return getNedostupniFieldBuilder().addBuilder(
+          index, com.xml2023.mainapp.TerminDTO.getDefaultInstance());
+    }
+    /**
+     * <code>repeated .com.xml2023.mainapp.TerminDTO nedostupni = 7;</code>
+     */
+    public java.util.List<com.xml2023.mainapp.TerminDTO.Builder> 
+         getNedostupniBuilderList() {
+      return getNedostupniFieldBuilder().getBuilderList();
+    }
+    private com.google.protobuf.RepeatedFieldBuilderV3<
+        com.xml2023.mainapp.TerminDTO, com.xml2023.mainapp.TerminDTO.Builder, com.xml2023.mainapp.TerminDTOOrBuilder> 
+        getNedostupniFieldBuilder() {
+      if (nedostupniBuilder_ == null) {
+        nedostupniBuilder_ = new com.google.protobuf.RepeatedFieldBuilderV3<
+            com.xml2023.mainapp.TerminDTO, com.xml2023.mainapp.TerminDTO.Builder, com.xml2023.mainapp.TerminDTOOrBuilder>(
+                nedostupni_,
+                ((bitField0_ & 0x00000040) == 0x00000040),
+                getParentForChildren(),
+                isClean());
+        nedostupni_ = null;
+      }
+      return nedostupniBuilder_;
+    }
+
+    private com.xml2023.mainapp.CenovnikDTO cenovnik_ = null;
+    private com.google.protobuf.SingleFieldBuilderV3<
+        com.xml2023.mainapp.CenovnikDTO, com.xml2023.mainapp.CenovnikDTO.Builder, com.xml2023.mainapp.CenovnikDTOOrBuilder> cenovnikBuilder_;
+    /**
+     * <code>.com.xml2023.mainapp.CenovnikDTO cenovnik = 8;</code>
+     */
+    public boolean hasCenovnik() {
+      return cenovnikBuilder_ != null || cenovnik_ != null;
+    }
+    /**
+     * <code>.com.xml2023.mainapp.CenovnikDTO cenovnik = 8;</code>
+     */
+    public com.xml2023.mainapp.CenovnikDTO getCenovnik() {
+      if (cenovnikBuilder_ == null) {
+        return cenovnik_ == null ? com.xml2023.mainapp.CenovnikDTO.getDefaultInstance() : cenovnik_;
+      } else {
+        return cenovnikBuilder_.getMessage();
+      }
+    }
+    /**
+     * <code>.com.xml2023.mainapp.CenovnikDTO cenovnik = 8;</code>
+     */
+    public Builder setCenovnik(com.xml2023.mainapp.CenovnikDTO value) {
+      if (cenovnikBuilder_ == null) {
+        if (value == null) {
+          throw new NullPointerException();
+        }
+        cenovnik_ = value;
+        onChanged();
+      } else {
+        cenovnikBuilder_.setMessage(value);
+      }
+
+      return this;
+    }
+    /**
+     * <code>.com.xml2023.mainapp.CenovnikDTO cenovnik = 8;</code>
+     */
+    public Builder setCenovnik(
+        com.xml2023.mainapp.CenovnikDTO.Builder builderForValue) {
+      if (cenovnikBuilder_ == null) {
+        cenovnik_ = builderForValue.build();
+        onChanged();
+      } else {
+        cenovnikBuilder_.setMessage(builderForValue.build());
+      }
+
+      return this;
+    }
+    /**
+     * <code>.com.xml2023.mainapp.CenovnikDTO cenovnik = 8;</code>
+     */
+    public Builder mergeCenovnik(com.xml2023.mainapp.CenovnikDTO value) {
+      if (cenovnikBuilder_ == null) {
+        if (cenovnik_ != null) {
+          cenovnik_ =
+            com.xml2023.mainapp.CenovnikDTO.newBuilder(cenovnik_).mergeFrom(value).buildPartial();
+        } else {
+          cenovnik_ = value;
+        }
+        onChanged();
+      } else {
+        cenovnikBuilder_.mergeFrom(value);
+      }
+
+      return this;
+    }
+    /**
+     * <code>.com.xml2023.mainapp.CenovnikDTO cenovnik = 8;</code>
+     */
+    public Builder clearCenovnik() {
+      if (cenovnikBuilder_ == null) {
+        cenovnik_ = null;
+        onChanged();
+      } else {
+        cenovnik_ = null;
+        cenovnikBuilder_ = null;
+      }
+
+      return this;
+    }
+    /**
+     * <code>.com.xml2023.mainapp.CenovnikDTO cenovnik = 8;</code>
+     */
+    public com.xml2023.mainapp.CenovnikDTO.Builder getCenovnikBuilder() {
+      
+      onChanged();
+      return getCenovnikFieldBuilder().getBuilder();
+    }
+    /**
+     * <code>.com.xml2023.mainapp.CenovnikDTO cenovnik = 8;</code>
+     */
+    public com.xml2023.mainapp.CenovnikDTOOrBuilder getCenovnikOrBuilder() {
+      if (cenovnikBuilder_ != null) {
+        return cenovnikBuilder_.getMessageOrBuilder();
+      } else {
+        return cenovnik_ == null ?
+            com.xml2023.mainapp.CenovnikDTO.getDefaultInstance() : cenovnik_;
+      }
+    }
+    /**
+     * <code>.com.xml2023.mainapp.CenovnikDTO cenovnik = 8;</code>
+     */
+    private com.google.protobuf.SingleFieldBuilderV3<
+        com.xml2023.mainapp.CenovnikDTO, com.xml2023.mainapp.CenovnikDTO.Builder, com.xml2023.mainapp.CenovnikDTOOrBuilder> 
+        getCenovnikFieldBuilder() {
+      if (cenovnikBuilder_ == null) {
+        cenovnikBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<
+            com.xml2023.mainapp.CenovnikDTO, com.xml2023.mainapp.CenovnikDTO.Builder, com.xml2023.mainapp.CenovnikDTOOrBuilder>(
+                getCenovnik(),
+                getParentForChildren(),
+                isClean());
+        cenovnik_ = null;
+      }
+      return cenovnikBuilder_;
     }
     @java.lang.Override
     public final Builder setUnknownFields(

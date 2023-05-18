@@ -111,7 +111,8 @@ message SmestajDTO{
 	repeated SlikaDTO slika = 4;
 	int32 minGosti = 5;
 	int32 maxGost = 6;
-	repeated string nedostupni = 7;
+	repeated TerminDTO nedostupni = 7;
+	CenovnikDTO cenovnik = 8;
 }
 
 
@@ -169,4 +170,27 @@ message TerminDTO{
 	google.protobuf.Timestamp kraj = 2;
 }
 
+service KorisnikGrpc{
+	rpc getHost(getHostRequest) returns (getHostResponse);
+	rpc rezOtkazana(rezOtkazanaRequest) returns (rezOtkazanaResponse);
+}
 
+message getHostRequest{
+	string hostId =1;
+}
+message getHostResponse{
+	HostBasicDTO host=1;
+}
+
+message HostBasicDTO{
+	bool istaknuti =1;
+	bool rezAutomatski=2;
+	int64 prosecnaOcena=3;
+}
+message rezOtkazanaRequest{
+	string guestId = 1;
+}
+
+message rezOtkazanaResponse{
+	bool penalDodat = 1;
+}

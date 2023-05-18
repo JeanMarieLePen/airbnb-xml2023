@@ -19,14 +19,8 @@ public class OcenaHost implements Serializable{
 	
 	@Id
 	private String id;
-	@Version
-	@Column(columnDefinition = "integer DEFAULT 0", nullable = false)
-	private Integer version;
-	
-	@DBRef
-	private Host vlasnik;
-	@DBRef
-	private Guest gost;
+	private String vlasnik;	
+	private String gost;
 	@PositiveOrZero
 	private int ocena;
 	@NotNull
@@ -39,24 +33,7 @@ public class OcenaHost implements Serializable{
 	public void setId(String id) {
 		this.id = id;
 	}
-	public Integer getVersion() {
-		return version;
-	}
-	public void setVersion(Integer version) {
-		this.version = version;
-	}
-	public Host getVlasnik() {
-		return vlasnik;
-	}
-	public void setVlasnik(Host vlasnik) {
-		this.vlasnik = vlasnik;
-	}
-	public Guest getGost() {
-		return gost;
-	}
-	public void setGost(Guest gost) {
-		this.gost = gost;
-	}
+	
 	public int getOcena() {
 		return ocena;
 	}

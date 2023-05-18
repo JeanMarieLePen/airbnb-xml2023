@@ -13,7 +13,6 @@ import org.springframework.stereotype.Service;
 import com.example.reservationservice.model.Rezervacija;
 import com.example.reservationservice.model.StatusRezervacije;
 import com.example.reservationservice.repositories.RezervacijaRep;
-import com.example.reservationservice.repositories.SmestajRep;
 import com.google.protobuf.Timestamp;
 import com.xml2023.mainapp.ActiveResExistsForSmestajRequest;
 import com.xml2023.mainapp.ActiveResExistsForSmestajResponse;
@@ -69,7 +68,7 @@ public class RezervacijaExistsServiceImpl extends RezervacijaGrpcImplBase {
 
 		if(tip.equals("gost"))
 		{
-			b= rRep.findAll().stream().anyMatch(x->x.getGost().getId().equals(userId) && x.getStatus().equals(StatusRezervacije.REZERVISANA));
+			b= rRep.findAll().stream().anyMatch(x->x.getGost().equals(userId) && x.getStatus().equals(StatusRezervacije.REZERVISANA));
 		}else {
 			ManagedChannel channel = ManagedChannelBuilder.forAddress("localhost", 7977).usePlaintext().build();
 			SmestajGrpcBlockingStub blockStub= SmestajGrpcGrpc.newBlockingStub(channel);
@@ -83,7 +82,7 @@ public class RezervacijaExistsServiceImpl extends RezervacijaGrpcImplBase {
 				b=false;
 			else {
 				for(String id : ids) {
-					Boolean postojeRez= rRep.findAll().stream().anyMatch(x->x.getSmestaj().getId().equals(id) && 
+					Boolean postojeRez= rRep.findAll().stream().anyMatch(x->x.getSmestaj().equals(id) && 
 							(x.getStatus().equals(StatusRezervacije.REZERVISANA) ||x.getStatus().equals(StatusRezervacije.PENDING) ));
 					if(postojeRez) {
 						b=true;
@@ -106,47 +105,46 @@ public class RezervacijaExistsServiceImpl extends RezervacijaGrpcImplBase {
 	@Override
 	public void getRezervacijaById(getRezervacijaByIdRequest request,
 			StreamObserver<getRezervacijaByIdResponse> responseObserver) {
-//		String rezervacijaId = request.getRezervacijaId();
-//		Rezervacija r = rRep.findById(rezervacijaId).orElse(null);
-//		getRezervacijaByIdResponse.Builder response = getRezervacijaByIdResponse.newBuilder();
-//		RezervacijaDTO.Builder retVal = RezervacijaDTO.newBuilder();
-//		retVal.setBrojGostiju(r.getBrojGostiju());
-//		retVal.setDoDatum(convertToTimeStamp(r.getDoDatum()));
-//		retVal.setOdDatum(convertToTimeStamp(r.getOdDatum()));
-//		retVal.setGost(r.getGost());
-//		retVal.setId(r.getId());
-//		retVal.setSmestaj(r.getSmestaj());
-//		retVal.setStatus(pickStatus(r.getStatus()));
-//		response.setOdgovor(retVal);
-//		responseObserver.onNext(response.build());
-//		responseObserver.onCompleted();
+		String rezervacijaId = request.getRezervacijaId();
+		Rezervacija r = rRep.findById(rezervacijaId).orElse(null);
+		getRezervacijaByIdResponse.Builder response = getRezervacijaByIdResponse.newBuilder();
+		RezervacijaDTO.Builder retVal = RezervacijaDTO.newBuilder();
+		retVal.setBrojGostiju(r.getBrojGostiju());
+		retVal.setDoDatum(convertToTimeStamp(r.getDoDatum()));
+		retVal.setOdDatum(convertToTimeStamp(r.getOdDatum()));
+		retVal.setGost(r.getGost());
+		retVal.setId(r.getId());
+		retVal.setSmestaj(r.getSmestaj());
+		retVal.setStatus(pickStatus(r.getStatus()));
+		response.setOdgovor(retVal);
+		responseObserver.onNext(response.build());
+		responseObserver.onCompleted();
 		
 	}
 	@Override
 	public void getListaRezervacijaByUserId(getListaRezervacijaByUserIdRequest request,
 			StreamObserver<getListaRezervacijaByUserIdResponse> responseObserver) {
-		// TODO Auto-generated method stub
-//		String userId = request.getId();
-//		List<Rezervacija> userReservation = this.rRep.findAll().stream().filter(r -> r.getGost().equals(userId)).toList();
-//		getListaRezervacijaByUserIdResponse.Builder response = getListaRezervacijaByUserIdResponse.newBuilder();
-//		
-//		if(userReservation != null) {
-//			for(Rezervacija r : userReservation) {
-//				RezervacijaDTO.Builder temp = RezervacijaDTO.newBuilder();
-//				temp.setBrojGostiju(r.getBrojGostiju());
-//				temp.setDoDatum(convertToTimeStamp(r.getOdDatum()));
-//				temp.setOdDatum(convertToTimeStamp(r.getOdDatum()));
-//				temp.setGost(r.getGost());
-//				temp.setId(r.getId());
-//				temp.setSmestaj(r.getSmestaj());
-//				temp.setStatusValue(r.getStatus().getStatus());
-//				response.addListaRezervacija(temp);
-//			}
-//		}else {
-//			response.addAllListaRezervacija(new ArrayList<RezervacijaDTO>());
-//		}
-//		responseObserver.onNext(response.build());
-//		responseObserver.onCompleted();
+		String userId = request.getId();
+		List<Rezervacija> userReservation = this.rRep.findAll().stream().filter(r -> r.getGost().equals(userId)).toList();
+		getListaRezervacijaByUserIdResponse.Builder response = getListaRezervacijaByUserIdResponse.newBuilder();
+		
+		if(userReservation != null) {
+			for(Rezervacija r : userReservation) {
+				RezervacijaDTO.Builder temp = RezervacijaDTO.newBuilder();
+				temp.setBrojGostiju(r.getBrojGostiju());
+				temp.setDoDatum(convertToTimeStamp(r.getOdDatum()));
+				temp.setOdDatum(convertToTimeStamp(r.getOdDatum()));
+				temp.setGost(r.getGost());
+				temp.setId(r.getId());
+				temp.setSmestaj(r.getSmestaj());
+				temp.setStatusValue(r.getStatus().getStatus());
+				response.addListaRezervacija(temp);
+			}
+		}else {
+			response.addAllListaRezervacija(new ArrayList<RezervacijaDTO>());
+		}
+		responseObserver.onNext(response.build());
+		responseObserver.onCompleted();
 	}
 	
 	@Override
@@ -178,14 +176,14 @@ public class RezervacijaExistsServiceImpl extends RezervacijaGrpcImplBase {
 		List<RezervacijaDTO> retList = new ArrayList<RezervacijaDTO>();
 		for(Rezervacija r : listaRezervacija) {
 			RezervacijaDTO.Builder temp = RezervacijaDTO.newBuilder();
-//			temp.setBrojGostiju(r.getBrojGostiju());
-//			temp.setDoDatum(convertToTimeStamp(r.getOdDatum()));
-//			temp.setOdDatum(convertToTimeStamp(r.getOdDatum()));
-//			temp.setGost(r.getGost());
-//			temp.setId(r.getId());
-//			temp.setSmestaj(r.getSmestaj());
-//			temp.setStatusValue(r.getStatus().getStatus());
-//			retList.add(temp.build());
+			temp.setBrojGostiju(r.getBrojGostiju());
+			temp.setDoDatum(convertToTimeStamp(r.getOdDatum()));
+			temp.setOdDatum(convertToTimeStamp(r.getOdDatum()));
+			temp.setGost(r.getGost());
+			temp.setId(r.getId());
+			temp.setSmestaj(r.getSmestaj());
+			temp.setStatusValue(r.getStatus().getStatus());
+			retList.add(temp.build());
 		}
 		res.addAllListaRezervacija(retList);
 		responseObserver.onNext(res.build());
