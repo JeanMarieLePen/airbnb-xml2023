@@ -83,7 +83,7 @@
                                             </td>
                                             <td>
                                                 <ul style="width: 200px; min-height:50px; max-height: 100px; overflow: auto">
-                                                    <li v-for="(tempPogodnost, index) in smestaj.pogodnosti" v-bind:key="index">{{tempPogodnost.naziv}}</li>
+                                                    <li v-for="(tempPogodnost, index) in smestaj.pogodnosti" v-bind:key="index">{{tempPogodnost}}</li>
                                                 </ul>
                                             </td>
                                         </tr>
@@ -142,7 +142,7 @@
                 </div> -->
                 </div>
                 <div style="margin-left: 200px;margin-top:100px" v-show="smestaj.listaOcena.length == 0 ">
-                    <h1>Trenutno nema komentara</h1>
+                    <h1>Trenutno nema ocena</h1>
                 </div>
             </div>
         </div>

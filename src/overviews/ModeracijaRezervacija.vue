@@ -7,7 +7,7 @@
                     <!-- class="card" v-for="(t, index) in listaRezervacija" :key="index" -->
                     <div class="card">
                         <div class="text-center bg-success" style="height:350px;">
-                            <img class="card-img-top" style="height:95%;width:95%; margin-top:2.5%;" :src="getAnImage(r.smestaj)">
+                            <!-- <img class="card-img-top" style="height:95%;width:95%; margin-top:2.5%;" :src="getAnImage(r.smestaj)"> -->
                         </div>
                         
                         <div class="card-body text-white bg-success">
@@ -18,7 +18,7 @@
                                 <p class="card-text display-7">Pocetak: {{setDatumForm(r.odDatum)}}</p>
                                 <p class="card-text display-7">Kraj: {{setDatumForm(r.doDatum)}}</p>
                                 <p class="card-text display-7">Broj gostiju: {{r.brojGostiju}}</p>
-                                <p class="card-text display-7">Slobodnih mesta: {{r.smestaj.maxGosti}}</p>
+                                <!-- <p class="card-text display-7">Slobodnih mesta: {{r.smestaj.maxGosti}}</p> -->
                                 <p class="card-text display-7">Preostalo vreme: {{calcTime(r)}}</p>
                                 <p class="card-text display-7">Status: {{r.status}}</p>
                             </div>
@@ -27,7 +27,7 @@
                         <div class="card-footer bg-white text-white text-center " style="height:100px;">
                             <button v-show="r.status === 'PENDING'" @click="reject(r, index)" style="margin-top:20px; margin-right:10px;" class="btn btn-warning">Odbij</button>
                             <button v-show="r.status === 'PENDING'" @click="approve(r, index)" style="margin-top:20px; margin-left:10px;" class="btn btn-primary">Odobri</button>
-                            <button v-show="r.status === 'REZERVISANA'" @click="cancel(r, index)" style="margin-top:20px; margin-left:10px;" class="btn btn-primary">Otkazi</button>
+                            <button v-show="r.status === 'REZERVISANA'" @click="cancelRezervaciju(r, index)" style="margin-top:20px; margin-left:10px;" class="btn btn-primary">Otkazi</button>
                             <div style="margin:10px;" v-if="messages[index].successMessage" v-html="messages[index].successMessage" class="alert alert-success">
                             
                             </div>

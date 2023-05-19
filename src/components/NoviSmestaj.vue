@@ -98,7 +98,7 @@
                                         <td>
                                             <ul>
                                                 <li @click="slctPogodnost(index)" :class="{backgroundColor: 'mycolor'}" v-for="(tempPogodnost, index) in svePogodnosti" :key="index">
-                                                    {{tempPogodnost.naziv}} 
+                                                    {{tempPogodnost}} 
                                                 </li>
                                             </ul>
                                         </td>
@@ -117,7 +117,7 @@
                                         <td>
                                             <ul>
                                                 <li @click="slctPogodnost2(index)" :class="{backgroundColor: 'mycolor'}" v-for="(tempPogodnost, index) in smestaj.pogodnosti" :key="index">
-                                                    {{tempPogodnost.naziv}} 
+                                                    {{tempPogodnost}} 
                                                 </li>
                                             </ul>
                                         </td>
@@ -349,7 +349,7 @@ export default {
         addPogodnost(){
             if(this.selectedPogodnost != -1){
                 let filteredList = this.smestaj.pogodnosti.filter((tmp) => {
-                    return tmp.naziv == this.svePogodnosti[this.selectedPogodnost].naziv;
+                    return tmp == this.svePogodnosti[this.selectedPogodnost];
                 });
                 console.log("FILTERED LIST: " + JSON.stringify(filteredList));
                 if(filteredList.length == 0){
@@ -607,6 +607,7 @@ export default {
             console.log("ADRESA: " + JSON.stringify(this.smestaj.adresa));
             console.log("NEDOSTUPNI[CREATE method]: " + JSON.stringify(this.smestaj.nedostupni))
             try{
+                console.log(JSON.stringify(this.smestaj));
                 dataService.createNewSmestaj(this.smestaj).then(response => {
                     console.log("KREIRAN SMESTAJ");
                     if(response.status === 200){

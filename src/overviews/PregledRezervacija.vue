@@ -7,7 +7,7 @@
                     <!-- class="card" v-for="(t, index) in listaRezervacija" :key="index" -->
                     <div class="card">
                         <div class="text-center bg-success" style="height:350px;">
-                            <img class="card-img-top" style="height:95%;width:95%; margin-top:2.5%;" :src="getAnImage(r.smestaj)">
+                            <!-- <img class="card-img-top" style="height:95%;width:95%; margin-top:2.5%;" :src="getAnImage(r.smestaj)"> -->
                         </div>
                         
                         <div class="card-body text-white bg-success">
@@ -18,7 +18,7 @@
                                 <p class="card-text display-7">Pocetak: {{setDatumForm(r.odDatum)}}</p>
                                 <p class="card-text display-7">Kraj: {{setDatumForm(r.doDatum)}}</p>
                                 <p class="card-text display-7">Broj gostiju: {{r.brojGostiju}}</p>
-                                <p class="card-text display-7">Slobodnih mesta: {{r.smestaj.maxGosti}}</p>
+                                <!-- <p class="card-text display-7">Slobodnih mesta: {{r.smestaj.maxGosti}}</p> -->
                                 <p class="card-text display-7">Preostalo vreme: {{calcTime(r)}}</p>
                                 <p class="card-text display-7">Status: {{r.status}}</p>
                             </div>
@@ -135,7 +135,7 @@ export default {
         },
         getRezervacije(){
             return dataService.getRezervacijeByKorisnik(this.userId).then(response => {
-                
+                console.log(JSON.stringify(response.data));
                 this.listaRezervacija = response.data;
                 console.log("userId:"+this.userId)
                 console.log("Dobavljena lista rezervacija, size="+this.listaRezervacija.length);

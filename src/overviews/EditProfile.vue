@@ -23,6 +23,72 @@
                         </tr>
                     </table>
 				</fieldset>
+                <fieldset v-if="userObj.role=='GUEST'" class="form-group">
+                    <table style="font-size:20px;">
+                        <thead>
+                            <th>
+                                OBAVESTENJA
+                            </th>
+                        </thead>
+                        <tr>
+                            <td>
+                                <label><font color="#1E90FF">OBRADJENA REZERVACIJA:</font></label>
+                            </td>
+                            <td>
+                                <input type="checkbox" v-model="profile.processedNotification"/>
+                            </td>
+                        </tr>
+                    </table>
+				</fieldset>
+                <fieldset v-if="userObj.role=='HOST'" class="form-group">
+                    <table style="font-size:20px;">
+                        <thead>
+                            <th>
+                                OBAVESTENJA
+                            </th>
+                        </thead>
+                        <tr>
+                            <td>
+                                <label><font color="#1E90FF">NOVA REZERVACIJA:</font></label>
+                            </td>
+                            <td>
+                                <input type="checkbox" v-model="profile.newNotification"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <label><font color="#1E90FF">OTKAZANA REZERVACIJA:</font></label>
+                            </td>
+                            <td>
+                                <input type="checkbox" v-model="profile.canceledNotification"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <label><font color="#1E90FF">OCENJEN HOST:</font></label>
+                            </td>
+                            <td>
+                                <input type="checkbox" v-model="profile.ratedHostNotification"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <label><font color="#1E90FF">OCENJEN SMESTAJ:</font></label>
+                            </td>
+                            <td>
+                                <input type="checkbox" v-model="profile.ratedAccomodationNotification"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <label><font color="#1E90FF">STATUS ISTAKNUTOG:</font></label>
+                            </td>
+                            <td>
+                                <input type="checkbox" v-model="profile.statusNotification"/>
+                            </td>
+                        </tr>
+                    </table>
+				</fieldset>
                 <div v-if='messages.errorUsername' id='testError' class="alert alert-danger" v-html="messages.errorUsername"></div>
                 <fieldset class="form-group">
                     <label><font color="#1E90FF">Korisnicko ime</font></label>

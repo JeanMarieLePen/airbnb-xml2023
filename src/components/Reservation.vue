@@ -48,7 +48,7 @@
                     </td>
                     <td>
                         <ul style="width:100%; min-height:50px; max-height: 100px; overflow: auto">
-                            <li v-for="(tempPogodnost, index) in smestaj.pogodnosti" v-bind:key="index">{{tempPogodnost.naziv}}</li>
+                            <li v-for="(tempPogodnost, index) in smestaj.pogodnosti" v-bind:key="index">{{tempPogodnost}}</li>
                         </ul>
                     </td>
                 </tr>
