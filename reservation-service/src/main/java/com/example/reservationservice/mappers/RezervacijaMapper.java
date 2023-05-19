@@ -13,11 +13,11 @@ public class RezervacijaMapper {
 
 
 	
-	public Rezervacija fromDTO(RezervacijaDTO dto) {
+	public Rezervacija fromDTO(RezervacijaDTO dto, String smestajId, String userId) {
 		Rezervacija r = new Rezervacija();
 		//r.setId(dto.getId());
-		r.setGost(dto.getGost());
-		r.setSmestaj(dto.getSmestaj());
+		r.setGost(userId);
+		r.setSmestaj(smestajId);
 		r.setBrojGostiju(dto.getBrojGostiju());
 		r.setDoDatum(dto.getDoDatum());
 		r.setOdDatum(dto.getOdDatum());
@@ -31,6 +31,8 @@ public class RezervacijaMapper {
 		dto.setDoDatum(r.getDoDatum());
 		dto.setOdDatum(r.getOdDatum());
 		dto.setId(r.getId());
+		dto.setGost(r.getGost());
+		dto.setSmestaj(r.getSmestaj());
 		//dto.setSmestaj(smestajMapper.toDTO(r.getSmestaj()));
 		dto.setStatus(r.getStatus());
 		return dto;

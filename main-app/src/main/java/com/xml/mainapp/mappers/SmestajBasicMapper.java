@@ -31,17 +31,7 @@ public class SmestajBasicMapper {
 //	@Autowired
 //	private PogodnostMapper pogodnostMapper;
 	@Autowired
-	private OcenaSmestajMapper ocenaSmestajMapper;
-	@Autowired
-	private HostMapper hMapper;
-	@Autowired
-	private HostRepository hRep;
-	@Autowired
 	private TerminMapper terminMapper;
-	@Autowired
-	private PogodnostRepository pogRep;
-	@Autowired
-	private TerminRepository terRep;
 	
 	public Smestaj fromBasicDTO(SmestajBasicDTO dto) {
 		Smestaj s = new Smestaj();

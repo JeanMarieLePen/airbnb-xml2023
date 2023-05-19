@@ -16,6 +16,7 @@ import org.springframework.web.client.RestTemplate;
 import com.github.cloudyrock.spring.v5.EnableMongock;
 import com.xml.mainapp.repositories.KorisnikRep;
 import com.xml.mainapp.services.GreetingServiceImpl;
+import com.xml.mainapp.services.KorisnikGrpcImpl;
 
 import io.grpc.Server;
 import io.grpc.ServerBuilder;
@@ -44,6 +45,10 @@ public class MainAppApplication {
 	public GreetingServiceImpl greetingService() {
 		return new GreetingServiceImpl();
 	}
+	@Bean
+	public KorisnikGrpcImpl korisnikGrpcImplService() {
+		return new KorisnikGrpcImpl();
+	}
 	
 	@Bean
     CommandLineRunner runner(){
@@ -52,7 +57,8 @@ public class MainAppApplication {
 //    		server.start();
 //    		server.blockUntilShutdown();
         	Server server = ServerBuilder.forPort(this.port())
-     	        .addService(this.greetingService())
+//     	        .addService(this.greetingService())
+     	        .addService(this.korisnikGrpcImplService())
      	        .build();
         	server.start();
     	    System.out.println("gRPC server started, listening on port " + this.port());

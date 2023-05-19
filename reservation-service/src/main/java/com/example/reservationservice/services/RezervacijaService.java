@@ -32,9 +32,13 @@ import com.xml2023.mainapp.KorisnikResponse;
 import com.xml2023.mainapp.SmestajDTO;
 import com.xml2023.mainapp.SmestajGrpcGrpc;
 import com.xml2023.mainapp.SmestajGrpcGrpc.SmestajGrpcBlockingStub;
+import com.xml2023.mainapp.SmestajIdsForHostRequest;
+import com.xml2023.mainapp.SmestajIdsForHostResponse;
 import com.xml2023.mainapp.TerminDTO;
 import com.xml2023.mainapp.getHostRequest;
 import com.xml2023.mainapp.getHostResponse;
+import com.xml2023.mainapp.getListaSmestajaByUserIdRequest;
+import com.xml2023.mainapp.getListaSmestajaByUserIdResponse;
 import com.xml2023.mainapp.getSmestajByIdRequest;
 import com.xml2023.mainapp.getSmestajByIdResponse;
 import com.xml2023.mainapp.rezOtkazanaRequest;
@@ -79,7 +83,7 @@ public class RezervacijaService {
 		}
 		//TODO sta sa cenom?
 		float cena= cenaServ.ukupnaCena(smestaj, r.getOdDatum(), r.getDoDatum());
-		Rezervacija rez = rezMapper.fromDTO(r);
+		Rezervacija rez = rezMapper.fromDTO(r, smestajId, userId);
 
 		//ZAVISNO OD TOGA DA LI JE VLASNIK SMESTAJA ODABRAO DA SE REZERVACIJE MODERIRAJU AUTOMATSKI ILI RUCNO
 		HostBasicDTO host= getHostBasic(smestaj.getVlasnik());		
@@ -132,9 +136,21 @@ public class RezervacijaService {
 	public Collection<RezervacijaDTO> getAllReservationsByHostId(String id) {
 		// TODO Auto-generated method stub
 		Collection<RezervacijaDTO> retList = new ArrayList<RezervacijaDTO>();
-		//posalji grpcZahtev smestaju za preuzimanje svih id smsetaja ovog hosta
-		//iz liste svih rez naci potrebne 
+		ManagedChannel channel = ManagedChannelBuilder.forAddress("localhost", 7977).usePlaintext().build();
+		SmestajGrpcBlockingStub smestajBlockingStub = SmestajGrpcGrpc.newBlockingStub(channel);
+		SmestajIdsForHostRequest rqst = SmestajIdsForHostRequest.newBuilder().setUserId(id).build();
+		SmestajIdsForHostResponse rspns = smestajBlockingStub.getSmestajIdsForHost(rqst);
 		
+		Collection<Rezervacija> rezervacije = this.rezervacijaRep.findAll();
+		if(!rezervacije.isEmpty()) {
+			for(String s : rspns.getSmestajIdsList()) {
+				for(Rezervacija r : rezervacije) {
+					if(r.getSmestaj().equals(s)) {
+						retList.add(rezMapper.toDTO(r));
+					}
+				}
+			}
+		}
 		return retList;
 	}
 	

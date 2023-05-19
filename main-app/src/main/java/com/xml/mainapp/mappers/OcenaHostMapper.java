@@ -1,6 +1,5 @@
 package com.xml.mainapp.mappers;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.xml.mainapp.dtos.user.OcenaHostDTO;
@@ -9,11 +8,6 @@ import com.xml.mainapp.model.users.OcenaHost;
 
 @Component
 public class OcenaHostMapper {
-
-	@Autowired
-	private GuestMapper guestMapper;
-	@Autowired
-	private HostMapper hostMapper;
 	
 	public OcenaHost fromDTO(OcenaHostDTO dto) {
 		OcenaHost o = new OcenaHost();

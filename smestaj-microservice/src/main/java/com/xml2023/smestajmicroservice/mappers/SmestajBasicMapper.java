@@ -48,7 +48,8 @@ public class SmestajBasicMapper {
 		s.setCenovnik(cenovnik);
 		s.setMinGosti(dto.getMinGosti());
 		s.setMaxGosti(dto.getMaxGosti());
-		
+		s.setVlasnik(dto.getVlasnikId().substring(1, dto.getVlasnikId().length() - 1));
+		s.setPogodnosti(dto.getPogodnosti());
 		Collection<Termin> tempTermini = new ArrayList<Termin>();
 		for(TerminDTO tdto : dto.getNedostupni()) {
 			Termin t = terminMapper.fromDTO(tdto);

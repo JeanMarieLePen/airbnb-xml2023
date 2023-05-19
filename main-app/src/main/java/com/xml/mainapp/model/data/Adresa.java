@@ -3,8 +3,6 @@ package com.xml.mainapp.model.data;
 import java.io.Serializable;
 
 import org.hibernate.validator.constraints.Length;
-import org.springframework.data.mongodb.core.mapping.Document;
-
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import javax.persistence.*;

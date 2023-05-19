@@ -12,5 +12,5 @@ import com.xml.mainapp.model.data.StatusRezervacije;
 public interface RezervacijaRep extends MongoRepository<Rezervacija, String>{
 
 	//vrati listu rezervacija koje se odnose na smestaj sa id-om id
-	Optional<Collection<Rezervacija>> findBySmestajIdAndStatus(String id, StatusRezervacije status);
+//	Optional<Collection<Rezervacija>> findBySmestajIdAndStatus(String id, StatusRezervacije status);
 }

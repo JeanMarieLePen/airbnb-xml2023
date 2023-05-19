@@ -1,23 +1,33 @@
 package com.xml2023.smestajmicroservice.services;
 
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
+import java.util.Base64;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.google.protobuf.Timestamp;
+import com.xml2023.mainapp.CenovnikDTO;
 import com.xml2023.mainapp.DeleteSmestajsForHostRequest;
 import com.xml2023.mainapp.DeleteSmestajsForHostResponse;
+import com.xml2023.mainapp.SlikaDTO;
+import com.xml2023.mainapp.SmestajDTO;
 import com.xml2023.mainapp.SmestajExistsRequest;
 import com.xml2023.mainapp.SmestajExistsResponse;
 import com.xml2023.mainapp.SmestajGrpcGrpc.SmestajGrpcImplBase;
 import com.xml2023.mainapp.SmestajIdsForHostRequest;
 import com.xml2023.mainapp.SmestajIdsForHostResponse;
+import com.xml2023.mainapp.TerminDTO;
 import com.xml2023.mainapp.getListaSmestajaByUserIdRequest;
 import com.xml2023.mainapp.getListaSmestajaByUserIdResponse;
 import com.xml2023.mainapp.getSmestajByIdRequest;
 import com.xml2023.mainapp.getSmestajByIdResponse;
+import com.xml2023.smestajmicroservice.model.data.Cenovnik;
 import com.xml2023.smestajmicroservice.model.data.Smestaj;
+import com.xml2023.smestajmicroservice.model.data.Termin;
 import com.xml2023.smestajmicroservice.repositories.SmestajRep;
 
 import io.grpc.stub.StreamObserver;
@@ -53,9 +63,7 @@ public class SmestajExistsServiceImpl extends SmestajGrpcImplBase{
 
 		SmestajIdsForHostResponse.Builder res= SmestajIdsForHostResponse.newBuilder();
 		if(ids.size()>0) {
-			for(int i=0; i<ids.size();i++) {
-				res.setSmestajIds(i, ids.get(i));
-			}
+			res.addAllSmestajIds(ids);
 		}else 	res.setSmestajIds(0, "0");
 
 		responseObserver.onNext(res.build());
@@ -83,7 +91,15 @@ public class SmestajExistsServiceImpl extends SmestajGrpcImplBase{
 	@Override
 	public void getSmestajById(getSmestajByIdRequest request, StreamObserver<getSmestajByIdResponse> responseObserver) {
 		// TODO Auto-generated method stub
-		super.getSmestajById(request, responseObserver);
+		String smestajId = request.getSmestajId();
+		Smestaj s = sRep.findById(smestajId).orElse(null);
+		getSmestajByIdResponse.Builder response = getSmestajByIdResponse.newBuilder();
+		
+		if(s != null) {
+			response.setOdgovor(mapSmestaj(s));
+		}
+		responseObserver.onNext(response.build());
+		responseObserver.onCompleted();
 	}
 
 	@Override
@@ -93,44 +109,53 @@ public class SmestajExistsServiceImpl extends SmestajGrpcImplBase{
 		super.getListaSmestajaByUserId(request, responseObserver);
 	}
 	
+	public SmestajDTO mapSmestaj(Smestaj s) {
+		SmestajDTO.Builder retVal = SmestajDTO.newBuilder();
+		retVal.setId(s.getId());
+		retVal.setVlasnik(s.getVlasnik());
+		retVal.setMinGosti(s.getMinGosti());
+		retVal.setMaxGost(s.getMaxGosti());
+		//cenovnik
+		retVal.setCenovnik(mapCenovnik(s.getCenovnik()));
+		//mapiranje termina
+		for(Termin t : s.getNedostupni()) {
+			retVal.addNedostupni(mapTermin(t));
+		}
+		//pogodnosti
+		for(String str : s.getPogodnosti()) {
+			retVal.addPogodnosti(str);
+		}
+		//slike
+		for(byte[] slika : s.getSlike()) {
+			String tempSlika = Base64.getEncoder().encodeToString(slika);
+			retVal.addSlika(mapSlika(tempSlika));
+		}
+		return retVal.build();
+	}
 	
-	/*
-	 * @Override public void getSmestaj(GetSmestajiForHostRequest request,
-	 * StreamObserver<ListaSmestajaResponse> responseObserver) { // TODO
-	 * Auto-generated method stub String id = request.getUserId();
-	 * ArrayList<Smestaj> lista = new ArrayList<Smestaj>(); lista =
-	 * (ArrayList<Smestaj>) this.sRep.findAllByVlasnikId(id);
-	 * ListaSmestajaResponse.Builder response = ListaSmestajaResponse.newBuilder();
-	 * if(lista!= null && lista.size() > 0) {
-	 * 
-	 * for(int i = 0; i < lista.size(); i++) { SmestajDTO.Builder retVal =
-	 * SmestajDTO.newBuilder(); AdresaDTO.Builder adrRetVal =
-	 * AdresaDTO.newBuilder();
-	 * adrRetVal.setAdresa(lista.get(i).getAdresa().getAdresa());
-	 * adrRetVal.setId(lista.get(i).getAdresa().getId());
-	 * adrRetVal.setLat(lista.get(i).getAdresa().getLat());
-	 * adrRetVal.setLng(lista.get(i).getAdresa().getLng());
-	 * retVal.setAdresa(adrRetVal);
-	 * 
-	 * Cenovnik.Builder cenRetVal = Cenovnik.newBuilder();
-	 * cenRetVal.setCena(lista.get(i).getCenovnik().getCena());
-	 * cenRetVal.setCenaLeto(lista.get(i).getCenovnik().getCenaLeto());
-	 * cenRetVal.setCenaVikend(lista.get(i).getCenovnik().getCenaVikend());
-	 * cenRetVal.setCenaPraznik(lista.get(i).getCenovnik().getCenaPraznik());
-	 * retVal.setCenovnik(cenRetVal);
-	 * 
-	 * Pogodnosti.Builder pogodnosti = Pogodnosti.newBuilder(); for(Pogodnost p :
-	 * lista.get(i).getPogodnosti()) { PogodnostDTO.Builder pdto =
-	 * PogodnostDTO.newBuilder(); pdto.setNaziv(p.getNaziv());
-	 * pdto.setId(p.getId()); pogodnosti.addPogodnosti(pdto); }
-	 * retVal.setPogodnosti(pogodnosti);
-	 * 
-	 * for(byte[] img : lista.get(i).getSlike()) { slika.Builder slk =
-	 * slika.newBuilder(); slk.setSlika(img.toString()); retVal.addSlike(slk); }
-	 * 
-	 * retVal.setMaxGosti(lista.get(i).getMaxGosti());
-	 * retVal.setMinGosti(lista.get(i).getMinGosti());
-	 * 
-	 * response.setSmestajList(i, retVal); } } responseObserver.onCompleted(); }
-	 */
+	public SlikaDTO mapSlika(String tempSlika) {
+		SlikaDTO.Builder retVal = SlikaDTO.newBuilder();
+		retVal.setSlika(tempSlika.toString());
+		return retVal.build();
+	}
+	public CenovnikDTO mapCenovnik(Cenovnik c) {
+		CenovnikDTO.Builder retVal = CenovnikDTO.newBuilder();
+		retVal.setCena(c.getCena());
+		retVal.setCenaLeto(c.getCenaLeto());
+		retVal.setCenaVikend(c.getCenaVikend());
+		retVal.setCenaPraznik(c.getCenaPraznik());
+		retVal.setPoSmestaju(c.isPoSmestaju());
+		return retVal.build();
+	}
+	public TerminDTO mapTermin(Termin t) {
+		TerminDTO.Builder retVal = TerminDTO.newBuilder();
+		retVal.setPocetak(convertToTimeStamp(t.getPocetak()));
+		retVal.setKraj(convertToTimeStamp(t.getKraj()));
+		return retVal.build();
+	}
+	
+	public Timestamp convertToTimeStamp(LocalDateTime ldt) {
+		return Timestamp.newBuilder().setSeconds(ldt.toEpochSecond(ZoneOffset.UTC))
+				.setNanos(ldt.getNano()).build();
+	}
 }

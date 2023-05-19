@@ -1,5 +1,6 @@
 package com.xml2023.smestajmicroservice.dtos;
 
+import java.util.ArrayList;
 import java.util.Collection;
 
 public class SmestajDTO {
@@ -14,7 +15,7 @@ public class SmestajDTO {
 	private CenovnikDTO cenovnik;
 	
 	private Collection<TerminDTO> nedostupni;
-	private Collection<OcenaSmestajaDTO> listaOcena;
+	private Collection<OcenaSmestajaDTO> listaOcena = new ArrayList<OcenaSmestajaDTO>();
 
 	public SmestajDTO() {
 		super();
