@@ -183,7 +183,8 @@ export default{
 
             this.idEntiteta = this.$route.params.id;
             await dataService.getSmestaj(this.idEntiteta).then(response => {
-                console.log("DOBAVLJEN SMESTAJ");
+                console.log("DOBAVLJEN SMESTAJ: " + JSON.stringify(response.data));
+                console.log("BROJ NEDOSTUPNIH: " + response.data.nedostupni.length);
                 this.smestaj = response.data;
                 let tempSlike = [];
                 for(let i = 0; i < this.smestaj.slike.length; i++){
@@ -204,6 +205,7 @@ export default{
 
                 let nedostupniTermini = [...this.smestaj.nedostupni]
                 for(let i = 0; i < nedostupniTermini.length; i++){
+                    console.log("UCITAVANJE BR: " + i);
                     this.ucitavanjeTermina(nedostupniTermini[i].pocetak, nedostupniTermini[i].kraj);
                 }
                 
@@ -258,6 +260,8 @@ export default{
             console.log("UCITAVANJE TERMINA");
             let datum1 = new Date(terminPocetak);
             let datum2 = new Date(terminKraj);
+            console.log("POCETAK: " + JSON.stringify(datum1));
+            console.log("KRAJ: " + JSON.stringify(datum2));
             const diffTime = Math.abs(datum2 - datum1);
             const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)); 
             let brDana = diffDays;

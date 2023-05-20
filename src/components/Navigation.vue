@@ -49,6 +49,9 @@
 
 <script>
 import axios from 'axios'
+import SockJS from "sockjs-client";
+import Stomp from "webstomp-client";
+
 
 export default {
 
@@ -57,6 +60,8 @@ export default {
         return{
             loggedIn : localStorage.getItem('xmljwt') ? true : false,
             notifications : false,
+            connected : false,
+            
         }
     },
     mounted(){
@@ -75,6 +80,33 @@ export default {
         }
     },
     methods:{
+        connect(){
+            this.socket = new SockJS("http://localhost:8082/main-app-websockets");
+            this.stompClient = Stomp.over(this.socket);
+            this.stompClient.connect(
+                {},
+                frame => {
+                    this.connected = true;
+                    console.log(frame);
+                    this.stompClient.subscribe("/topic/notifications", tick => {
+                        console.log(tick);
+                        console.log("SADRZAJ ODGOVORA: " + tick.body);
+                    });
+
+                }
+            )
+            
+        },
+        disconnect(){
+            if(this.stompClient){
+                this.stompClient.disconnect();
+            }
+            this.connected = false;
+        },
+        tickleConnection(){
+            this.connected ? this.disconnect : this.connect
+        },
+        
         enableNotifications(){
             this.notifications = !this.notifications;
             if(this.notifications==true){
@@ -83,6 +115,7 @@ export default {
                 this.emitter.emit("notificationOn", false);
             }
             console.log("NOTIFIKACIJE: " + this.notifications);
+            this.connect();
         },
         logOut(){
             if(confirm('Da li ste sigurni da zelite da se odjavite?')){

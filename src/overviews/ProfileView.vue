@@ -186,6 +186,7 @@ import axios from 'axios'
                     dataService.getUser(id).then(response => {
                         // console.log("USER PROFILE: " + JSON.stringify(response.data));
                         this.profile = response.data;
+                        console.log(JSON.stringify(response.data));
                         if(this.profile.slike){
                             if(this.userObj.role === 'HOST'){
                                 console.log("BROJ SMESTAJA: " + this.profile.smestajList.length);

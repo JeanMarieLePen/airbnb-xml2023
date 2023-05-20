@@ -13,9 +13,14 @@
 				</fieldset>
                 <fieldset v-if="userObj.role=='HOST'" class="form-group">
                     <table style="font-size:20px;">
-                        <tr>
-                            <td>
-                                <label><font color="#1E90FF">Automatska obrada:</font></label>
+                        <tr style="vertical-align:center;">
+                            <td style="width:300px;">
+                                <!-- <ul>
+                                    <li><label style="margin-right:20px;">Automatska obrada:</label> 
+                                        <input type="checkbox" @change="selectRezAutomatski()" v-model="profile.rezAutomatski"/>
+                                    </li>
+                                </ul> -->
+                                <label>Automatska obrada:</label>
                             </td>
                             <td>
                                 <input type="checkbox" @change="selectRezAutomatski()" v-model="profile.rezAutomatski"/>
@@ -30,12 +35,13 @@
                                 OBAVESTENJA
                             </th>
                         </thead>
-                        <tr>
+                        <tr style="text-align:center">
                             <td>
-                                <label><font color="#1E90FF">OBRADJENA REZERVACIJA:</font></label>
-                            </td>
-                            <td>
-                                <input type="checkbox" v-model="profile.processedNotification"/>
+                                <ul>
+                                    <li><label style="margin-right:20px;">OBRADJENA REZERVACIJA:</label> 
+                                        <input type="checkbox" v-model="profile.obradjenaRezervacijaNotifikacija"/>
+                                    </li>
+                                </ul>
                             </td>
                         </tr>
                     </table>
@@ -49,42 +55,47 @@
                         </thead>
                         <tr>
                             <td>
-                                <label><font color="#1E90FF">NOVA REZERVACIJA:</font></label>
-                            </td>
-                            <td>
-                                <input type="checkbox" v-model="profile.newNotification"/>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <label><font color="#1E90FF">OTKAZANA REZERVACIJA:</font></label>
-                            </td>
-                            <td>
-                                <input type="checkbox" v-model="profile.canceledNotification"/>
+                                <ul>
+                                    <li><label style="margin-right:20px;">NOVA REZERVACIJA:</label> 
+                                        <input type="checkbox" v-model="profile.newNotification"/>
+                                    </li>
+                                </ul>
                             </td>
                         </tr>
                         <tr>
                             <td>
-                                <label><font color="#1E90FF">OCENJEN HOST:</font></label>
-                            </td>
-                            <td>
-                                <input type="checkbox" v-model="profile.ratedHostNotification"/>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <label><font color="#1E90FF">OCENJEN SMESTAJ:</font></label>
-                            </td>
-                            <td>
-                                <input type="checkbox" v-model="profile.ratedAccomodationNotification"/>
+                                <ul>
+                                    <li><label style="margin-right:20px;">OTKAZANA REZERVACIJA:</label> 
+                                        <input type="checkbox" v-model="profile.canceledNotification"/>
+                                    </li>
+                                </ul>
                             </td>
                         </tr>
                         <tr>
                             <td>
-                                <label><font color="#1E90FF">STATUS ISTAKNUTOG:</font></label>
+                                <ul>
+                                    <li><label style="margin-right:20px;">OCENJEN HOST:</label> 
+                                        <input type="checkbox" v-model="profile.ratedHostNotification"/>
+                                    </li>
+                                </ul>
                             </td>
+                        </tr>
+                        <tr>
                             <td>
-                                <input type="checkbox" v-model="profile.statusNotification"/>
+                                <ul>
+                                    <li><label style="margin-right:20px;">OCENJEN SMESTAJ:</label> 
+                                        <input type="checkbox" v-model="profile.ratedAccomodationNotification"/>
+                                    </li>
+                                </ul>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <ul>
+                                    <li><label style="margin-right:20px;">STATUS ISTAKNUTOG:</label> 
+                                        <input type="checkbox" v-model="profile.statusNotification"/>
+                                    </li>
+                                </ul>
                             </td>
                         </tr>
                     </table>
