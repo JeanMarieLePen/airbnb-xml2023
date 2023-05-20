@@ -116,4 +116,17 @@ public interface SmestajDTOOrBuilder extends
    * <code>.com.xml2023.mainapp.CenovnikDTO cenovnik = 8;</code>
    */
   com.xml2023.mainapp.CenovnikDTOOrBuilder getCenovnikOrBuilder();
+
+  /**
+   * <code>.com.xml2023.mainapp.AdresaDTO adresa = 9;</code>
+   */
+  boolean hasAdresa();
+  /**
+   * <code>.com.xml2023.mainapp.AdresaDTO adresa = 9;</code>
+   */
+  com.xml2023.mainapp.AdresaDTO getAdresa();
+  /**
+   * <code>.com.xml2023.mainapp.AdresaDTO adresa = 9;</code>
+   */
+  com.xml2023.mainapp.AdresaDTOOrBuilder getAdresaOrBuilder();
 }

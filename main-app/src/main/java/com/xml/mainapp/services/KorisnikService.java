@@ -1,5 +1,9 @@
 package com.xml.mainapp.services;
 
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZoneOffset;
 import java.util.ArrayList;
 import java.util.Base64;
 import java.util.Collection;
@@ -14,8 +18,11 @@ import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.google.protobuf.Timestamp;
+import com.xml.mainapp.dtos.AdresaDTO;
 import com.xml.mainapp.dtos.KorisnikDTO;
 import com.xml.mainapp.dtos.UpdateProfileDTO;
+import com.xml.mainapp.dtos.data.CenovnikDTO;
 import com.xml.mainapp.dtos.data.OcenaSmestajaDTO;
 import com.xml.mainapp.dtos.data.RezervacijaDTO;
 import com.xml.mainapp.dtos.data.SmestajDTO;
@@ -31,6 +38,7 @@ import com.xml.mainapp.model.data.OcenaSmestaj;
 import com.xml.mainapp.model.data.Rezervacija;
 import com.xml.mainapp.model.data.Smestaj;
 import com.xml.mainapp.model.data.StatusRezervacije;
+import com.xml.mainapp.model.data.Termin;
 import com.xml.mainapp.model.users.Guest;
 import com.xml.mainapp.model.users.Host;
 import com.xml.mainapp.model.users.Korisnik;
@@ -46,12 +54,14 @@ import com.xml2023.mainapp.DeleteSmestajsForHostRequest;
 import com.xml2023.mainapp.DeleteSmestajsForHostResponse;
 import com.xml2023.mainapp.RezervacijaGrpcGrpc;
 import com.xml2023.mainapp.RezervacijaGrpcGrpc.RezervacijaGrpcBlockingStub;
+import com.xml2023.mainapp.SlikaDTO;
 import com.xml2023.mainapp.SmestajGrpcGrpc;
 import com.xml2023.mainapp.getListaRezervacijaByUserIdRequest;
 import com.xml2023.mainapp.getListaRezervacijaByUserIdResponse;
 import com.xml2023.mainapp.getListaSmestajaByUserIdRequest;
 import com.xml2023.mainapp.getListaSmestajaByUserIdResponse;
 import com.xml2023.mainapp.SmestajGrpcGrpc.SmestajGrpcBlockingStub;
+import com.xml2023.mainapp.TerminDTO;
 
 import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
@@ -91,14 +101,76 @@ public class KorisnikService {
 			return null;
 		}else {
 			KorisnikDTO retVal = this.korisnikMapper.toDTO(k);
+			//mora da se premapira
 			if(k.getTipKorisnika().equals(TipKorisnika.HOST)) {
 				Host h = this.hostRep.findById(id).orElse(null);
 				retVal.setIstaknuti(h.isIstaknuti());
 				retVal.setRezAutomatski(h.isRezAutomatski());
-				Collection<com.xml2023.mainapp.SmestajDTO> smestajList = getAllSmestajForHost(h.getId());		
+				Collection<com.xml2023.mainapp.SmestajDTO> smestajList = getAllSmestajForHost(h.getId());
+				
+				Collection<SmestajDTO> tempList = new ArrayList<SmestajDTO>();
+				if(!smestajList.isEmpty()) {
+					for(com.xml2023.mainapp.SmestajDTO sdto : smestajList) {
+						tempList.add(mapToDTO(sdto));
+					}
+				}
+				retVal.setSmestajList(tempList);
 			}	
-		return retVal;
+			return retVal;
 		}
+	}
+
+	private SmestajDTO mapToDTO(com.xml2023.mainapp.SmestajDTO sdto) {
+		// TODO Auto-generated method stub
+		SmestajDTO retVal = new SmestajDTO();
+		AdresaDTO adr = new AdresaDTO();
+		adr.setAdresa(sdto.getAdresa().getAdresa());
+		adr.setLat(sdto.getAdresa().getLat());
+		adr.setLng(sdto.getAdresa().getLng());
+		retVal.setAdresa(adr);
+		
+		CenovnikDTO cen = new CenovnikDTO();
+		cen.setCena(sdto.getCenovnik().getCena());
+		cen.setCenaLeto(sdto.getCenovnik().getCenaLeto());
+		cen.setCenaPraznik(sdto.getCenovnik().getCenaPraznik());
+		cen.setCenaVikend(sdto.getCenovnik().getCenaVikend());
+		cen.setPoSmestaju(sdto.getCenovnik().getPoSmestaju());
+		retVal.setCenovnik(cen);
+		
+		retVal.setId(sdto.getId());
+		retVal.setMaxGosti(sdto.getMaxGost());
+		retVal.setMinGosti(sdto.getMinGosti());
+		
+		Collection<String> slike = new ArrayList<String>();
+		for(SlikaDTO s : sdto.getSlikaList()) {
+			slike.add(s.getSlika());
+		}
+		retVal.setSlike(slike);
+		Collection<String> pogodnosti = new ArrayList<String>();
+		for(String p : sdto.getPogodnostiList()) {
+			pogodnosti.add(p);
+		}
+		retVal.setPogodnosti(pogodnosti);
+		
+		Collection<com.xml.mainapp.dtos.data.TerminDTO> nedostupni = new ArrayList<com.xml.mainapp.dtos.data.TerminDTO>();
+		for(TerminDTO t : sdto.getNedostupniList()) {
+			com.xml.mainapp.dtos.data.TerminDTO tt = new com.xml.mainapp.dtos.data.TerminDTO();
+			tt.setPocetak(convertFromTimeStamp(t.getPocetak()));
+			tt.setKraj(convertFromTimeStamp(t.getKraj()));
+			nedostupni.add(tt);
+		}
+		retVal.setNedostupni(nedostupni);
+		
+		retVal.setVlasnikId(sdto.getVlasnik());
+		return retVal;
+	}
+	
+	public Timestamp convertToTimeStamp(LocalDateTime ldt) {
+		return Timestamp.newBuilder().setSeconds(ldt.toEpochSecond(ZoneOffset.UTC))
+				.setNanos(ldt.getNano()).build();
+	}
+	public LocalDateTime convertFromTimeStamp(Timestamp t) {
+		return Instant.ofEpochSecond(t.getSeconds(),t.getNanos()).atZone(ZoneId.of("Europe/Belgrade")).toLocalDateTime();
 	}
 
 	public HostDTO findHostById(String id) {

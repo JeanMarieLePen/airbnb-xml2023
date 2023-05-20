@@ -71,6 +71,49 @@ public class HostMapper {
 		
 		return h;
 	}
+	public HostDTO toDTO2(Host h, Collection<com.xml.mainapp.dtos.data.SmestajDTO> smestajList) {
+		HostDTO dto = new HostDTO();
+		dto.setAdresa(aMapper.toDTO(h.getAdresa()));
+		dto.setEmail(h.getEmail());
+		dto.setIme(h.getIme());
+		dto.setPrezime(h.getPrezime());
+		dto.setKorIme(h.getKorIme());
+		dto.setId(h.getId());
+		dto.setLozinka(h.getLozinka());
+		dto.setTipKorisnika(h.getTipKorisnika());
+		
+		dto.setIstaknuti(h.isIstaknuti());
+		dto.setRezAutomatski(h.isRezAutomatski());
+		
+		if(h.getSlike() != null) {
+			Collection<String> tempSlike = new ArrayList<String>();
+			for(byte[] s : h.getSlike()) {
+				String tempSlika = Base64.getEncoder().encodeToString(s);
+				tempSlike.add(tempSlika);
+			}
+			dto.setSlike(tempSlike);
+		}
+				
+		dto.setSmestajList(smestajList);
+		
+		/*
+		 * if(h.getSmestajList() != null) { for(Smestaj tmp : h.getSmestajList()) {
+		 * smestajList.add(smestajMapper.toDTO(tmp)); } }
+		 * dto.setSmestajList(smestajList);
+		 */
+		
+		
+		//ocene hosta, kopirati ako zatreba negde
+		/*
+		 * Collection<OcenaHostDTO> tempOceneHost = new ArrayList<OcenaHostDTO>();
+		 * if(h.getOcene()!=null) { for(OcenaHost o: h.getOcene()) {
+		 * tempOceneHost.add(ohMapper.toDTO(o)); } }
+		 *dto.setOcene(tempOceneHost);
+		 **/
+		dto.setOcene(new ArrayList<OcenaHostDTO>());
+		dto.setProsecnaOcena(0);
+		return dto;
+	}
 	
 	public HostDTO toDTO(Host h, Collection<SmestajDTO> smestajList) {
 		HostDTO dto = new HostDTO();
@@ -95,7 +138,7 @@ public class HostMapper {
 			dto.setSlike(tempSlike);
 		}
 				
-		dto.setSmestajList(smestajList);
+//		dto.setSmestajList(smestajList);
 		
 		/*
 		 * if(h.getSmestajList() != null) { for(Smestaj tmp : h.getSmestajList()) {

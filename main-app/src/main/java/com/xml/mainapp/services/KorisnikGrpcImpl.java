@@ -3,6 +3,7 @@ package com.xml.mainapp.services;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.xml.mainapp.model.users.Guest;
 import com.xml.mainapp.model.users.Host;
 import com.xml.mainapp.repositories.KorisnikRep;
 import com.xml2023.mainapp.HostBasicDTO;
@@ -42,7 +43,18 @@ public class KorisnikGrpcImpl extends KorisnikGrpcImplBase{
 	@Override
 	public void rezOtkazana(rezOtkazanaRequest request, StreamObserver<rezOtkazanaResponse> responseObserver) {
 		// TODO Auto-generated method stub
-		super.rezOtkazana(request, responseObserver);
+		String id = request.getGuestId();
+		Guest g = (Guest) this.korRep.findById(id).orElse(null);
+		boolean penal = false;
+		if(g != null) {
+			g.setBrojOtkazivanja(g.getBrojOtkazivanja() + 1);
+			penal = true;
+		}
+		korRep.save(g);
+		rezOtkazanaResponse.Builder response = rezOtkazanaResponse.newBuilder();
+		response.setPenalDodat(penal);
+		responseObserver.onNext(response.build());
+		responseObserver.onCompleted();
 	}
 	
 

@@ -3,11 +3,9 @@ package com.xml2023.smestajmicroservice.model.data;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
-import org.springframework.data.mongodb.core.mapping.DBRef;
-import org.springframework.data.mongodb.core.mapping.Document;
 
 import javax.persistence.*;
-@Document("termini_db")
+
 public class Termin implements Serializable{
 
 	/**
@@ -18,15 +16,8 @@ public class Termin implements Serializable{
 	@Id
 	private String id;
 	
-	@Version
-	@Column(columnDefinition = "integer DEFAULT 0", nullable = false)
-	private Integer version;
-	
 	private LocalDateTime pocetak;
 	private LocalDateTime kraj;
-	
-	@DBRef
-	private Smestaj smestaj;
 	
 	public Termin() {
 		super();
@@ -46,14 +37,6 @@ public class Termin implements Serializable{
 		this.id = id;
 	}
 
-	public Integer getVersion() {
-		return version;
-	}
-
-	public void setVersion(Integer version) {
-		this.version = version;
-	}
-
 	public LocalDateTime getPocetak() {
 		return pocetak;
 	}
@@ -69,15 +52,6 @@ public class Termin implements Serializable{
 	public void setKraj(LocalDateTime kraj) {
 		this.kraj = kraj;
 	}
-
-	public Smestaj getSmestaj() {
-		return smestaj;
-	}
-
-	public void setSmestaj(Smestaj smestaj) {
-		this.smestaj = smestaj;
-	}
-	
 	// komparatori//////////////////////////////////////////////////////////////////////////////////////
 		public boolean zavrsen() {
 			return kraj.isBefore(LocalDateTime.now());

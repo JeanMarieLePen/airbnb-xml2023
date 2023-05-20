@@ -187,6 +187,70 @@ public final class SmestajGrpcGrpc {
      return getGetListaSmestajaByUserIdMethod;
   }
 
+  private static volatile io.grpc.MethodDescriptor<com.xml2023.mainapp.TerminZauzmiRequest,
+      com.xml2023.mainapp.TerminZauzmiResponse> getZauzmiTerminMethod;
+
+  @io.grpc.stub.annotations.RpcMethod(
+      fullMethodName = SERVICE_NAME + '/' + "zauzmiTermin",
+      requestType = com.xml2023.mainapp.TerminZauzmiRequest.class,
+      responseType = com.xml2023.mainapp.TerminZauzmiResponse.class,
+      methodType = io.grpc.MethodDescriptor.MethodType.UNARY)
+  public static io.grpc.MethodDescriptor<com.xml2023.mainapp.TerminZauzmiRequest,
+      com.xml2023.mainapp.TerminZauzmiResponse> getZauzmiTerminMethod() {
+    io.grpc.MethodDescriptor<com.xml2023.mainapp.TerminZauzmiRequest, com.xml2023.mainapp.TerminZauzmiResponse> getZauzmiTerminMethod;
+    if ((getZauzmiTerminMethod = SmestajGrpcGrpc.getZauzmiTerminMethod) == null) {
+      synchronized (SmestajGrpcGrpc.class) {
+        if ((getZauzmiTerminMethod = SmestajGrpcGrpc.getZauzmiTerminMethod) == null) {
+          SmestajGrpcGrpc.getZauzmiTerminMethod = getZauzmiTerminMethod = 
+              io.grpc.MethodDescriptor.<com.xml2023.mainapp.TerminZauzmiRequest, com.xml2023.mainapp.TerminZauzmiResponse>newBuilder()
+              .setType(io.grpc.MethodDescriptor.MethodType.UNARY)
+              .setFullMethodName(generateFullMethodName(
+                  "com.xml2023.mainapp.SmestajGrpc", "zauzmiTermin"))
+              .setSampledToLocalTracing(true)
+              .setRequestMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(
+                  com.xml2023.mainapp.TerminZauzmiRequest.getDefaultInstance()))
+              .setResponseMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(
+                  com.xml2023.mainapp.TerminZauzmiResponse.getDefaultInstance()))
+                  .setSchemaDescriptor(new SmestajGrpcMethodDescriptorSupplier("zauzmiTermin"))
+                  .build();
+          }
+        }
+     }
+     return getZauzmiTerminMethod;
+  }
+
+  private static volatile io.grpc.MethodDescriptor<com.xml2023.mainapp.TerminOslobodiRequest,
+      com.xml2023.mainapp.TerminOslobodiResponse> getOslobodiTerminMethod;
+
+  @io.grpc.stub.annotations.RpcMethod(
+      fullMethodName = SERVICE_NAME + '/' + "oslobodiTermin",
+      requestType = com.xml2023.mainapp.TerminOslobodiRequest.class,
+      responseType = com.xml2023.mainapp.TerminOslobodiResponse.class,
+      methodType = io.grpc.MethodDescriptor.MethodType.UNARY)
+  public static io.grpc.MethodDescriptor<com.xml2023.mainapp.TerminOslobodiRequest,
+      com.xml2023.mainapp.TerminOslobodiResponse> getOslobodiTerminMethod() {
+    io.grpc.MethodDescriptor<com.xml2023.mainapp.TerminOslobodiRequest, com.xml2023.mainapp.TerminOslobodiResponse> getOslobodiTerminMethod;
+    if ((getOslobodiTerminMethod = SmestajGrpcGrpc.getOslobodiTerminMethod) == null) {
+      synchronized (SmestajGrpcGrpc.class) {
+        if ((getOslobodiTerminMethod = SmestajGrpcGrpc.getOslobodiTerminMethod) == null) {
+          SmestajGrpcGrpc.getOslobodiTerminMethod = getOslobodiTerminMethod = 
+              io.grpc.MethodDescriptor.<com.xml2023.mainapp.TerminOslobodiRequest, com.xml2023.mainapp.TerminOslobodiResponse>newBuilder()
+              .setType(io.grpc.MethodDescriptor.MethodType.UNARY)
+              .setFullMethodName(generateFullMethodName(
+                  "com.xml2023.mainapp.SmestajGrpc", "oslobodiTermin"))
+              .setSampledToLocalTracing(true)
+              .setRequestMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(
+                  com.xml2023.mainapp.TerminOslobodiRequest.getDefaultInstance()))
+              .setResponseMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(
+                  com.xml2023.mainapp.TerminOslobodiResponse.getDefaultInstance()))
+                  .setSchemaDescriptor(new SmestajGrpcMethodDescriptorSupplier("oslobodiTermin"))
+                  .build();
+          }
+        }
+     }
+     return getOslobodiTerminMethod;
+  }
+
   /**
    * Creates a new async stub that supports all call types for the service
    */
@@ -249,6 +313,20 @@ public final class SmestajGrpcGrpc {
       asyncUnimplementedUnaryCall(getGetListaSmestajaByUserIdMethod(), responseObserver);
     }
 
+    /**
+     */
+    public void zauzmiTermin(com.xml2023.mainapp.TerminZauzmiRequest request,
+        io.grpc.stub.StreamObserver<com.xml2023.mainapp.TerminZauzmiResponse> responseObserver) {
+      asyncUnimplementedUnaryCall(getZauzmiTerminMethod(), responseObserver);
+    }
+
+    /**
+     */
+    public void oslobodiTermin(com.xml2023.mainapp.TerminOslobodiRequest request,
+        io.grpc.stub.StreamObserver<com.xml2023.mainapp.TerminOslobodiResponse> responseObserver) {
+      asyncUnimplementedUnaryCall(getOslobodiTerminMethod(), responseObserver);
+    }
+
     @java.lang.Override public final io.grpc.ServerServiceDefinition bindService() {
       return io.grpc.ServerServiceDefinition.builder(getServiceDescriptor())
           .addMethod(
@@ -286,6 +364,20 @@ public final class SmestajGrpcGrpc {
                 com.xml2023.mainapp.getListaSmestajaByUserIdRequest,
                 com.xml2023.mainapp.getListaSmestajaByUserIdResponse>(
                   this, METHODID_GET_LISTA_SMESTAJA_BY_USER_ID)))
+          .addMethod(
+            getZauzmiTerminMethod(),
+            asyncUnaryCall(
+              new MethodHandlers<
+                com.xml2023.mainapp.TerminZauzmiRequest,
+                com.xml2023.mainapp.TerminZauzmiResponse>(
+                  this, METHODID_ZAUZMI_TERMIN)))
+          .addMethod(
+            getOslobodiTerminMethod(),
+            asyncUnaryCall(
+              new MethodHandlers<
+                com.xml2023.mainapp.TerminOslobodiRequest,
+                com.xml2023.mainapp.TerminOslobodiResponse>(
+                  this, METHODID_OSLOBODI_TERMIN)))
           .build();
     }
   }
@@ -347,6 +439,22 @@ public final class SmestajGrpcGrpc {
       asyncUnaryCall(
           getChannel().newCall(getGetListaSmestajaByUserIdMethod(), getCallOptions()), request, responseObserver);
     }
+
+    /**
+     */
+    public void zauzmiTermin(com.xml2023.mainapp.TerminZauzmiRequest request,
+        io.grpc.stub.StreamObserver<com.xml2023.mainapp.TerminZauzmiResponse> responseObserver) {
+      asyncUnaryCall(
+          getChannel().newCall(getZauzmiTerminMethod(), getCallOptions()), request, responseObserver);
+    }
+
+    /**
+     */
+    public void oslobodiTermin(com.xml2023.mainapp.TerminOslobodiRequest request,
+        io.grpc.stub.StreamObserver<com.xml2023.mainapp.TerminOslobodiResponse> responseObserver) {
+      asyncUnaryCall(
+          getChannel().newCall(getOslobodiTerminMethod(), getCallOptions()), request, responseObserver);
+    }
   }
 
   /**
@@ -400,6 +508,20 @@ public final class SmestajGrpcGrpc {
     public com.xml2023.mainapp.getListaSmestajaByUserIdResponse getListaSmestajaByUserId(com.xml2023.mainapp.getListaSmestajaByUserIdRequest request) {
       return blockingUnaryCall(
           getChannel(), getGetListaSmestajaByUserIdMethod(), getCallOptions(), request);
+    }
+
+    /**
+     */
+    public com.xml2023.mainapp.TerminZauzmiResponse zauzmiTermin(com.xml2023.mainapp.TerminZauzmiRequest request) {
+      return blockingUnaryCall(
+          getChannel(), getZauzmiTerminMethod(), getCallOptions(), request);
+    }
+
+    /**
+     */
+    public com.xml2023.mainapp.TerminOslobodiResponse oslobodiTermin(com.xml2023.mainapp.TerminOslobodiRequest request) {
+      return blockingUnaryCall(
+          getChannel(), getOslobodiTerminMethod(), getCallOptions(), request);
     }
   }
 
@@ -460,6 +582,22 @@ public final class SmestajGrpcGrpc {
       return futureUnaryCall(
           getChannel().newCall(getGetListaSmestajaByUserIdMethod(), getCallOptions()), request);
     }
+
+    /**
+     */
+    public com.google.common.util.concurrent.ListenableFuture<com.xml2023.mainapp.TerminZauzmiResponse> zauzmiTermin(
+        com.xml2023.mainapp.TerminZauzmiRequest request) {
+      return futureUnaryCall(
+          getChannel().newCall(getZauzmiTerminMethod(), getCallOptions()), request);
+    }
+
+    /**
+     */
+    public com.google.common.util.concurrent.ListenableFuture<com.xml2023.mainapp.TerminOslobodiResponse> oslobodiTermin(
+        com.xml2023.mainapp.TerminOslobodiRequest request) {
+      return futureUnaryCall(
+          getChannel().newCall(getOslobodiTerminMethod(), getCallOptions()), request);
+    }
   }
 
   private static final int METHODID_EXISTS = 0;
@@ -467,6 +605,8 @@ public final class SmestajGrpcGrpc {
   private static final int METHODID_DEKETE_SNESTAJS_FOR_HOST = 2;
   private static final int METHODID_GET_SMESTAJ_BY_ID = 3;
   private static final int METHODID_GET_LISTA_SMESTAJA_BY_USER_ID = 4;
+  private static final int METHODID_ZAUZMI_TERMIN = 5;
+  private static final int METHODID_OSLOBODI_TERMIN = 6;
 
   private static final class MethodHandlers<Req, Resp> implements
       io.grpc.stub.ServerCalls.UnaryMethod<Req, Resp>,
@@ -504,6 +644,14 @@ public final class SmestajGrpcGrpc {
         case METHODID_GET_LISTA_SMESTAJA_BY_USER_ID:
           serviceImpl.getListaSmestajaByUserId((com.xml2023.mainapp.getListaSmestajaByUserIdRequest) request,
               (io.grpc.stub.StreamObserver<com.xml2023.mainapp.getListaSmestajaByUserIdResponse>) responseObserver);
+          break;
+        case METHODID_ZAUZMI_TERMIN:
+          serviceImpl.zauzmiTermin((com.xml2023.mainapp.TerminZauzmiRequest) request,
+              (io.grpc.stub.StreamObserver<com.xml2023.mainapp.TerminZauzmiResponse>) responseObserver);
+          break;
+        case METHODID_OSLOBODI_TERMIN:
+          serviceImpl.oslobodiTermin((com.xml2023.mainapp.TerminOslobodiRequest) request,
+              (io.grpc.stub.StreamObserver<com.xml2023.mainapp.TerminOslobodiResponse>) responseObserver);
           break;
         default:
           throw new AssertionError();
@@ -571,6 +719,8 @@ public final class SmestajGrpcGrpc {
               .addMethod(getDeketeSnestajsForHostMethod())
               .addMethod(getGetSmestajByIdMethod())
               .addMethod(getGetListaSmestajaByUserIdMethod())
+              .addMethod(getZauzmiTerminMethod())
+              .addMethod(getOslobodiTerminMethod())
               .build();
         }
       }

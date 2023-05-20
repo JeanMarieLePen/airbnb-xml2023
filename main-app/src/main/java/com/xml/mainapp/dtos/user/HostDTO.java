@@ -4,6 +4,7 @@ package com.xml.mainapp.dtos.user;
 import java.util.Collection;
 
 import com.xml.mainapp.dtos.KorisnikDTO;
+import com.xml.mainapp.dtos.data.SmestajDTO;
 
 
 public class HostDTO extends KorisnikDTO{
@@ -14,7 +15,8 @@ public class HostDTO extends KorisnikDTO{
 
 	private boolean istaknuti;
 	
-	private Collection<com.xml2023.mainapp.SmestajDTO> smestajList;
+//	private Collection<com.xml2023.mainapp.SmestajDTO> smestajList;
+	private Collection<SmestajDTO> smestajList;
 	private Collection<OcenaHostDTO> ocene;
 	private boolean rezAutomatski;
 	private int prosecnaOcena;
@@ -24,6 +26,17 @@ public class HostDTO extends KorisnikDTO{
 		super();
 	}
 	
+	
+	public Collection<SmestajDTO> getSmestajList() {
+		return smestajList;
+	}
+
+
+	public void setSmestajList(Collection<SmestajDTO> smestajList) {
+		this.smestajList = smestajList;
+	}
+
+
 	public int getProsecnaOcena() {
 		return prosecnaOcena;
 	}
@@ -47,13 +60,13 @@ public class HostDTO extends KorisnikDTO{
 		this.istaknuti = istaknuti;
 	}
 
-	public Collection<com.xml2023.mainapp.SmestajDTO> getSmestajList() {
-		return smestajList;
-	}
-
-	public void setSmestajList(Collection<com.xml2023.mainapp.SmestajDTO> smestajList) {
-		this.smestajList = smestajList;
-	}
+//	public Collection<com.xml2023.mainapp.SmestajDTO> getSmestajList() {
+//		return smestajList;
+//	}
+//
+//	public void setSmestajList(Collection<com.xml2023.mainapp.SmestajDTO> smestajList) {
+//		this.smestajList = smestajList;
+//	}
 
 	public Collection<OcenaHostDTO> getOcene() {
 		return ocene;

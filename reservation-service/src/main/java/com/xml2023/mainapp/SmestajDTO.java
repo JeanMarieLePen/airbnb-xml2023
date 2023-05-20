@@ -111,6 +111,19 @@ private static final long serialVersionUID = 0L;
 
             break;
           }
+          case 74: {
+            com.xml2023.mainapp.AdresaDTO.Builder subBuilder = null;
+            if (adresa_ != null) {
+              subBuilder = adresa_.toBuilder();
+            }
+            adresa_ = input.readMessage(com.xml2023.mainapp.AdresaDTO.parser(), extensionRegistry);
+            if (subBuilder != null) {
+              subBuilder.mergeFrom(adresa_);
+              adresa_ = subBuilder.buildPartial();
+            }
+
+            break;
+          }
           default: {
             if (!parseUnknownFieldProto3(
                 input, unknownFields, extensionRegistry, tag)) {
@@ -359,6 +372,27 @@ private static final long serialVersionUID = 0L;
     return getCenovnik();
   }
 
+  public static final int ADRESA_FIELD_NUMBER = 9;
+  private com.xml2023.mainapp.AdresaDTO adresa_;
+  /**
+   * <code>.com.xml2023.mainapp.AdresaDTO adresa = 9;</code>
+   */
+  public boolean hasAdresa() {
+    return adresa_ != null;
+  }
+  /**
+   * <code>.com.xml2023.mainapp.AdresaDTO adresa = 9;</code>
+   */
+  public com.xml2023.mainapp.AdresaDTO getAdresa() {
+    return adresa_ == null ? com.xml2023.mainapp.AdresaDTO.getDefaultInstance() : adresa_;
+  }
+  /**
+   * <code>.com.xml2023.mainapp.AdresaDTO adresa = 9;</code>
+   */
+  public com.xml2023.mainapp.AdresaDTOOrBuilder getAdresaOrBuilder() {
+    return getAdresa();
+  }
+
   private byte memoizedIsInitialized = -1;
   @java.lang.Override
   public final boolean isInitialized() {
@@ -396,6 +430,9 @@ private static final long serialVersionUID = 0L;
     }
     if (cenovnik_ != null) {
       output.writeMessage(8, getCenovnik());
+    }
+    if (adresa_ != null) {
+      output.writeMessage(9, getAdresa());
     }
     unknownFields.writeTo(output);
   }
@@ -440,6 +477,10 @@ private static final long serialVersionUID = 0L;
       size += com.google.protobuf.CodedOutputStream
         .computeMessageSize(8, getCenovnik());
     }
+    if (adresa_ != null) {
+      size += com.google.protobuf.CodedOutputStream
+        .computeMessageSize(9, getAdresa());
+    }
     size += unknownFields.getSerializedSize();
     memoizedSize = size;
     return size;
@@ -475,6 +516,11 @@ private static final long serialVersionUID = 0L;
       result = result && getCenovnik()
           .equals(other.getCenovnik());
     }
+    result = result && (hasAdresa() == other.hasAdresa());
+    if (hasAdresa()) {
+      result = result && getAdresa()
+          .equals(other.getAdresa());
+    }
     result = result && unknownFields.equals(other.unknownFields);
     return result;
   }
@@ -509,6 +555,10 @@ private static final long serialVersionUID = 0L;
     if (hasCenovnik()) {
       hash = (37 * hash) + CENOVNIK_FIELD_NUMBER;
       hash = (53 * hash) + getCenovnik().hashCode();
+    }
+    if (hasAdresa()) {
+      hash = (37 * hash) + ADRESA_FIELD_NUMBER;
+      hash = (53 * hash) + getAdresa().hashCode();
     }
     hash = (29 * hash) + unknownFields.hashCode();
     memoizedHashCode = hash;
@@ -673,6 +723,12 @@ private static final long serialVersionUID = 0L;
         cenovnik_ = null;
         cenovnikBuilder_ = null;
       }
+      if (adresaBuilder_ == null) {
+        adresa_ = null;
+      } else {
+        adresa_ = null;
+        adresaBuilder_ = null;
+      }
       return this;
     }
 
@@ -732,6 +788,11 @@ private static final long serialVersionUID = 0L;
         result.cenovnik_ = cenovnik_;
       } else {
         result.cenovnik_ = cenovnikBuilder_.build();
+      }
+      if (adresaBuilder_ == null) {
+        result.adresa_ = adresa_;
+      } else {
+        result.adresa_ = adresaBuilder_.build();
       }
       result.bitField0_ = to_bitField0_;
       onBuilt();
@@ -860,6 +921,9 @@ private static final long serialVersionUID = 0L;
       }
       if (other.hasCenovnik()) {
         mergeCenovnik(other.getCenovnik());
+      }
+      if (other.hasAdresa()) {
+        mergeAdresa(other.getAdresa());
       }
       this.mergeUnknownFields(other.unknownFields);
       onChanged();
@@ -1770,6 +1834,123 @@ private static final long serialVersionUID = 0L;
         cenovnik_ = null;
       }
       return cenovnikBuilder_;
+    }
+
+    private com.xml2023.mainapp.AdresaDTO adresa_ = null;
+    private com.google.protobuf.SingleFieldBuilderV3<
+        com.xml2023.mainapp.AdresaDTO, com.xml2023.mainapp.AdresaDTO.Builder, com.xml2023.mainapp.AdresaDTOOrBuilder> adresaBuilder_;
+    /**
+     * <code>.com.xml2023.mainapp.AdresaDTO adresa = 9;</code>
+     */
+    public boolean hasAdresa() {
+      return adresaBuilder_ != null || adresa_ != null;
+    }
+    /**
+     * <code>.com.xml2023.mainapp.AdresaDTO adresa = 9;</code>
+     */
+    public com.xml2023.mainapp.AdresaDTO getAdresa() {
+      if (adresaBuilder_ == null) {
+        return adresa_ == null ? com.xml2023.mainapp.AdresaDTO.getDefaultInstance() : adresa_;
+      } else {
+        return adresaBuilder_.getMessage();
+      }
+    }
+    /**
+     * <code>.com.xml2023.mainapp.AdresaDTO adresa = 9;</code>
+     */
+    public Builder setAdresa(com.xml2023.mainapp.AdresaDTO value) {
+      if (adresaBuilder_ == null) {
+        if (value == null) {
+          throw new NullPointerException();
+        }
+        adresa_ = value;
+        onChanged();
+      } else {
+        adresaBuilder_.setMessage(value);
+      }
+
+      return this;
+    }
+    /**
+     * <code>.com.xml2023.mainapp.AdresaDTO adresa = 9;</code>
+     */
+    public Builder setAdresa(
+        com.xml2023.mainapp.AdresaDTO.Builder builderForValue) {
+      if (adresaBuilder_ == null) {
+        adresa_ = builderForValue.build();
+        onChanged();
+      } else {
+        adresaBuilder_.setMessage(builderForValue.build());
+      }
+
+      return this;
+    }
+    /**
+     * <code>.com.xml2023.mainapp.AdresaDTO adresa = 9;</code>
+     */
+    public Builder mergeAdresa(com.xml2023.mainapp.AdresaDTO value) {
+      if (adresaBuilder_ == null) {
+        if (adresa_ != null) {
+          adresa_ =
+            com.xml2023.mainapp.AdresaDTO.newBuilder(adresa_).mergeFrom(value).buildPartial();
+        } else {
+          adresa_ = value;
+        }
+        onChanged();
+      } else {
+        adresaBuilder_.mergeFrom(value);
+      }
+
+      return this;
+    }
+    /**
+     * <code>.com.xml2023.mainapp.AdresaDTO adresa = 9;</code>
+     */
+    public Builder clearAdresa() {
+      if (adresaBuilder_ == null) {
+        adresa_ = null;
+        onChanged();
+      } else {
+        adresa_ = null;
+        adresaBuilder_ = null;
+      }
+
+      return this;
+    }
+    /**
+     * <code>.com.xml2023.mainapp.AdresaDTO adresa = 9;</code>
+     */
+    public com.xml2023.mainapp.AdresaDTO.Builder getAdresaBuilder() {
+      
+      onChanged();
+      return getAdresaFieldBuilder().getBuilder();
+    }
+    /**
+     * <code>.com.xml2023.mainapp.AdresaDTO adresa = 9;</code>
+     */
+    public com.xml2023.mainapp.AdresaDTOOrBuilder getAdresaOrBuilder() {
+      if (adresaBuilder_ != null) {
+        return adresaBuilder_.getMessageOrBuilder();
+      } else {
+        return adresa_ == null ?
+            com.xml2023.mainapp.AdresaDTO.getDefaultInstance() : adresa_;
+      }
+    }
+    /**
+     * <code>.com.xml2023.mainapp.AdresaDTO adresa = 9;</code>
+     */
+    private com.google.protobuf.SingleFieldBuilderV3<
+        com.xml2023.mainapp.AdresaDTO, com.xml2023.mainapp.AdresaDTO.Builder, com.xml2023.mainapp.AdresaDTOOrBuilder> 
+        getAdresaFieldBuilder() {
+      if (adresaBuilder_ == null) {
+        adresaBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<
+            com.xml2023.mainapp.AdresaDTO, com.xml2023.mainapp.AdresaDTO.Builder, com.xml2023.mainapp.AdresaDTOOrBuilder>(
+                getAdresa(),
+                getParentForChildren(),
+                isClean());
+        adresa_ = null;
+      }
+      return adresaBuilder_;
     }
     @java.lang.Override
     public final Builder setUnknownFields(

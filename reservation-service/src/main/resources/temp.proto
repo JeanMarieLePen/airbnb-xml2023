@@ -42,6 +42,8 @@ service SmestajGrpc{
 	rpc deketeSnestajsForHost(DeleteSmestajsForHostRequest) returns (DeleteSmestajsForHostResponse);
 	rpc getSmestajById(getSmestajByIdRequest) returns (getSmestajByIdResponse);
 	rpc getListaSmestajaByUserId(getListaSmestajaByUserIdRequest) returns (getListaSmestajaByUserIdResponse);
+	rpc zauzmiTermin(TerminZauzmiRequest) returns (TerminZauzmiResponse);
+	rpc oslobodiTermin(TerminOslobodiRequest) returns (TerminOslobodiResponse);
 }
 
 service RezervacijaGrpc{
@@ -53,6 +55,20 @@ service RezervacijaGrpc{
 	rpc getActiveReservations(ActiveReservationsRequest) returns (ActiveReservationsResponse);
 }
 
+message TerminZauzmiRequest{
+	string smestajId = 1;
+	TerminDTO termin = 2;
+}
+message TerminZauzmiResponse{
+	bool zauzet = 1;
+}
+message TerminOslobodiRequest{
+	string smestajId = 1;
+	TerminDTO termin = 2;
+}
+message TerminOslobodiResponse{
+	bool oslobodjen = 1;
+}
 message ActiveReservationsRequest{
 	string smestajId = 1;
 	google.protobuf.Timestamp pocetak = 2;
@@ -113,6 +129,7 @@ message SmestajDTO{
 	int32 maxGost = 6;
 	repeated TerminDTO nedostupni = 7;
 	CenovnikDTO cenovnik = 8;
+	AdresaDTO adresa = 9;
 }
 
 

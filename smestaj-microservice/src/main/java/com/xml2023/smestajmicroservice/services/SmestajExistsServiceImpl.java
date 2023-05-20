@@ -1,7 +1,10 @@
 package com.xml2023.smestajmicroservice.services;
 
+import java.time.Instant;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.time.ZoneOffset;
+import java.util.ArrayList;
 import java.util.Base64;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -10,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.google.protobuf.Timestamp;
+import com.xml2023.mainapp.AdresaDTO;
 import com.xml2023.mainapp.CenovnikDTO;
 import com.xml2023.mainapp.DeleteSmestajsForHostRequest;
 import com.xml2023.mainapp.DeleteSmestajsForHostResponse;
@@ -21,10 +25,15 @@ import com.xml2023.mainapp.SmestajGrpcGrpc.SmestajGrpcImplBase;
 import com.xml2023.mainapp.SmestajIdsForHostRequest;
 import com.xml2023.mainapp.SmestajIdsForHostResponse;
 import com.xml2023.mainapp.TerminDTO;
+import com.xml2023.mainapp.TerminOslobodiRequest;
+import com.xml2023.mainapp.TerminOslobodiResponse;
+import com.xml2023.mainapp.TerminZauzmiRequest;
+import com.xml2023.mainapp.TerminZauzmiResponse;
 import com.xml2023.mainapp.getListaSmestajaByUserIdRequest;
 import com.xml2023.mainapp.getListaSmestajaByUserIdResponse;
 import com.xml2023.mainapp.getSmestajByIdRequest;
 import com.xml2023.mainapp.getSmestajByIdResponse;
+import com.xml2023.smestajmicroservice.model.data.Adresa;
 import com.xml2023.smestajmicroservice.model.data.Cenovnik;
 import com.xml2023.smestajmicroservice.model.data.Smestaj;
 import com.xml2023.smestajmicroservice.model.data.Termin;
@@ -54,7 +63,56 @@ public class SmestajExistsServiceImpl extends SmestajGrpcImplBase{
 //		super.greeting(request, responseObserver);
 	
 	}
+	
+	@Override
+	public void zauzmiTermin(TerminZauzmiRequest request, StreamObserver<TerminZauzmiResponse> responseObserver) {
+		// TODO Auto-generated method stub
+		String id = request.getSmestajId();
+		TerminDTO t = request.getTermin();
+		Smestaj s = this.sRep.findById(id).orElse(null);
+		boolean zauzet = false;
+		if(s != null) {
+			Termin tmp = new Termin();
+			tmp.setPocetak(convertFromTimeStamp(t.getPocetak()));
+			tmp.setKraj(convertFromTimeStamp(t.getKraj()));
+			s.getNedostupni().add(tmp);
+			zauzet = true;
+		}
+		this.sRep.save(s);
+		TerminZauzmiResponse.Builder response = TerminZauzmiResponse.newBuilder();
+		response.setZauzet(zauzet);
+		responseObserver.onNext(response.build());
+		responseObserver.onCompleted();
+	}	
+	
 
+	@Override
+	public void oslobodiTermin(TerminOslobodiRequest request, StreamObserver<TerminOslobodiResponse> responseObserver) {
+		// TODO Auto-generated method stub
+		String id = request.getSmestajId();
+		TerminDTO t = request.getTermin();
+		Smestaj s = this.sRep.findById(id).orElse(null);
+		boolean oslobodjen = false;
+		if(s != null) {
+			for(Termin tt : s.getNedostupni()) {
+				if(LocalDateTime.from(tt.getPocetak()).isEqual(LocalDateTime.from(convertFromTimeStamp(t.getPocetak())))) {
+					s.getNedostupni().remove(tt);
+					oslobodjen = true;
+					break;
+				}
+			}
+		}
+		this.sRep.save(s);
+		TerminOslobodiResponse.Builder response = TerminOslobodiResponse.newBuilder().setOslobodjen(oslobodjen);
+		
+		responseObserver.onNext(response.build());
+		responseObserver.onCompleted();
+	}
+
+	public LocalDateTime convertFromTimeStamp(Timestamp t) {
+		return Instant.ofEpochSecond(t.getSeconds(),t.getNanos()).atZone(ZoneId.of("Europe/Belgrade")).toLocalDateTime();
+	}
+	
 	@Override
 	public void getSmestajIdsForHost(SmestajIdsForHostRequest request,
 			StreamObserver<SmestajIdsForHostResponse> responseObserver) {
@@ -71,6 +129,7 @@ public class SmestajExistsServiceImpl extends SmestajGrpcImplBase{
 		responseObserver.onCompleted();
 		
 	}
+
 
 	@Override
 	public void deketeSnestajsForHost(DeleteSmestajsForHostRequest request,
@@ -106,7 +165,28 @@ public class SmestajExistsServiceImpl extends SmestajGrpcImplBase{
 	public void getListaSmestajaByUserId(getListaSmestajaByUserIdRequest request,
 			StreamObserver<getListaSmestajaByUserIdResponse> responseObserver) {
 		// TODO Auto-generated method stub
-		super.getListaSmestajaByUserId(request, responseObserver);
+		
+		String userId = request.getId();
+		List<Smestaj> listaSmestaja = this.sRep.findAll().stream().filter(s -> s.getVlasnik().equals(userId)).toList();
+		getListaSmestajaByUserIdResponse.Builder response = getListaSmestajaByUserIdResponse.newBuilder();
+		
+		if(listaSmestaja.isEmpty()) {
+			response.addAllListaSmestaja(new ArrayList<SmestajDTO>());
+		}else {
+			for(Smestaj s : listaSmestaja) {
+				response.addListaSmestaja(mapSmestaj(s));
+			}
+		}
+		responseObserver.onNext(response.build());
+		responseObserver.onCompleted();
+	}
+	
+	public AdresaDTO mapAdresa(Adresa a) {
+		AdresaDTO.Builder retVal = AdresaDTO.newBuilder();
+		retVal.setAdresa(a.getAdresa());
+		retVal.setLng(a.getLng());
+		retVal.setLat(a.getLat());
+		return retVal.build();
 	}
 	
 	public SmestajDTO mapSmestaj(Smestaj s) {
@@ -130,6 +210,7 @@ public class SmestajExistsServiceImpl extends SmestajGrpcImplBase{
 			String tempSlika = Base64.getEncoder().encodeToString(slika);
 			retVal.addSlika(mapSlika(tempSlika));
 		}
+		retVal.setAdresa(mapAdresa(s.getAdresa()));
 		return retVal.build();
 	}
 	

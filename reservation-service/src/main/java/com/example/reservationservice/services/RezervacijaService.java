@@ -35,6 +35,10 @@ import com.xml2023.mainapp.SmestajGrpcGrpc.SmestajGrpcBlockingStub;
 import com.xml2023.mainapp.SmestajIdsForHostRequest;
 import com.xml2023.mainapp.SmestajIdsForHostResponse;
 import com.xml2023.mainapp.TerminDTO;
+import com.xml2023.mainapp.TerminOslobodiRequest;
+import com.xml2023.mainapp.TerminOslobodiResponse;
+import com.xml2023.mainapp.TerminZauzmiRequest;
+import com.xml2023.mainapp.TerminZauzmiResponse;
 import com.xml2023.mainapp.getHostRequest;
 import com.xml2023.mainapp.getHostResponse;
 import com.xml2023.mainapp.getListaSmestajaByUserIdRequest;
@@ -89,12 +93,28 @@ public class RezervacijaService {
 		HostBasicDTO host= getHostBasic(smestaj.getVlasnik());		
 
 		if(host.getRezAutomatski()) {
-			rez.setStatus(StatusRezervacije.REZERVISANA);
+			
+			ManagedChannel channel = ManagedChannelBuilder.forAddress("localhost", 7977).usePlaintext().build();
+			SmestajGrpcBlockingStub smestajBlockingStub = SmestajGrpcGrpc.newBlockingStub(channel);
+			TerminZauzmiRequest rqst = TerminZauzmiRequest.newBuilder().setSmestajId(smestajId).setTermin(mapTermin(r.getOdDatum(), r.getDoDatum())).build();
+			TerminZauzmiResponse rspns = smestajBlockingStub.zauzmiTermin(rqst);
+			if(rspns.getZauzet()) {
+				rez.setStatus(StatusRezervacije.REZERVISANA);
+			}else {
+				return null;
+			}
 		}else {
 			rez.setStatus(StatusRezervacije.PENDING);
 		}
 		rezervacijaRep.save(rez);
 		return rezMapper.toDTO(rez);
+	}
+	
+	public TerminDTO mapTermin(LocalDateTime localDateTime, LocalDateTime localDateTime2) {
+		TerminDTO.Builder t = TerminDTO.newBuilder();
+		t.setPocetak(convertToTimeStamp(localDateTime));
+		t.setKraj(convertToTimeStamp(localDateTime2));
+		return t.build();
 	}
 	
 	public RezervacijaDTO cancelReservation(String userId, String rezervacijaId) {
@@ -108,9 +128,21 @@ public class RezervacijaService {
 		if(days <= 1) {
 			return null;
 		}
-		r.setStatus(StatusRezervacije.OTKAZANA);
+		
+		ManagedChannel channel = ManagedChannelBuilder.forAddress("localhost", 7977).usePlaintext().build();
+		SmestajGrpcBlockingStub smestajBlockingStub = SmestajGrpcGrpc.newBlockingStub(channel);
+		TerminOslobodiRequest rqst = TerminOslobodiRequest.newBuilder().setSmestajId(r.getSmestaj()).setTermin(mapTermin(r.getOdDatum(), r.getDoDatum())).build();
+		TerminOslobodiResponse rspns = smestajBlockingStub.oslobodiTermin(rqst);
+		if(rspns.getOslobodjen()) {
+			r.setStatus(StatusRezervacije.OTKAZANA);
+		}else {
+			return null;
+		}
 		guestOtkazaoRez(userId);
 		rezervacijaRep.save(r);
+		
+		
+		
 		return rezMapper.toDTO(r);
 	}
 
@@ -160,9 +192,19 @@ public class RezervacijaService {
 			return null;
 		}
 		//TODO proveri da li uopste postoji smestaj
-		r.setStatus(StatusRezervacije.REZERVISANA);
-
+		
+		ManagedChannel channel = ManagedChannelBuilder.forAddress("localhost", 7977).usePlaintext().build();
+		SmestajGrpcBlockingStub smestajBlockingStub = SmestajGrpcGrpc.newBlockingStub(channel);
+		TerminZauzmiRequest rqst = TerminZauzmiRequest.newBuilder().setSmestajId(r.getSmestaj()).setTermin(mapTermin(r.getOdDatum(), r.getDoDatum())).build();
+		TerminZauzmiResponse rspns = smestajBlockingStub.zauzmiTermin(rqst);
+		if(rspns.getZauzet()) {
+			r.setStatus(StatusRezervacije.REZERVISANA);
+		}else {
+			return null;
+		}
 		rezervacijaRep.save(r);
+		
+		
 		//otkazivanje pending rez za smestaj;
 		Collection<Rezervacija> pendingRez= rezervacijaRep.findBySmestajAndStatus(r.getSmestaj(), StatusRezervacije.PENDING).orElse(new ArrayList<Rezervacija>());
 		if(pendingRez.size()>0) {

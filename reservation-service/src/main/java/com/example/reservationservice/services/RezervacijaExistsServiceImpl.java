@@ -132,7 +132,7 @@ public class RezervacijaExistsServiceImpl extends RezervacijaGrpcImplBase {
 			for(Rezervacija r : userReservation) {
 				RezervacijaDTO.Builder temp = RezervacijaDTO.newBuilder();
 				temp.setBrojGostiju(r.getBrojGostiju());
-				temp.setDoDatum(convertToTimeStamp(r.getOdDatum()));
+				temp.setDoDatum(convertToTimeStamp(r.getDoDatum()));
 				temp.setOdDatum(convertToTimeStamp(r.getOdDatum()));
 				temp.setGost(r.getGost());
 				temp.setId(r.getId());
@@ -177,7 +177,7 @@ public class RezervacijaExistsServiceImpl extends RezervacijaGrpcImplBase {
 		for(Rezervacija r : listaRezervacija) {
 			RezervacijaDTO.Builder temp = RezervacijaDTO.newBuilder();
 			temp.setBrojGostiju(r.getBrojGostiju());
-			temp.setDoDatum(convertToTimeStamp(r.getOdDatum()));
+			temp.setDoDatum(convertToTimeStamp(r.getDoDatum()));
 			temp.setOdDatum(convertToTimeStamp(r.getOdDatum()));
 			temp.setGost(r.getGost());
 			temp.setId(r.getId());

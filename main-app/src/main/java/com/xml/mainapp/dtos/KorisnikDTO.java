@@ -3,9 +3,9 @@ package com.xml.mainapp.dtos;
 import java.io.Serializable;
 import java.util.Collection;
 
-import com.xml.mainapp.model.data.Smestaj;
 import com.xml.mainapp.model.users.StatusNaloga;
 import com.xml.mainapp.model.users.TipKorisnika;
+import com.xml2023.mainapp.SmestajDTO;
 
 public class KorisnikDTO implements Serializable{
 
@@ -32,19 +32,32 @@ public class KorisnikDTO implements Serializable{
 	
 	private boolean istaknuti;
 	
-	private Collection<com.xml2023.mainapp.SmestajDTO> smestajList;
+//	private Collection<SmestajDTO> smestajList;
+	private Collection<com.xml.mainapp.dtos.data.SmestajDTO> smestajList;
     
 	public KorisnikDTO() {
 		super();
 	}
 	
-	public Collection<com.xml2023.mainapp.SmestajDTO> getSmestajList() {
+	
+	
+//	public Collection<SmestajDTO> getSmestajList() {
+//		return smestajList;
+//	}
+//
+//	public void setSmestajList(Collection<SmestajDTO> smestajList) {
+//		this.smestajList = smestajList;
+//	}
+
+	public Collection<com.xml.mainapp.dtos.data.SmestajDTO> getSmestajList() {
 		return smestajList;
 	}
 
-	public void setSmestajList(Collection<com.xml2023.mainapp.SmestajDTO> smestajList) {
+
+	public void setSmestajList(Collection<com.xml.mainapp.dtos.data.SmestajDTO> smestajList) {
 		this.smestajList = smestajList;
 	}
+
 
 	public boolean isRezAutomatski() {
 		return rezAutomatski;
