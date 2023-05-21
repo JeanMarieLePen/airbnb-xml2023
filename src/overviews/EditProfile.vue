@@ -232,23 +232,49 @@ import 'vueperslides/dist/vueperslides.css'
             },
             getUserProfileData(id){
                 try{
-                    dataService.getUser(id).then(response => {
-                        // console.log("USER PROFILE: " + JSON.stringify(response.data));
-                        this.profile = response.data;
-                        console.log("AUTOMATSKA OBRADA: " + this.profile.rezAutomatski)
-                        if(this.profile.slike){
-                            console.log("BROJ SLIKA: " + this.profile.slike.length);
-                            let tempSlike = [];
-                            for(let i = 0; i < this.profile.slike.length; i++){
-                                // console.log("AAA")
-                                tempSlike.push('data:image/png;base64,' + this.profile.slike[i]);
-                            }
-                            this.profile.slike = tempSlike;
-                            // console.log("SLIKA POSLE FORMATIRANJA: " + JSON.stringify(this.profile.slike[0]));
-                        }else{
-                            this.profile.slike = [];
-                        } 
-                    });
+                    if(this.userObj.role === "GUEST"){
+                        dataService.getUser(id).then(response => {
+                            // console.log("USER PROFILE: " + JSON.stringify(response.data));
+                            this.profile = response.data;
+                            console.log(JSON.stringify(this.profile))
+                            console.log("AUTOMATSKA OBRADA: " + this.profile.rezAutomatski)
+                            console.log("OBRADA NOTIFIKACIJA: " + this.profile.obradjenaRezervacijaNotifikacija);
+                            if(this.profile.slike){
+                                console.log("BROJ SLIKA: " + this.profile.slike.length);
+                                let tempSlike = [];
+                                for(let i = 0; i < this.profile.slike.length; i++){
+                                    // console.log("AAA")
+                                    tempSlike.push('data:image/png;base64,' + this.profile.slike[i]);
+                                }
+                                this.profile.slike = tempSlike;
+                                // console.log("SLIKA POSLE FORMATIRANJA: " + JSON.stringify(this.profile.slike[0]));
+                            }else{
+                                this.profile.slike = [];
+                            } 
+                        });
+                    }
+                    if(this.userObj.role === "HOST"){
+                        dataService.getOwnerById(id).then(response => {
+                            console.log("USER PROFILE: " + JSON.stringify(response.data));
+                            this.profile = response.data;
+                            console.log(JSON.stringify(this.profile))
+                            console.log("AUTOMATSKA OBRADA: " + this.profile.rezAutomatski)
+                            console.log("OBRADA NOTIFIKACIJA: " + this.profile.obradjenaRezervacijaNotifikacija);
+                            if(this.profile.slike){
+                                console.log("BROJ SLIKA: " + this.profile.slike.length);
+                                let tempSlike = [];
+                                for(let i = 0; i < this.profile.slike.length; i++){
+                                    // console.log("AAA")
+                                    tempSlike.push('data:image/png;base64,' + this.profile.slike[i]);
+                                }
+                                this.profile.slike = tempSlike;
+                                // console.log("SLIKA POSLE FORMATIRANJA: " + JSON.stringify(this.profile.slike[0]));
+                            }else{
+                                this.profile.slike = [];
+                            } 
+                        });
+                    }
+                    
                 }catch(error){
                     console.log("GRESKA: " + error.message);
                 }
@@ -341,54 +367,109 @@ import 'vueperslides/dist/vueperslides.css'
                         if(tempObjekat.staraSifra === '' || tempObjekat.staraSifra === null){
                             tempObjekat.staraSifra='';
                         }
-                        console.log("Korisnik: " + JSON.stringify(this.profile));
-                        let objekat = {
-                            korisnikDTO: this.profile,
-                            novaSifraDTO: tempObjekat
+                        if(this.userObj.role === "HOST"){
+
+                            let objekat = {
+                                hostDTO: this.profile,
+                                novaSifraDTO: tempObjekat
+                            }
+                            console.log(JSON.stringify(objekat))
+                            dataService.updateUserProfile2(objekat).then(response => {
+                                if(response.status === 200){
+                                    this.messages.successResponse = `<h4>Vas profil je uspesno izmenjen!</h4>`;
+                                    setTimeout(() => this.messages.successResponse = '', 5000);
+                                    setTimeout(() => { this.$router.push(`/dash`)}, 5050);
+                                }
+                            })
+                            .catch(error=>{
+                                // && error.response.data.message === "Wrong password!"
+                                if(error.response.status === 409 ){
+                                    this.messages.errorResponse = `<h4>Vaša stara sifra je netačna! Molimo Vas pokušajte ponovo...</h4>`;
+                                    setTimeout(()=>this.messages.errorResponse='', 5000);
+                                }
+                                else if (error.response.status === 500 || error.response.status === 404) {
+                                    this.messages.errorResponse = `<h4>Imali smo nekih problema na serveru,  molimo Vas pokušajte ponovo kasnije!</h4>`;
+                                    setTimeout(() => this.messages.errorResponse = '', 5000);
+                                }
+                            });
                         }
-                        console.log("Objekat koji se salje na bek: " + JSON.stringify(objekat));
-                        dataService.updateUserProfile(objekat).then(response => {
-                            if(response.status === 200){
-                                this.messages.successResponse = `<h4>Vas profil je uspesno izmenjen!</h4>`;
-                                setTimeout(() => this.messages.successResponse = '', 5000);
-                                setTimeout(() => { this.$router.push(`/dash`)}, 5050);
+                        if(this.userObj.role === "GUEST"){
+                            let objekat = {
+                                guestDTO: this.profile,
+                                novaSifraDTO: tempObjekat
                             }
-                        })
-                        .catch(error=>{
-                            // && error.response.data.message === "Wrong password!"
-                            if(error.response.status === 409 ){
-                                this.messages.errorResponse = `<h4>Vaša stara sifra je netačna! Molimo Vas pokušajte ponovo...</h4>`;
-                                setTimeout(()=>this.messages.errorResponse='', 5000);
-                            }
-                            else if (error.response.status === 500 || error.response.status === 404) {
-                                this.messages.errorResponse = `<h4>Imali smo nekih problema na serveru,  molimo Vas pokušajte ponovo kasnije!</h4>`;
-                                setTimeout(() => this.messages.errorResponse = '', 5000);
-                            }
-                        });
+                            dataService.updateUserProfile(objekat).then(response => {
+                                if(response.status === 200){
+                                    this.messages.successResponse = `<h4>Vas profil je uspesno izmenjen!</h4>`;
+                                    setTimeout(() => this.messages.successResponse = '', 5000);
+                                    setTimeout(() => { this.$router.push(`/dash`)}, 5050);
+                                }
+                            })
+                            .catch(error=>{
+                                // && error.response.data.message === "Wrong password!"
+                                if(error.response.status === 409 ){
+                                    this.messages.errorResponse = `<h4>Vaša stara sifra je netačna! Molimo Vas pokušajte ponovo...</h4>`;
+                                    setTimeout(()=>this.messages.errorResponse='', 5000);
+                                }
+                                else if (error.response.status === 500 || error.response.status === 404) {
+                                    this.messages.errorResponse = `<h4>Imali smo nekih problema na serveru,  molimo Vas pokušajte ponovo kasnije!</h4>`;
+                                    setTimeout(() => this.messages.errorResponse = '', 5000);
+                                }
+                            });
+                        }
+                        
                     }
                 }
                 else{
                     let tempObjekat = {
-                            staraSifra: '',
-                            novaSifra: '',
-                        }
-                    let objekat = {
-                            korisnikDTO: this.profile,
-                            novaSifraDTO: tempObjekat
+                        staraSifra: '',
+                        novaSifra: '',
                     }
-                    dataService.updateUserProfile(objekat).then(response => {
-                        this.messages.successResponse = `<h4>Vas profil je uspesno izmenjen!</h4>`;
-                        setTimeout(() => this.messages.successResponse = '', 5000);
-                        setTimeout(() => { this.$router.push(`/dash`)}, 5050);
-                        console.log(response.data)
-                        this.profile = response.data;
-                    })
-                    .catch(error => {
-                        if (error.response.status === 500 || error.response.status === 404) {
-                            this.messages.errorResponse = `<h4>Imali smo nekih problema na serveru, molimo Vas pokušajte kasnije!</h4>`;
-                            setTimeout(() => this.messages.errorResponse = '', 5000);
-                        }
-                    });
+                    // let objekat = {
+                    //     guestDTO: this.profile,
+                    //     novaSifraDTO: tempObjekat
+                    // }
+                    if(this.userObj.role === "GUEST"){
+                       let objekat = {
+                            guestDTO: this.profile,
+                            novaSifraDTO: tempObjekat
+                        } 
+                        console.log(JSON.stringify(objekat));
+                        dataService.updateUserProfile(objekat).then(response => {
+                            this.messages.successResponse = `<h4>Vas profil je uspesno izmenjen!</h4>`;
+                            setTimeout(() => this.messages.successResponse = '', 5000);
+                            setTimeout(() => { this.$router.push(`/dash`)}, 5050);
+                            console.log(response.data)
+                            this.profile = response.data;
+                        })
+                        .catch(error => {
+                            if (error.response.status === 500 || error.response.status === 404) {
+                                this.messages.errorResponse = `<h4>Imali smo nekih problema na serveru, molimo Vas pokušajte kasnije!</h4>`;
+                                setTimeout(() => this.messages.errorResponse = '', 5000);
+                            }
+                        });
+                    }
+                    if(this.userObj.role === "HOST"){
+                        let objekat = {
+                            hostDTO: this.profile,
+                            novaSifraDTO: tempObjekat
+                        } 
+                        console.log(JSON.stringify(objekat))
+                        dataService.updateUserProfile2(objekat).then(response => {
+                            this.messages.successResponse = `<h4>Vas profil je uspesno izmenjen!</h4>`;
+                            setTimeout(() => this.messages.successResponse = '', 5000);
+                            setTimeout(() => { this.$router.push(`/dash`)}, 5050);
+                            console.log(response.data)
+                            this.profile = response.data;
+                        })
+                        .catch(error => {
+                            if (error.response.status === 500 || error.response.status === 404) {
+                                this.messages.errorResponse = `<h4>Imali smo nekih problema na serveru, molimo Vas pokušajte kasnije!</h4>`;
+                                setTimeout(() => this.messages.errorResponse = '', 5000);
+                            }
+                        });
+                    }
+                    
                 }
             },
         },

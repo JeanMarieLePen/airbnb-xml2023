@@ -42,6 +42,9 @@ class DataService{
     updateUserProfile(profile){
         return axios.put(`${API_URL}/korisnik/update`, profile);
     }
+    updateUserProfile2(profile){
+        return axios.put(`${API_URL}/korisnik/update2`, profile);
+    }
     getSmestaj(id){
         return axios.get(`${API_URL}/smestaj/getByIdSmestaja/${id}`);
     }
