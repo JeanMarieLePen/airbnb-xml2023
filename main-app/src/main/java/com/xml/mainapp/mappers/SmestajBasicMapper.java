@@ -6,20 +6,11 @@ import java.util.Collection;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-
-import com.xml.mainapp.dtos.data.OcenaSmestajaDTO;
-import com.xml.mainapp.dtos.data.PogodnostBasicDTO;
-import com.xml.mainapp.dtos.data.PogodnostDTO;
 import com.xml.mainapp.dtos.data.SmestajBasicDTO;
 import com.xml.mainapp.dtos.data.SmestajDTO;
 import com.xml.mainapp.dtos.data.TerminDTO;
-import com.xml.mainapp.model.data.OcenaSmestaj;
-import com.xml.mainapp.model.data.Pogodnost;
 import com.xml.mainapp.model.data.Smestaj;
 import com.xml.mainapp.model.data.Termin;
-import com.xml.mainapp.repositories.HostRepository;
-import com.xml.mainapp.repositories.PogodnostRepository;
-import com.xml.mainapp.repositories.TerminRepository;
 
 @Component
 public class SmestajBasicMapper {

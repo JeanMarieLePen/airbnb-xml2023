@@ -12,9 +12,6 @@ import com.xml.mainapp.model.users.Host;
 import com.xml.mainapp.model.users.Korisnik;
 import com.xml.mainapp.model.users.StatusNaloga;
 import com.xml.mainapp.model.users.TipKorisnika;
-import com.xml.mainapp.repositories.AdresaRep;
-import com.xml.mainapp.repositories.GuestRepository;
-import com.xml.mainapp.repositories.HostRepository;
 import com.xml.mainapp.repositories.KorisnikRep;
 import com.xml.mainapp.repositories.PogodnostRepository;
 
@@ -22,7 +19,7 @@ import com.xml.mainapp.repositories.PogodnostRepository;
 public class DatabaseChangeLog {
 
 	@ChangeSet(order = "001", id = "seedDatabase", author = "")
-	public void seedDatabase(GuestRepository guestRep, HostRepository hostRep, AdresaRep adrRep, PogodnostRepository pogRep, KorisnikRep korRep) {
+	public void seedDatabase(PogodnostRepository pogRep, KorisnikRep korRep) {
 		List<Adresa> listaAdresa = new ArrayList<Adresa>();
 		listaAdresa.add(makeNewAdresa("Novi Sad, Maksima Gorkog 12", 10.22, 52.02002));
 		listaAdresa.add(makeNewAdresa("Kladovo, Omladinska 6", 10.22, 52.02002));
@@ -41,10 +38,10 @@ public class DatabaseChangeLog {
 		pogRep.insert(pogodnost);
 		
 		List<Korisnik> listaKorisnika = new ArrayList<Korisnik>();
-		listaKorisnika.add(makeNewGuest("temp@gmail.com", "zdravko", "tempUsername", "$2a$12$.RdHV2luFjgp5vR2LQSjWeLjU3WRzUEOmaqqsL51CD/L.5sPFoxoq", "Todovski", StatusNaloga.AKTIVAN, TipKorisnika.GUEST, listaAdresa.get(0), 0));
-		listaKorisnika.add(makeNewGuest("arsen@gmail.com", "Mitar", "mitar22", "$2a$12$.RdHV2luFjgp5vR2LQSjWeLjU3WRzUEOmaqqsL51CD/L.5sPFoxoq", "Mitra", StatusNaloga.AKTIVAN, TipKorisnika.GUEST, listaAdresa.get(1), 5));
-		listaKorisnika.add(makeNewGuest("smajser@gmail.com", "Slobodan", "sloba", "$2a$12$.RdHV2luFjgp5vR2LQSjWeLjU3WRzUEOmaqqsL51CD/L.5sPFoxoq", "Misovic", StatusNaloga.AKTIVAN, TipKorisnika.GUEST, listaAdresa.get(2), 0));
-		listaKorisnika.add(makeNewHost("npele96@gmail.com", "Nikola", "npele96", "$2a$12$.RdHV2luFjgp5vR2LQSjWeLjU3WRzUEOmaqqsL51CD/L.5sPFoxoq", "Petkovic", StatusNaloga.AKTIVAN, TipKorisnika.HOST, listaAdresa.get(3), false, false));
+		listaKorisnika.add(makeNewGuest("temp@gmail.com", "zdravko", "tempUsername", "$2a$12$.RdHV2luFjgp5vR2LQSjWeLjU3WRzUEOmaqqsL51CD/L.5sPFoxoq", "Todovski", StatusNaloga.AKTIVAN, TipKorisnika.GUEST, listaAdresa.get(0), 0, true));
+		listaKorisnika.add(makeNewGuest("arsen@gmail.com", "Mitar", "mitar22", "$2a$12$.RdHV2luFjgp5vR2LQSjWeLjU3WRzUEOmaqqsL51CD/L.5sPFoxoq", "Mitra", StatusNaloga.AKTIVAN, TipKorisnika.GUEST, listaAdresa.get(1), 5, true));
+		listaKorisnika.add(makeNewGuest("smajser@gmail.com", "Slobodan", "sloba", "$2a$12$.RdHV2luFjgp5vR2LQSjWeLjU3WRzUEOmaqqsL51CD/L.5sPFoxoq", "Misovic", StatusNaloga.AKTIVAN, TipKorisnika.GUEST, listaAdresa.get(2), 0, false));
+		listaKorisnika.add(makeNewHost("npele96@gmail.com", "Nikola", "npele96", "$2a$12$.RdHV2luFjgp5vR2LQSjWeLjU3WRzUEOmaqqsL51CD/L.5sPFoxoq", "Petkovic", StatusNaloga.AKTIVAN, TipKorisnika.HOST, listaAdresa.get(3), false, false, true, true, true, true, true));
 	
 		korRep.insert(listaKorisnika);
 	}
@@ -58,7 +55,7 @@ public class DatabaseChangeLog {
 	}
 
 	
-	public Guest makeNewGuest(String email, String ime, String kor_ime, String lozinka, String prezime, StatusNaloga status_naloga, TipKorisnika tip_korisnika, Adresa adresa, int brojOtkazivanja) {
+	public Guest makeNewGuest(String email, String ime, String kor_ime, String lozinka, String prezime, StatusNaloga status_naloga, TipKorisnika tip_korisnika, Adresa adresa, int brojOtkazivanja, boolean notifikacije) {
 		Guest g = new Guest();
 		
 		g.setSlike(new ArrayList<byte[]>());
@@ -71,9 +68,11 @@ public class DatabaseChangeLog {
 		g.setTipKorisnika(tip_korisnika);
 		g.setAdresa(adresa);
 		g.setBrojOtkazivanja(brojOtkazivanja);
+		g.setObradjenaRezervacijaNotifikacija(notifikacije);
 		return g;
 	}
-	public Host makeNewHost(String email, String ime, String kor_ime, String lozinka, String prezime, StatusNaloga status_naloga, TipKorisnika tip_korisnika, Adresa adresa, boolean istaknuti, boolean rez_automatski) {
+	public Host makeNewHost(String email, String ime, String kor_ime, String lozinka, String prezime, StatusNaloga status_naloga, TipKorisnika tip_korisnika, Adresa adresa, boolean istaknuti, boolean rez_automatski,
+			boolean newNotification, boolean canceledNotification, boolean ratedHostNotification, boolean ratedAccomodationNotification, boolean statusNotification) {
 		Host h = new Host();
 		
 		h.setEmail(email);
@@ -87,6 +86,11 @@ public class DatabaseChangeLog {
 		h.setSlike(new ArrayList<byte[]>());
 		h.setIstaknuti(istaknuti);
 		h.setRezAutomatski(rez_automatski);
+		h.setNewNotification(newNotification);
+		h.setCanceledNotification(canceledNotification);
+		h.setRatedHostNotification(ratedHostNotification);
+		h.setRatedAccomodationNotification(ratedAccomodationNotification);
+		h.setStatusNotification(statusNotification);
 		return h;
 	}
 }

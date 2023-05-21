@@ -15,7 +15,12 @@ public class Host extends Korisnik{
 	private boolean rezAutomatski;
 	
 	private boolean istaknuti;
-
+	
+	private boolean newNotification;
+	private boolean canceledNotification;
+	private boolean ratedHostNotification;
+	private boolean ratedAccomodationNotification;
+	private boolean statusNotification;
 	
 	
 	public Host() {
@@ -27,6 +32,46 @@ public class Host extends Korisnik{
 		this.rezAutomatski = rezAutomatski;
 		this.istaknuti = istaknuti;
 
+	}
+
+	public boolean isNewNotification() {
+		return newNotification;
+	}
+
+	public void setNewNotification(boolean newNotification) {
+		this.newNotification = newNotification;
+	}
+
+	public boolean isCanceledNotification() {
+		return canceledNotification;
+	}
+
+	public void setCanceledNotification(boolean canceledNotification) {
+		this.canceledNotification = canceledNotification;
+	}
+
+	public boolean isRatedHostNotification() {
+		return ratedHostNotification;
+	}
+
+	public void setRatedHostNotification(boolean ratedHostNotification) {
+		this.ratedHostNotification = ratedHostNotification;
+	}
+
+	public boolean isRatedAccomodationNotification() {
+		return ratedAccomodationNotification;
+	}
+
+	public void setRatedAccomodationNotification(boolean ratedAccomodationNotification) {
+		this.ratedAccomodationNotification = ratedAccomodationNotification;
+	}
+
+	public boolean isStatusNotification() {
+		return statusNotification;
+	}
+
+	public void setStatusNotification(boolean statusNotification) {
+		this.statusNotification = statusNotification;
 	}
 
 	public boolean isRezAutomatski() {

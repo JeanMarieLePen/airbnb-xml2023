@@ -26,7 +26,6 @@ public class AdresaMapper {
 	public AdresaDTO toDTO(Adresa a) {
 		AdresaDTO dto = new AdresaDTO();
 		dto.setAdresa(a.getAdresa());
-		dto.setId(a.getId());
 		dto.setLat(a.getLat());
 		dto.setLng(a.getLng());
 		return dto;

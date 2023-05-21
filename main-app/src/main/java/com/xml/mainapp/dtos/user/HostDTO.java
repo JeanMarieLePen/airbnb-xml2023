@@ -6,27 +6,35 @@ import java.util.Collection;
 import com.xml.mainapp.dtos.KorisnikDTO;
 import com.xml.mainapp.dtos.data.SmestajDTO;
 
+import jakarta.validation.constraints.NotNull;
+
 
 public class HostDTO extends KorisnikDTO{
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -4086155352617025191L;
 
+	@NotNull
 	private boolean istaknuti;
 	
-//	private Collection<com.xml2023.mainapp.SmestajDTO> smestajList;
+	@NotNull
 	private Collection<SmestajDTO> smestajList;
-	private Collection<OcenaHostDTO> ocene;
+	@NotNull
 	private boolean rezAutomatski;
+	@NotNull
 	private int prosecnaOcena;
 	
+	@NotNull
+	private boolean newNotification;
+	@NotNull
+	private boolean canceledNotification;
+	@NotNull
+	private boolean ratedHostNotification;
+	@NotNull
+	private boolean ratedAccomodationNotification;
+	@NotNull
+	private boolean statusNotification;
 	
 	public HostDTO() {
-		super();
+		
 	}
-	
-	
 	public Collection<SmestajDTO> getSmestajList() {
 		return smestajList;
 	}
@@ -37,6 +45,54 @@ public class HostDTO extends KorisnikDTO{
 	}
 
 
+	public boolean isNewNotification() {
+		return newNotification;
+	}
+
+
+	public void setNewNotification(boolean newNotification) {
+		this.newNotification = newNotification;
+	}
+
+
+	public boolean isCanceledNotification() {
+		return canceledNotification;
+	}
+
+
+	public void setCanceledNotification(boolean canceledNotification) {
+		this.canceledNotification = canceledNotification;
+	}
+
+
+	public boolean isRatedHostNotification() {
+		return ratedHostNotification;
+	}
+
+
+	public void setRatedHostNotification(boolean ratedHostNotification) {
+		this.ratedHostNotification = ratedHostNotification;
+	}
+
+
+	public boolean isRatedAccomodationNotification() {
+		return ratedAccomodationNotification;
+	}
+
+
+	public void setRatedAccomodationNotification(boolean ratedAccomodationNotification) {
+		this.ratedAccomodationNotification = ratedAccomodationNotification;
+	}
+
+
+	public boolean isStatusNotification() {
+		return statusNotification;
+	}
+
+
+	public void setStatusNotification(boolean statusNotification) {
+		this.statusNotification = statusNotification;
+	}
 	public int getProsecnaOcena() {
 		return prosecnaOcena;
 	}
@@ -59,23 +115,5 @@ public class HostDTO extends KorisnikDTO{
 	public void setIstaknuti(boolean istaknuti) {
 		this.istaknuti = istaknuti;
 	}
-
-//	public Collection<com.xml2023.mainapp.SmestajDTO> getSmestajList() {
-//		return smestajList;
-//	}
-//
-//	public void setSmestajList(Collection<com.xml2023.mainapp.SmestajDTO> smestajList) {
-//		this.smestajList = smestajList;
-//	}
-
-	public Collection<OcenaHostDTO> getOcene() {
-		return ocene;
-	}
-
-	public void setOcene(Collection<OcenaHostDTO> ocene) {
-		this.ocene = ocene;
-	}
-	
-
 	
 }

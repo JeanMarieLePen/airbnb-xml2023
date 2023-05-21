@@ -14,9 +14,6 @@ public class AdresaDTO implements Serializable{
 	 * 
 	 */
 	private static final long serialVersionUID = -8603719579936684827L;
-	private String id;
-	@PositiveOrZero
-	private Integer version;
 	
 	@NotBlank
 	@Length(min = 5, max = 100)
@@ -28,18 +25,6 @@ public class AdresaDTO implements Serializable{
 	
 	public AdresaDTO() {
 		super();
-	}
-	public String getId() {
-		return id;
-	}
-	public void setId(String id) {
-		this.id = id;
-	}
-	public Integer getVersion() {
-		return version;
-	}
-	public void setVersion(Integer version) {
-		this.version = version;
 	}
 	public String getAdresa() {
 		return adresa;

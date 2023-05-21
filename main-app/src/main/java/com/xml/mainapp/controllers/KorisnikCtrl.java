@@ -4,8 +4,10 @@ import java.util.Collection;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -14,13 +16,15 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
 import com.xml.mainapp.dtos.KorisnikDTO;
 import com.xml.mainapp.dtos.UpdateProfileDTO;
+import com.xml.mainapp.dtos.UpdateProfileDTO2;
 import com.xml.mainapp.dtos.data.OcenaSmestajaDTO;
 import com.xml.mainapp.dtos.data.RezervacijaDTO;
 import com.xml.mainapp.services.KorisnikService;
-import javax.persistence.*;
+
+import jakarta.ws.rs.Consumes;
+
 import javax.transaction.Transactional;
 
 @RestController
@@ -43,7 +47,7 @@ public class KorisnikCtrl {
 	@PreAuthorize("hasAnyAuthority('GUEST', 'HOST')")
 	@GetMapping("/getHostById/{id}")
 	public ResponseEntity<KorisnikDTO> getHostById(@PathVariable(name="id") String id){
-		KorisnikDTO retVal = this.korisnikService.findHostById(id);
+		KorisnikDTO retVal = this.korisnikService.findHostById(id.substring(1, id.length() - 1));
 		if(retVal == null) {
 			return new ResponseEntity<KorisnikDTO>(HttpStatus.NO_CONTENT);
 		}else {
@@ -55,11 +59,26 @@ public class KorisnikCtrl {
 	public String test() {
 		return "test";
 	}
-	@PreAuthorize("hasAnyAuthority('GUEST', 'HOST')")
 	@Transactional
 	@PutMapping("/update")
-	public ResponseEntity<KorisnikDTO> editProfileById(@RequestBody UpdateProfileDTO udto){
-		KorisnikDTO retVal = this.korisnikService.updateProfileById(udto.getKorisnikDTO().getId(), udto);
+//	@Consumes(MediaType.APPLICATION_JSON_VALUE + ";charset=UTF-8")
+//	@Consumes("application/json")
+//	@Consumes(MediaType.APPLICATION_JSON_UTF8_VALUE)
+	public ResponseEntity<KorisnikDTO> editProfileById(@RequestBody @Validated UpdateProfileDTO udto){
+		KorisnikDTO retVal = this.korisnikService.updateProfileById(udto.getGuestDTO().getId(), udto);
+		if(retVal == null) {
+			return new ResponseEntity<KorisnikDTO>(HttpStatus.NO_CONTENT);
+		}else {
+			return new ResponseEntity<KorisnikDTO>(retVal, HttpStatus.OK);
+		}
+	}
+	@Transactional
+	@PutMapping("/update2")
+//	@Consumes("application/json")
+//	@Consumes(MediaType.APPLICATION_JSON_VALUE + ";charset=UTF-8")
+//	@Consumes(MediaType.APPLICATION_JSON_UTF8_VALUE)
+	public ResponseEntity<KorisnikDTO> editHostProfileById(@RequestBody @Validated UpdateProfileDTO2 udto){
+		KorisnikDTO retVal = this.korisnikService.updateProfileById(udto.getHostDTO().getId(), udto);
 		if(retVal == null) {
 			return new ResponseEntity<KorisnikDTO>(HttpStatus.NO_CONTENT);
 		}else {

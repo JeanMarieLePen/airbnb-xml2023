@@ -6,6 +6,9 @@ import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import com.xml2023.mainapp.ActiveResExistsForSmestajRequest;
+import com.xml2023.mainapp.ActiveResExistsForSmestajResponse;
 import com.xml2023.mainapp.RezervacijaGrpcGrpc;
 import com.xml2023.mainapp.RezervacijaGrpcGrpc.RezervacijaGrpcBlockingStub;
 import com.xml2023.smestajmicroservice.dtos.SmestajDTO;
@@ -69,7 +72,12 @@ public class SmestajService {
 		//da li ima trenutno aktivnih rezervacija prema tom smestaju
 		ManagedChannel channel = ManagedChannelBuilder.forAddress("localhost", 7978).usePlaintext().build();
 		RezervacijaGrpcBlockingStub rezServBlockStub = RezervacijaGrpcGrpc.newBlockingStub(channel);
-//		ActiveResExistsRequest req = ActiveResExistsRequest.newBuilder().setUserId(vlasnikId)
+		ActiveResExistsForSmestajRequest req = ActiveResExistsForSmestajRequest.newBuilder().setUserId(smestajId).build();
+		ActiveResExistsForSmestajResponse response = rezServBlockStub.resExistsForSmestaj(req);
+		if(response.getExists()) {
+			System.out.println("SMESTAJ IMA AKTIVNU REZERVACIJU;");
+			return null;
+		}
 		smestajRep.delete(s);
 		return smestajMapper.toDTO(s);
 	}

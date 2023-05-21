@@ -12,8 +12,6 @@ import com.xml.mainapp.dtos.user.GuestDTO;
 import com.xml.mainapp.model.data.OcenaSmestaj;
 import com.xml.mainapp.model.users.Guest;
 
-
-
 @Component
 public class GuestMapper {
 
@@ -21,10 +19,6 @@ public class GuestMapper {
 	private AdresaMapper aMapper;
 	@Autowired
 	private OcenaSmestajMapper osMapper;
-	@Autowired
-	private OcenaHostMapper ohMapper;
-	@Autowired
-	private RezervacijaMapper rMapper;
 	
 	public Guest fromDTO(GuestDTO dto) {
 		Guest g = new Guest();
@@ -43,11 +37,7 @@ public class GuestMapper {
 		}
 		g.setSlike(tempSlike);
 		g.setBrojOtkazivanja(dto.getBrojOtkazivanja());
-		Collection<OcenaSmestaj> tempOcene = new ArrayList<OcenaSmestaj>();
-		for(OcenaSmestajaDTO odto : dto.getOceneSmestaja()) {
-			OcenaSmestaj tmp = osMapper.fromDTO(odto);
-			tempOcene.add(tmp);
-		}
+		g.setObradjenaRezervacijaNotifikacija(dto.isObradjenaRezervacijaNotifikacija());
 		//g.setOceneSmestaja(tempOcene);
 		
 		return g;
@@ -72,32 +62,7 @@ public class GuestMapper {
 		}
 		dto.setSlike(tempSlike);
 		
-		
-		dto.setRezervacije(allRez);
-		//ocene smestaja, kopirati ako zatreba negde
-		/*
-		 * Collection<OcenaSmestajaDTO> tempOceneSmestaja = new
-		 * ArrayList<OcenaSmestajaDTO>(); if(g.getOceneSmestaja()!=null) {
-		 * for(OcenaSmestaj o: g.getOceneSmestaja()) {
-		 * tempOceneSmestaja.add(osMapper.toDTO(o)); } }
-		 * dto.setOceneSmestaja(tempOceneSmestaja);
-		 */
-		
-		//ocene hosta, kopirati ako zatreba negde
-		/*
-		 * Collection<OcenaHostDTO> tempOceneHost = new ArrayList<OcenaHostDTO>();
-		 * if(g.getOceneVlasnika()!=null) { for(OcenaHost o: g.getOceneVlasnika()) {
-		 * tempOceneHost.add(ohMapper.toDTO(o)); } }
-		 * dto.setOceneVlasnika(tempOceneHost);
-		 */
-		
-		/*
-		 * //rezervacije, kopirati ako zatreba negde Collection<RezervacijaDTO>
-		 * tempRezervacije = new ArrayList<RezervacijaDTO>();
-		 * if(g.getRezervacije()!=null) { for(Rezervacija r:g.getRezervacije()) {
-		 * tempRezervacije.add(rMapper.toDTO(r)); } }
-		 * dto.setRezervacije(tempRezervacije);
-		 */
+		dto.setObradjenaRezervacijaNotifikacija(g.isObradjenaRezervacijaNotifikacija());
 		return dto;
 	}
 }

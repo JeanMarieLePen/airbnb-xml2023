@@ -4,6 +4,10 @@ import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.Collection;
 
+import com.xml.mainapp.dtos.user.GuestDTO;
+
+import jakarta.validation.constraints.NotNull;
+
 public class UpdateProfileDTO implements Serializable{
 
 	/**
@@ -11,25 +15,21 @@ public class UpdateProfileDTO implements Serializable{
 	 */
 	private static final long serialVersionUID = -1269785345731781974L;
 	
-	private KorisnikDTO korisnikDTO;
+	@NotNull
+	private GuestDTO guestDTO;
+	@NotNull
 	private NewSifraDTO novaSifraDTO;
 	
 	public UpdateProfileDTO() {
 		super();
 	}
 
-	public UpdateProfileDTO(KorisnikDTO korisnikDTO, NewSifraDTO novaSifraDTO) {
-		super();
-		this.korisnikDTO = korisnikDTO;
-		this.novaSifraDTO = novaSifraDTO;
+	public GuestDTO getGuestDTO() {
+		return guestDTO;
 	}
 
-	public KorisnikDTO getKorisnikDTO() {
-		return korisnikDTO;
-	}
-
-	public void setKorisnikDTO(KorisnikDTO korisnikDTO) {
-		this.korisnikDTO = korisnikDTO;
+	public void setGuestDTO(GuestDTO guestDTO) {
+		this.guestDTO = guestDTO;
 	}
 
 	public NewSifraDTO getNovaSifraDTO() {

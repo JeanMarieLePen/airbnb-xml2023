@@ -22,6 +22,8 @@ public class Guest extends Korisnik{
 	@PositiveOrZero
 	private int brojOtkazivanja;
 	
+	private boolean obradjenaRezervacijaNotifikacija;
+	
 	public Guest() {
 		super();
 	}
@@ -32,6 +34,14 @@ public class Guest extends Korisnik{
 
 	}
 	
+	public boolean isObradjenaRezervacijaNotifikacija() {
+		return obradjenaRezervacijaNotifikacija;
+	}
+
+	public void setObradjenaRezervacijaNotifikacija(boolean obradjenaRezervacijaNotifikacija) {
+		this.obradjenaRezervacijaNotifikacija = obradjenaRezervacijaNotifikacija;
+	}
+
 	public int getBrojOtkazivanja() {
 		return brojOtkazivanja;
 	}
