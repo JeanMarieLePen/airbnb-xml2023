@@ -1,6 +1,6 @@
 <template>
   <div>
-    <navigation></navigation>
+    <navigation @addNotification="addNotification"></navigation>
     
     <div style="height: 85vh; overflow: auto">
       <!-- <button @click="addReservation()">REZERVACIJA</button>
@@ -8,7 +8,7 @@
       <router-view></router-view>
       
     </div>
-    <!-- <div class="div1">
+    <div class="div1">
       <div>
         <transition-group style="margin-bottom:40px;" tag="ul" name="notification">
           <div v-for="(item, index) in rezervacije.slice(0,5)" class="notification" :key="index">
@@ -20,7 +20,7 @@
           </div>
         </transition-group>
       </div>
-    </div> -->
+    </div>
    
     <app-footer></app-footer>
     
@@ -33,7 +33,7 @@
 import 'bootstrap/dist/css/bootstrap.css'
 import Footer from './components/Footer.vue'
 import Navigation from './components/Navigation.vue'
-import {ref} from 'vue';
+import {reactive, ref} from 'vue';
 
 import SockJS from "sockjs-client";
 import Stomp from "webstomp-client";
@@ -41,12 +41,19 @@ import Stomp from "webstomp-client";
 export default {
   name:'app',
   setup(){
+
+    const state = reactive({
+      notifications:[],
+    })
+    const addNotification = (notification) => {
+      state.notifications.push(notification);
+    }
     const showSlide = ref(false);
     const triggerSlide = () => {
         showSlide.value = true;
         setTimeout(() => showSlide.value = false, 6000);
     }
-    return {showSlide, triggerSlide}
+    return {showSlide, triggerSlide, notifications: state.notifications, addNotification}
   },
   watch:{
     // rezervacije(){
@@ -62,34 +69,6 @@ export default {
     }
   },
   methods:{
-     connect() {
-        this.socket = new SockJS("http://localhost:7777/main-app-websockets");
-        this.stompClient = Stomp.over(this.socket);
-        this.stompClient.connect(
-          {},
-          frame => {
-          this.connected = true;
-          console.log(frame);
-          this.stompClient.subscribe("/topic/notifications", tick => {
-              console.log(tick);
-              this.reservationNotificaiton = JSON.parse(tick.body);
-              console.log(JSON.stringify(this.reservationNotificaiton));
-              
-              this.rezervacije.push(this.reservationNotificaiton);
-          });
-          },
-          error => {
-            console.log(error);
-            this.connected = false;
-          }
-        );
-      },
-        disconnect() {
-            if (this.stompClient) {
-                this.stompClient.disconnect();
-            }
-            this.connected = false;
-        },
     addReservation(){
       let tempRezervacija = {
         id:1,
@@ -131,6 +110,10 @@ export default {
     this.emitter.on("notificationOn", (data) => {
       console.log("NOTIFIKACIJE SU UPALJENE: " + data)
       this.notifications = data;
+    });
+    this.emitter.on("GuestRezervacijaEvent", (data) => {
+      console.log("PREBACENO OBAVESTENJE[GUEST REZERVACIJA]: " + data);
+      this.rezervacije.push(data);
     })
   },
   components:{

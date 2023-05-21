@@ -27,6 +27,16 @@
                             </button>
                         </li>
                         <li class="nav-item">
+                            <button style="padding: 0; border: none; background: none; margin-right:10px;" :title="showNotificationButton" @click="submit()">
+                                <div v-show="!notifications">
+                                    <img id="imgNotifications" src="../assets/bell.png" style="max-width:42px; max-height:38px;" />
+                                </div>
+                                <div v-show="notifications">
+                                    <img id="imgNotifications" src="../assets/bell-disabled.png" style="max-width:42px; max-height:38px;" />
+                                </div>
+                            </button>
+                        </li>
+                        <li class="nav-item">
                             <button class="btn btn-warning" style="font-weight: bold;" v-show="!loggedIn" @click="$router.push('/login')">Log in</button> 
                         </li>
                         <li class="nav-item">
@@ -51,17 +61,28 @@
 import axios from 'axios'
 import SockJS from "sockjs-client";
 import Stomp from "webstomp-client";
-
+import { defineEmits } from 'vue';
 
 export default {
-
+    emits: ['addNotification'],
+    setup(props, { emit }) {
+        let newNotification = '12345';
+        const submit = () => {
+            console.log("AAAAA")
+            emit('addNotification', newNotification);
+            newNotification = '';
+        }
+        return{
+            newNotification, submit,
+        }
+    },
     name:'Navigation',
     data(){
         return{
             loggedIn : localStorage.getItem('xmljwt') ? true : false,
             notifications : false,
             connected : false,
-            
+            receivedNotification : null,
         }
     },
     mounted(){
@@ -80,6 +101,15 @@ export default {
         }
     },
     methods:{
+        // addNotification(){
+        //     let tempRezervacija = {
+        //         id:1,
+        //         let:'OA-2234-22L',
+        //         ime:'Andrija',
+        //         prezime:'Bogdanovic'
+        //     }
+        //     this.emitter.emit('add-to-list', tempRezervacija);
+        // },
         connect(){
             this.socket = new SockJS("http://localhost:8082/main-app-websockets");
             this.stompClient = Stomp.over(this.socket);
@@ -88,11 +118,19 @@ export default {
                 frame => {
                     this.connected = true;
                     console.log(frame);
-                    this.stompClient.subscribe("/topic/notifications", tick => {
+                    this.stompClient.subscribe("/queue/notifications", tick => {
                         console.log(tick);
                         console.log("SADRZAJ ODGOVORA: " + tick.body);
+                        this.receivedNotification = JSON.parse(tick.body);
+                        // this.emitter.emit("GuestRezervacijaEvent", this.receivedNotification);
+                        this.emitter.emit('addNotification', this.receivedNotification.idRezervacije);
+                        this.receivedNotification = null;
+                        console.log(JSON.stringify(this.receivedNotification));
                     });
 
+                }, error => {
+                    console.log(error);
+                    this.connected = false;
                 }
             )
             
@@ -104,7 +142,7 @@ export default {
             this.connected = false;
         },
         tickleConnection(){
-            this.connected ? this.disconnect : this.connect
+            this.connected ? this.disconnect() : this.connect();
         },
         
         enableNotifications(){
@@ -115,7 +153,11 @@ export default {
                 this.emitter.emit("notificationOn", false);
             }
             console.log("NOTIFIKACIJE: " + this.notifications);
-            this.connect();
+            if(this.connected){
+                this.disconnect();
+            }else{
+                this.connect();
+            }
         },
         logOut(){
             if(confirm('Da li ste sigurni da zelite da se odjavite?')){

@@ -453,7 +453,8 @@ import 'vueperslides/dist/vueperslides.css'
                         let objekat = {
                             hostDTO: this.profile,
                             novaSifraDTO: tempObjekat
-                        } 
+                        }
+                        console.log("APDEJT PROFILA HOST-a") 
                         console.log(JSON.stringify(objekat))
                         dataService.updateUserProfile2(objekat).then(response => {
                             this.messages.successResponse = `<h4>Vas profil je uspesno izmenjen!</h4>`;
