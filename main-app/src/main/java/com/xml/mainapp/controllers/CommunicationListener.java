@@ -13,7 +13,8 @@ public class CommunicationListener {
 	SimpMessagingTemplate template;
 	
 	public void sendNotification(NotificationDTO notification) {
-		template.convertAndSend("/topic/notifications", notification);
-		System.out.println("NOTIFIKACIJA POSLATA NA PRIKAZ. ID SMESTAJA: " + notification.getIdSmestaja());
+		System.out.println("NOTIFIKACIJA STIGLA;");
+		template.convertAndSend("/queue/notifications", notification);
+		System.out.println("NOTIFIKACIJA POSLATA NA PRIKAZ. ID SMESTAJA: " + notification.getIdRezervacije());
 	}
 }

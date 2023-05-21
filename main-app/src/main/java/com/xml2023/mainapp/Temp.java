@@ -209,6 +209,16 @@ public final class Temp {
   static final 
     com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internal_static_com_xml2023_mainapp_rezOtkazanaResponse_fieldAccessorTable;
+  static final com.google.protobuf.Descriptors.Descriptor
+    internal_static_com_xml2023_mainapp_reservationApprovedNotificationRequest_descriptor;
+  static final 
+    com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+      internal_static_com_xml2023_mainapp_reservationApprovedNotificationRequest_fieldAccessorTable;
+  static final com.google.protobuf.Descriptors.Descriptor
+    internal_static_com_xml2023_mainapp_reservationApprovedNotificationResponse_descriptor;
+  static final 
+    com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+      internal_static_com_xml2023_mainapp_reservationApprovedNotificationResponse_fieldAccessorTable;
 
   public static com.google.protobuf.Descriptors.FileDescriptor
       getDescriptor() {
@@ -293,54 +303,61 @@ public final class Temp {
       "\001 \001(\010\022\025\n\rrezAutomatski\030\002 \001(\010\022\025\n\rprosecna" +
       "Ocena\030\003 \001(\003\"%\n\022rezOtkazanaRequest\022\017\n\007gue" +
       "stId\030\001 \001(\t\")\n\023rezOtkazanaResponse\022\022\n\npen" +
-      "alDodat\030\001 \001(\0102j\n\017GreetingService\022W\n\010gree" +
-      "ting\022$.com.xml2023.mainapp.KorisnikReque" +
-      "st\032%.com.xml2023.mainapp.KorisnikRespons" +
-      "e2\252\006\n\013SmestajGrpc\022_\n\006exists\022).com.xml202" +
-      "3.mainapp.SmestajExistsRequest\032*.com.xml" +
-      "2023.mainapp.SmestajExistsResponse\022u\n\024ge" +
-      "tSmestajIdsForHost\022-.com.xml2023.mainapp" +
-      ".SmestajIdsForHostRequest\032..com.xml2023." +
-      "mainapp.SmestajIdsForHostResponse\022~\n\025dek" +
-      "eteSnestajsForHost\0221.com.xml2023.mainapp" +
-      ".DeleteSmestajsForHostRequest\0322.com.xml2" +
-      "023.mainapp.DeleteSmestajsForHostRespons" +
-      "e\022i\n\016getSmestajById\022*.com.xml2023.mainap" +
-      "p.getSmestajByIdRequest\032+.com.xml2023.ma" +
-      "inapp.getSmestajByIdResponse\022\207\001\n\030getList" +
-      "aSmestajaByUserId\0224.com.xml2023.mainapp." +
-      "getListaSmestajaByUserIdRequest\0325.com.xm" +
-      "l2023.mainapp.getListaSmestajaByUserIdRe" +
-      "sponse\022c\n\014zauzmiTermin\022(.com.xml2023.mai" +
-      "napp.TerminZauzmiRequest\032).com.xml2023.m" +
-      "ainapp.TerminZauzmiResponse\022i\n\016oslobodiT" +
-      "ermin\022*.com.xml2023.mainapp.TerminOslobo" +
-      "diRequest\032+.com.xml2023.mainapp.TerminOs" +
-      "lobodiResponse2\375\005\n\017RezervacijaGrpc\022g\n\006ex" +
-      "ists\022-.com.xml2023.mainapp.RezervacijaEx" +
-      "istsRequest\032..com.xml2023.mainapp.Rezerv" +
-      "acijaExistsResponse\022v\n\031reservationsForUs" +
-      "erExists\022+.com.xml2023.mainapp.ActiveRes" +
-      "ExistsRequest\032,.com.xml2023.mainapp.Acti" +
-      "veResExistsResponse\022u\n\022getRezervacijaByI" +
-      "d\022..com.xml2023.mainapp.getRezervacijaBy" +
-      "IdRequest\032/.com.xml2023.mainapp.getRezer" +
-      "vacijaByIdResponse\022\220\001\n\033getListaRezervaci" +
-      "jaByUserId\0227.com.xml2023.mainapp.getList" +
-      "aRezervacijaByUserIdRequest\0328.com.xml202" +
-      "3.mainapp.getListaRezervacijaByUserIdRes" +
-      "ponse\022\204\001\n\023resExistsForSmestaj\0225.com.xml2" +
-      "023.mainapp.ActiveResExistsForSmestajReq" +
-      "uest\0326.com.xml2023.mainapp.ActiveResExis" +
-      "tsForSmestajResponse\022x\n\025getActiveReserva" +
-      "tions\022..com.xml2023.mainapp.ActiveReserv" +
-      "ationsRequest\032/.com.xml2023.mainapp.Acti" +
-      "veReservationsResponse2\306\001\n\014KorisnikGrpc\022" +
-      "T\n\007getHost\022#.com.xml2023.mainapp.getHost" +
-      "Request\032$.com.xml2023.mainapp.getHostRes" +
-      "ponse\022`\n\013rezOtkazana\022\'.com.xml2023.maina" +
-      "pp.rezOtkazanaRequest\032(.com.xml2023.main" +
-      "app.rezOtkazanaResponseB\002P\001b\006proto3"
+      "alDodat\030\001 \001(\010\"?\n&reservationApprovedNoti" +
+      "ficationRequest\022\025\n\ridRezervacije\030\001 \001(\t\"=" +
+      "\n\'reservationApprovedNotificationRespons" +
+      "e\022\022\n\nisporuceno\030\001 \001(\0102j\n\017GreetingService" +
+      "\022W\n\010greeting\022$.com.xml2023.mainapp.Koris" +
+      "nikRequest\032%.com.xml2023.mainapp.Korisni" +
+      "kResponse2\252\006\n\013SmestajGrpc\022_\n\006exists\022).co" +
+      "m.xml2023.mainapp.SmestajExistsRequest\032*" +
+      ".com.xml2023.mainapp.SmestajExistsRespon" +
+      "se\022u\n\024getSmestajIdsForHost\022-.com.xml2023" +
+      ".mainapp.SmestajIdsForHostRequest\032..com." +
+      "xml2023.mainapp.SmestajIdsForHostRespons" +
+      "e\022~\n\025deketeSnestajsForHost\0221.com.xml2023" +
+      ".mainapp.DeleteSmestajsForHostRequest\0322." +
+      "com.xml2023.mainapp.DeleteSmestajsForHos" +
+      "tResponse\022i\n\016getSmestajById\022*.com.xml202" +
+      "3.mainapp.getSmestajByIdRequest\032+.com.xm" +
+      "l2023.mainapp.getSmestajByIdResponse\022\207\001\n" +
+      "\030getListaSmestajaByUserId\0224.com.xml2023." +
+      "mainapp.getListaSmestajaByUserIdRequest\032" +
+      "5.com.xml2023.mainapp.getListaSmestajaBy" +
+      "UserIdResponse\022c\n\014zauzmiTermin\022(.com.xml" +
+      "2023.mainapp.TerminZauzmiRequest\032).com.x" +
+      "ml2023.mainapp.TerminZauzmiResponse\022i\n\016o" +
+      "slobodiTermin\022*.com.xml2023.mainapp.Term" +
+      "inOslobodiRequest\032+.com.xml2023.mainapp." +
+      "TerminOslobodiResponse2\375\005\n\017RezervacijaGr" +
+      "pc\022g\n\006exists\022-.com.xml2023.mainapp.Rezer" +
+      "vacijaExistsRequest\032..com.xml2023.mainap" +
+      "p.RezervacijaExistsResponse\022v\n\031reservati" +
+      "onsForUserExists\022+.com.xml2023.mainapp.A" +
+      "ctiveResExistsRequest\032,.com.xml2023.main" +
+      "app.ActiveResExistsResponse\022u\n\022getRezerv" +
+      "acijaById\022..com.xml2023.mainapp.getRezer" +
+      "vacijaByIdRequest\032/.com.xml2023.mainapp." +
+      "getRezervacijaByIdResponse\022\220\001\n\033getListaR" +
+      "ezervacijaByUserId\0227.com.xml2023.mainapp" +
+      ".getListaRezervacijaByUserIdRequest\0328.co" +
+      "m.xml2023.mainapp.getListaRezervacijaByU" +
+      "serIdResponse\022\204\001\n\023resExistsForSmestaj\0225." +
+      "com.xml2023.mainapp.ActiveResExistsForSm" +
+      "estajRequest\0326.com.xml2023.mainapp.Activ" +
+      "eResExistsForSmestajResponse\022x\n\025getActiv" +
+      "eReservations\022..com.xml2023.mainapp.Acti" +
+      "veReservationsRequest\032/.com.xml2023.main" +
+      "app.ActiveReservationsResponse2\324\002\n\014Koris" +
+      "nikGrpc\022T\n\007getHost\022#.com.xml2023.mainapp" +
+      ".getHostRequest\032$.com.xml2023.mainapp.ge" +
+      "tHostResponse\022`\n\013rezOtkazana\022\'.com.xml20" +
+      "23.mainapp.rezOtkazanaRequest\032(.com.xml2" +
+      "023.mainapp.rezOtkazanaResponse\022\213\001\n\016rezO" +
+      "bavestenje\022;.com.xml2023.mainapp.reserva" +
+      "tionApprovedNotificationRequest\032<.com.xm" +
+      "l2023.mainapp.reservationApprovedNotific" +
+      "ationResponseB\002P\001b\006proto3"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
         new com.google.protobuf.Descriptors.FileDescriptor.    InternalDescriptorAssigner() {
@@ -589,6 +606,18 @@ public final class Temp {
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_com_xml2023_mainapp_rezOtkazanaResponse_descriptor,
         new java.lang.String[] { "PenalDodat", });
+    internal_static_com_xml2023_mainapp_reservationApprovedNotificationRequest_descriptor =
+      getDescriptor().getMessageTypes().get(39);
+    internal_static_com_xml2023_mainapp_reservationApprovedNotificationRequest_fieldAccessorTable = new
+      com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
+        internal_static_com_xml2023_mainapp_reservationApprovedNotificationRequest_descriptor,
+        new java.lang.String[] { "IdRezervacije", });
+    internal_static_com_xml2023_mainapp_reservationApprovedNotificationResponse_descriptor =
+      getDescriptor().getMessageTypes().get(40);
+    internal_static_com_xml2023_mainapp_reservationApprovedNotificationResponse_fieldAccessorTable = new
+      com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
+        internal_static_com_xml2023_mainapp_reservationApprovedNotificationResponse_descriptor,
+        new java.lang.String[] { "Isporuceno", });
     com.google.protobuf.TimestampProto.getDescriptor();
   }
 

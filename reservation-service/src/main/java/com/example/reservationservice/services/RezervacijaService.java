@@ -45,6 +45,8 @@ import com.xml2023.mainapp.getListaSmestajaByUserIdRequest;
 import com.xml2023.mainapp.getListaSmestajaByUserIdResponse;
 import com.xml2023.mainapp.getSmestajByIdRequest;
 import com.xml2023.mainapp.getSmestajByIdResponse;
+import com.xml2023.mainapp.reservationApprovedNotificationRequest;
+import com.xml2023.mainapp.reservationApprovedNotificationResponse;
 import com.xml2023.mainapp.rezOtkazanaRequest;
 import com.xml2023.mainapp.rezOtkazanaResponse;
 
@@ -199,6 +201,14 @@ public class RezervacijaService {
 		TerminZauzmiResponse rspns = smestajBlockingStub.zauzmiTermin(rqst);
 		if(rspns.getZauzet()) {
 			r.setStatus(StatusRezervacije.REZERVISANA);
+			reservationApprovedNotificationRequest req = reservationApprovedNotificationRequest.newBuilder().setIdRezervacije(r.getId()).build();
+			ManagedChannel channel2 = ManagedChannelBuilder.forAddress("localhost", 7979).usePlaintext().build();
+			KorisnikGrpcBlockingStub blockStub = KorisnikGrpcGrpc.newBlockingStub(channel2);
+			reservationApprovedNotificationResponse res = blockStub.rezObavestenje(req);
+			//ako nije uspesno preneo obavestenje da je obavljena rezervacija, prekini izvrsavanje
+			if(!res.getIsporuceno()) {
+				return null;
+			}
 		}else {
 			return null;
 		}

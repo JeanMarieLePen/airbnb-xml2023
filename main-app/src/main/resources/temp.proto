@@ -190,6 +190,7 @@ message TerminDTO{
 service KorisnikGrpc{
 	rpc getHost(getHostRequest) returns (getHostResponse);
 	rpc rezOtkazana(rezOtkazanaRequest) returns (rezOtkazanaResponse);
+	rpc rezObavestenje(reservationApprovedNotificationRequest) returns (reservationApprovedNotificationResponse);
 }
 
 message getHostRequest{
@@ -210,4 +211,11 @@ message rezOtkazanaRequest{
 
 message rezOtkazanaResponse{
 	bool penalDodat = 1;
+}
+
+message reservationApprovedNotificationRequest{
+	string idRezervacije = 1;
+}
+message reservationApprovedNotificationResponse{
+	bool isporuceno = 1;
 }

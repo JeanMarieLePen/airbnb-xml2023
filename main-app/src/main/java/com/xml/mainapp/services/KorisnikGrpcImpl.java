@@ -3,6 +3,8 @@ package com.xml.mainapp.services;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.xml.mainapp.controllers.CommunicationListener;
+import com.xml.mainapp.dtos.NotificationDTO;
 import com.xml.mainapp.model.users.Guest;
 import com.xml.mainapp.model.users.Host;
 import com.xml.mainapp.repositories.KorisnikRep;
@@ -10,6 +12,8 @@ import com.xml2023.mainapp.HostBasicDTO;
 import com.xml2023.mainapp.KorisnikGrpcGrpc.KorisnikGrpcImplBase;
 import com.xml2023.mainapp.getHostRequest;
 import com.xml2023.mainapp.getHostResponse;
+import com.xml2023.mainapp.reservationApprovedNotificationRequest;
+import com.xml2023.mainapp.reservationApprovedNotificationResponse;
 import com.xml2023.mainapp.rezOtkazanaRequest;
 import com.xml2023.mainapp.rezOtkazanaResponse;
 
@@ -20,6 +24,9 @@ public class KorisnikGrpcImpl extends KorisnikGrpcImplBase{
 
 	@Autowired
 	private KorisnikRep korRep;
+	
+	@Autowired
+	private CommunicationListener cmnListener;
 	@Override
 	public void getHost(getHostRequest request, StreamObserver<getHostResponse> responseObserver) {
 		// TODO Auto-generated method stub
@@ -55,6 +62,19 @@ public class KorisnikGrpcImpl extends KorisnikGrpcImplBase{
 		response.setPenalDodat(penal);
 		responseObserver.onNext(response.build());
 		responseObserver.onCompleted();
+	}
+
+	@Override
+	public void rezObavestenje(reservationApprovedNotificationRequest request,
+			StreamObserver<reservationApprovedNotificationResponse> responseObserver) {
+			String id = request.getIdRezervacije();
+			NotificationDTO notifikacija = new NotificationDTO();
+			notifikacija.setIdRezervacije(id);
+			cmnListener.sendNotification(notifikacija);
+			reservationApprovedNotificationResponse.Builder response = reservationApprovedNotificationResponse.newBuilder();
+			response.setIsporuceno(true);
+			responseObserver.onNext(response.build());
+			responseObserver.onCompleted();		
 	}
 	
 

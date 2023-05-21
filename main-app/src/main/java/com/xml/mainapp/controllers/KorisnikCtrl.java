@@ -75,7 +75,7 @@ public class KorisnikCtrl {
 	@Transactional
 	@PutMapping("/update2")
 //	@Consumes("application/json")
-//	@Consumes(MediaType.APPLICATION_JSON_VALUE + ";charset=UTF-8")
+	@Consumes(MediaType.APPLICATION_JSON_VALUE + ";charset=UTF-8")
 //	@Consumes(MediaType.APPLICATION_JSON_UTF8_VALUE)
 	public ResponseEntity<KorisnikDTO> editHostProfileById(@RequestBody @Validated UpdateProfileDTO2 udto){
 		KorisnikDTO retVal = this.korisnikService.updateProfileById(udto.getHostDTO().getId(), udto);

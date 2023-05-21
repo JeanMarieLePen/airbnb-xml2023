@@ -91,6 +91,38 @@ public final class KorisnikGrpcGrpc {
      return getRezOtkazanaMethod;
   }
 
+  private static volatile io.grpc.MethodDescriptor<com.xml2023.mainapp.reservationApprovedNotificationRequest,
+      com.xml2023.mainapp.reservationApprovedNotificationResponse> getRezObavestenjeMethod;
+
+  @io.grpc.stub.annotations.RpcMethod(
+      fullMethodName = SERVICE_NAME + '/' + "rezObavestenje",
+      requestType = com.xml2023.mainapp.reservationApprovedNotificationRequest.class,
+      responseType = com.xml2023.mainapp.reservationApprovedNotificationResponse.class,
+      methodType = io.grpc.MethodDescriptor.MethodType.UNARY)
+  public static io.grpc.MethodDescriptor<com.xml2023.mainapp.reservationApprovedNotificationRequest,
+      com.xml2023.mainapp.reservationApprovedNotificationResponse> getRezObavestenjeMethod() {
+    io.grpc.MethodDescriptor<com.xml2023.mainapp.reservationApprovedNotificationRequest, com.xml2023.mainapp.reservationApprovedNotificationResponse> getRezObavestenjeMethod;
+    if ((getRezObavestenjeMethod = KorisnikGrpcGrpc.getRezObavestenjeMethod) == null) {
+      synchronized (KorisnikGrpcGrpc.class) {
+        if ((getRezObavestenjeMethod = KorisnikGrpcGrpc.getRezObavestenjeMethod) == null) {
+          KorisnikGrpcGrpc.getRezObavestenjeMethod = getRezObavestenjeMethod = 
+              io.grpc.MethodDescriptor.<com.xml2023.mainapp.reservationApprovedNotificationRequest, com.xml2023.mainapp.reservationApprovedNotificationResponse>newBuilder()
+              .setType(io.grpc.MethodDescriptor.MethodType.UNARY)
+              .setFullMethodName(generateFullMethodName(
+                  "com.xml2023.mainapp.KorisnikGrpc", "rezObavestenje"))
+              .setSampledToLocalTracing(true)
+              .setRequestMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(
+                  com.xml2023.mainapp.reservationApprovedNotificationRequest.getDefaultInstance()))
+              .setResponseMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(
+                  com.xml2023.mainapp.reservationApprovedNotificationResponse.getDefaultInstance()))
+                  .setSchemaDescriptor(new KorisnikGrpcMethodDescriptorSupplier("rezObavestenje"))
+                  .build();
+          }
+        }
+     }
+     return getRezObavestenjeMethod;
+  }
+
   /**
    * Creates a new async stub that supports all call types for the service
    */
@@ -132,6 +164,13 @@ public final class KorisnikGrpcGrpc {
       asyncUnimplementedUnaryCall(getRezOtkazanaMethod(), responseObserver);
     }
 
+    /**
+     */
+    public void rezObavestenje(com.xml2023.mainapp.reservationApprovedNotificationRequest request,
+        io.grpc.stub.StreamObserver<com.xml2023.mainapp.reservationApprovedNotificationResponse> responseObserver) {
+      asyncUnimplementedUnaryCall(getRezObavestenjeMethod(), responseObserver);
+    }
+
     @java.lang.Override public final io.grpc.ServerServiceDefinition bindService() {
       return io.grpc.ServerServiceDefinition.builder(getServiceDescriptor())
           .addMethod(
@@ -148,6 +187,13 @@ public final class KorisnikGrpcGrpc {
                 com.xml2023.mainapp.rezOtkazanaRequest,
                 com.xml2023.mainapp.rezOtkazanaResponse>(
                   this, METHODID_REZ_OTKAZANA)))
+          .addMethod(
+            getRezObavestenjeMethod(),
+            asyncUnaryCall(
+              new MethodHandlers<
+                com.xml2023.mainapp.reservationApprovedNotificationRequest,
+                com.xml2023.mainapp.reservationApprovedNotificationResponse>(
+                  this, METHODID_REZ_OBAVESTENJE)))
           .build();
     }
   }
@@ -185,6 +231,14 @@ public final class KorisnikGrpcGrpc {
       asyncUnaryCall(
           getChannel().newCall(getRezOtkazanaMethod(), getCallOptions()), request, responseObserver);
     }
+
+    /**
+     */
+    public void rezObavestenje(com.xml2023.mainapp.reservationApprovedNotificationRequest request,
+        io.grpc.stub.StreamObserver<com.xml2023.mainapp.reservationApprovedNotificationResponse> responseObserver) {
+      asyncUnaryCall(
+          getChannel().newCall(getRezObavestenjeMethod(), getCallOptions()), request, responseObserver);
+    }
   }
 
   /**
@@ -217,6 +271,13 @@ public final class KorisnikGrpcGrpc {
     public com.xml2023.mainapp.rezOtkazanaResponse rezOtkazana(com.xml2023.mainapp.rezOtkazanaRequest request) {
       return blockingUnaryCall(
           getChannel(), getRezOtkazanaMethod(), getCallOptions(), request);
+    }
+
+    /**
+     */
+    public com.xml2023.mainapp.reservationApprovedNotificationResponse rezObavestenje(com.xml2023.mainapp.reservationApprovedNotificationRequest request) {
+      return blockingUnaryCall(
+          getChannel(), getRezObavestenjeMethod(), getCallOptions(), request);
     }
   }
 
@@ -253,10 +314,19 @@ public final class KorisnikGrpcGrpc {
       return futureUnaryCall(
           getChannel().newCall(getRezOtkazanaMethod(), getCallOptions()), request);
     }
+
+    /**
+     */
+    public com.google.common.util.concurrent.ListenableFuture<com.xml2023.mainapp.reservationApprovedNotificationResponse> rezObavestenje(
+        com.xml2023.mainapp.reservationApprovedNotificationRequest request) {
+      return futureUnaryCall(
+          getChannel().newCall(getRezObavestenjeMethod(), getCallOptions()), request);
+    }
   }
 
   private static final int METHODID_GET_HOST = 0;
   private static final int METHODID_REZ_OTKAZANA = 1;
+  private static final int METHODID_REZ_OBAVESTENJE = 2;
 
   private static final class MethodHandlers<Req, Resp> implements
       io.grpc.stub.ServerCalls.UnaryMethod<Req, Resp>,
@@ -282,6 +352,10 @@ public final class KorisnikGrpcGrpc {
         case METHODID_REZ_OTKAZANA:
           serviceImpl.rezOtkazana((com.xml2023.mainapp.rezOtkazanaRequest) request,
               (io.grpc.stub.StreamObserver<com.xml2023.mainapp.rezOtkazanaResponse>) responseObserver);
+          break;
+        case METHODID_REZ_OBAVESTENJE:
+          serviceImpl.rezObavestenje((com.xml2023.mainapp.reservationApprovedNotificationRequest) request,
+              (io.grpc.stub.StreamObserver<com.xml2023.mainapp.reservationApprovedNotificationResponse>) responseObserver);
           break;
         default:
           throw new AssertionError();
@@ -346,6 +420,7 @@ public final class KorisnikGrpcGrpc {
               .setSchemaDescriptor(new KorisnikGrpcFileDescriptorSupplier())
               .addMethod(getGetHostMethod())
               .addMethod(getRezOtkazanaMethod())
+              .addMethod(getRezObavestenjeMethod())
               .build();
         }
       }
