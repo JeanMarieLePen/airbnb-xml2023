@@ -98,25 +98,6 @@ public class KorisnikCtrl {
 		}
 	}
 	
-	@PreAuthorize("hasAuthority('GUEST')")
-	@Transactional
-	@PostMapping("/giveRatingToSmestaj/{userId}/{smestajId}")
-	public ResponseEntity<?> giveRatingToSmestaj(@PathVariable(value = "userId") String userId, @PathVariable(value = "smestajId") String smestajId, @RequestBody OcenaSmestajaDTO ocena){
-		OcenaSmestajaDTO retVal = this.korisnikService.giveRatingToSmestaj(userId, smestajId, ocena);
-		if(retVal == null) {
-			return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-		}else {
-			return new ResponseEntity<OcenaSmestajaDTO>(retVal, HttpStatus.OK);
-		}
-	}
-	
-	@PreAuthorize("hasAuthority('GUEST')")
-	@Transactional
-	@GetMapping("/canGiveRating/{userId}/{smestajId}")
-	public ResponseEntity<?> canGiveRating(@PathVariable(value = "userId") String userId, @PathVariable(value = "smestajId") String smestajId){
-		boolean retVal = this.korisnikService.canGiveRating(userId, smestajId);
-		return new ResponseEntity<Boolean>(retVal, HttpStatus.OK);
-	}
 	
 	@PreAuthorize("hasAnyAuthority('GUEST', 'HOST')")
 	@Transactional

@@ -34,9 +34,8 @@ public class OcenaSmestaj implements Serializable{
 	}
 
 
-	public OcenaSmestaj(String id, String smestaj, String gost, @PositiveOrZero int ocena, @NotNull LocalDate datum) {
+	public OcenaSmestaj(String smestaj, String gost, @PositiveOrZero int ocena, @NotNull LocalDate datum) {
 		super();
-		this.id = id;
 		this.smestaj = smestaj;
 		this.gost = gost;
 		this.ocena = ocena;
