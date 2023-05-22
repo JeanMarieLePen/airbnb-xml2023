@@ -42,7 +42,7 @@
 
     <div v-if="smestaj.length > 0">
         <Template v-bind:listaSmestaja="prop"></Template> 
-        <!--<p>{{ this.smestajString }}</p>-->
+       <!-- <p>{{ this.smestajString }}</p>-->
     </div>
     <div v-if="smestaj.length == 0">
         <p style="font-family:Verdana;font-size:30px;font-style: italic;">LISTA SMESTAJA JE PRAZNA</p>
@@ -61,7 +61,8 @@ export default {
         return {
             prop:{
                 brojDana:'1',
-                listaSmestaja:[]
+                listaSmestaja:[],
+                brojGostiju:'1',
             },
             smestaj: [],
             smestajString: '',
@@ -110,6 +111,7 @@ export default {
         },
         search() {
             this.prop.brojDana=this.getDani(this.parametriDTO.kraj,this.parametriDTO.pocetak);
+            this.prop.brojGostiju=this.parametri.brGosti;
             this.parametriDTO.pocetak = this.parametri.pocetak;
             this.parametriDTO.kraj = this.parametri.kraj;
             this.parametriDTO.adresa = this.parametri.adresa;
