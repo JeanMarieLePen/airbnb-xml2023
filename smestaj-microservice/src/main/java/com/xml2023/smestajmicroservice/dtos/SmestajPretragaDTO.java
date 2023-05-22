@@ -13,10 +13,11 @@ public class SmestajPretragaDTO {
 	private int maxGosti;
 	private double ukCena;
 	private double prosecnaOcena;
+	private boolean poSmestaju;
 	
 	
 	public SmestajPretragaDTO(String id, String hostId, AdresaDTO adresa,
-			Collection<String> slike, int minGosti, int maxGosti, double ukCena, double prosecnaOcena) {
+			Collection<String> slike, int minGosti, int maxGosti, double ukCena, double prosecnaOcena, boolean poSmestaju) {
 		super();
 		this.id = id;
 		this.hostId = hostId;
@@ -26,6 +27,7 @@ public class SmestajPretragaDTO {
 		this.maxGosti = maxGosti;
 		this.ukCena = ukCena;
 		this.prosecnaOcena = prosecnaOcena;
+		this.poSmestaju=poSmestaju;
 	}
 	
 
@@ -112,6 +114,15 @@ public class SmestajPretragaDTO {
 	public void setProsecnaOcena(double prosecnaOcena) {
 		this.prosecnaOcena = prosecnaOcena;
 	}
-	
+
+
+	public boolean isPoSmestaju() {
+		return poSmestaju;
+	}
+
+
+	public void setPoSmestaju(boolean poSmestaju) {
+		this.poSmestaju = poSmestaju;
+	}
 	
 }

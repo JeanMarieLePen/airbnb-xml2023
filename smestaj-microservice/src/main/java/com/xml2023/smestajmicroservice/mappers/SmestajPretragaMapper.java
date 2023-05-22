@@ -39,6 +39,7 @@ public class SmestajPretragaMapper {
 		}		dto.setSlike(tempSlike);
 		dto.setProsecnaOcena(getProsecnaOcena(s));
 		dto.setUkCena(ukupnaCena(s, pocetak, kraj));
+		dto.setPoSmestaju(s.getCenovnik().isPoSmestaju());
 		return dto;
 		
 	} 

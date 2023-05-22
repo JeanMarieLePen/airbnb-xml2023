@@ -57,12 +57,7 @@ public class PretragaService {
 		if(dto.getPocetak()!=null && dto.getKraj()!=null) {
 			pronadjeni=pronadjeni.stream().filter(x-> isSlobodan(x, dto.getPocetak(), dto.getKraj())).collect(Collectors.toList());
 		}
-//		List<SmestajPretragaDTO> dtos = new ArrayList<SmestajPretragaDTO>();
-//		for(Smestaj s : pronadjeni) {
-//			dtos.add(smMap.toDTO(s, dto.getPocetak(), dto.getKraj()));
-//		}
-		
-		//iz nekog razloga puca, vrv bag; obrisati ovu gornju petlju kad spojimo
+
 		List<SmestajPretragaDTO> dtos = pronadjeni.stream().map(x-> smMap.toDTO(x, dto.getPocetak(), dto.getKraj())).collect(Collectors.toList());
 		//filter za cene
 		if(dto.getMinCena()>-1) {
