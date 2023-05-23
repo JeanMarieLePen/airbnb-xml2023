@@ -75,7 +75,7 @@
                                                 <label>Ocena: </label>
                                             </td>
                                             <td>
-                                                <star-rating :star-size="20" read-only style="margin-left:10px;display:inline-block"  v-model:rating="smestaj.ocena"></star-rating>
+                                                <star-rating :star-size="20" read-only style="margin-left:10px;display:inline-block"  v-model:rating="smestaj.prosecnaOcena"></star-rating>
                                             </td>
                                         </tr>
                                         <tr>

@@ -97,6 +97,12 @@ class DataService{
     removeSmestaj(smestajId, vlasnikId){
         return axios.delete(`${API_URL}/smestaj/remove/${smestajId}/${vlasnikId}`);
     }
+    canGiveRatingHost(userId, hostId){
+        return axios.get(`${API_URL}/rezervacija/canGiveRatingHost/${userId}/${hostId}`);
+    }
+    giveRatingToHost(userId, hostId, ocenaObj){
+        return axios.post(`${API_URL}/korisnik/giveRatingToHost/${userId}/${hostId}`, ocenaObj);
+    }
 }
 
 
