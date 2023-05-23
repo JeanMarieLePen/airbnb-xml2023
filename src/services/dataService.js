@@ -83,10 +83,10 @@ class DataService{
         return axios.put(`${API_URL}/rezervacija/rejectReservation/${ownerId}/${reservationId}`);
     }
     canGiveRating(userId, smestajId){
-        return axios.get(`${API_URL}/korisnik/canGiveRating/${userId}/${smestajId}`);
+        return axios.get(`${API_URL}/rezervacija/canGiveRating/${userId}/${smestajId}`);
     }
     giveRatingToSmestaj(userId, smestajId, ocenaObj){
-        return axios.post(`${API_URL}/korisnik/giveRatingToSmestaj/${userId}/${smestajId}`, ocenaObj);
+        return axios.post(`${API_URL}/smestaj/giveRatingToSmestaj/${userId}/${smestajId}`, ocenaObj);
     }
     search(parametri){
         return axios.post(`${API_URL}/smestaj/pretraga`, parametri)

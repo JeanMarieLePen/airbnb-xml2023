@@ -2,6 +2,8 @@
     <!--SORTIRANJE-->
     <p>{{this.listaSmestaja.brojDana}}</p>
     <section style="margin-left: 10px; margin-bottom:200px;">
+    <!--<p>{{this.listaSmestaja.brojDana}}</p>-->
+    <section style="margin-left: 10px; margin-bottom:100px;">
         <div>
             <div class="row">
                 <div class="col-md-4" v-bind:key="index" v-for="(sTemp, index) in sortEntities.slice(0,15)">
@@ -11,7 +13,9 @@
                         <h5 class="card-title">{{sTemp.adresa.adresa}}</h5>
                         <p class="card-text">Ocena: {{sTemp.prosecnaOcena}}</p>
                         <p class="card-text">Cena(ukupna): {{sTemp.ukCena}}</p>
-                        <p class="card-text">Cena(po Osobi): {{this.getProsekCena(sTemp.ukCena)}}</p>
+                        <p class="card-text" v-if="sTemp.poSmestaju===true">Cena(po smestaju): {{this.getProsekCena(sTemp.ukCena)}}</p>
+                        <p class="card-text" v-else>Cena(po smestaju/po Osobi): {{this.getProsekCenaOsoba(sTemp.ukCena)}}</p> 
+
                         <button style="margin-left:30px;" v-on:click="smestajDet(sTemp.id)" class="btn btn-primary">Detalji</button>
                        </div>
                     </div>
@@ -34,7 +38,7 @@ export default {
             userObj: {},
             currentSortDir: 'asc',
             currentSort: 'polazakIz',
-            
+            brGosti:''
         }
     },
     methods: { 
@@ -48,7 +52,11 @@ export default {
             return tmpImg;
         },
         getProsekCena(cena){
-            return cena/this.listaSmestaja.brojDana
+            return Math.abs(cena/(this.listaSmestaja.brojDana-1))
+        },
+        getProsekCenaOsoba(cena){
+            let c= Math.abs(cena/(this.listaSmestaja.brojDana-1));
+            return Math.abs(c/this.brGosti-1);
         },
         smestajDet(id){
             this.$router.push(`/pregled/${id}`);
@@ -57,6 +65,8 @@ export default {
     created(){
         //if(parserMixin.methods.checkLoginStatus() == true){
         console.log("ID KORISNIKA: " + this.userObj.role);
+        if(this.listaSmestaja.brojGostiju===''){ this.brGosti=1;}
+        else {this.brGosti=Number(this.listaSmestaja.brojGostiju);}
         //}
     },
     computed:{

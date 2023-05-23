@@ -9,9 +9,10 @@
                     <button v-show="role === 'HOST'" @click="editSmestaj(smestaj.id)" style="font-weight:500; margin-right: 5px;" class="btn btn-success">Izmeni</button>
                     <button @click="goToProfile(smestaj.vlasnikId)" style="font-weight:500" class="btn btn-success">Pogledaj profil oglasivaca</button>
                     
-                    <div style="display:flex-inline">
+                    <div style="display:flex-inline" v-if="canRate">
                         <h4>Vasa ocena: </h4>
-                        <star-rating @update:rating="rateSmestaj" v-show="!canRate" :star-size="40" style="margin-left:10px;display:inline-block"></star-rating>
+                        <star-rating v-model:rating="ocenaSmestaja.ocena" v-show="canRate" :star-size="40" style="margin-left:10px;display:inline-block"></star-rating>
+                        <button @click="rateSmestaj()">Ocenite</button>
                     </div>
                     
                                            
@@ -123,7 +124,7 @@
                 <div  v-for="(tempComment, index) in smestaj.listaOcena" v-bind:key="index" class="comments-box">
                 <div>
                     <p class="author">
-                    {{tempComment.gost.username}} 
+                    {{tempComment.gost}} 
                     <star-rating :star-size="20" read-only style="margin-left:10px;display:inline-block"  v-model:rating="tempComment.ocena"></star-rating>
                     </p>
                 </div>
@@ -217,6 +218,16 @@ export default{
 
             await dataService.canGiveRating(this.userId, this.$route.params.id).then(response => {
                 this.canRate = response.data;
+                console.log("Can give rating : "+this.canRate);
+                if(this.canRate===true){
+                    for(let i =0 ; i<this.smestaj.listaOcena.length;i++){
+                        console.log("poredjenje ids : "+this.smestaj.listaOcena[i].gost+" : "+this.userId.substr(1,this.userId.length-2))
+                        if(this.smestaj.listaOcena[i].gost===this.userId.substr(1,this.userId.length-2)){
+                            this.ocenaSmestaja.ocena=this.smestaj.listaOcena[i].ocena;
+                            break;
+                        }
+                    }
+                }
             });
             // await this.getCoords(this.smestaj.adresa.adresa);
             navigator.geolocation.getCurrentPosition((geolocation) => {
@@ -235,10 +246,10 @@ export default{
         StarRating,
     },
     methods:{
-        rateSmestaj(rating){
+        rateSmestaj(){
             console.log("OCENI SMESTAJ")
-            console.log("DATA OCENA: " + rating);
-            this.ocenaSmestaja.ocena = rating;
+            console.log("DATA OCENA: " + this.ocenaSmestaja.ocena);
+            //this.ocenaSmestaja.ocena = rating;
             this.ocenaSmestaja.datum = moment(new Date()).format("YYYY-MM-DD");
             dataService.giveRatingToSmestaj(this.userId, this.$route.params.id, this.ocenaSmestaja).then(response => {
                 console.log("uspesno ocenjeno");
