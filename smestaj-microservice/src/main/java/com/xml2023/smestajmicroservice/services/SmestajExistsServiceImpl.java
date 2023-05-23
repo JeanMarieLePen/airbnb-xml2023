@@ -6,6 +6,8 @@ import java.time.ZoneId;
 import java.time.ZoneOffset;
 import java.util.ArrayList;
 import java.util.Base64;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -14,6 +16,8 @@ import org.springframework.stereotype.Service;
 
 import com.google.protobuf.Timestamp;
 import com.xml2023.mainapp.AdresaDTO;
+import com.xml2023.mainapp.AnySmestajBelongToHostRequest;
+import com.xml2023.mainapp.AnySmestajBelongToHostResponse;
 import com.xml2023.mainapp.CenovnikDTO;
 import com.xml2023.mainapp.DeleteSmestajsForHostRequest;
 import com.xml2023.mainapp.DeleteSmestajsForHostResponse;
@@ -239,4 +243,24 @@ public class SmestajExistsServiceImpl extends SmestajGrpcImplBase{
 		return Timestamp.newBuilder().setSeconds(ldt.toEpochSecond(ZoneOffset.UTC))
 				.setNanos(ldt.getNano()).build();
 	}
+
+	@Override
+	public void belongsToHost(AnySmestajBelongToHostRequest request,
+			StreamObserver<AnySmestajBelongToHostResponse> responseObserver) {
+		// TODO Auto-generated method stub
+		//super.belongsToHost(request, responseObserver);
+		Collection<Smestaj> SmestajForHost=sRep.findAllByVlasnik(request.getHostId()).orElse(new ArrayList<Smestaj>());
+		if(SmestajForHost.size()>0) {
+			Collection<String> localIds= SmestajForHost.stream().map(x->x.getId()).distinct().collect(Collectors.toList());
+			Collection <String> reqIds= request.getSmestajIdsList();
+			boolean presek= !Collections.disjoint(localIds, reqIds);
+			AnySmestajBelongToHostResponse.Builder resp= AnySmestajBelongToHostResponse.newBuilder();
+			resp.setBelongs(presek);
+			
+			responseObserver.onNext(resp.build());
+			responseObserver.onCompleted();
+		}
+	}
+	
+	
 }

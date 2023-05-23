@@ -319,6 +319,16 @@ public final class Temp {
   static final 
     com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internal_static_com_xml2023_mainapp_StatusIstaknutogNotifikacijaResponse_fieldAccessorTable;
+  static final com.google.protobuf.Descriptors.Descriptor
+    internal_static_com_xml2023_mainapp_AnySmestajBelongToHostRequest_descriptor;
+  static final 
+    com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+      internal_static_com_xml2023_mainapp_AnySmestajBelongToHostRequest_fieldAccessorTable;
+  static final com.google.protobuf.Descriptors.Descriptor
+    internal_static_com_xml2023_mainapp_AnySmestajBelongToHostResponse_descriptor;
+  static final 
+    com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+      internal_static_com_xml2023_mainapp_AnySmestajBelongToHostResponse_fieldAccessorTable;
 
   public static com.google.protobuf.Descriptors.FileDescriptor
       getDescriptor() {
@@ -434,10 +444,13 @@ public final class Temp {
       "ifikacijaResponse\022\016\n\006stanje\030\001 \001(\010\":\n#Sta" +
       "tusIstaknutogNotifikacijaRequest\022\023\n\013idKo" +
       "risnika\030\001 \001(\t\"6\n$StatusIstaknutogNotifik" +
-      "acijaResponse\022\016\n\006stanje\030\001 \001(\0102j\n\017Greetin" +
+      "acijaResponse\022\016\n\006stanje\030\001 \001(\010\"C\n\035AnySmes" +
+      "tajBelongToHostRequest\022\016\n\006hostId\030\001 \001(\t\022\022" +
+      "\n\nsmestajIds\030\002 \003(\t\"1\n\036AnySmestajBelongTo" +
+      "HostResponse\022\017\n\007belongs\030\001 \001(\0102j\n\017Greetin" +
       "gService\022W\n\010greeting\022$.com.xml2023.maina" +
       "pp.KorisnikRequest\032%.com.xml2023.mainapp" +
-      ".KorisnikResponse2\252\006\n\013SmestajGrpc\022_\n\006exi" +
+      ".KorisnikResponse2\244\007\n\013SmestajGrpc\022_\n\006exi" +
       "sts\022).com.xml2023.mainapp.SmestajExistsR" +
       "equest\032*.com.xml2023.mainapp.SmestajExis" +
       "tsResponse\022u\n\024getSmestajIdsForHost\022-.com" +
@@ -457,67 +470,70 @@ public final class Temp {
       "\032).com.xml2023.mainapp.TerminZauzmiRespo" +
       "nse\022i\n\016oslobodiTermin\022*.com.xml2023.main" +
       "app.TerminOslobodiRequest\032+.com.xml2023." +
-      "mainapp.TerminOslobodiResponse2\375\005\n\017Rezer" +
-      "vacijaGrpc\022g\n\006exists\022-.com.xml2023.maina" +
-      "pp.RezervacijaExistsRequest\032..com.xml202" +
-      "3.mainapp.RezervacijaExistsResponse\022v\n\031r" +
-      "eservationsForUserExists\022+.com.xml2023.m" +
-      "ainapp.ActiveResExistsRequest\032,.com.xml2" +
-      "023.mainapp.ActiveResExistsResponse\022u\n\022g" +
-      "etRezervacijaById\022..com.xml2023.mainapp." +
-      "getRezervacijaByIdRequest\032/.com.xml2023." +
-      "mainapp.getRezervacijaByIdResponse\022\220\001\n\033g" +
-      "etListaRezervacijaByUserId\0227.com.xml2023" +
-      ".mainapp.getListaRezervacijaByUserIdRequ" +
-      "est\0328.com.xml2023.mainapp.getListaRezerv" +
-      "acijaByUserIdResponse\022\204\001\n\023resExistsForSm" +
-      "estaj\0225.com.xml2023.mainapp.ActiveResExi" +
-      "stsForSmestajRequest\0326.com.xml2023.maina" +
-      "pp.ActiveResExistsForSmestajResponse\022x\n\025" +
-      "getActiveReservations\022..com.xml2023.main" +
-      "app.ActiveReservationsRequest\032/.com.xml2" +
-      "023.mainapp.ActiveReservationsResponse2\277" +
-      "\014\n\014KorisnikGrpc\022T\n\007getHost\022#.com.xml2023" +
-      ".mainapp.getHostRequest\032$.com.xml2023.ma" +
-      "inapp.getHostResponse\022`\n\013rezOtkazana\022\'.c" +
-      "om.xml2023.mainapp.rezOtkazanaRequest\032(." +
-      "com.xml2023.mainapp.rezOtkazanaResponse\022" +
-      "\213\001\n\016rezObavestenje\022;.com.xml2023.mainapp" +
-      ".reservationApprovedNotificationRequest\032" +
-      "<.com.xml2023.mainapp.reservationApprove" +
-      "dNotificationResponse\022g\n\014newRezNotify\022*." +
-      "com.xml2023.mainapp.NekoRezervisaoReques" +
-      "t\032+.com.xml2023.mainapp.NekoRezervisaoRe" +
-      "sponse\022b\n\rnewQuitNotify\022\'.com.xml2023.ma" +
-      "inapp.NekoOtkazaoRequest\032(.com.xml2023.m" +
-      "ainapp.NekoOtkazaoResponse\022o\n\016newRankSme" +
-      "staj\022-.com.xml2023.mainapp.NekoOcenioSme" +
-      "stajRequest\032..com.xml2023.mainapp.NekoOc" +
-      "enioSmestajResponse\022h\n\013newRankHost\022+.com" +
-      ".xml2023.mainapp.NekoOcenioHostaRequest\032" +
-      ",.com.xml2023.mainapp.NekoOcenioHostaRes" +
-      "ponse\022v\n\ristaknutiHost\0221.com.xml2023.mai" +
-      "napp.DobioStatusIstaknutogRequest\0322.com." +
-      "xml2023.mainapp.DobioStatusIstaknutogRes" +
-      "ponse\022\205\001\n\020novaRezNotStatus\0227.com.xml2023" +
-      ".mainapp.NovaRezervacijaNotifikacijaRequ" +
-      "est\0328.com.xml2023.mainapp.NovaRezervacij" +
-      "aNotifikacijaResponse\022\221\001\n\024otkazanaRezNot" +
-      "Status\022;.com.xml2023.mainapp.OtkazanaRez" +
-      "ervacijaNotifikacijaRequest\032<.com.xml202" +
-      "3.mainapp.OtkazanaRezervacijaNotifikacij" +
-      "aResponse\022\212\001\n\027novaOcenaHostaNotStatus\0226." +
-      "com.xml2023.mainapp.NovaOcenaHostaNotifi" +
-      "kacijaRequest\0327.com.xml2023.mainapp.Nova" +
-      "OcenaHostaNotifikacijaResponse\022\223\001\n\032novaO" +
-      "cenaSmestajaNotStatus\0229.com.xml2023.main" +
-      "app.NovaOcenaSmestajaNotifikacijaRequest" +
-      "\032:.com.xml2023.mainapp.NovaOcenaSmestaja" +
-      "NotifikacijaResponse\022\211\001\n\022istaknutiNotSta" +
-      "tus\0228.com.xml2023.mainapp.StatusIstaknut" +
-      "ogNotifikacijaRequest\0329.com.xml2023.main" +
-      "app.StatusIstaknutogNotifikacijaResponse" +
-      "B\002P\001b\006proto3"
+      "mainapp.TerminOslobodiResponse\022x\n\rbelong" +
+      "sToHost\0222.com.xml2023.mainapp.AnySmestaj" +
+      "BelongToHostRequest\0323.com.xml2023.mainap" +
+      "p.AnySmestajBelongToHostResponse2\375\005\n\017Rez" +
+      "ervacijaGrpc\022g\n\006exists\022-.com.xml2023.mai" +
+      "napp.RezervacijaExistsRequest\032..com.xml2" +
+      "023.mainapp.RezervacijaExistsResponse\022v\n" +
+      "\031reservationsForUserExists\022+.com.xml2023" +
+      ".mainapp.ActiveResExistsRequest\032,.com.xm" +
+      "l2023.mainapp.ActiveResExistsResponse\022u\n" +
+      "\022getRezervacijaById\022..com.xml2023.mainap" +
+      "p.getRezervacijaByIdRequest\032/.com.xml202" +
+      "3.mainapp.getRezervacijaByIdResponse\022\220\001\n" +
+      "\033getListaRezervacijaByUserId\0227.com.xml20" +
+      "23.mainapp.getListaRezervacijaByUserIdRe" +
+      "quest\0328.com.xml2023.mainapp.getListaReze" +
+      "rvacijaByUserIdResponse\022\204\001\n\023resExistsFor" +
+      "Smestaj\0225.com.xml2023.mainapp.ActiveResE" +
+      "xistsForSmestajRequest\0326.com.xml2023.mai" +
+      "napp.ActiveResExistsForSmestajResponse\022x" +
+      "\n\025getActiveReservations\022..com.xml2023.ma" +
+      "inapp.ActiveReservationsRequest\032/.com.xm" +
+      "l2023.mainapp.ActiveReservationsResponse" +
+      "2\277\014\n\014KorisnikGrpc\022T\n\007getHost\022#.com.xml20" +
+      "23.mainapp.getHostRequest\032$.com.xml2023." +
+      "mainapp.getHostResponse\022`\n\013rezOtkazana\022\'" +
+      ".com.xml2023.mainapp.rezOtkazanaRequest\032" +
+      "(.com.xml2023.mainapp.rezOtkazanaRespons" +
+      "e\022\213\001\n\016rezObavestenje\022;.com.xml2023.maina" +
+      "pp.reservationApprovedNotificationReques" +
+      "t\032<.com.xml2023.mainapp.reservationAppro" +
+      "vedNotificationResponse\022g\n\014newRezNotify\022" +
+      "*.com.xml2023.mainapp.NekoRezervisaoRequ" +
+      "est\032+.com.xml2023.mainapp.NekoRezervisao" +
+      "Response\022b\n\rnewQuitNotify\022\'.com.xml2023." +
+      "mainapp.NekoOtkazaoRequest\032(.com.xml2023" +
+      ".mainapp.NekoOtkazaoResponse\022o\n\016newRankS" +
+      "mestaj\022-.com.xml2023.mainapp.NekoOcenioS" +
+      "mestajRequest\032..com.xml2023.mainapp.Neko" +
+      "OcenioSmestajResponse\022h\n\013newRankHost\022+.c" +
+      "om.xml2023.mainapp.NekoOcenioHostaReques" +
+      "t\032,.com.xml2023.mainapp.NekoOcenioHostaR" +
+      "esponse\022v\n\ristaknutiHost\0221.com.xml2023.m" +
+      "ainapp.DobioStatusIstaknutogRequest\0322.co" +
+      "m.xml2023.mainapp.DobioStatusIstaknutogR" +
+      "esponse\022\205\001\n\020novaRezNotStatus\0227.com.xml20" +
+      "23.mainapp.NovaRezervacijaNotifikacijaRe" +
+      "quest\0328.com.xml2023.mainapp.NovaRezervac" +
+      "ijaNotifikacijaResponse\022\221\001\n\024otkazanaRezN" +
+      "otStatus\022;.com.xml2023.mainapp.OtkazanaR" +
+      "ezervacijaNotifikacijaRequest\032<.com.xml2" +
+      "023.mainapp.OtkazanaRezervacijaNotifikac" +
+      "ijaResponse\022\212\001\n\027novaOcenaHostaNotStatus\022" +
+      "6.com.xml2023.mainapp.NovaOcenaHostaNoti" +
+      "fikacijaRequest\0327.com.xml2023.mainapp.No" +
+      "vaOcenaHostaNotifikacijaResponse\022\223\001\n\032nov" +
+      "aOcenaSmestajaNotStatus\0229.com.xml2023.ma" +
+      "inapp.NovaOcenaSmestajaNotifikacijaReque" +
+      "st\032:.com.xml2023.mainapp.NovaOcenaSmesta" +
+      "jaNotifikacijaResponse\022\211\001\n\022istaknutiNotS" +
+      "tatus\0228.com.xml2023.mainapp.StatusIstakn" +
+      "utogNotifikacijaRequest\0329.com.xml2023.ma" +
+      "inapp.StatusIstaknutogNotifikacijaRespon" +
+      "seB\002P\001b\006proto3"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
         new com.google.protobuf.Descriptors.FileDescriptor.    InternalDescriptorAssigner() {
@@ -898,6 +914,18 @@ public final class Temp {
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_com_xml2023_mainapp_StatusIstaknutogNotifikacijaResponse_descriptor,
         new java.lang.String[] { "Stanje", });
+    internal_static_com_xml2023_mainapp_AnySmestajBelongToHostRequest_descriptor =
+      getDescriptor().getMessageTypes().get(61);
+    internal_static_com_xml2023_mainapp_AnySmestajBelongToHostRequest_fieldAccessorTable = new
+      com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
+        internal_static_com_xml2023_mainapp_AnySmestajBelongToHostRequest_descriptor,
+        new java.lang.String[] { "HostId", "SmestajIds", });
+    internal_static_com_xml2023_mainapp_AnySmestajBelongToHostResponse_descriptor =
+      getDescriptor().getMessageTypes().get(62);
+    internal_static_com_xml2023_mainapp_AnySmestajBelongToHostResponse_fieldAccessorTable = new
+      com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
+        internal_static_com_xml2023_mainapp_AnySmestajBelongToHostResponse_descriptor,
+        new java.lang.String[] { "Belongs", });
     com.google.protobuf.TimestampProto.getDescriptor();
   }
 

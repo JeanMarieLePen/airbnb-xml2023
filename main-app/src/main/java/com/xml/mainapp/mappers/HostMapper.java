@@ -8,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.xml.mainapp.dtos.user.HostDTO;
-import com.xml.mainapp.dtos.user.OcenaHostDTO;
 import com.xml.mainapp.model.users.Host;
 import com.xml.mainapp.model.users.OcenaHost;
 import com.xml2023.mainapp.SmestajDTO;

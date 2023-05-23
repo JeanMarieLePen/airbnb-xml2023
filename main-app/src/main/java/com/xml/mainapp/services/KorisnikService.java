@@ -1,6 +1,7 @@
 package com.xml.mainapp.services;
 
 import java.time.Instant;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZoneOffset;
@@ -8,6 +9,7 @@ import java.util.ArrayList;
 import java.util.Base64;
 import java.util.Collection;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import javax.transaction.Transactional;
 
@@ -29,6 +31,7 @@ import com.xml.mainapp.dtos.data.RezervacijaDTO;
 import com.xml.mainapp.dtos.data.SmestajDTO;
 import com.xml.mainapp.dtos.user.GuestDTO;
 import com.xml.mainapp.dtos.user.HostDTO;
+import com.xml.mainapp.dtos.user.OcenaHostBasicDTO;
 import com.xml.mainapp.mappers.AdresaMapper;
 import com.xml.mainapp.mappers.GuestMapper;
 import com.xml.mainapp.mappers.HostMapper;
@@ -45,8 +48,10 @@ import com.xml.mainapp.model.data.Termin;
 import com.xml.mainapp.model.users.Guest;
 import com.xml.mainapp.model.users.Host;
 import com.xml.mainapp.model.users.Korisnik;
+import com.xml.mainapp.model.users.OcenaHost;
 import com.xml.mainapp.model.users.TipKorisnika;
 import com.xml.mainapp.repositories.KorisnikRep;
+import com.xml.mainapp.repositories.OcenaHostRep;
 import com.xml2023.mainapp.ActiveResExistsRequest;
 import com.xml2023.mainapp.ActiveResExistsResponse;
 import com.xml2023.mainapp.DeleteSmestajsForHostRequest;
@@ -76,6 +81,7 @@ public class KorisnikService {
 	private HostMapper hostMapper;
 	@Autowired
 	private GuestMapper guestMapper;
+	@Autowired OcenaHostRep oRep;
 	
 //	@Cacheable(key="#id", value = "Korisnik")
 	public KorisnikDTO getUserById(String id) {
@@ -116,6 +122,12 @@ public class KorisnikService {
 					}
 				}
 				retVal.setSmestajList(tempList);
+				
+				Collection<OcenaHost> ocene=oRep.findAllByVlasnik(id).orElse(new ArrayList<OcenaHost>());
+				retVal.setOcene(ocene.stream().map(x->new OcenaHostBasicDTO(x)).collect(Collectors.toList()));
+				float prosek= retVal.getOcene().stream().mapToInt(x->x.getOcena()).sum();
+				retVal.setProsecnaOcena(prosek/retVal.getOcene().size());
+				
 				return retVal;
 			}	
 		}
@@ -176,7 +188,7 @@ public class KorisnikService {
 	}
 
 	public HostDTO findHostById(String id) {
-		// TODO Auto-generated method stub
+		System.out.println("TRAZENI HOST : "+id);
 		Host h = (Host) this.korisnikRep.findById(id).orElse(null);
 		if(h == null) {
 			return null;
@@ -188,6 +200,8 @@ public class KorisnikService {
 			smestajList.add(mapToDTO(sdto));
 		}
 		retVal.setSmestajList(smestajList);
+		Collection<OcenaHost> ocene=oRep.findAllByVlasnik(id).orElse(new ArrayList<OcenaHost>());
+		retVal.setOcene(ocene.stream().map(x->new OcenaHostBasicDTO(x)).collect(Collectors.toList()));
 		return retVal;
 	}
 	
@@ -302,7 +316,6 @@ public class KorisnikService {
 			return retVal;
 		}
 	}
-
 	
 	  public Collection<RezervacijaDTO> getAllReservationByUserId(String id) { 
 		  Guest g = (Guest) korisnikRep.findById(id).orElse(null);
@@ -384,5 +397,18 @@ public class KorisnikService {
 		if(resRez.getListaRezervacijaList()==null) {
 			return new ArrayList<com.xml2023.mainapp.RezervacijaDTO>();
 		}else return resRez.getListaRezervacijaList();
+	}
+
+	public OcenaHostBasicDTO giveRatingToHost(String substring, String hostId, OcenaHostBasicDTO ocena) {
+		
+		OcenaHost o= oRep.findByGostAndVlasnik(substring,hostId).orElse(null); 
+		if(o==null) {
+			o=new OcenaHost(  hostId, substring, ocena.getOcena(), LocalDate.now());
+		}else {
+			o.setDatum(LocalDate.now());
+			o.setOcena(ocena.getOcena());
+		}
+		oRep.save(o);
+		return new OcenaHostBasicDTO(o);
 	}
 }
