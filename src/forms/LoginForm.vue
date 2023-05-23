@@ -78,8 +78,9 @@ export default {
                     this.token = response.data.odgovor;
                     axios.defaults.headers.common['Authorization'] = 'Bearer ' + response.data.odgovor;
                     localStorage.setItem('xmljwt', JSON.stringify(this.token));
-
+                    let tempObj = parserMixin.methods.parseXmlJwt();
                     this.emitter.emit("loggedIn", true);
+                    this.emitter.emit("roleAssigned", tempObj.role);
                     this.$router.push(`/dash`);
                 }else{
                   console.log("Neuspesan login");

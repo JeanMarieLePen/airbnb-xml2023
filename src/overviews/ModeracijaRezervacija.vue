@@ -1,14 +1,18 @@
 <template>
     <div style="margin-left:15px;">
         <h1>Pregled rezervacija:</h1>
+        <button class="pending-button" @click="showPendingOnly()">PENDING</button>
+        <button class="pending-button" @click="showOtkazaneOnly()">OTKAZANE</button>
+        <button class="pending-button" @click="showRezervisaneOnly()">REZERVISANE</button>
+        <button class="pending-button" @click="showSve()">SVE</button>
         <div v-if="listaRezervacija.length > 0" class="row">
             <!-- <div class="card-deck"> -->
-                <div class="col-md-3" v-for="(r, index) in listaRezervacija" v-bind:key="index">
+                <div class="col-md-3" v-for="(r, index) in showList" v-bind:key="index">
                     <!-- class="card" v-for="(t, index) in listaRezervacija" :key="index" -->
                     <div class="card">
-                        <div class="text-center bg-success" style="height:350px;">
-                            <!-- <img class="card-img-top" style="height:95%;width:95%; margin-top:2.5%;" :src="getAnImage(r.smestaj)"> -->
-                        </div>
+                        <!-- <div class="text-center bg-success" style="height:350px;">
+                            <img class="card-img-top" style="height:95%;width:95%; margin-top:2.5%;" :src="getAnImage(r.smestaj)">
+                        </div> -->
                         
                         <div class="card-body text-white bg-success">
                             <h5 class="card-title text-center">
@@ -63,9 +67,61 @@ export default {
 
             listaRezervacija:[],
             messages:[],
+
+            showAll: true,
+            showRezervisane: false,
+            showPending: false,
+            showOtkazane: false,
+            showList:[],
         }
     },
     methods:{
+        showPendingOnly(){
+            this.showPending = true;
+            this.showAll = false;
+            this.showRezervisane = false;
+            this.showOtkazane = false;
+            let tempList = [];
+            for(let i = 0; i < this.listaRezervacija.length; i++){
+                if(this.listaRezervacija[i].status === 'PENDING'){
+                    tempList.push(this.listaRezervacija[i]);
+                }
+            }
+            this.showList = tempList;
+        },
+        showOtkazaneOnly(){
+            this.showPending = false;
+            this.showAll = false;
+            this.showRezervisane = false;
+            this.showOtkazane = true;
+            let tempList = [];
+            for(let i = 0; i < this.listaRezervacija.length; i++){
+                if(this.listaRezervacija[i].status === 'OTKAZANA'){
+                    tempList.push(this.listaRezervacija[i]);
+                }
+            }
+            this.showList = tempList;
+        },
+        showRezervisaneOnly(){
+            this.showPending = false;
+            this.showAll = false;
+            this.showRezervisane = true;
+            this.showOtkazane = false;
+            let tempList = [];
+            for(let i = 0; i < this.listaRezervacija.length; i++){
+                if(this.listaRezervacija[i].status === 'REZERVISANA'){
+                    tempList.push(this.listaRezervacija[i]);
+                }
+            }
+            this.showList = tempList;
+        },
+        showSve(){
+            this.showPending = false;
+            this.showAll = true;
+            this.showRezervisane = false;
+            this.showOtkazane = false;
+            this.showList = this.listaRezervacija;
+        },
         approve(r, index){
             dataService.approveReservation(r.id, this.userId).then(response => {
                 console.log("ODOBRENA REZERVACIJA");
@@ -151,6 +207,7 @@ export default {
             return dataService.getRezervacijeByHost(this.userId).then(response => {
                 
                 this.listaRezervacija = response.data;
+                this.showList = this.listaRezervacija;
                 console.log("userId:"+this.userId)
                 console.log("Dobavljena lista rezervacija, size="+this.listaRezervacija.length);
                 this.messages = [];
@@ -179,5 +236,22 @@ export default {
 
 
 <style scoped>
+.pending-button {
+    border-radius: 6rem;
+    color: #0275d8;
+    border: 2px solid #0275d8;
+    background-color: white;
+    width: 150px;
+    font-size: 15px;
+    padding: 10px;
+    margin: 0px;
+    cursor: pointer;
+    transition-duration: 0.4s;
+    margin-bottom: 20px;
+}
 
+.pending-button:hover {
+    background-color: #0275d8;
+    color: white;
+}
 </style>

@@ -1,7 +1,7 @@
 <template>
     <!--SORTIRANJE-->
     <p>{{this.listaSmestaja.brojDana}}</p>
-    <section style="margin-left: 10px; margin-bottom:100px;">
+    <section style="margin-left: 10px; margin-bottom:200px;">
         <div>
             <div class="row">
                 <div class="col-md-4" v-bind:key="index" v-for="(sTemp, index) in sortEntities.slice(0,15)">

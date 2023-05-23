@@ -5,6 +5,49 @@
 			    <h1 style="margin-top:10px;color:#1E90FF;">Izmena profila <span id='titleEffect'>{{this.profile.korIme}}</span></h1>
 			    <hr style='background:#1E90FF;height:1px;'>
 			</div>
+            
+            <div v-if="userObj.role === 'GUEST'" class="container" style="margin-top:30px; margin-bottom:30px;">
+                <div style="display: inline-block;">
+                    <button  @click="tokenTable()" style="margin-right:20px;">API token</button>
+                    <input type="text" style="width:800px;" readonly v-model="tokenTekst" :placeholder="tokenPlaceHolder"/>
+                </div>
+                <table v-show="showTokenTable" style="margin-top:30px; margin-bottom:30px;">
+                    <thead>
+                        <th colspan="2" style=" text-align:center">GENERISANJE TOKENA</th>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>
+                                <label style="margin-right:40px;" >PRIVREMENI TOKEN [30 minuta]</label> 
+                            </td>
+                            <td>
+                                <input @change="selectTokenType()" v-model="tokenPrivremeni" type="checkbox">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                 <label style="margin-right:40px;" >TRAJNI TOKEN</label>
+                            </td>
+                            <td>
+                                <input @change="selectTokenType2()" v-model="tokenTrajni" type="checkbox">
+                            </td>
+                        </tr>
+                    </tbody>
+                    <tfoot >
+                        <tr >
+                            <td colspan="2" style="text-align:center">
+                                <button style="margin-top:30px;" @click="generateToken()"> Generisi</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="2">
+                                <div class="alert alert-success" v-if="messages.successToken" v-html="messages.successToken"/>
+                                <div class="alert alert-danger" v-if="messages.errorToken" v-html="messages.errorToken"/>
+                            </td>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
             <div class="container">
                 <div v-if='messages.errorEmail' class="alert alert-danger" v-html="messages.errorEmail"></div>
                 <fieldset class="form-group">
@@ -184,6 +227,7 @@ import 'vueperslides/dist/vueperslides.css'
     export default{
         data(){
             return{
+                showTokenTable: false,
                 btnEnabled:false,
                 profile: {
                     slike:[],
@@ -197,6 +241,9 @@ import 'vueperslides/dist/vueperslides.css'
                 },
                 slike:[],
 
+                tokenPrivremeni: false,
+                tokenTrajni : true, 
+                tokenTekst: '',
                 messages:{
                     errorUsername:'',
                     errorEmail:'',
@@ -210,6 +257,8 @@ import 'vueperslides/dist/vueperslides.css'
                     errorNotEqualNewPassword: '',
                     errorResponse: '',
                     successResponse: '',
+                    successToken:'',
+                    errorToken:'',
                 },
                 userObj:{
 
@@ -223,6 +272,45 @@ import 'vueperslides/dist/vueperslides.css'
             this.getUserProfileData(this.userObj.id);
         },
         methods:{
+            
+            selectTokenType(){
+                console.log("TOKEN PRIVREMENI: " + this.tokenPrivremeni);
+                this.tokenTrajni = !this.tokenPrivremeni;
+                console.log("TOKEN TRAJNI: " + this.tokenTrajni)
+            },
+             selectTokenType2(){
+                console.log("TOKEN TRAJNI: " + this.tokenTrajni)
+                this.tokenPrivremeni = !this.tokenTrajni;
+                console.log("TOKEN PRIVREMENI: " + this.tokenPrivremeni);
+             },
+            generateToken(){
+                let param = null;
+                if(this.tokenPrivremeni){
+                    param = this.tokenPrivremeni;
+                }else if(!this.tokenPrivremeni){
+                    param = this.tokenTrajni;
+                }
+                dataService.generateToken(param).then(response => {
+                    if(response.status === 200){
+                        console.log("USPESNO IZGENERISAN TOKEN");
+                        console.log(JSON.stringify(response.data));
+                        this.messages.successToken = '<h4>Uspesno generisan API token</h4>';
+                         setTimeout(() => {
+                            this.messages.successToken = '';
+                        }, 4000);
+                    }else{
+                        console.log("DOSLO DO GRESKE");
+                        this.messages.errorToken = '<h4>Doslo je do greske pri generisanju tokena</h4>';
+                        setTimeout(() => {
+                            this.messages.errorToken = '';
+                        }, 4000);
+                    }
+                    
+                });
+            },
+            tokenTable(){
+                this.showTokenTable = !this.showTokenTable;
+            },
             selectRezAutomatski(){
                 console.log("AUTOMATSKI: " + this.profile.rezAutomatski)
             },
@@ -471,6 +559,15 @@ import 'vueperslides/dist/vueperslides.css'
                         });
                     }
                     
+                }
+            },
+        },
+        computed:{
+            tokenPlaceHolder(){
+                if(this.tokenTekst == ''){
+                    return 'NEMATE IZGENERISAN TOKEN';
+                }else{
+                    return this.tokenTekst;
                 }
             },
         },

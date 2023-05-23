@@ -16,7 +16,7 @@
                 </ul>
                 <div style="margin-left: auto; margin-right:20px;">
                     <ul class="nav my-2 my-lg-0">
-                        <li class="nav-item">
+                        <li v-if="role === 'GUEST' || role === 'HOST'" class="nav-item">
                             <button style="padding: 0; border: none; background: none; margin-right:10px;" :title="showNotificationButton" @click="enableNotifications()">
                                 <div v-show="!notifications">
                                     <img id="imgNotifications" src="../assets/bell.png" style="max-width:42px; max-height:38px;" />
@@ -26,8 +26,8 @@
                                 </div>
                             </button>
                         </li>
-                        <li class="nav-item">
-                            <button style="padding: 0; border: none; background: none; margin-right:10px;" :title="showNotificationButton" @click="submit()">
+                        <!-- <li class="nav-item">
+                            <button style="padding: 0; border: none; background: none; margin-right:10px;" @click="addNotification('dwadawdawadwdaw')">
                                 <div v-show="!notifications">
                                     <img id="imgNotifications" src="../assets/bell.png" style="max-width:42px; max-height:38px;" />
                                 </div>
@@ -35,7 +35,7 @@
                                     <img id="imgNotifications" src="../assets/bell-disabled.png" style="max-width:42px; max-height:38px;" />
                                 </div>
                             </button>
-                        </li>
+                        </li> -->
                         <li class="nav-item">
                             <button class="btn btn-warning" style="font-weight: bold;" v-show="!loggedIn" @click="$router.push('/login')">Log in</button> 
                         </li>
@@ -61,21 +61,9 @@
 import axios from 'axios'
 import SockJS from "sockjs-client";
 import Stomp from "webstomp-client";
-import { defineEmits } from 'vue';
+import parserMixin from '@/mixins/mixin';
 
 export default {
-    emits: ['addNotification'],
-    setup(props, { emit }) {
-        let newNotification = '12345';
-        const submit = () => {
-            console.log("AAAAA")
-            emit('addNotification', newNotification);
-            newNotification = '';
-        }
-        return{
-            newNotification, submit,
-        }
-    },
     name:'Navigation',
     data(){
         return{
@@ -83,13 +71,26 @@ export default {
             notifications : false,
             connected : false,
             receivedNotification : null,
+
+            userObj:{
+
+            },
+            role: '',
         }
+    },
+    props:{
+        addNotification:Function,
+        anullNotifications:Function,
     },
     mounted(){
         //bez $ znaka ispred emitera
         this.emitter.on("loggedIn", (data) => {
             this.loggedIn = data;
         });
+        this.emitter.on("roleAssigned", (data) => {
+            console.log("DODELJANA ULOGA: " + data);
+            this.role = data;
+        })
     },
     computed:{
         showNotificationButton(){
@@ -98,6 +99,12 @@ export default {
             }else{
                 return "Ukljucite notifikacije"
             }
+        }
+    },
+    created(){
+        if(localStorage.getItem('xmljwt')){
+            let userObj = parserMixin.methods.parseXmlJwt();
+            this.userObj = userObj;
         }
     },
     methods:{
@@ -111,28 +118,62 @@ export default {
         //     this.emitter.emit('add-to-list', tempRezervacija);
         // },
         connect(){
-            this.socket = new SockJS("http://localhost:8082/main-app-websockets");
-            this.stompClient = Stomp.over(this.socket);
-            this.stompClient.connect(
-                {},
-                frame => {
-                    this.connected = true;
-                    console.log(frame);
-                    this.stompClient.subscribe("/queue/notifications", tick => {
-                        console.log(tick);
-                        console.log("SADRZAJ ODGOVORA: " + tick.body);
-                        this.receivedNotification = JSON.parse(tick.body);
-                        // this.emitter.emit("GuestRezervacijaEvent", this.receivedNotification);
-                        this.emitter.emit('addNotification', this.receivedNotification.idRezervacije);
-                        this.receivedNotification = null;
-                        console.log(JSON.stringify(this.receivedNotification));
-                    });
+            if(this.userObj.role === "GUEST"){
+                console.log("ADWDADWDAWDAW")
+                this.socket = new SockJS("http://localhost:8082/main-app-websockets");
+                this.stompClient = Stomp.over(this.socket);
+                this.stompClient.connect(
+                    {},
+                    frame => {
+                        this.connected = true;
+                        console.log(frame);
+                        this.stompClient.subscribe("/queue/notifications", tick => {
+                            console.log(tick);
+                            console.log("SADRZAJ ODGOVORA: " + tick.body);
+                            this.receivedNotification = JSON.parse(tick.body);
+                            // this.emitter.emit("GuestRezervacijaEvent", this.receivedNotification);
+                            console.log("REZERVACIJA NAKON PARSIRANJA: " + this.receivedNotification);
+                            this.addNotification(this.receivedNotification.idRezervacije);
 
-                }, error => {
-                    console.log(error);
-                    this.connected = false;
-                }
-            )
+                            // this.emitter.emit('addNotification', this.receivedNotification.idRezervacije);
+                            this.receivedNotification = null;
+                            console.log(JSON.stringify(this.receivedNotification));
+                        });
+
+                    }, error => {
+                        console.log(error);
+                        this.connected = false;
+                    }
+                )
+            }
+            else if(this.userObj.role === "HOST"){
+                this.socket = new SockJS("http://localhost:8082/main-app-websockets/host");
+                this.stompClient = Stomp.over(this.socket);
+                this.stompClient.connect(
+                    {},
+                    frame => {
+                        this.connected = true;
+                        console.log(frame);
+                        this.stompClient.subscribe("/queue/notificationsHost", tick => {
+                            console.log(tick);
+                            console.log("SADRZAJ ODGOVORA: " + tick.body);
+                            this.receivedNotification = JSON.parse(tick.body);
+                            // this.emitter.emit("GuestRezervacijaEvent", this.receivedNotification);
+                            console.log("REZERVACIJA NAKON PARSIRANJA: " + this.receivedNotification);
+                            this.addNotification(this.receivedNotification.tekst);
+
+                            // this.emitter.emit('addNotification', this.receivedNotification.idRezervacije);
+                            this.receivedNotification = null;
+                            console.log(JSON.stringify(this.receivedNotification));
+                        });
+
+                    }, error => {
+                        console.log(error);
+                        this.connected = false;
+                    }
+                )
+            }
+            
             
         },
         disconnect(){
@@ -151,6 +192,7 @@ export default {
                 this.emitter.emit("notificationOn", true);
             }else{
                 this.emitter.emit("notificationOn", false);
+                this.anullNotifications();
             }
             console.log("NOTIFIKACIJE: " + this.notifications);
             if(this.connected){
@@ -165,6 +207,7 @@ export default {
                     localStorage.removeItem('xmljwt');
                     axios.defaults.headers.common['Authorization'] = undefined;
                     this.loggedIn = false;
+                    this.role = '';
                     this.$router.push("/");
                     if(localStorage.getItem('parsedToken')){
                         localStorage.removeItem('parsedToken');

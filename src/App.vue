@@ -1,6 +1,6 @@
 <template>
   <div>
-    <navigation @addNotification="addNotification"></navigation>
+    <navigation :addNotification="addNotification" :anullNotifications="anullNotifications"></navigation>
     
     <div style="height: 85vh; overflow: auto">
       <!-- <button @click="addReservation()">REZERVACIJA</button>
@@ -10,12 +10,12 @@
     </div>
     <div class="div1">
       <div>
-        <transition-group style="margin-bottom:40px;" tag="ul" name="notification">
-          <div v-for="(item, index) in rezervacije.slice(0,5)" class="notification" :key="index">
-            <p style="font-size:15px; font-style: italic;">nova rezervacija</p>
+        <transition-group style="margin-bottom:70px;" tag="ul" mode="out-in" name="notification">
+          <div v-for="(item) in rezervacije.slice(0,5)" class="notification" :key="item">
+            <p style="font-size:15px; font-style: italic;">novo obavestenje</p>
             <div style="font-size:20px;">
-              Let:{{item.let}}
-              Ime: {{item.ime}}
+              TEKST:{{item}}
+              <!-- Ime: {{item.ime}} -->
             </div>
           </div>
         </transition-group>
@@ -34,26 +34,23 @@ import 'bootstrap/dist/css/bootstrap.css'
 import Footer from './components/Footer.vue'
 import Navigation from './components/Navigation.vue'
 import {reactive, ref} from 'vue';
-
-import SockJS from "sockjs-client";
-import Stomp from "webstomp-client";
-
+import parserMixin from '@/mixins/mixin';
 export default {
   name:'app',
   setup(){
 
-    const state = reactive({
-      notifications:[],
-    })
-    const addNotification = (notification) => {
-      state.notifications.push(notification);
-    }
+    // const state = reactive({
+    //   notifications:[],
+    // })
+    // const addNotification = (notification) => {
+    //   state.notifications.push(notification);
+    // }
     const showSlide = ref(false);
     const triggerSlide = () => {
         showSlide.value = true;
         setTimeout(() => showSlide.value = false, 6000);
     }
-    return {showSlide, triggerSlide, notifications: state.notifications, addNotification}
+    return {showSlide, triggerSlide}
   },
   watch:{
     // rezervacije(){
@@ -69,6 +66,16 @@ export default {
     }
   },
   methods:{
+    addNotification(notification){
+      setTimeout(() => {
+        this.rezervacije.shift();
+      }, 5000)
+      console.log("DODAVANJE NOTIFIKACIJE");
+      this.rezervacije.push(notification);
+    },
+    anullNotifications(){
+      this.rezervacije = [];
+    },
     addReservation(){
       let tempRezervacija = {
         id:1,
@@ -77,20 +84,6 @@ export default {
         prezime:'Bogdanovic'
       }
       this.rezervacije.push(tempRezervacija);
-      // tempRezervacija = {
-      //   id:2,
-      //   let:'KK-245L',
-      //   ime:'Milica',
-      //   prezime:'Jankovic'
-      // }
-      // this.rezervacije.push(tempRezervacija);
-      // tempRezervacija = {
-      //   id:3,
-      //   let:'FF-2452-DA',
-      //   ime:'Milan',
-      //   prezime:'Trifkovic'
-      // }
-      // this.rezervacije.push(tempRezervacija);
 
       let tmpIndex = 0;
       for(let i = 0; i < this.rezervacije.length; i++){
@@ -106,15 +99,34 @@ export default {
       
     }
   },
+  created(){
+    
+  },
   mounted(){
+    // setInterval(() => {
+    //   this.rezervacije.shift();
+    // }, 5000);
     this.emitter.on("notificationOn", (data) => {
       console.log("NOTIFIKACIJE SU UPALJENE: " + data)
       this.notifications = data;
     });
-    this.emitter.on("GuestRezervacijaEvent", (data) => {
-      console.log("PREBACENO OBAVESTENJE[GUEST REZERVACIJA]: " + data);
-      this.rezervacije.push(data);
-    })
+    // this.emitter.on("GuestRezervacijaEvent", (data) => {
+    //   console.log("PREBACENO OBAVESTENJE[GUEST REZERVACIJA]: " + data);
+    //   this.rezervacije.push(data);
+    // });
+    console.log("PRVA STRANICA");
+
+    let tempObj = parserMixin.methods.parseXmlJwt();
+    console.log("ULOGA JE: " + tempObj.role)
+    if(tempObj.role == 'GUEST'){
+      console.log("USLO U GOSTA");
+      this.emitter.emit("roleAssigned", tempObj.role);
+    }else if(tempObj.role == 'HOST'){
+      this.emitter.emit("roleAssigned", tempObj.role);
+    }else{
+      this.emitter.emit("roleAssigned", '');
+    }
+    
   },
   components:{
     'app-footer':Footer,
@@ -129,6 +141,7 @@ export default {
       reservationNotificaiton:null,
       notifications:false,
       notificationsShow: false,
+      role:'',
     }
   }
 }
@@ -164,7 +177,7 @@ nav a.router-link-exact-active {
 .notification-enter-to{
     opacity: 1;
     transform: translateY(0);
-    transform: translateX(0px);
+    transform: translateX(0);
 }
 .notification-enter-active{
     transition: all 0.4s ease;
@@ -180,7 +193,7 @@ nav a.router-link-exact-active {
     transform: translateX(100px);
 }
 .notification-leave-active{
-    transition: all 4s ease;
+    transition: all 0.4s ease;
 }
 
 
