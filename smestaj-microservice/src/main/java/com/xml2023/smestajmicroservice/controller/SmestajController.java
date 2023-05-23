@@ -3,6 +3,8 @@ package com.xml2023.smestajmicroservice.controller;
 import java.util.Collection;
 import java.util.stream.Collectors;
 
+import javax.transaction.Transactional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,6 +16,8 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import com.xml2023.smestajmicroservice.dtos.OcenaSmestajaDTO;
 import com.xml2023.smestajmicroservice.dtos.PretragaDTO;
 import com.xml2023.smestajmicroservice.dtos.SmestajDTO;
 import com.xml2023.smestajmicroservice.dtos.SmestajPretragaDTO;
@@ -91,5 +95,17 @@ public class SmestajController {
 		System.out.println("Pretraga");
 		Collection<SmestajPretragaDTO> lista=pServ.pretraga(dto);
 		return new ResponseEntity<Collection<SmestajPretragaDTO>>(lista,HttpStatus.OK);
+	}
+	
+	//@PreAuthorize("hasAuthority('GUEST')")
+	@Transactional
+	@PostMapping("/giveRatingToSmestaj/{userId}/{smestajId}")
+	public ResponseEntity<?> giveRatingToSmestaj(@PathVariable(value = "userId") String userId, @PathVariable(value = "smestajId") String smestajId, @RequestBody OcenaSmestajaDTO ocena){
+		OcenaSmestajaDTO retVal = this.smestajService.giveRatingToSmestaj(userId.substring(1, userId.length() - 1), smestajId, ocena);
+		if(retVal == null) {
+			return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+		}else {
+			return new ResponseEntity<OcenaSmestajaDTO>(retVal, HttpStatus.OK);
+		}
 	}
 }

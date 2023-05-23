@@ -1,5 +1,7 @@
 package com.xml2023.smestajmicroservice.mappers;
 
+import java.time.LocalDate;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -14,21 +16,22 @@ public class OcenaSmestajMapper {
 	public SmestajBasicMapper sbMapper;
 	
 	public OcenaSmestaj fromDTO(OcenaSmestajaDTO dto) {
-//		OcenaSmestaj os = new OcenaSmestaj();
-//		os.setSmestaj(dto.getS);
-//		os.setSmestaj(sbMapper.fromBasicDTO(dto.getSmestaj()));
-//		return os;
-		return null;
+		OcenaSmestaj os = new OcenaSmestaj();
+		os.setDatum(LocalDate.now());
+		os.setId(dto.getId());
+		os.setGost(dto.getGost());
+		os.setSmestaj(dto.getSmestaj());
+		os.setOcena(dto.getOcena());
+		return os;
 	}
 	
 	public OcenaSmestajaDTO toDTO(OcenaSmestaj os) {
-//		OcenaSmestajaDTO dto = new OcenaSmestajaDTO();
-//		dto.setDatum(os.getDatum());
-//		dto.setId(os.getId());
-//		dto.setOcena(os.getOcena());
-////		dto.setSmestaj(sbMapper.toDTO(os.getSmestaj()));
-//		dto.setGost(guestMapper.toDTO(os.getGost()));
-//		return dto;
-		return null;
+		OcenaSmestajaDTO dto = new OcenaSmestajaDTO();
+		dto.setDatum(os.getDatum());
+		dto.setId(os.getId());
+		dto.setOcena(os.getOcena());
+		dto.setSmestaj(os.getSmestaj());
+		dto.setGost(os.getGost());
+		return dto;
 	}
 }

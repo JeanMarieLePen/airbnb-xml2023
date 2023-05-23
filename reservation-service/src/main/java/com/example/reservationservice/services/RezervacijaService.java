@@ -78,7 +78,7 @@ public class RezervacijaService {
 //		KorisnikResponse odgovor = greetServBlockStub.greeting(zahtev);
 //		
 		//proveri ostale rez za smestaj, da li je slobodan
-		Collection<Rezervacija> rezRezervisane = rezervacijaRep.findBySmestajAndStatus(smestajId, StatusRezervacije.REZERVISANA).orElse(new ArrayList<Rezervacija>());
+		Collection<Rezervacija> rezRezervisane = rezervacijaRep.findAllBySmestajAndStatus(smestajId, StatusRezervacije.REZERVISANA).orElse(new ArrayList<Rezervacija>());
 		//Collection<Rezervacija> rezPending=rezervacijaRep.findBySmestajIdAndStatus(smestajId, StatusRezervacije.PENDING).orElse(new ArrayList<Rezervacija>());
 		Termin t= new Termin(r.getOdDatum(), r.getDoDatum());
 		if(rezRezervisane.size()>0) {
@@ -264,7 +264,7 @@ public class RezervacijaService {
 		
 		
 		//otkazivanje pending rez za smestaj;
-		Collection<Rezervacija> pendingRez= rezervacijaRep.findBySmestajAndStatus(r.getSmestaj(), StatusRezervacije.PENDING).orElse(new ArrayList<Rezervacija>());
+		Collection<Rezervacija> pendingRez= rezervacijaRep.findAllBySmestajAndStatus(r.getSmestaj(), StatusRezervacije.PENDING).orElse(new ArrayList<Rezervacija>());
 		if(pendingRez.size()>0) {
 			Termin t= new Termin(r.getOdDatum(), r.getDoDatum());
 			for(Rezervacija p: pendingRez) {
@@ -324,5 +324,21 @@ public class RezervacijaService {
 		rezOtkazanaResponse res= korServBlockStub.rezOtkazana(req);
 		Boolean uspeh= res.getPenalDodat();
 		//todo
+	}
+
+	public boolean canGiveRating(String userId, String smestajId) {
+		//smestaj i rezervisane
+		System.out.println("Gost id : "+userId);
+		Collection<Rezervacija> rez= rezervacijaRep.findAllByGost(userId).orElse(new ArrayList<Rezervacija>());
+		System.out.println("Rezervacije gosta : "+rez.size());
+		if(rez.size()>0) {
+			//isfiltrirane zavrsene za smestaj za korisnika
+			Collection<Rezervacija> userRez= rez.stream().filter(x->x.getSmestaj().equals(smestajId) && x.getStatus().equals(StatusRezervacije.REZERVISANA)).collect(Collectors.toList());
+			if(userRez.size()>0)
+				System.out.println("Korisnik moze oceniti!");
+				return true;
+		}
+		System.out.println("Korisnik NE moze oceniti!");
+		return false;
 	}
 }

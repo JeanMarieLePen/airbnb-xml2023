@@ -3,17 +3,21 @@ package com.xml2023.smestajmicroservice.mappers;
 import java.util.ArrayList;
 import java.util.Base64;
 import java.util.Collection;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import com.xml2023.smestajmicroservice.dtos.OcenaSmestajaDTO;
 import com.xml2023.smestajmicroservice.dtos.SmestajBasicDTO;
 import com.xml2023.smestajmicroservice.dtos.SmestajDTO;
 import com.xml2023.smestajmicroservice.dtos.TerminDTO;
 import com.xml2023.smestajmicroservice.model.data.Adresa;
 import com.xml2023.smestajmicroservice.model.data.Cenovnik;
+import com.xml2023.smestajmicroservice.model.data.OcenaSmestaj;
 import com.xml2023.smestajmicroservice.model.data.Smestaj;
 import com.xml2023.smestajmicroservice.model.data.Termin;
+import com.xml2023.smestajmicroservice.repositories.OcenaSmestajRep;
 
 
 @Component
@@ -23,10 +27,12 @@ public class SmestajBasicMapper {
 	private AdresaMapper aMapper;
 	@Autowired
 	private CenovnikMapper cenovnikMapper;
-//	@Autowired
-//	private OcenaSmestajMapper ocenaSmestajMapper;
+	@Autowired
+	private OcenaSmestajMapper ocenaSmestajMapper;
 	@Autowired
 	private TerminMapper terminMapper;
+	@Autowired OcenaSmestajRep oRep;
+	
 	public Smestaj fromBasicDTO(SmestajBasicDTO dto) {
 		Smestaj s = new Smestaj();
 		Adresa adr = aMapper.fromDTO(dto.getAdresa());
@@ -95,15 +101,13 @@ public class SmestajBasicMapper {
 		dto.setId(s.getId());
 		dto.setMaxGosti(s.getMaxGosti());
 		dto.setMinGosti(s.getMinGosti());
-//		Collection<OcenaSmestajaDTO> tempLista = new ArrayList<OcenaSmestajaDTO>();
-//		if(s.getListaOcena() != null) {
-//			for(OcenaSmestaj o: s.getListaOcena()) {
-//				tempLista.add(ocenaSmestajMapper.toDTO(o));
-//			}
-//		}
-//		dto.setListaOcena(tempLista);
 		dto.setVlasnikId(s.getVlasnik());
 		
+		Collection<OcenaSmestaj> ocene= oRep.findAllBySmestaj(s.getId());
+		if(ocene.size()>0) {
+			dto.setListaOcena(ocene.stream().map(x->ocenaSmestajMapper.toDTO(x)).collect(Collectors.toList()));
+		}else dto.setListaOcena(new ArrayList<OcenaSmestajaDTO>());
+
 		
 		Collection<TerminDTO> tempTermini = new ArrayList<TerminDTO>();
 		if(s.getNedostupni() != null) {

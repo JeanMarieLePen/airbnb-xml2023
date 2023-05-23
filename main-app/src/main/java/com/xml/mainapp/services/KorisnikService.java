@@ -320,10 +320,6 @@ public class KorisnikService {
 		return null;
 	}
 
-	public boolean canGiveRating(String userId, String smestajId) {
-		return false;
-	}
-
 	public KorisnikDTO deleteAcc(String id) {
 		// TODO Auto-generated method stub
 		Korisnik k = this.korisnikRep.findById(id).orElse(null);

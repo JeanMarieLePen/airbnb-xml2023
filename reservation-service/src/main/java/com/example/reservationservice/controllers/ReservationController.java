@@ -2,6 +2,8 @@ package com.example.reservationservice.controllers;
 
 import java.util.Collection;
 
+import javax.transaction.Transactional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -108,6 +110,15 @@ public class ReservationController {
 		}else {
 			return new ResponseEntity<RezervacijaDTO>(retVal, HttpStatus.OK);
 		}
+	}
+	
+	//@PreAuthorize("hasAuthority('GUEST')")
+	@Transactional
+	@GetMapping("/canGiveRating/{userId}/{smestajId}")
+	public ResponseEntity<?> canGiveRating(@PathVariable(value = "userId") String userId, @PathVariable(value = "smestajId") String smestajId){
+		System.out.println("Can give rating check:");
+		boolean retVal = this.rezervacijaService.canGiveRating(userId.substring(1, userId.length() - 1), smestajId);
+		return new ResponseEntity<Boolean>(retVal, HttpStatus.OK);
 	}
 	
 }

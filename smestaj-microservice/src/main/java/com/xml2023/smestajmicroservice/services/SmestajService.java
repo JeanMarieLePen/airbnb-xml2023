@@ -1,5 +1,6 @@
 package com.xml2023.smestajmicroservice.services;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.stream.Collectors;
@@ -11,10 +12,13 @@ import com.xml2023.mainapp.ActiveResExistsForSmestajRequest;
 import com.xml2023.mainapp.ActiveResExistsForSmestajResponse;
 import com.xml2023.mainapp.RezervacijaGrpcGrpc;
 import com.xml2023.mainapp.RezervacijaGrpcGrpc.RezervacijaGrpcBlockingStub;
+import com.xml2023.smestajmicroservice.dtos.OcenaSmestajaDTO;
 import com.xml2023.smestajmicroservice.dtos.SmestajDTO;
 import com.xml2023.smestajmicroservice.mappers.SmestajBasicMapper;
+import com.xml2023.smestajmicroservice.model.data.OcenaSmestaj;
 import com.xml2023.smestajmicroservice.model.data.Pogodnost;
 import com.xml2023.smestajmicroservice.model.data.Smestaj;
+import com.xml2023.smestajmicroservice.repositories.OcenaSmestajRep;
 import com.xml2023.smestajmicroservice.repositories.PogodnostRepository;
 import com.xml2023.smestajmicroservice.repositories.SmestajRep;
 
@@ -31,7 +35,8 @@ public class SmestajService {
 	private SmestajRep smestajRep;
 	@Autowired 
 	private PogodnostRepository pogRep;
-
+	@Autowired OcenaSmestajRep ocenaRep;
+	
 	public SmestajDTO createNew(SmestajDTO s) {
 		//u maperu se definisu i cuvaju svi objekti koji su ugnjezdeni u objekat smestaj
 		Smestaj tmp = smestajMapper.fromDTO(s);
@@ -113,6 +118,18 @@ public class SmestajService {
 //		}
 //		return uk/ocene.size();	
 		return 0F;
+	}
+
+	public OcenaSmestajaDTO giveRatingToSmestaj(String userId, String smestajId, OcenaSmestajaDTO ocena) {
+		OcenaSmestaj o= ocenaRep.findByGostAndSmestaj(userId,smestajId).orElse(null); 
+		if(o==null) {
+			o=new OcenaSmestaj( smestajId, userId, ocena.getOcena(), LocalDate.now());
+		}else {
+			o.setDatum(LocalDate.now());
+			o.setOcena(ocena.getOcena());
+		}
+		ocenaRep.save(o);
+		return new OcenaSmestajaDTO(o.getId(), o.getSmestaj(), o.getGost(), o.getOcena(), o.getDatum());
 	}
 	
 }
