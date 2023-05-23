@@ -17,7 +17,7 @@ spring:
         - id: REGLOG-SERVICE
           uri: lb://REGLOG-SERVICE
           predicates:
-            - Path=/login/**, /korisnik/**, /main-app-websockets/**, /host/**
+            - Path=/login/**, /korisnik/**, /main-app-websockets/**, /main-app-websockets/host/**, /host/**
           #filters:
           #- AuthenticationFilter
           #filters:

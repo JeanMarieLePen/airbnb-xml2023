@@ -55,6 +55,7 @@ service RezervacijaGrpc{
 	rpc getActiveReservations(ActiveReservationsRequest) returns (ActiveReservationsResponse);
 }
 
+
 message TerminZauzmiRequest{
 	string smestajId = 1;
 	TerminDTO termin = 2;
@@ -186,11 +187,57 @@ message TerminDTO{
 	google.protobuf.Timestamp pocetak = 1;
 	google.protobuf.Timestamp kraj = 2;
 }
+message NekoRezervisaoRequest{
+	string idKorisnika = 1;
+	string idSmestaja = 2;
+}
+message NekoRezervisaoResponse{
+	bool result = 1;
+}
+message NekoOtkazaoRequest{
+	string idKorisnika = 1;
+	string idSmestaja = 2;
+}
+message NekoOtkazaoResponse{
+	bool result = 1;
+}
+message NekoOcenioSmestajRequest{
+	string idKorisnika = 1;
+	string idSmestaja = 2;
+	int32 ocena = 3;
+}
+message NekoOcenioSmestajResponse{
+	bool result = 1;
+}
+message NekoOcenioHostaRequest{
+	string idKorisnika = 1;
+	int32 ocena = 2;
+}
+message NekoOcenioHostaResponse{
+	bool result = 1;
+}
 
+message DobioStatusIstaknutogRequest{
+	string idKorisnika = 1;
+}
+message DobioStatusIstaknutogResponse{
+	bool result = 1;
+}
 service KorisnikGrpc{
 	rpc getHost(getHostRequest) returns (getHostResponse);
 	rpc rezOtkazana(rezOtkazanaRequest) returns (rezOtkazanaResponse);
 	rpc rezObavestenje(reservationApprovedNotificationRequest) returns (reservationApprovedNotificationResponse);
+	rpc newRezNotify(NekoRezervisaoRequest) returns (NekoRezervisaoResponse);
+	rpc newQuitNotify(NekoOtkazaoRequest) returns (NekoOtkazaoResponse);
+	rpc newRankSmestaj(NekoOcenioSmestajRequest) returns (NekoOcenioSmestajResponse);
+	rpc newRankHost(NekoOcenioHostaRequest) returns (NekoOcenioHostaResponse);
+	rpc istaknutiHost(DobioStatusIstaknutogRequest) returns (DobioStatusIstaknutogResponse);
+	
+	rpc novaRezNotStatus(NovaRezervacijaNotifikacijaRequest) returns (NovaRezervacijaNotifikacijaResponse);
+	rpc otkazanaRezNotStatus(OtkazanaRezervacijaNotifikacijaRequest) returns (OtkazanaRezervacijaNotifikacijaResponse);
+	rpc novaOcenaHostaNotStatus(NovaOcenaHostaNotifikacijaRequest) returns (NovaOcenaHostaNotifikacijaResponse);
+	rpc novaOcenaSmestajaNotStatus(NovaOcenaSmestajaNotifikacijaRequest) returns (NovaOcenaSmestajaNotifikacijaResponse);
+	rpc istaknutiNotStatus(StatusIstaknutogNotifikacijaRequest) returns (StatusIstaknutogNotifikacijaResponse);
 }
 
 message getHostRequest{
@@ -219,3 +266,39 @@ message reservationApprovedNotificationRequest{
 message reservationApprovedNotificationResponse{
 	bool isporuceno = 1;
 }
+
+
+
+message NovaRezervacijaNotifikacijaRequest{
+	string idKorisnika = 1;
+}
+message NovaRezervacijaNotifikacijaResponse{
+	bool stanje = 1;
+}
+message OtkazanaRezervacijaNotifikacijaRequest{
+	string idKorisnika = 1;
+}
+message OtkazanaRezervacijaNotifikacijaResponse{
+	bool stanje = 1;
+}
+
+message NovaOcenaHostaNotifikacijaRequest{
+	string idKorisnika = 1;
+}
+message NovaOcenaHostaNotifikacijaResponse{
+	bool stanje = 1;
+}
+
+message NovaOcenaSmestajaNotifikacijaRequest{
+	string idKorisnika = 1;
+}
+message NovaOcenaSmestajaNotifikacijaResponse{
+	bool stanje = 1;
+}
+message StatusIstaknutogNotifikacijaRequest{
+	string idKorisnika = 1;
+}
+message StatusIstaknutogNotifikacijaResponse{
+	bool stanje = 1;
+}
+

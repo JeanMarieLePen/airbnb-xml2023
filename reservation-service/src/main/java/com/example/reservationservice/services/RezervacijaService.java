@@ -29,6 +29,14 @@ import com.xml2023.mainapp.KorisnikGrpcGrpc;
 import com.xml2023.mainapp.KorisnikGrpcGrpc.KorisnikGrpcBlockingStub;
 import com.xml2023.mainapp.KorisnikRequest;
 import com.xml2023.mainapp.KorisnikResponse;
+import com.xml2023.mainapp.NekoOtkazaoRequest;
+import com.xml2023.mainapp.NekoOtkazaoResponse;
+import com.xml2023.mainapp.NekoRezervisaoRequest;
+import com.xml2023.mainapp.NekoRezervisaoResponse;
+import com.xml2023.mainapp.NovaRezervacijaNotifikacijaRequest;
+import com.xml2023.mainapp.NovaRezervacijaNotifikacijaResponse;
+import com.xml2023.mainapp.OtkazanaRezervacijaNotifikacijaRequest;
+import com.xml2023.mainapp.OtkazanaRezervacijaNotifikacijaResponse;
 import com.xml2023.mainapp.SmestajDTO;
 import com.xml2023.mainapp.SmestajGrpcGrpc;
 import com.xml2023.mainapp.SmestajGrpcGrpc.SmestajGrpcBlockingStub;
@@ -93,7 +101,7 @@ public class RezervacijaService {
 
 		//ZAVISNO OD TOGA DA LI JE VLASNIK SMESTAJA ODABRAO DA SE REZERVACIJE MODERIRAJU AUTOMATSKI ILI RUCNO
 		HostBasicDTO host= getHostBasic(smestaj.getVlasnik());		
-
+		
 		if(host.getRezAutomatski()) {
 			
 			ManagedChannel channel = ManagedChannelBuilder.forAddress("localhost", 7977).usePlaintext().build();
@@ -102,6 +110,8 @@ public class RezervacijaService {
 			TerminZauzmiResponse rspns = smestajBlockingStub.zauzmiTermin(rqst);
 			if(rspns.getZauzet()) {
 				rez.setStatus(StatusRezervacije.REZERVISANA);
+				
+				
 			}else {
 				return null;
 			}
@@ -109,9 +119,29 @@ public class RezervacijaService {
 			rez.setStatus(StatusRezervacije.PENDING);
 		}
 		rezervacijaRep.save(rez);
+		if(novaRezervacijaNotificationEnabled(smestaj.getVlasnik())) {
+			newReservationNotify(rez);
+		}
 		return rezMapper.toDTO(rez);
 	}
 	
+	public boolean novaRezervacijaNotificationEnabled(String idVlasnika) {
+		ManagedChannel channel = ManagedChannelBuilder.forAddress("localhost", 7979).usePlaintext().build();
+		KorisnikGrpcBlockingStub bs = KorisnikGrpcGrpc.newBlockingStub(channel);
+		NovaRezervacijaNotifikacijaRequest rqst = NovaRezervacijaNotifikacijaRequest.newBuilder().setIdKorisnika(idVlasnika).build();
+		NovaRezervacijaNotifikacijaResponse rspns = bs.novaRezNotStatus(rqst);
+		return rspns.getStanje();
+	}
+	
+	public void newReservationNotify(Rezervacija r) {
+		ManagedChannel channel = ManagedChannelBuilder.forAddress("localhost", 7979).usePlaintext().build();
+		KorisnikGrpcBlockingStub bs = KorisnikGrpcGrpc.newBlockingStub(channel);
+		NekoRezervisaoRequest rqst = NekoRezervisaoRequest.newBuilder().setIdSmestaja(r.getSmestaj()).setIdKorisnika(r.getGost()).build();
+		NekoRezervisaoResponse rspns = bs.newRezNotify(rqst);
+		if(rspns.getResult()) {
+			System.out.println("USPESNO POSLATO OBAVESTENJE HOSTU");
+		}
+	}
 	public TerminDTO mapTermin(LocalDateTime localDateTime, LocalDateTime localDateTime2) {
 		TerminDTO.Builder t = TerminDTO.newBuilder();
 		t.setPocetak(convertToTimeStamp(localDateTime));
@@ -142,12 +172,30 @@ public class RezervacijaService {
 		}
 		guestOtkazaoRez(userId);
 		rezervacijaRep.save(r);
-		
-		
+		//da bih dobavio id vlasnika
+		SmestajDTO smestaj= getSmestaj(r.getSmestaj());
+		if(otkazanaRezervacijaNotificationEnabled(smestaj.getVlasnik())) {
+			newCancelationNotify(r);
+		}
 		
 		return rezMapper.toDTO(r);
 	}
-
+	public boolean otkazanaRezervacijaNotificationEnabled(String idVlasnika) {
+		ManagedChannel channel = ManagedChannelBuilder.forAddress("localhost", 7979).usePlaintext().build();
+		KorisnikGrpcBlockingStub bs = KorisnikGrpcGrpc.newBlockingStub(channel);
+		OtkazanaRezervacijaNotifikacijaRequest rqst = OtkazanaRezervacijaNotifikacijaRequest.newBuilder().setIdKorisnika(idVlasnika).build();
+		OtkazanaRezervacijaNotifikacijaResponse rspns = bs.otkazanaRezNotStatus(rqst);
+		return rspns.getStanje();
+	}
+	public void newCancelationNotify(Rezervacija r) {
+		ManagedChannel channel = ManagedChannelBuilder.forAddress("localhost", 7979).usePlaintext().build();
+		KorisnikGrpcBlockingStub bs = KorisnikGrpcGrpc.newBlockingStub(channel);
+		NekoOtkazaoRequest rqst = NekoOtkazaoRequest.newBuilder().setIdKorisnika(r.getGost()).setIdSmestaja(r.getSmestaj()).build();
+		NekoOtkazaoResponse rspns = bs.newQuitNotify(rqst);
+		if(rspns.getResult()) {
+			System.out.println("USPESNO POSLATO OBAVESTENJE HOSTU");
+		}
+	}
 
 	//TODO: treba li ovo uopste?
 //	public RezervacijaDTO editReservation(RezervacijaDTO edited) {

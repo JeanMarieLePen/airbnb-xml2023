@@ -4,9 +4,18 @@ import java.time.LocalDateTime;
 
 public class NotificationDTO {
 	private String idRezervacije;
+	private String tekst;
 	
 	public NotificationDTO() {
 		super();
+	}
+	
+	public String getTekst() {
+		return tekst;
+	}
+
+	public void setTekst(String tekst) {
+		this.tekst = tekst;
 	}
 
 	public String getIdRezervacije() {

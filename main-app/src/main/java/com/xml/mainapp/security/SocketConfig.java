@@ -16,6 +16,7 @@ public class SocketConfig implements WebSocketMessageBrokerConfigurer {
 //		.setAllowedOrigins("*")
 		.setAllowedOriginPatterns("*")
 		.withSockJS();
+		registry.addEndpoint("/main-app-websockets/host").setHandshakeHandler(new UserHandshakeHandler()).setAllowedOriginPatterns("*").withSockJS();
 	}
 	
 	@Override
