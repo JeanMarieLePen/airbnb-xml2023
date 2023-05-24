@@ -110,6 +110,36 @@
                 </div>
             </div>
         </section>
+        <section v-if="userObj.role == 'HOST'" style="margin-left: 10px; margin-bottom:200px;">
+            <div id="comment-section" style="margin-left:30px">
+            <div>
+                <div  v-for="(tempComment, index) in profile.ocene" v-bind:key="index" class="comments-box">
+                <div>
+                    <p class="author">
+                    {{tempComment.gost}} 
+                    <star-rating :star-size="20" read-only style="margin-left:10px;display:inline-block"  v-model:rating="tempComment.ocena"></star-rating>
+                    </p>
+                </div>
+                <p style="font-weight:200; font-style:italic">Kreiran: {{tempComment.datum}}</p>
+                <!-- <div id="like-section">
+                    <button @click="like()">
+                        <div>
+                            <img src="../assets/like.png" style="max-width:100%; max-height:100%;" />
+                        </div>
+                    </button>
+                    <button @click="dislike()">
+                        <div>
+                            <img src="../assets/dislike.png" style="max-width:100%; max-height:100%;" />
+                        </div>
+                    </button>
+                </div> -->
+                </div>
+                <div style="margin-left: 200px;margin-top:100px" v-show="profile.ocene.length == 0 ">
+                    <h1>Trenutno nema ocena</h1>
+                </div>
+            </div>
+        </div>
+        </section>
     </div>
 
 </template>

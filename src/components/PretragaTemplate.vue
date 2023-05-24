@@ -1,7 +1,7 @@
 <template>
     <!--SORTIRANJE-->
     <p>{{this.listaSmestaja.brojDana}}</p>
-    <section style="margin-left: 10px; margin-bottom:200px;">
+   <!-- <section style="margin-left: 10px; margin-bottom:200px;">-->
     <!--<p>{{this.listaSmestaja.brojDana}}</p>-->
     <section style="margin-left: 10px; margin-bottom:100px;">
         <div>
