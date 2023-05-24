@@ -1,6 +1,6 @@
 import axios from "axios"
 
-const API_URL = "http://localhost:8084";
+const API_URL = "http://localhost:7777";
 
 (function() {
     let xmljwt = localStorage.getItem('xmljwt');
@@ -65,6 +65,12 @@ const API_URL = "http://localhost:8084";
     }
     deleteUserProfile(id){
         return axios.delete(`${API_URL}/regkor/deleteAccount/${id}`);
+    }
+    generateToken(dto, id){
+        return axios.post(`${API_URL}/regkor/generateToken/${id}`, dto);
+    }
+    checkToken(id){
+        return axios.get(`${API_URL}/regkor/checkToken/${id}`);
     }
 }
 

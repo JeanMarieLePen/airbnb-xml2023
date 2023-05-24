@@ -5,6 +5,59 @@
 			    <h1 style="margin-top:10px;color:#1E90FF;">Izmena profila <span id='titleEffect'>{{this.profile.tipKorisnika}}</span></h1>
 			    <hr style='background:#1E90FF;height:1px;'>
 			</div>
+            <div v-if="userObj.role === 'REG_KOR'" class="container" style="margin-top:30px; margin-bottom:30px;">
+                <div style="display: inline-block;">
+                    <button  @click="tokenTable()" style="margin-right:20px;">API token</button>
+                    <input type="text" style="width:300px; margin-right:10px;" readonly :placeholder="tokenPlaceHolder"/>
+                    <input type="text" style="width:300px;" readonly  :placeholder="vaziDoPlaceHolder"/>
+                    <button @click="kopiraj()">Kopiraj</button>
+                </div>
+                <table v-show="showTokenTable" style="margin-top:30px; margin-bottom:30px;">
+                    <thead>
+                        <th colspan="2" style=" text-align:center">GENERISANJE TOKENA</th>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>
+                                <label style="margin-right:40px;" >PRIVREMENI TOKEN</label> 
+                            </td>
+                            <td>
+                                <input @change="selectTokenType()" v-model="tokenPrivremeni" type="checkbox">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                 <label style="margin-right:40px;" >TRAJNI TOKEN</label>
+                            </td>
+                            <td>
+                                <input @change="selectTokenType2()" v-model="tokenTrajni" type="checkbox">
+                            </td>
+                        </tr>
+                        <tr v-if="tokenPrivremeni">
+                            <td colspan="2">
+                                <label style="margin-right:5px;" >Broj sati:</label>
+                                <input v-model="brojSati" min="1" type="number" style="width:100%;" placeholder="broj sati vazenja tokena...">
+                            </td>
+                            <!-- <td>
+                                <input v-model="brojMinuta" type="text" placeholder="broj minuta vazenja tokena...">
+                            </td> -->
+                        </tr>
+                    </tbody>
+                    <tfoot >
+                        <tr >
+                            <td colspan="2" style="text-align:center">
+                                <button style="margin-top:30px;" @click="generateToken()"> Generisi</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="2">
+                                <div class="alert alert-success" v-if="messages.successToken" v-html="messages.successToken"/>
+                                <div class="alert alert-danger" v-if="messages.errorToken" v-html="messages.errorToken"/>
+                            </td>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
             <div class="container">
                 <fieldset class="form-group">
 					<label><font color="#1E90FF">Email</font></label>
@@ -89,10 +142,17 @@ import parserMixin from '@/mixins/mixin'
 
 import { VueperSlides, VueperSlide } from 'vueperslides'
 import 'vueperslides/dist/vueperslides.css'
-
+import moment from 'moment';
     export default{
         data(){
             return{
+                prikaz:{
+                    vaziDo:'',
+                    tokenTekst:'',
+                },
+                vaziDo: '',
+                brojSati:-1,
+                showTokenTable: false,
                 btnEnabled:false,
                 profile: {
                     slike:[],
@@ -106,6 +166,10 @@ import 'vueperslides/dist/vueperslides.css'
                 },
                 slike:[],
 
+                tokenPrivremeni: false,
+                tokenTrajni : true, 
+                tokenTekst: '',
+
                 messages:{
                     errorUsername:'',
                     errorFirstName: '',
@@ -118,6 +182,8 @@ import 'vueperslides/dist/vueperslides.css'
                     errorNotEqualNewPassword: '',
                     errorResponse: '',
                     successResponse: '',
+                    successToken:'',
+                    errorToken:'',
                 },
                 userObj:{
 
@@ -129,8 +195,82 @@ import 'vueperslides/dist/vueperslides.css'
             this.userObj = parserMixin.methods.parseXmlJwt();
             console.log("ID KORISNIKA: " + this.userObj.id);
             await this.getUserProfileData(this.userObj.id);
+            await dataService.checkToken(this.userObj.id).then(response => {
+                console.log("TOKEN SA BEKA: " + JSON.stringify(response.data));
+                if(response.status === 200){
+                    console.log("DODELA VREDNOSTI");
+                    this.tokenTekst = response.data.tokenTekst;
+                    this.vaziDo = response.data.vremeVazenja;
+                }
+            });
+        },
+        computed:{
+            tokenPlaceHolder(){
+                if(this.tokenTekst == null){
+                    return 'NEMATE IZGENERISAN TOKEN';
+                }else{
+                    return this.tokenTekst;
+                }
+            },
+            vaziDoPlaceHolder(){
+                if(this.vaziDo == null){
+                    return 'NEMATE IZGENERISAN TOKEN';
+                }else{
+                    return moment(this.vaziDo).format('HH:MM | DD-MM-YYYY ')
+                }
+            }
+
         },
         methods:{
+            async kopiraj(){
+                await navigator.clipboard.writeText(this.tokenTekst);
+            },
+            //pri ucitavanju stranice
+            checkIfTokenExists(){
+            },
+            generateToken(){
+                let tempTrajni = true;
+                if(this.tokenPrivremeni == true){
+                    console.log("TOKEN JE PRIVREMENI");
+                    tempTrajni = false;
+                }
+                let tokenDTO = {
+                    trajni : tempTrajni,
+                    brojSatiVazenja : this.brojSati
+                }
+                dataService.generateToken(tokenDTO, this.userObj.id).then(response => {
+                    if(response.status === 200){
+                        console.log("USPESNO IZGENERISAN TOKEN");
+                        console.log(JSON.stringify(response.data));
+                        this.tokenTekst = response.tokenTekst;
+                        this.vaziDo = response.vremeVazenja;
+                        this.messages.successToken = '<h4>Uspesno generisan API token</h4>';
+                         setTimeout(() => {
+                            this.messages.successToken = '';
+                        }, 4000);
+                    }else{
+                        console.log("DOSLO DO GRESKE");
+                        this.messages.errorToken = '<h4>Doslo je do greske pri generisanju tokena</h4>';
+                        setTimeout(() => {
+                            this.messages.errorToken = '';
+                        }, 4000);
+                    }
+                    
+                });
+            },
+            selectTokenType(){
+                console.log("TOKEN PRIVREMENI: " + this.tokenPrivremeni);
+                this.tokenTrajni = !this.tokenPrivremeni;
+                console.log("TOKEN TRAJNI: " + this.tokenTrajni)
+            },
+             selectTokenType2(){
+                console.log("TOKEN TRAJNI: " + this.tokenTrajni)
+                this.tokenPrivremeni = !this.tokenTrajni;
+                console.log("TOKEN PRIVREMENI: " + this.tokenPrivremeni);
+             },
+            tokenTable(){
+                this.showTokenTable = !this.showTokenTable;
+            },
             ponistiIzbor(){
                 this.slike.pop();
                 this.profile.slike.pop();
