@@ -16,7 +16,7 @@ public class SmestajDTO {
 	
 	private Collection<TerminDTO> nedostupni;
 	private Collection<OcenaSmestajaDTO> listaOcena = new ArrayList<OcenaSmestajaDTO>();
-
+	private float prosecnaOcena;
 	public SmestajDTO() {
 		super();
 	}
@@ -101,5 +101,11 @@ public class SmestajDTO {
 		this.nedostupni = nedostupni;
 	}
 
+	public float getProsecnaOcena() {
+		return prosecnaOcena;
+	}
 
+	public void setProsecnaOcena(float prosecnaOcena) {
+		this.prosecnaOcena = prosecnaOcena;
+	}
 }

@@ -120,5 +120,14 @@ public class ReservationController {
 		boolean retVal = this.rezervacijaService.canGiveRating(userId.substring(1, userId.length() - 1), smestajId);
 		return new ResponseEntity<Boolean>(retVal, HttpStatus.OK);
 	}
+	//@PreAuthorize("hasAuthority('GUEST')")
+
+	@Transactional
+	@GetMapping("/canGiveRatingHost/{userId}/{smestajId}")
+	public ResponseEntity<?> canGiveRatingHost(@PathVariable(value = "userId") String userId, @PathVariable(value = "smestajId") String smestajId){
+		System.out.println("Can give rating check:");
+		boolean retVal = this.rezervacijaService.canGiveRatingHost(userId.substring(1, userId.length() - 1), smestajId);
+		return new ResponseEntity<Boolean>(retVal, HttpStatus.OK);
+	}
 	
 }

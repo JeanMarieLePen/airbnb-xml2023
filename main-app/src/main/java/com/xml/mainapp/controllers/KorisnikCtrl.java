@@ -21,6 +21,8 @@ import com.xml.mainapp.dtos.UpdateProfileDTO;
 import com.xml.mainapp.dtos.UpdateProfileDTO2;
 import com.xml.mainapp.dtos.data.OcenaSmestajaDTO;
 import com.xml.mainapp.dtos.data.RezervacijaDTO;
+import com.xml.mainapp.dtos.user.HostDTO;
+import com.xml.mainapp.dtos.user.OcenaHostBasicDTO;
 import com.xml.mainapp.services.KorisnikService;
 
 import jakarta.ws.rs.Consumes;
@@ -47,7 +49,7 @@ public class KorisnikCtrl {
 	@PreAuthorize("hasAnyAuthority('GUEST', 'HOST')")
 	@GetMapping("/getHostById/{id}")
 	public ResponseEntity<KorisnikDTO> getHostById(@PathVariable(name="id") String id){
-		KorisnikDTO retVal = this.korisnikService.findHostById(id.substring(1, id.length() - 1));
+		KorisnikDTO retVal = this.korisnikService.getUserById(id);
 		if(retVal == null) {
 			return new ResponseEntity<KorisnikDTO>(HttpStatus.NO_CONTENT);
 		}else {
@@ -111,4 +113,14 @@ public class KorisnikCtrl {
 		}
 	}
 	
+	@Transactional
+	@PostMapping("/giveRatingToHost/{userId}/{hostId}")
+	public ResponseEntity<?> giveRatingToHost(@PathVariable(value = "userId") String userId, @PathVariable(value = "hostId") String hostId, @RequestBody OcenaHostBasicDTO ocena){
+		OcenaHostBasicDTO retVal = this.korisnikService.giveRatingToHost(userId.substring(1, userId.length() - 1), hostId, ocena);
+		if(retVal == null) {
+			return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+		}else {
+			return new ResponseEntity<OcenaHostBasicDTO>(retVal, HttpStatus.OK);
+		}
+	}
 }

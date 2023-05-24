@@ -44,6 +44,7 @@ service SmestajGrpc{
 	rpc getListaSmestajaByUserId(getListaSmestajaByUserIdRequest) returns (getListaSmestajaByUserIdResponse);
 	rpc zauzmiTermin(TerminZauzmiRequest) returns (TerminZauzmiResponse);
 	rpc oslobodiTermin(TerminOslobodiRequest) returns (TerminOslobodiResponse);
+	rpc belongsToHost(AnySmestajBelongToHostRequest) returns (AnySmestajBelongToHostResponse);
 }
 
 service RezervacijaGrpc{
@@ -300,5 +301,13 @@ message StatusIstaknutogNotifikacijaRequest{
 }
 message StatusIstaknutogNotifikacijaResponse{
 	bool stanje = 1;
+}
+
+message AnySmestajBelongToHostRequest{
+	string hostId = 1;
+	repeated string smestajIds = 2;
+}
+message AnySmestajBelongToHostResponse{
+	bool belongs = 1;
 }
 

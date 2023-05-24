@@ -16,7 +16,7 @@ public class GuestBasicDTO {
 	private Long brojOtkazivanja;
 	private Collection<RezervacijaDTO> rezervacije;
 	private Collection<OcenaSmestajaDTO> oceneSmestaja;
-	private Collection<OcenaHostDTO> oceneVlasnika;
+	private Collection<OcenaHostBasicDTO> oceneVlasnika;
 	
 	public GuestBasicDTO() {
 		super();
@@ -75,10 +75,10 @@ public class GuestBasicDTO {
 	public void setOceneSmestaja(Collection<OcenaSmestajaDTO> oceneSmestaja) {
 		this.oceneSmestaja = oceneSmestaja;
 	}
-	public Collection<OcenaHostDTO> getOceneVlasnika() {
+	public Collection<OcenaHostBasicDTO> getOceneVlasnika() {
 		return oceneVlasnika;
 	}
-	public void setOceneVlasnika(Collection<OcenaHostDTO> oceneVlasnika) {
+	public void setOceneVlasnika(Collection<OcenaHostBasicDTO> oceneVlasnika) {
 		this.oceneVlasnika = oceneVlasnika;
 	}
 	

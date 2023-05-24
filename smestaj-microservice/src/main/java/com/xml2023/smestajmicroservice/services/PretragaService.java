@@ -24,8 +24,10 @@ import com.xml2023.mainapp.RezervacijaGrpcGrpc.RezervacijaGrpcBlockingStub;
 import com.xml2023.smestajmicroservice.dtos.PretragaDTO;
 import com.xml2023.smestajmicroservice.dtos.SmestajPretragaDTO;
 import com.xml2023.smestajmicroservice.mappers.SmestajPretragaMapper;
+import com.xml2023.smestajmicroservice.model.data.OcenaSmestaj;
 import com.xml2023.smestajmicroservice.model.data.Smestaj;
 import com.xml2023.smestajmicroservice.model.data.Termin;
+import com.xml2023.smestajmicroservice.repositories.OcenaSmestajRep;
 
 import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
@@ -36,7 +38,7 @@ public class PretragaService {
 	private MongoTemplate monTempl;
 	@Autowired 
 	private SmestajPretragaMapper smMap;
-	
+	@Autowired OcenaSmestajRep oRep;
 	public Collection<SmestajPretragaDTO> pretraga(PretragaDTO dto){
 		Query query = new Query();
 		if(dto.getAdresa()!=null && !dto.getAdresa().getAdresa().trim().equals("")) {
@@ -74,16 +76,6 @@ public class PretragaService {
 		if(dtos.isEmpty()) return new ArrayList<SmestajPretragaDTO>();
 		else
 		return dtos;
-	}
-	public float getProsecnaOcena(Smestaj s) {
-//		if(s.getListaOcena()==null) return 0;
-//		Collection<OcenaSmestaj> ocene= s.getListaOcena();
-//		float uk=0;
-//		for(OcenaSmestaj o : ocene) {
-//			uk+=o.getOcena();
-//		}
-//		return uk/ocene.size();	
-		return 0f;
 	}
 	
 	public Timestamp convertToTimeStamp(LocalDateTime ldt) {

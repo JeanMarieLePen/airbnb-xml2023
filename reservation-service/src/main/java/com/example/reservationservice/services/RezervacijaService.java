@@ -22,6 +22,8 @@ import com.example.reservationservice.model.StatusRezervacije;
 import com.example.reservationservice.model.Termin;
 import com.example.reservationservice.repositories.RezervacijaRep;
 import com.google.protobuf.Timestamp;
+import com.xml2023.mainapp.AnySmestajBelongToHostRequest;
+import com.xml2023.mainapp.AnySmestajBelongToHostResponse;
 import com.xml2023.mainapp.GreetingServiceGrpc;
 import com.xml2023.mainapp.GreetingServiceGrpc.GreetingServiceBlockingStub;
 import com.xml2023.mainapp.HostBasicDTO;
@@ -340,5 +342,24 @@ public class RezervacijaService {
 		}
 		System.out.println("Korisnik NE moze oceniti!");
 		return false;
+	}
+
+	public boolean canGiveRatingHost(String userId, String hostId) {
+		Collection<Rezervacija> rez= rezervacijaRep.findAllByGost(userId).orElse(new ArrayList<Rezervacija>());
+		Collection<String> smestajsId= new ArrayList<String>();
+		boolean canGiveRating=false;
+		if(rez.size()>0) {
+			smestajsId=rez.stream().map(x->x.getSmestaj()).distinct().collect(Collectors.toList());
+			canGiveRating=SmestajsBelongToHost(hostId, smestajsId);
+		}
+		return canGiveRating;
+	}
+	
+	private boolean SmestajsBelongToHost(String hostId ,Collection<String> smestajsId ) {
+		ManagedChannel channel = ManagedChannelBuilder.forAddress("localhost", 7977).usePlaintext().build();
+		SmestajGrpcBlockingStub smBlockStub= SmestajGrpcGrpc.newBlockingStub(channel);
+		AnySmestajBelongToHostRequest req= AnySmestajBelongToHostRequest.newBuilder().addAllSmestajIds(smestajsId).build();
+		AnySmestajBelongToHostResponse resp= smBlockStub.belongsToHost(req);
+		return resp.getBelongs();
 	}
 }

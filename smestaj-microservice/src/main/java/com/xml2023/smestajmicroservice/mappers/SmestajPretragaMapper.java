@@ -15,11 +15,12 @@ import org.springframework.stereotype.Component;
 import com.xml2023.smestajmicroservice.dtos.SmestajPretragaDTO;
 import com.xml2023.smestajmicroservice.model.data.OcenaSmestaj;
 import com.xml2023.smestajmicroservice.model.data.Smestaj;
+import com.xml2023.smestajmicroservice.repositories.OcenaSmestajRep;
 
 @Component
 public class SmestajPretragaMapper {
 	@Autowired 	private AdresaMapper aMapper;
-	
+	@Autowired OcenaSmestajRep oRep;
 	public SmestajPretragaDTO toDTO(Smestaj s, LocalDateTime pocetak, LocalDateTime kraj) {
 		
 		SmestajPretragaDTO dto = new SmestajPretragaDTO();
@@ -37,23 +38,20 @@ public class SmestajPretragaMapper {
 				tempSlike.add(tempSlika);
 			}
 		}		dto.setSlike(tempSlike);
-		dto.setProsecnaOcena(getProsecnaOcena(s));
+		dto.setProsecnaOcena(getProsecnaOcena(s.getId()));
 		dto.setUkCena(ukupnaCena(s, pocetak, kraj));
 		dto.setPoSmestaju(s.getCenovnik().isPoSmestaju());
 		return dto;
 		
 	} 
 	
-	public float getProsecnaOcena(Smestaj s) {
-//		if(s.getListaOcena()==null) return 0;
-//
-//		Collection<OcenaSmestaj> ocene= s.getListaOcena();
-//		float uk=0;
-//		for(OcenaSmestaj o : ocene) {
-//			uk+=o.getOcena();
-//		}
-//		return uk/ocene.size();	
-		return 0f;
+	public float getProsecnaOcena(String id) {
+		Collection<OcenaSmestaj> ocene= oRep.findAllBySmestaj(id);;
+		float uk=0;
+		for(OcenaSmestaj o : ocene) {
+			uk+=o.getOcena();
+		}
+		return uk/ocene.size();	
 	}
 	//https://www.baeldung.com/java-between-dates
 	//TODO provera praznika, leta i neradnih dana

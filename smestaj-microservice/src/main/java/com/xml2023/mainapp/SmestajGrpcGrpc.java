@@ -251,6 +251,38 @@ public final class SmestajGrpcGrpc {
      return getOslobodiTerminMethod;
   }
 
+  private static volatile io.grpc.MethodDescriptor<com.xml2023.mainapp.AnySmestajBelongToHostRequest,
+      com.xml2023.mainapp.AnySmestajBelongToHostResponse> getBelongsToHostMethod;
+
+  @io.grpc.stub.annotations.RpcMethod(
+      fullMethodName = SERVICE_NAME + '/' + "belongsToHost",
+      requestType = com.xml2023.mainapp.AnySmestajBelongToHostRequest.class,
+      responseType = com.xml2023.mainapp.AnySmestajBelongToHostResponse.class,
+      methodType = io.grpc.MethodDescriptor.MethodType.UNARY)
+  public static io.grpc.MethodDescriptor<com.xml2023.mainapp.AnySmestajBelongToHostRequest,
+      com.xml2023.mainapp.AnySmestajBelongToHostResponse> getBelongsToHostMethod() {
+    io.grpc.MethodDescriptor<com.xml2023.mainapp.AnySmestajBelongToHostRequest, com.xml2023.mainapp.AnySmestajBelongToHostResponse> getBelongsToHostMethod;
+    if ((getBelongsToHostMethod = SmestajGrpcGrpc.getBelongsToHostMethod) == null) {
+      synchronized (SmestajGrpcGrpc.class) {
+        if ((getBelongsToHostMethod = SmestajGrpcGrpc.getBelongsToHostMethod) == null) {
+          SmestajGrpcGrpc.getBelongsToHostMethod = getBelongsToHostMethod = 
+              io.grpc.MethodDescriptor.<com.xml2023.mainapp.AnySmestajBelongToHostRequest, com.xml2023.mainapp.AnySmestajBelongToHostResponse>newBuilder()
+              .setType(io.grpc.MethodDescriptor.MethodType.UNARY)
+              .setFullMethodName(generateFullMethodName(
+                  "com.xml2023.mainapp.SmestajGrpc", "belongsToHost"))
+              .setSampledToLocalTracing(true)
+              .setRequestMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(
+                  com.xml2023.mainapp.AnySmestajBelongToHostRequest.getDefaultInstance()))
+              .setResponseMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(
+                  com.xml2023.mainapp.AnySmestajBelongToHostResponse.getDefaultInstance()))
+                  .setSchemaDescriptor(new SmestajGrpcMethodDescriptorSupplier("belongsToHost"))
+                  .build();
+          }
+        }
+     }
+     return getBelongsToHostMethod;
+  }
+
   /**
    * Creates a new async stub that supports all call types for the service
    */
@@ -327,6 +359,13 @@ public final class SmestajGrpcGrpc {
       asyncUnimplementedUnaryCall(getOslobodiTerminMethod(), responseObserver);
     }
 
+    /**
+     */
+    public void belongsToHost(com.xml2023.mainapp.AnySmestajBelongToHostRequest request,
+        io.grpc.stub.StreamObserver<com.xml2023.mainapp.AnySmestajBelongToHostResponse> responseObserver) {
+      asyncUnimplementedUnaryCall(getBelongsToHostMethod(), responseObserver);
+    }
+
     @java.lang.Override public final io.grpc.ServerServiceDefinition bindService() {
       return io.grpc.ServerServiceDefinition.builder(getServiceDescriptor())
           .addMethod(
@@ -378,6 +417,13 @@ public final class SmestajGrpcGrpc {
                 com.xml2023.mainapp.TerminOslobodiRequest,
                 com.xml2023.mainapp.TerminOslobodiResponse>(
                   this, METHODID_OSLOBODI_TERMIN)))
+          .addMethod(
+            getBelongsToHostMethod(),
+            asyncUnaryCall(
+              new MethodHandlers<
+                com.xml2023.mainapp.AnySmestajBelongToHostRequest,
+                com.xml2023.mainapp.AnySmestajBelongToHostResponse>(
+                  this, METHODID_BELONGS_TO_HOST)))
           .build();
     }
   }
@@ -455,6 +501,14 @@ public final class SmestajGrpcGrpc {
       asyncUnaryCall(
           getChannel().newCall(getOslobodiTerminMethod(), getCallOptions()), request, responseObserver);
     }
+
+    /**
+     */
+    public void belongsToHost(com.xml2023.mainapp.AnySmestajBelongToHostRequest request,
+        io.grpc.stub.StreamObserver<com.xml2023.mainapp.AnySmestajBelongToHostResponse> responseObserver) {
+      asyncUnaryCall(
+          getChannel().newCall(getBelongsToHostMethod(), getCallOptions()), request, responseObserver);
+    }
   }
 
   /**
@@ -522,6 +576,13 @@ public final class SmestajGrpcGrpc {
     public com.xml2023.mainapp.TerminOslobodiResponse oslobodiTermin(com.xml2023.mainapp.TerminOslobodiRequest request) {
       return blockingUnaryCall(
           getChannel(), getOslobodiTerminMethod(), getCallOptions(), request);
+    }
+
+    /**
+     */
+    public com.xml2023.mainapp.AnySmestajBelongToHostResponse belongsToHost(com.xml2023.mainapp.AnySmestajBelongToHostRequest request) {
+      return blockingUnaryCall(
+          getChannel(), getBelongsToHostMethod(), getCallOptions(), request);
     }
   }
 
@@ -598,6 +659,14 @@ public final class SmestajGrpcGrpc {
       return futureUnaryCall(
           getChannel().newCall(getOslobodiTerminMethod(), getCallOptions()), request);
     }
+
+    /**
+     */
+    public com.google.common.util.concurrent.ListenableFuture<com.xml2023.mainapp.AnySmestajBelongToHostResponse> belongsToHost(
+        com.xml2023.mainapp.AnySmestajBelongToHostRequest request) {
+      return futureUnaryCall(
+          getChannel().newCall(getBelongsToHostMethod(), getCallOptions()), request);
+    }
   }
 
   private static final int METHODID_EXISTS = 0;
@@ -607,6 +676,7 @@ public final class SmestajGrpcGrpc {
   private static final int METHODID_GET_LISTA_SMESTAJA_BY_USER_ID = 4;
   private static final int METHODID_ZAUZMI_TERMIN = 5;
   private static final int METHODID_OSLOBODI_TERMIN = 6;
+  private static final int METHODID_BELONGS_TO_HOST = 7;
 
   private static final class MethodHandlers<Req, Resp> implements
       io.grpc.stub.ServerCalls.UnaryMethod<Req, Resp>,
@@ -652,6 +722,10 @@ public final class SmestajGrpcGrpc {
         case METHODID_OSLOBODI_TERMIN:
           serviceImpl.oslobodiTermin((com.xml2023.mainapp.TerminOslobodiRequest) request,
               (io.grpc.stub.StreamObserver<com.xml2023.mainapp.TerminOslobodiResponse>) responseObserver);
+          break;
+        case METHODID_BELONGS_TO_HOST:
+          serviceImpl.belongsToHost((com.xml2023.mainapp.AnySmestajBelongToHostRequest) request,
+              (io.grpc.stub.StreamObserver<com.xml2023.mainapp.AnySmestajBelongToHostResponse>) responseObserver);
           break;
         default:
           throw new AssertionError();
@@ -721,6 +795,7 @@ public final class SmestajGrpcGrpc {
               .addMethod(getGetListaSmestajaByUserIdMethod())
               .addMethod(getZauzmiTerminMethod())
               .addMethod(getOslobodiTerminMethod())
+              .addMethod(getBelongsToHostMethod())
               .build();
         }
       }

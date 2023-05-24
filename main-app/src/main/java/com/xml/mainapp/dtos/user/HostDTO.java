@@ -20,7 +20,7 @@ public class HostDTO extends KorisnikDTO{
 	@NotNull
 	private boolean rezAutomatski;
 	@NotNull
-	private int prosecnaOcena;
+	private float prosecnaOcena;
 	
 	@NotNull
 	private boolean newNotification;
@@ -32,6 +32,9 @@ public class HostDTO extends KorisnikDTO{
 	private boolean ratedAccomodationNotification;
 	@NotNull
 	private boolean statusNotification;
+	
+	@NotNull
+	private Collection<OcenaHostBasicDTO> ocene;
 	
 	public HostDTO() {
 		
@@ -94,11 +97,11 @@ public class HostDTO extends KorisnikDTO{
 	public void setStatusNotification(boolean statusNotification) {
 		this.statusNotification = statusNotification;
 	}
-	public int getProsecnaOcena() {
+	public float getProsecnaOcena() {
 		return prosecnaOcena;
 	}
 
-	public void setProsecnaOcena(int prosecnaOcena) {
+	public void setProsecnaOcena(float prosecnaOcena) {
 		this.prosecnaOcena = prosecnaOcena;
 	}
 
@@ -115,6 +118,12 @@ public class HostDTO extends KorisnikDTO{
 	}
 	public void setIstaknuti(boolean istaknuti) {
 		this.istaknuti = istaknuti;
+	}
+	public Collection<OcenaHostBasicDTO> getOcene() {
+		return ocene;
+	}
+	public void setOcene(Collection<OcenaHostBasicDTO> ocene) {
+		this.ocene = ocene;
 	}
 	
 }
