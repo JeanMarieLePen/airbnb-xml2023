@@ -10,20 +10,20 @@
                     <div style="width:90%;height:300px; margin-bottom:100px;" class="card">
                        <img  :src="getAnImage(sTemp)" alt="card image collar"> 
                        <div class="card-body">
-                        <h5 class="card-title">{{sTemp.adresa.adresa}}</h5>
-                        <p class="card-text">Ocena: {{sTemp.prosecnaOcena}}</p>
-                        <p class="card-text">Cena(ukupna): {{sTemp.ukCena}}</p>
-                        <p class="card-text" v-if="sTemp.poSmestaju===true">Cena(po smestaju): {{this.getProsekCena(sTemp.ukCena)}}</p>
-                        <p class="card-text" v-else>Cena(po smestaju/po Osobi): {{this.getProsekCenaOsoba(sTemp.ukCena)}}</p> 
+                            <h5 class="card-title">{{sTemp.adresa.adresa}}</h5>
+                            <p class="card-text">Ocena: {{sTemp.prosecnaOcena}}</p>
+                            <p class="card-text">Cena(ukupna): {{sTemp.ukCena}}</p>
+                            <p class="card-text" v-if="sTemp.poSmestaju===true">Cena(po smestaju): {{this.getProsekCena(sTemp.ukCena)}}</p>
+                            <p class="card-text" v-else>Cena(po smestaju/po Osobi): {{this.getProsekCenaOsoba(sTemp.ukCena)}}</p> 
 
-                        <button style="margin-left:30px;" v-on:click="smestajDet(sTemp.id)" class="btn btn-primary">Detalji</button>
+                            <button style="margin-left:30px;" v-on:click="smestajDet(sTemp.id)" class="btn btn-primary">Detalji</button>
                        </div>
                     </div>
                 </div>                        
             </div>
         </div>
     </section>
-
+    </section>
 </template>
 <script>
 
