@@ -19,7 +19,7 @@ spring:
           predicates:
             - Path=/login/**, /korisnik/**, /main-app-websockets/**, /main-app-websockets/host/**, /host/**
           #filters:
-          #- AuthenticationFilter
+          #- AuthorizationFilter
           #filters:
             #- name: CircuitBreaker
               #args:
@@ -29,8 +29,8 @@ spring:
           uri: lb://FLIGHTS-SERVICE
           predicates:
           - Path=/login2/**, /korisnik2/**, /regkor/**, /admin/**, /let/**
-          filters:
-          - AuthenticationFilter
+         # filters:
+         # - AuthenticationFilter
         - id: SMESTAJ-SERVICE
           uri: lb://SMESTAJ-SERVICE
           predicates:

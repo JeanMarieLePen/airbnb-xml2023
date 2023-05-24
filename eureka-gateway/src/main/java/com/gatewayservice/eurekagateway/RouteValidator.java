@@ -10,10 +10,14 @@ import java.util.function.Predicate;
 @Component
 public class RouteValidator {
 
+	//endpointi za koje nije neophodan API key
 	public static final List<String> apiEndPoints = List.of(
 		"/login/authenticate",
 		"/login/register",
-		"/login/activateAccount"
+		"/login/activateAccount",
+		"/login2/authenticate",
+		"/login2/register",
+		"/login2/activateAccount"
 //		"/smestaj/getAllPogodnosti"
 	);
 			
