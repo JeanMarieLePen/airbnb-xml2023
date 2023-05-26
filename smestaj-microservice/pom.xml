@@ -17,7 +17,22 @@
 		<java.version>17</java.version>
 		<spring-cloud.version>2022.0.1</spring-cloud.version>
 	</properties>
+	
 	<dependencies>
+		<dependency>
+	      <groupId>org.springframework.boot</groupId>
+	      <artifactId>spring-boot-starter-data-neo4j</artifactId>
+	    </dependency>
+	    <dependency>
+			<groupId>org.neo4j</groupId>
+			<artifactId>neo4j-ogm-core</artifactId>
+			<version>4.0.5</version>
+		</dependency>
+		<dependency>
+			<groupId>com.arangodb</groupId>
+			<artifactId>arangodb-spring-data</artifactId>
+			<version>3.10.0</version>
+		</dependency>
 		<dependency>
 		  <groupId>com.google.protobuf</groupId>
 		  <artifactId>protobuf-java</artifactId>

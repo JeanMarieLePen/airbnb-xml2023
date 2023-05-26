@@ -10,7 +10,13 @@ import org.springframework.stereotype.Service;
 
 import com.xml2023.mainapp.ActiveResExistsForSmestajRequest;
 import com.xml2023.mainapp.ActiveResExistsForSmestajResponse;
+import com.xml2023.mainapp.KorisnikGrpcGrpc;
 import com.xml2023.mainapp.RezervacijaGrpcGrpc;
+import com.xml2023.mainapp.KorisnikGrpcGrpc.KorisnikGrpcBlockingStub;
+import com.xml2023.mainapp.NekoOcenioSmestajRequest;
+import com.xml2023.mainapp.NekoOcenioSmestajResponse;
+import com.xml2023.mainapp.NovaOcenaSmestajaNotifikacijaRequest;
+import com.xml2023.mainapp.NovaOcenaSmestajaNotifikacijaResponse;
 import com.xml2023.mainapp.RezervacijaGrpcGrpc.RezervacijaGrpcBlockingStub;
 import com.xml2023.smestajmicroservice.dtos.OcenaSmestajaDTO;
 import com.xml2023.smestajmicroservice.dtos.SmestajDTO;
@@ -18,6 +24,7 @@ import com.xml2023.smestajmicroservice.mappers.SmestajBasicMapper;
 import com.xml2023.smestajmicroservice.model.data.OcenaSmestaj;
 import com.xml2023.smestajmicroservice.model.data.Pogodnost;
 import com.xml2023.smestajmicroservice.model.data.Smestaj;
+import com.xml2023.smestajmicroservice.neo4j.repositories.Neo4JSmestajRep;
 import com.xml2023.smestajmicroservice.repositories.OcenaSmestajRep;
 import com.xml2023.smestajmicroservice.repositories.PogodnostRepository;
 import com.xml2023.smestajmicroservice.repositories.SmestajRep;
@@ -37,10 +44,14 @@ public class SmestajService {
 	private PogodnostRepository pogRep;
 	@Autowired OcenaSmestajRep ocenaRep;
 	
+	@Autowired
+	private Neo4JSmestajRep smestajNeoRep;
+	
 	public SmestajDTO createNew(SmestajDTO s) {
 		//u maperu se definisu i cuvaju svi objekti koji su ugnjezdeni u objekat smestaj
 		Smestaj tmp = smestajMapper.fromDTO(s);
 		this.smestajRep.save(tmp);
+		this.smestajNeoRep.save(tmp);
 		return s;
 	}
 
@@ -129,7 +140,29 @@ public class SmestajService {
 			o.setOcena(ocena.getOcena());
 		}
 		ocenaRep.save(o);
+		
+		if(novaOcenaSmestajaNotificationEnabled(smestajId)) {
+			newSmestajOcenaNotify(o);
+		}
 		return new OcenaSmestajaDTO(o.getId(), o.getSmestaj(), o.getGost(), o.getOcena(), o.getDatum());
 	}
 	
+	//provera da li je host id-a idVlasnik u svojim podesavanjima ukljucio obavestenja za novu ocenu smestaja
+	public boolean novaOcenaSmestajaNotificationEnabled(String idVlasnika) {
+		ManagedChannel channel = ManagedChannelBuilder.forAddress("localhost", 7979).usePlaintext().build();
+		KorisnikGrpcBlockingStub bs = KorisnikGrpcGrpc.newBlockingStub(channel);
+		NovaOcenaSmestajaNotifikacijaRequest rqst = NovaOcenaSmestajaNotifikacijaRequest.newBuilder().setIdKorisnika(idVlasnika).build();
+		NovaOcenaSmestajaNotifikacijaResponse rspns = bs.novaOcenaSmestajaNotStatus(rqst);
+		return rspns.getStanje();
+	}
+	
+	public void newSmestajOcenaNotify(OcenaSmestaj os) {
+		ManagedChannel channel = ManagedChannelBuilder.forAddress("localhost", 7979).usePlaintext().build();
+		KorisnikGrpcBlockingStub bs = KorisnikGrpcGrpc.newBlockingStub(channel);
+		NekoOcenioSmestajRequest rqst = NekoOcenioSmestajRequest.newBuilder().setIdKorisnika(os.getGost()).setIdSmestaja(os.getSmestaj()).build();
+		NekoOcenioSmestajResponse rspns = bs.newRankSmestaj(rqst);
+		if(rspns.getResult()) {
+			System.out.println("USPESNO POSLATO OBAVESTENJE O NOVOJ OCENI SMESTAJA");
+		}
+	}
 }

@@ -56,6 +56,12 @@ import com.xml2023.mainapp.ActiveResExistsRequest;
 import com.xml2023.mainapp.ActiveResExistsResponse;
 import com.xml2023.mainapp.DeleteSmestajsForHostRequest;
 import com.xml2023.mainapp.DeleteSmestajsForHostResponse;
+import com.xml2023.mainapp.KorisnikGrpcGrpc;
+import com.xml2023.mainapp.KorisnikGrpcGrpc.KorisnikGrpcBlockingStub;
+import com.xml2023.mainapp.NekoOcenioHostaRequest;
+import com.xml2023.mainapp.NekoOcenioHostaResponse;
+import com.xml2023.mainapp.NovaOcenaHostaNotifikacijaRequest;
+import com.xml2023.mainapp.NovaOcenaHostaNotifikacijaResponse;
 import com.xml2023.mainapp.RezervacijaGrpcGrpc;
 import com.xml2023.mainapp.RezervacijaGrpcGrpc.RezervacijaGrpcBlockingStub;
 import com.xml2023.mainapp.SlikaDTO;
@@ -409,6 +415,28 @@ public class KorisnikService {
 			o.setOcena(ocena.getOcena());
 		}
 		oRep.save(o);
+		
+		
 		return new OcenaHostBasicDTO(o);
 	}
+	
+	
+	public boolean novaOcenaHostaNotificationEnabled(String idVlasnika) {
+		ManagedChannel channel = ManagedChannelBuilder.forAddress("localhost", 7979).usePlaintext().build();
+		KorisnikGrpcBlockingStub bs = KorisnikGrpcGrpc.newBlockingStub(channel);
+		NovaOcenaHostaNotifikacijaRequest rqst = NovaOcenaHostaNotifikacijaRequest.newBuilder().setIdKorisnika(idVlasnika).build();
+		NovaOcenaHostaNotifikacijaResponse rspns = bs.novaOcenaHostaNotStatus(rqst);
+		return rspns.getStanje();
+	}
+	
+	public void newHostOcenaNotify(OcenaHost oh) {
+		ManagedChannel channel = ManagedChannelBuilder.forAddress("localhost", 7979).usePlaintext().build();
+		KorisnikGrpcBlockingStub bs = KorisnikGrpcGrpc.newBlockingStub(channel);
+		NekoOcenioHostaRequest rqst = NekoOcenioHostaRequest.newBuilder().setIdKorisnika(oh.getGost()).setOcena(oh.getOcena()).build();
+		NekoOcenioHostaResponse rspns = bs.newRankHost(rqst);
+		if(rspns.getResult()) {
+			System.out.println("USPESNO POSLATO OBAVESTENJE O NOVOJ OCENI HOSTA");
+		}
+	}
+	
 }

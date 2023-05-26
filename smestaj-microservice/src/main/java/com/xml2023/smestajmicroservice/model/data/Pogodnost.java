@@ -6,14 +6,17 @@ import java.util.List;
 
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.neo4j.core.schema.Node;
 
 import javax.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 
+@Node
 public class Pogodnost implements Serializable{
 
 	private static final long serialVersionUID = -776142387481773478L;
 	@Id
+	@org.springframework.data.neo4j.core.schema.Id
 	private String id;
 
 	@NotBlank

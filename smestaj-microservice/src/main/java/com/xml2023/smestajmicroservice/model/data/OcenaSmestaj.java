@@ -5,11 +5,13 @@ import java.time.LocalDate;
 
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.neo4j.core.schema.Node;
 
 import javax.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.PositiveOrZero;
 
+@Node
 @Document(collection = "ocenasmestaj_db")
 public class OcenaSmestaj implements Serializable{
 
@@ -18,6 +20,7 @@ public class OcenaSmestaj implements Serializable{
 	 */
 	private static final long serialVersionUID = 3146125669257521835L;
 	@Id
+	@org.springframework.data.neo4j.core.schema.Id
 	private String id;	
 	private String smestaj;
 	private String gost;
