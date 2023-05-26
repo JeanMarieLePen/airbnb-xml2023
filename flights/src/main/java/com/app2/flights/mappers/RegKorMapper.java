@@ -10,6 +10,7 @@ import com.app2.flights.dtos.PorudzbinaDTO;
 import com.app2.flights.dtos.RegKorDTO;
 import com.app2.flights.model.data.Porudzbina;
 import com.app2.flights.model.user.RegKor;
+import com.app2.flights.repositories.PorudzbinaRep;
 
 @Component
 public class RegKorMapper {
@@ -18,6 +19,8 @@ public class RegKorMapper {
 	private AdresaMapper adresaMapper;
 	@Autowired
 	private PorudzbinaMapper porMapper;
+	@Autowired
+	private PorudzbinaRep porRep;
 	
 	public RegKor fromDTO(RegKorDTO dto) {
 		RegKor r = new RegKor();
@@ -29,10 +32,9 @@ public class RegKorMapper {
 		r.setPassword(dto.getPassword());
 		r.setPrezime(dto.getPrezime());
 		r.setUsername(dto.getUsername());
-		Collection<Porudzbina> tempList = new ArrayList<Porudzbina>();
+		Collection<String> tempList = new ArrayList<String>();
 		for(PorudzbinaDTO pdto : dto.getPorudzbine()) {
-			Porudzbina temp = porMapper.fromDTO(pdto);
-			tempList.add(temp);
+			tempList.add(pdto.getId());
 		}
 		r.setPorudzbine(tempList);
 		return r;
@@ -50,9 +52,14 @@ public class RegKorMapper {
 		dto.setId(r.getId());
 		dto.setUsername(r.getUsername());
 		Collection<PorudzbinaDTO> tempList = new ArrayList<PorudzbinaDTO>();
-		for(Porudzbina p : r.getPorudzbine()) {
-			PorudzbinaDTO temp = porMapper.toDTO(p);
-			tempList.add(temp);
+		for(String p : r.getPorudzbine()) {
+			Porudzbina tmp = porRep.findById(p).orElse(null);
+			if(tmp != null) {
+				PorudzbinaDTO temp = porMapper.toDTO(tmp);
+				tempList.add(temp);
+			}else {
+				return null;
+			}
 		}
 		dto.setPorudzbine(tempList);
 		return dto;

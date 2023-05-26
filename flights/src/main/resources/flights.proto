@@ -1,0 +1,18 @@
+syntax = "proto3";
+
+import "google/protobuf/timestamp.proto";
+
+package com.xml2023.flights;
+
+message TokenValidanRequest{
+	string apiToken = 1;
+}
+
+message TokenValidanResponse{
+	bool result = 1;
+	string tekst = 2;
+}
+
+service Flights{
+	rpc validateToken(TokenValidanRequest) returns (TokenValidanResponse);
+}

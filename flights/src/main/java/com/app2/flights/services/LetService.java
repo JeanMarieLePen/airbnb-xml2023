@@ -44,7 +44,6 @@ import com.app2.flights.model.data.StatusPorudzbine;
 import com.app2.flights.model.user.Korisnik;
 import com.app2.flights.repositories.LetRep;
 import com.app2.flights.repositories.PorudzbinaRep;
-import com.app2.flights.repositories.RegKorRep;
 
 @Service
 public class LetService {
@@ -55,21 +54,18 @@ public class LetService {
 	private LetMapper letMapper;
 	@Autowired
 	private AdresaMapper adresaMapper;
-	@Autowired PorudzbinaRep pRep;
+	@Autowired 
+	private PorudzbinaRep pRep;
 
-	@Autowired MongoTemplate monTempl;
+	@Autowired 
+	private MongoTemplate monTempl;
 
 	public LetDTO addNew(LetDTO letDTO) {
-		// TODO Auto-generated method stub
-		//this.letRep.save(letMapper.fromDTO(letDTO));
 		this.letRep.save(new Let(letDTO));
-//		Collection<Let> letovi = letRep.findAll();
-//		System.out.println("BROJ LETOVA U BAZI: " + letovi.size());
 		return letDTO;
 	}
 
 	public LetDTOSimple getLetById(String id) {
-		// TODO Auto-generated method stub
 		Let l = letRep.findById(id).orElse(null);
 		if(l==null) {
 			return null;
@@ -79,7 +75,6 @@ public class LetService {
 	}
 
 	public LetDTO editLet(LetDTO ldto) {
-		// TODO Auto-generated method stub
 		Let l = letRep.findById(ldto.getId()).orElse(null);
 		if(l == null) {
 			return null;
@@ -88,19 +83,8 @@ public class LetService {
 			l.setCena(ldto.getCena());
 			l.setDatumIVreme(ldto.getDatumIVreme());
 			l.setKapacitet(ldto.getKapacitet());
-//			l.setListaPutnika(ldto.getListaPutnika());
-
-
-			//Zakomentarisane dve linije jer sam menjao dto da bude string
-			//l.setLokDo(adresaMapper.fromDTO(ldto.getLokDo()));
-			//l.setLokOd(adresaMapper.fromDTO(ldto.getLokOd()));
-
 			l.setLokOd(new Adresa(ldto.getLokOd()));
 			l.setLokDo(new Adresa(ldto.getLokDo()));
-
-			//	l.setLokDoAddress(adresaMapper.fromDTO(ldto.getLokDo()));
-
-
 			letRep.save(l);
 			return letMapper.toDTO(l);
 		}
@@ -116,7 +100,7 @@ public class LetService {
 			LocalDateTime now = LocalDateTime.now();
 			Duration duration = Duration.between(now, l.getDatumIVreme());
 			long days = duration.toDays();
-			if(!l.getListaPorudzbina().stream().map(Porudzbina::getStatus).filter(StatusPorudzbine.REZERVISANA::equals).findFirst().isPresent() && days > 3+1) {
+			if(!pRep.findAll().stream().filter(p -> p.getStatus().equals(StatusPorudzbine.REZERVISANA)).findFirst().isPresent() && days > 3+1){
 				letRep.deleteById(id);
 				return letMapper.toDTO(l);
 			}else {
@@ -188,21 +172,27 @@ public class LetService {
 		}
 		/***LOKACIJE***/
 		if(dto.getPocetnaLok()!=null && !dto.getPocetnaLok().getAdresa().trim().equals("")) {
-			Criteria kreceIz= Criteria.where("lokOd.adresa") .regex(dto.getPocetnaLok().getAdresa().toLowerCase());
+			Criteria kreceIz= Criteria.where("lokOd.adresa").regex(dto.getPocetnaLok().getAdresa().toLowerCase());
 			query.addCriteria(kreceIz);
 		}
 		if(dto.getKrajnjaLok()!=null && !dto.getKrajnjaLok().getAdresa().trim().equals("")) {
-			Criteria sleceU= Criteria.where("lokDo.adresa").regex(dto.getKrajnjaLok().getAdresa());
+			Criteria sleceU= Criteria.where("lokDo.adresa").regex(dto.getKrajnjaLok().getAdresa().toLowerCase());
 			query.addCriteria(sleceU);
 		}
 		List<Let> letovi= monTempl.find(query,Let.class);
 		if(dto.getBrKarata()>-1) { //vezati porudzbine za letove
-			letovi=letovi.stream().filter(x-> x.getKapacitet()-x.brZauzetoihMesta()>=dto.getBrKarata()).collect(Collectors.toList());
+			letovi=letovi.stream().filter(x-> x.getKapacitet()- brZauzetihMesta(x)>=dto.getBrKarata()).collect(Collectors.toList());
 		}
 		List<Document> l=pretragaT(1);
 		return  letovi.stream().map(x->letMapper.toDTOSimple(x)).collect(Collectors.toList());
 	}
 
+	public int brZauzetihMesta(Let l) {
+		int retVal = 0;
+		List<Porudzbina> lista = new ArrayList<Porudzbina>();
+		retVal = pRep.findAll().stream().filter(p -> p.getLet().equals(l.getId())).map(x -> x.getBrojKarata()).collect(Collectors.summingInt(Integer::intValue));
+		return retVal;
+	}
 	public List<Document> pretragaT(int brK) {
 		//https://stackoverflow.com/questions/56376939/spring-data-mongo-get-sum-of-array-of-object
 		AggregationOperation  filterRez=Aggregation.match(Criteria.where("listaPorudzbina.status").is(StatusPorudzbine.REZERVISANA.toString()));

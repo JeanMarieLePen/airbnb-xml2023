@@ -31,15 +31,14 @@ public class Let {
 	private double cena;
 	//ovo moze biti samo Date?
 	private LocalDateTime datumIVreme;
-	@DBRef
 	@Nullable
-	private Collection<Porudzbina> listaPorudzbina;
+	private Collection<String> listaPorudzbina;
 	
 	public Let() {
 		super();
 	}
 	public Let(String id, Adresa lokOd, Adresa lokDo, String brojLeta, int kapacitet, double cena,
-			LocalDateTime datumIVreme, Collection<Porudzbina> listaPorudzbina) {
+			LocalDateTime datumIVreme, Collection<String> listaPorudzbina) {
 		super();
 		this.id = id;
 		this.lokOd = lokOd;
@@ -58,13 +57,13 @@ public class Let {
 		this.kapacitet = novi.getKapacitet();
 		this.cena = novi.getCena();
 		this.datumIVreme = novi.getDatumIVreme();
-		this.listaPorudzbina = new ArrayList<Porudzbina>();
+		this.listaPorudzbina = new ArrayList<String>();
 	}
 
-	public Collection<Porudzbina> getListaPorudzbina() {
+	public Collection<String> getListaPorudzbina() {
 		return listaPorudzbina;
 	}
-	public void setListaPorudzbina(Collection<Porudzbina> listaPorudzbina) {
+	public void setListaPorudzbina(Collection<String> listaPorudzbina) {
 		this.listaPorudzbina = listaPorudzbina;
 	}
 	public String getId() {
@@ -128,7 +127,7 @@ public class Let {
 	public void setDatumIVreme(LocalDateTime datumIVreme) {
 		this.datumIVreme = datumIVreme;
 	}
-	public int brZauzetoihMesta() {
-		return this.getListaPorudzbina().stream().map(x->x.getBrojKarata()).collect(Collectors.summingInt(Integer::intValue));	 
-	}
+//	public int brZauzetoihMesta() {
+//		return this.getListaPorudzbina().stream().map(x->x.getBrojKarata()).collect(Collectors.summingInt(Integer::intValue));	 
+//	}
 }

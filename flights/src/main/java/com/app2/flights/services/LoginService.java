@@ -17,9 +17,7 @@ import com.app2.flights.model.user.Korisnik;
 import com.app2.flights.model.user.RegKor;
 import com.app2.flights.model.user.StatusNaloga;
 import com.app2.flights.model.user.TipKorisnika;
-import com.app2.flights.repositories.AdresaRep;
 import com.app2.flights.repositories.KorisnikRep;
-import com.app2.flights.repositories.RegKorRep;
 import com.app2.flights.security.MessageQueueConfig;
 
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
@@ -35,12 +33,7 @@ public class LoginService {
 	@Autowired
 	private RabbitTemplate template;
 	@Autowired
-	private AdresaRep adresaRep;
-	
-	@Autowired
 	private EmailService emailService;
-	
-	@Autowired RegKorRep regRep;
 	
 	public LoginDTO login(LoginDTO logDTO) {
 		Korisnik k = this.korisnikRep.findByEmail(logDTO.getEmail());
@@ -63,17 +56,12 @@ public class LoginService {
 			newUser.setTip(TipKorisnika.REG_KOR);
 			newUser.setStatus(StatusNaloga.NA_CEKANJU);
 			newUser.setPassword(new String(enc.encode(regDTO.getPassword())));
-			this.adresaRep.save(newUser.getAdresa());
 			this.korisnikRep.save(newUser);
 //			this.template.convertAndSend(MessageQueueConfig.EXCHANGE, MessageQueueConfig.ROUTING_KEY, regDTO);
 //			System.out.println("POSLATO NA QUEUE");
 			
 			this.emailService.sendActivationEmail(newUser);
 			korisnikRep.save(newUser);
-			
-			//cuvanje korisnika u registrovane korisnike
-			regRep.save(new RegKor(newUser));
-			
 			return regDTO;
 		}
 		return null;

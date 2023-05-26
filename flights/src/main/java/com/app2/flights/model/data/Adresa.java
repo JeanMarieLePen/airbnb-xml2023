@@ -6,11 +6,7 @@ import org.springframework.data.mongodb.core.mapping.MongoId;
 
 import com.app2.flights.dtos.AdresaDTO;
 
-@Document(collection = "adresa_db")
 public class Adresa {
-	
-	@Id
-	private String id;
 	
 	private String adresa;
 	
@@ -22,14 +18,7 @@ public class Adresa {
 		super();
 	}
 
-	public Adresa(String id, String adresa, double lat, double lng) {
-		super();
-		this.id = id;
-		this.adresa = adresa;
-		this.lat = lat;
-		this.lng = lng;
-	}
-	public Adresa( String adresa, double lat, double lng) {
+	public Adresa(String adresa, double lat, double lng) {
 		super();
 		this.adresa = adresa;
 		this.lat = lat;
@@ -48,15 +37,6 @@ public class Adresa {
 		this.setLat(0);
 		this.setLng(0);
 	}
-
-	public String getId() {
-		return id;
-	}
-
-	public void setId(String id) {
-		this.id = id;
-	}
-
 	public String getAdresa() {
 		return adresa;
 	}

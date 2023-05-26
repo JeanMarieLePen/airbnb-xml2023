@@ -5,7 +5,6 @@ import java.util.Collection;
 import org.hibernate.validator.constraints.Length;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;
-import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import com.app2.flights.model.data.Adresa;
@@ -36,7 +35,6 @@ public class Korisnik {
 	
 	private String password;
 	
-	@DBRef
 	@NotNull
 	private Adresa adresa;
 

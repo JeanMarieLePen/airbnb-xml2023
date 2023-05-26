@@ -13,7 +13,6 @@ public class AdresaDTO {
 		super();
 	}
 	public AdresaDTO(Adresa lokOd) {
-		this.setId(lokOd.getId());
 		this.setAdresa(lokOd.getAdresa());
 		this.setLat(lokOd.getLat());
 		this.setLng(lokOd.getLng());

@@ -14,14 +14,13 @@ import com.app2.flights.model.data.Porudzbina;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
 
-@Document(collection = "admin_db")
 public class Administrator extends Korisnik{
 
-	@DBRef
-	private Collection<Let> letovi;
+	
+	private Collection<String> letovi;
 	
 	@DBRef
-	private Collection<Porudzbina> porudzbine;
+	private Collection<String> porudzbine;
 
 	public Administrator() {
 		super();
@@ -29,7 +28,6 @@ public class Administrator extends Korisnik{
 	
 	public Administrator(Korisnik k) {
 		super(k);
-		// TODO Auto-generated constructor stub
 	}
 
 	public Administrator( @Length(min = 2, max = 100) String ime, @Length(min = 2, max = 100) String prezime,
@@ -44,30 +42,30 @@ public class Administrator extends Korisnik{
 		this.setAdresa(adresa);
 		this.setTip(TipKorisnika.ADMINISTRATOR);
 		this.setStatus(StatusNaloga.AKTIVAN);
-		this.porudzbine= new ArrayList<Porudzbina>();
-		this.letovi= new ArrayList<Let>();
+		this.porudzbine= new ArrayList<String>();
+		this.letovi= new ArrayList<String>();
 	}
 
-	public Administrator(Collection<Let> letovi, Collection<Porudzbina> porudzbine) {
+	public Administrator(Collection<String> letovi, Collection<String> porudzbine) {
 		super();
 		this.letovi = letovi;
 		this.porudzbine = porudzbine;
 	}
 
-	public Collection<Let> getLetovi() {
+	public Collection<String> getLetovi() {
 		return letovi;
 	}
 
-	public void setLetovi(Collection<Let> letovi) {
+	public void setLetovi(Collection<String> letovi) {
 		this.letovi = letovi;
 	}
 
-	public Collection<Porudzbina> getPorudzbine() {
+	public Collection<String> getPorudzbine() {
 		return porudzbine;
 	}
 
-	public void setPorudzbine(Collection<Porudzbina> porudzbine) {
+	public void setPorudzbine(Collection<String> porudzbine) {
 		this.porudzbine = porudzbine;
 	}
-
+	
 }

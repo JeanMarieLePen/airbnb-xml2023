@@ -18,16 +18,13 @@ public class Porudzbina {
 
 	@Id
 	private String id;
-	@DBRef
-	@NotNull
-	private Let let;
+	
+	private String let;
 	
 //	//ako budu rekli da treba da se modeluje i kompanija
 //	@NotNull
 //	private Kompanija kompanija;
-	@DBRef
-	@NotNull
-	private RegKor kupac;
+	private String kupac;
 	@Positive
 	private int brojKarata;
 	@PositiveOrZero
@@ -40,15 +37,20 @@ public class Porudzbina {
 		super();
 	}
 	
-	public Porudzbina(String id, @NotNull Let let, @NotNull RegKor kupac, @Positive int brojKarata,
-			@PositiveOrZero double ukupnaCena, StatusPorudzbine status) {
-		super();
-		this.id = id;
+	public String getLet() {
+		return let;
+	}
+
+	public String getKupac() {
+		return kupac;
+	}
+
+	public void setLet(String let) {
 		this.let = let;
+	}
+
+	public void setKupac(String kupac) {
 		this.kupac = kupac;
-		this.brojKarata = brojKarata;
-		this.ukupnaCena = ukupnaCena;
-		this.status = status;
 	}
 
 	public StatusPorudzbine getStatus() {
@@ -64,18 +66,6 @@ public class Porudzbina {
 	}
 	public void setId(String id) {
 		this.id = id;
-	}
-	public Let getLet() {
-		return let;
-	}
-	public void setLet(Let let) {
-		this.let = let;
-	}
-	public RegKor getKupac() {
-		return kupac;
-	}
-	public void setKupac(RegKor kupac) {
-		this.kupac = kupac;
 	}
 	public int getBrojKarata() {
 		return brojKarata;

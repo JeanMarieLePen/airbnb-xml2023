@@ -12,6 +12,8 @@ import com.app2.flights.dtos.PorudzbinaDTO;
 import com.app2.flights.model.data.Let;
 import com.app2.flights.model.data.Porudzbina;
 import com.app2.flights.model.user.Administrator;
+import com.app2.flights.repositories.LetRep;
+import com.app2.flights.repositories.PorudzbinaRep;
 
 @Component
 public class AdministratorMapper {
@@ -21,6 +23,10 @@ public class AdministratorMapper {
 	private PorudzbinaMapper porMapper;
 	@Autowired
 	private LetMapper letMapper;
+	@Autowired
+	private PorudzbinaRep porRep;
+	@Autowired
+	private LetRep letRep;
 	public Administrator fromDTO(AdministratorDTO dto) {
 		Administrator a = new Administrator();
 		a.setAdresa(adresaMapper.fromDTO(dto.getAdresa()));
@@ -31,16 +37,16 @@ public class AdministratorMapper {
 		a.setPrezime(dto.getPrezime());
 		a.setUsername(dto.getUsername());
 		
-		Collection<Porudzbina> tempList = new ArrayList<Porudzbina>();
+		Collection<String> tempList = new ArrayList<String>();
 		for(PorudzbinaDTO pdto : dto.getPorudzbine()) {
-			Porudzbina temp = porMapper.fromDTO(pdto);
+			String temp = pdto.getId();
 			tempList.add(temp);
 		}
 		a.setPorudzbine(tempList);
 		
-		Collection<Let> tempList2 = new ArrayList<Let>();
+		Collection<String> tempList2 = new ArrayList<String>();
 		for(LetDTO ldto : dto.getLetovi()) {
-			Let temp = letMapper.fromDTO(ldto);
+			String temp = ldto.getId();
 			tempList2.add(temp);
 		}
 		a.setLetovi(tempList2);
@@ -58,16 +64,27 @@ public class AdministratorMapper {
 		dto.setUsername(a.getUsername());
 		
 		Collection<PorudzbinaDTO> tempList = new ArrayList<PorudzbinaDTO>();
-		for(Porudzbina p : a.getPorudzbine()) {
-			PorudzbinaDTO temp = porMapper.toDTO(p);
-			tempList.add(temp);
+		for(String s : a.getPorudzbine()) {
+//			PorudzbinaDTO temp = porMapper.toDTO(p);
+			Porudzbina tmp = porRep.findById(s).orElse(null);
+			if(tmp != null) {
+				PorudzbinaDTO temp = porMapper.toDTO(tmp);
+				tempList.add(temp);
+			}else {
+				return null;
+			}
 		}
 		dto.setPorudzbine(tempList);
 		
 		Collection<LetDTO> tempList2 = new ArrayList<LetDTO>();
-		for(Let l : a.getLetovi()) {
-			LetDTO temp = letMapper.toDTO(l);
-			tempList2.add(temp);
+		for(String l : a.getLetovi()) {
+			Let tmp = letRep.findById(l).orElse(null);
+			if(tmp != null) {
+				LetDTO temp = letMapper.toDTO(tmp);
+				tempList2.add(temp);
+			}else {
+				return null;
+			}
 		}
 		dto.setLetovi(tempList2);
 		return dto;

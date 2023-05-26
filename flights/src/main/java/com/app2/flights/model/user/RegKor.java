@@ -3,24 +3,18 @@ package com.app2.flights.model.user;
 import java.util.ArrayList;
 import java.util.Collection;
 
-import org.springframework.data.mongodb.core.mapping.DBRef;
-import org.springframework.data.mongodb.core.mapping.Document;
 
-import com.app2.flights.model.data.Porudzbina;
+import com.app2.flights.model.data.APIToken;
 
-@Document(collection = "regkor_db")
 public class RegKor extends Korisnik{
-
-	//lista porudzbina/karata
-	@DBRef
-	private Collection<Porudzbina> porudzbine;
-
+	private Collection<String> porudzbine;
+	private APIToken apiToken;  
 	
 	public RegKor() {
 		super();
 	}
 
-	public RegKor(Collection<Porudzbina> porudzbine) {
+	public RegKor(Collection<String> porudzbine) {
 		super();
 		this.porudzbine = porudzbine;
 	}
@@ -36,14 +30,23 @@ public class RegKor extends Korisnik{
 		this.setAdresa(k.getAdresa());
 		this.setTip(k.getTip());
 		this.setStatus(k.getStatus());
-		this.porudzbine=new ArrayList<Porudzbina>();
+		this.porudzbine= new ArrayList<String>();
+	}
+	
+
+	public APIToken getApiToken() {
+		return apiToken;
 	}
 
-	public Collection<Porudzbina> getPorudzbine() {
+	public void setApiToken(APIToken apiToken) {
+		this.apiToken = apiToken;
+	}
+
+	public Collection<String> getPorudzbine() {
 		return porudzbine;
 	}
 
-	public void setPorudzbine(Collection<Porudzbina> porudzbine) {
+	public void setPorudzbine(Collection<String> porudzbine) {
 		this.porudzbine = porudzbine;
 	}
 	

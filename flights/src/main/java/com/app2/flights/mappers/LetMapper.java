@@ -16,13 +16,14 @@ import com.app2.flights.model.data.Let;
 import com.app2.flights.model.data.Porudzbina;
 import com.app2.flights.model.user.RegKor;
 import com.app2.flights.repositories.LetRep;
+import com.app2.flights.repositories.PorudzbinaRep;
 import com.app2.flights.services.LetService;
 
 @Component
 public class LetMapper {
 
 	@Autowired
-	private AdresaMapper adrMapper;
+	private PorudzbinaRep porRep;
 	
 	@Autowired RegKorMapper regKorMapper;
 	@Autowired LetRep lRep;
@@ -35,18 +36,15 @@ public class LetMapper {
 		l.setDatumIVreme(dto.getDatumIVreme());
 		l.setId(dto.getId());
 		l.setKapacitet(dto.getKapacitet());
-		//l.setLokOd(adrMapper.fromDTO(dto.getLokOd()));
-		//l.setLokDo(adrMapper.fromDTO(dto.getLokDo()));
-		
 		l.setLokOd(new Adresa(dto.getLokOd()));
 		l.setLokDo(new Adresa(dto.getLokDo()));
 		
 		
 		
 		if(dto.getListaPorudzbina()!= null) {
-			Collection<Porudzbina> tempList = new ArrayList<Porudzbina>();
+			Collection<String> tempList = new ArrayList<String>();
 			for(PorudzbinaDTO rdto: dto.getListaPorudzbina()) {
-				Porudzbina temp = porMap.fromDTO(rdto);
+				String temp = rdto.getId();
 				tempList.add(temp);
 			}
 			l.setListaPorudzbina(tempList);
@@ -69,9 +67,14 @@ public class LetMapper {
 		dto.setLokDo(new AdresaDTO(l.getLokDo()));
 		
 		Collection<PorudzbinaDTO> tempList = new ArrayList<PorudzbinaDTO>();
-		for(Porudzbina r : l.getListaPorudzbina()) {
-			PorudzbinaDTO temp = porMap.toDTO(r);
-			tempList.add(temp);
+		for(String r : l.getListaPorudzbina()) {
+			Porudzbina tmp = porRep.findById(r).orElse(null);
+			if(tmp != null) {
+				PorudzbinaDTO temp = porMap.toDTO(tmp);
+				tempList.add(temp);
+			}else {
+				return null;
+			}
 		}
 		dto.setListaPorudzbina(tempList);
 		return dto;
