@@ -20,6 +20,11 @@ import com.example.reservationservice.mappers.RezervacijaMapper;
 import com.example.reservationservice.model.Rezervacija;
 import com.example.reservationservice.model.StatusRezervacije;
 import com.example.reservationservice.model.Termin;
+import com.example.reservationservice.neo4j.model.Korisnik;
+//import com.example.reservationservice.neo4j.model.OcenaSmestaj;
+import com.example.reservationservice.neo4j.model.Smestaj;
+import com.example.reservationservice.repositories.Neo4JKorisnikRep;
+import com.example.reservationservice.repositories.Neo4JSmestajRep;
 import com.example.reservationservice.repositories.RezervacijaRep;
 import com.google.protobuf.Timestamp;
 import com.xml2023.mainapp.AnySmestajBelongToHostRequest;
@@ -37,6 +42,7 @@ import com.xml2023.mainapp.NekoRezervisaoRequest;
 import com.xml2023.mainapp.NekoRezervisaoResponse;
 import com.xml2023.mainapp.NovaRezervacijaNotifikacijaRequest;
 import com.xml2023.mainapp.NovaRezervacijaNotifikacijaResponse;
+import com.xml2023.mainapp.OcenaSmestajDTO;
 import com.xml2023.mainapp.OtkazanaRezervacijaNotifikacijaRequest;
 import com.xml2023.mainapp.OtkazanaRezervacijaNotifikacijaResponse;
 import com.xml2023.mainapp.SmestajDTO;
@@ -53,6 +59,8 @@ import com.xml2023.mainapp.getHostRequest;
 import com.xml2023.mainapp.getHostResponse;
 import com.xml2023.mainapp.getListaSmestajaByUserIdRequest;
 import com.xml2023.mainapp.getListaSmestajaByUserIdResponse;
+import com.xml2023.mainapp.getOceneBySmestajIdRequest;
+import com.xml2023.mainapp.getOceneBySmestajIdResponse;
 import com.xml2023.mainapp.getSmestajByIdRequest;
 import com.xml2023.mainapp.getSmestajByIdResponse;
 import com.xml2023.mainapp.reservationApprovedNotificationRequest;
@@ -71,6 +79,11 @@ public class RezervacijaService {
 	@Autowired 
 	private RezervacijaMapper rezMapper;
 	@Autowired CenaService cenaServ;
+	
+	@Autowired
+	private Neo4JKorisnikRep neo4jKorisnikRep;
+	@Autowired
+	private Neo4JSmestajRep neo4jSmestajRep;
 	
 	public RezervacijaDTO makeReservation(String userId, String smestajId, RezervacijaDTO r) {
 //		
@@ -121,11 +134,43 @@ public class RezervacijaService {
 			rez.setStatus(StatusRezervacije.PENDING);
 		}
 		rezervacijaRep.save(rez);
+		
+		//U GRAF BAZU SE UPISUJE REZERVISANI SMESTAJ OBOSTRANO;
+		Korisnik kor = this.neo4jKorisnikRep.findById(userId).orElse(null);
+		Smestaj sme = this.neo4jSmestajRep.findById(smestajId).orElse(null);
+		if(kor != null) {
+			kor.getRezervisani().add(sme);
+		}
+		this.neo4jKorisnikRep.save(kor);
+		
 		if(novaRezervacijaNotificationEnabled(smestaj.getVlasnik())) {
 			newReservationNotify(rez);
 		}
 		return rezMapper.toDTO(rez);
 	}
+	
+//	public List<OcenaSmestaj> getOceneSmestaja(String id){
+//		ManagedChannel channel = ManagedChannelBuilder.forAddress("localhost", 7977).usePlaintext().build();
+//		SmestajGrpcBlockingStub bs = SmestajGrpcGrpc.newBlockingStub(channel);
+//		getOceneBySmestajIdRequest rqst = getOceneBySmestajIdRequest.newBuilder().setSmestajId(id).build();
+//		getOceneBySmestajIdResponse rspns = bs.getOceneSmestaja(rqst);
+//		List<OcenaSmestaj> retList = new ArrayList<OcenaSmestaj>();
+//		if(!retList.isEmpty()) {
+//			for(OcenaSmestajDTO dto : rspns.getOceneList()) {
+//				retList.add(mapDTOtoOcenaSmestaj(dto));
+//			}
+//		}
+//		return retList;
+//		
+//	}
+//	
+//	public OcenaSmestaj mapDTOtoOcenaSmestaj(OcenaSmestajDTO dto) {
+//		OcenaSmestaj retVal = new OcenaSmestaj();
+//		retVal.setDatumIVreme(convertFromTimeStamp(dto.getDatumIVreme()));
+//		retVal.setId(dto.getId());
+//		retVal.setKorisnikDavalac(dto.getIdKorisnika());
+//		return retVal;
+//	}
 	
 	public boolean novaRezervacijaNotificationEnabled(String idVlasnika) {
 		ManagedChannel channel = ManagedChannelBuilder.forAddress("localhost", 7979).usePlaintext().build();

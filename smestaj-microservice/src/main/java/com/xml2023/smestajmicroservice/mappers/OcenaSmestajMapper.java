@@ -1,6 +1,7 @@
 package com.xml2023.smestajmicroservice.mappers;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -17,7 +18,7 @@ public class OcenaSmestajMapper {
 	
 	public OcenaSmestaj fromDTO(OcenaSmestajaDTO dto) {
 		OcenaSmestaj os = new OcenaSmestaj();
-		os.setDatum(LocalDate.now());
+		os.setDatum(LocalDateTime.now());
 		os.setId(dto.getId());
 		os.setGost(dto.getGost());
 		os.setSmestaj(dto.getSmestaj());

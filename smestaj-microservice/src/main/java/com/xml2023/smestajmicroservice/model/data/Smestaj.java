@@ -4,7 +4,6 @@ import java.io.Serializable;
 import java.util.Collection;
 
 import org.springframework.data.mongodb.core.mapping.Document;
-import org.springframework.data.neo4j.core.schema.Node;
 import org.springframework.data.neo4j.core.schema.Relationship;
 import org.springframework.data.neo4j.core.schema.Relationship.Direction;
 
@@ -12,7 +11,7 @@ import jakarta.annotation.Nullable;
 import javax.persistence.*;
 import jakarta.validation.constraints.Positive;
 
-@Node
+
 @Document("smestaj_db")
 public class Smestaj implements Serializable{
 
@@ -22,12 +21,12 @@ public class Smestaj implements Serializable{
 	private static final long serialVersionUID = 6956429912337266684L;
 
 	@Id
-	@org.springframework.data.neo4j.core.schema.Id
 	private String id;
 
 	private String vlasnik;
 	private Adresa adresa;
 	
+	@Relationship(type = "poseduje", direction = Direction.OUTGOING)
 	private Collection<String> pogodnosti;
 	
 	@ElementCollection

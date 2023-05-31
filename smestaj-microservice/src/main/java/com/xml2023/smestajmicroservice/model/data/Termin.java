@@ -8,7 +8,7 @@ import javax.persistence.*;
 
 import org.springframework.data.neo4j.core.schema.Node;
 
-@Node
+
 public class Termin implements Serializable{
 
 	/**
@@ -17,7 +17,6 @@ public class Termin implements Serializable{
 	private static final long serialVersionUID = 334341200024100711L;
 
 	@Id
-	@org.springframework.data.neo4j.core.schema.Id
 	private String id;
 	
 	private LocalDateTime pocetak;

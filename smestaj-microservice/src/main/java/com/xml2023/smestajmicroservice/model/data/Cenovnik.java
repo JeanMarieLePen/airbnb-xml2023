@@ -5,13 +5,13 @@ import java.io.Serializable;
 import javax.persistence.Column;
 
 import javax.persistence.*;
+
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.neo4j.core.schema.Node;
 
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 
-@Node
 @Document(collection = "cenovnik_db")
 public class Cenovnik implements Serializable{
 
@@ -22,11 +22,7 @@ public class Cenovnik implements Serializable{
 
 
 	@Id
-	@org.springframework.data.neo4j.core.schema.Id
 	private String id;
-	@Version
-	@Column(columnDefinition = "integer DEFAULT 0", nullable = false)
-	private Integer version;
 	
 	// true- cena za ceo smestaj, false cena po gostu
 	@NotNull

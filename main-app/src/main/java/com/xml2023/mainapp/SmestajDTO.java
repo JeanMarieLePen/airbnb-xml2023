@@ -23,6 +23,7 @@ private static final long serialVersionUID = 0L;
     minGosti_ = 0;
     maxGost_ = 0;
     nedostupni_ = java.util.Collections.emptyList();
+    ocene_ = java.util.Collections.emptyList();
   }
 
   @java.lang.Override
@@ -124,6 +125,15 @@ private static final long serialVersionUID = 0L;
 
             break;
           }
+          case 82: {
+            if (!((mutable_bitField0_ & 0x00000200) == 0x00000200)) {
+              ocene_ = new java.util.ArrayList<com.xml2023.mainapp.OcenaSmestajDTO>();
+              mutable_bitField0_ |= 0x00000200;
+            }
+            ocene_.add(
+                input.readMessage(com.xml2023.mainapp.OcenaSmestajDTO.parser(), extensionRegistry));
+            break;
+          }
           default: {
             if (!parseUnknownFieldProto3(
                 input, unknownFields, extensionRegistry, tag)) {
@@ -147,6 +157,9 @@ private static final long serialVersionUID = 0L;
       }
       if (((mutable_bitField0_ & 0x00000040) == 0x00000040)) {
         nedostupni_ = java.util.Collections.unmodifiableList(nedostupni_);
+      }
+      if (((mutable_bitField0_ & 0x00000200) == 0x00000200)) {
+        ocene_ = java.util.Collections.unmodifiableList(ocene_);
       }
       this.unknownFields = unknownFields.build();
       makeExtensionsImmutable();
@@ -393,6 +406,41 @@ private static final long serialVersionUID = 0L;
     return getAdresa();
   }
 
+  public static final int OCENE_FIELD_NUMBER = 10;
+  private java.util.List<com.xml2023.mainapp.OcenaSmestajDTO> ocene_;
+  /**
+   * <code>repeated .com.xml2023.mainapp.OcenaSmestajDTO ocene = 10;</code>
+   */
+  public java.util.List<com.xml2023.mainapp.OcenaSmestajDTO> getOceneList() {
+    return ocene_;
+  }
+  /**
+   * <code>repeated .com.xml2023.mainapp.OcenaSmestajDTO ocene = 10;</code>
+   */
+  public java.util.List<? extends com.xml2023.mainapp.OcenaSmestajDTOOrBuilder> 
+      getOceneOrBuilderList() {
+    return ocene_;
+  }
+  /**
+   * <code>repeated .com.xml2023.mainapp.OcenaSmestajDTO ocene = 10;</code>
+   */
+  public int getOceneCount() {
+    return ocene_.size();
+  }
+  /**
+   * <code>repeated .com.xml2023.mainapp.OcenaSmestajDTO ocene = 10;</code>
+   */
+  public com.xml2023.mainapp.OcenaSmestajDTO getOcene(int index) {
+    return ocene_.get(index);
+  }
+  /**
+   * <code>repeated .com.xml2023.mainapp.OcenaSmestajDTO ocene = 10;</code>
+   */
+  public com.xml2023.mainapp.OcenaSmestajDTOOrBuilder getOceneOrBuilder(
+      int index) {
+    return ocene_.get(index);
+  }
+
   private byte memoizedIsInitialized = -1;
   @java.lang.Override
   public final boolean isInitialized() {
@@ -433,6 +481,9 @@ private static final long serialVersionUID = 0L;
     }
     if (adresa_ != null) {
       output.writeMessage(9, getAdresa());
+    }
+    for (int i = 0; i < ocene_.size(); i++) {
+      output.writeMessage(10, ocene_.get(i));
     }
     unknownFields.writeTo(output);
   }
@@ -481,6 +532,10 @@ private static final long serialVersionUID = 0L;
       size += com.google.protobuf.CodedOutputStream
         .computeMessageSize(9, getAdresa());
     }
+    for (int i = 0; i < ocene_.size(); i++) {
+      size += com.google.protobuf.CodedOutputStream
+        .computeMessageSize(10, ocene_.get(i));
+    }
     size += unknownFields.getSerializedSize();
     memoizedSize = size;
     return size;
@@ -521,6 +576,8 @@ private static final long serialVersionUID = 0L;
       result = result && getAdresa()
           .equals(other.getAdresa());
     }
+    result = result && getOceneList()
+        .equals(other.getOceneList());
     result = result && unknownFields.equals(other.unknownFields);
     return result;
   }
@@ -559,6 +616,10 @@ private static final long serialVersionUID = 0L;
     if (hasAdresa()) {
       hash = (37 * hash) + ADRESA_FIELD_NUMBER;
       hash = (53 * hash) + getAdresa().hashCode();
+    }
+    if (getOceneCount() > 0) {
+      hash = (37 * hash) + OCENE_FIELD_NUMBER;
+      hash = (53 * hash) + getOceneList().hashCode();
     }
     hash = (29 * hash) + unknownFields.hashCode();
     memoizedHashCode = hash;
@@ -690,6 +751,7 @@ private static final long serialVersionUID = 0L;
               .alwaysUseFieldBuilders) {
         getSlikaFieldBuilder();
         getNedostupniFieldBuilder();
+        getOceneFieldBuilder();
       }
     }
     @java.lang.Override
@@ -728,6 +790,12 @@ private static final long serialVersionUID = 0L;
       } else {
         adresa_ = null;
         adresaBuilder_ = null;
+      }
+      if (oceneBuilder_ == null) {
+        ocene_ = java.util.Collections.emptyList();
+        bitField0_ = (bitField0_ & ~0x00000200);
+      } else {
+        oceneBuilder_.clear();
       }
       return this;
     }
@@ -793,6 +861,15 @@ private static final long serialVersionUID = 0L;
         result.adresa_ = adresa_;
       } else {
         result.adresa_ = adresaBuilder_.build();
+      }
+      if (oceneBuilder_ == null) {
+        if (((bitField0_ & 0x00000200) == 0x00000200)) {
+          ocene_ = java.util.Collections.unmodifiableList(ocene_);
+          bitField0_ = (bitField0_ & ~0x00000200);
+        }
+        result.ocene_ = ocene_;
+      } else {
+        result.ocene_ = oceneBuilder_.build();
       }
       result.bitField0_ = to_bitField0_;
       onBuilt();
@@ -924,6 +1001,32 @@ private static final long serialVersionUID = 0L;
       }
       if (other.hasAdresa()) {
         mergeAdresa(other.getAdresa());
+      }
+      if (oceneBuilder_ == null) {
+        if (!other.ocene_.isEmpty()) {
+          if (ocene_.isEmpty()) {
+            ocene_ = other.ocene_;
+            bitField0_ = (bitField0_ & ~0x00000200);
+          } else {
+            ensureOceneIsMutable();
+            ocene_.addAll(other.ocene_);
+          }
+          onChanged();
+        }
+      } else {
+        if (!other.ocene_.isEmpty()) {
+          if (oceneBuilder_.isEmpty()) {
+            oceneBuilder_.dispose();
+            oceneBuilder_ = null;
+            ocene_ = other.ocene_;
+            bitField0_ = (bitField0_ & ~0x00000200);
+            oceneBuilder_ = 
+              com.google.protobuf.GeneratedMessageV3.alwaysUseFieldBuilders ?
+                 getOceneFieldBuilder() : null;
+          } else {
+            oceneBuilder_.addAllMessages(other.ocene_);
+          }
+        }
       }
       this.mergeUnknownFields(other.unknownFields);
       onChanged();
@@ -1951,6 +2054,246 @@ private static final long serialVersionUID = 0L;
         adresa_ = null;
       }
       return adresaBuilder_;
+    }
+
+    private java.util.List<com.xml2023.mainapp.OcenaSmestajDTO> ocene_ =
+      java.util.Collections.emptyList();
+    private void ensureOceneIsMutable() {
+      if (!((bitField0_ & 0x00000200) == 0x00000200)) {
+        ocene_ = new java.util.ArrayList<com.xml2023.mainapp.OcenaSmestajDTO>(ocene_);
+        bitField0_ |= 0x00000200;
+       }
+    }
+
+    private com.google.protobuf.RepeatedFieldBuilderV3<
+        com.xml2023.mainapp.OcenaSmestajDTO, com.xml2023.mainapp.OcenaSmestajDTO.Builder, com.xml2023.mainapp.OcenaSmestajDTOOrBuilder> oceneBuilder_;
+
+    /**
+     * <code>repeated .com.xml2023.mainapp.OcenaSmestajDTO ocene = 10;</code>
+     */
+    public java.util.List<com.xml2023.mainapp.OcenaSmestajDTO> getOceneList() {
+      if (oceneBuilder_ == null) {
+        return java.util.Collections.unmodifiableList(ocene_);
+      } else {
+        return oceneBuilder_.getMessageList();
+      }
+    }
+    /**
+     * <code>repeated .com.xml2023.mainapp.OcenaSmestajDTO ocene = 10;</code>
+     */
+    public int getOceneCount() {
+      if (oceneBuilder_ == null) {
+        return ocene_.size();
+      } else {
+        return oceneBuilder_.getCount();
+      }
+    }
+    /**
+     * <code>repeated .com.xml2023.mainapp.OcenaSmestajDTO ocene = 10;</code>
+     */
+    public com.xml2023.mainapp.OcenaSmestajDTO getOcene(int index) {
+      if (oceneBuilder_ == null) {
+        return ocene_.get(index);
+      } else {
+        return oceneBuilder_.getMessage(index);
+      }
+    }
+    /**
+     * <code>repeated .com.xml2023.mainapp.OcenaSmestajDTO ocene = 10;</code>
+     */
+    public Builder setOcene(
+        int index, com.xml2023.mainapp.OcenaSmestajDTO value) {
+      if (oceneBuilder_ == null) {
+        if (value == null) {
+          throw new NullPointerException();
+        }
+        ensureOceneIsMutable();
+        ocene_.set(index, value);
+        onChanged();
+      } else {
+        oceneBuilder_.setMessage(index, value);
+      }
+      return this;
+    }
+    /**
+     * <code>repeated .com.xml2023.mainapp.OcenaSmestajDTO ocene = 10;</code>
+     */
+    public Builder setOcene(
+        int index, com.xml2023.mainapp.OcenaSmestajDTO.Builder builderForValue) {
+      if (oceneBuilder_ == null) {
+        ensureOceneIsMutable();
+        ocene_.set(index, builderForValue.build());
+        onChanged();
+      } else {
+        oceneBuilder_.setMessage(index, builderForValue.build());
+      }
+      return this;
+    }
+    /**
+     * <code>repeated .com.xml2023.mainapp.OcenaSmestajDTO ocene = 10;</code>
+     */
+    public Builder addOcene(com.xml2023.mainapp.OcenaSmestajDTO value) {
+      if (oceneBuilder_ == null) {
+        if (value == null) {
+          throw new NullPointerException();
+        }
+        ensureOceneIsMutable();
+        ocene_.add(value);
+        onChanged();
+      } else {
+        oceneBuilder_.addMessage(value);
+      }
+      return this;
+    }
+    /**
+     * <code>repeated .com.xml2023.mainapp.OcenaSmestajDTO ocene = 10;</code>
+     */
+    public Builder addOcene(
+        int index, com.xml2023.mainapp.OcenaSmestajDTO value) {
+      if (oceneBuilder_ == null) {
+        if (value == null) {
+          throw new NullPointerException();
+        }
+        ensureOceneIsMutable();
+        ocene_.add(index, value);
+        onChanged();
+      } else {
+        oceneBuilder_.addMessage(index, value);
+      }
+      return this;
+    }
+    /**
+     * <code>repeated .com.xml2023.mainapp.OcenaSmestajDTO ocene = 10;</code>
+     */
+    public Builder addOcene(
+        com.xml2023.mainapp.OcenaSmestajDTO.Builder builderForValue) {
+      if (oceneBuilder_ == null) {
+        ensureOceneIsMutable();
+        ocene_.add(builderForValue.build());
+        onChanged();
+      } else {
+        oceneBuilder_.addMessage(builderForValue.build());
+      }
+      return this;
+    }
+    /**
+     * <code>repeated .com.xml2023.mainapp.OcenaSmestajDTO ocene = 10;</code>
+     */
+    public Builder addOcene(
+        int index, com.xml2023.mainapp.OcenaSmestajDTO.Builder builderForValue) {
+      if (oceneBuilder_ == null) {
+        ensureOceneIsMutable();
+        ocene_.add(index, builderForValue.build());
+        onChanged();
+      } else {
+        oceneBuilder_.addMessage(index, builderForValue.build());
+      }
+      return this;
+    }
+    /**
+     * <code>repeated .com.xml2023.mainapp.OcenaSmestajDTO ocene = 10;</code>
+     */
+    public Builder addAllOcene(
+        java.lang.Iterable<? extends com.xml2023.mainapp.OcenaSmestajDTO> values) {
+      if (oceneBuilder_ == null) {
+        ensureOceneIsMutable();
+        com.google.protobuf.AbstractMessageLite.Builder.addAll(
+            values, ocene_);
+        onChanged();
+      } else {
+        oceneBuilder_.addAllMessages(values);
+      }
+      return this;
+    }
+    /**
+     * <code>repeated .com.xml2023.mainapp.OcenaSmestajDTO ocene = 10;</code>
+     */
+    public Builder clearOcene() {
+      if (oceneBuilder_ == null) {
+        ocene_ = java.util.Collections.emptyList();
+        bitField0_ = (bitField0_ & ~0x00000200);
+        onChanged();
+      } else {
+        oceneBuilder_.clear();
+      }
+      return this;
+    }
+    /**
+     * <code>repeated .com.xml2023.mainapp.OcenaSmestajDTO ocene = 10;</code>
+     */
+    public Builder removeOcene(int index) {
+      if (oceneBuilder_ == null) {
+        ensureOceneIsMutable();
+        ocene_.remove(index);
+        onChanged();
+      } else {
+        oceneBuilder_.remove(index);
+      }
+      return this;
+    }
+    /**
+     * <code>repeated .com.xml2023.mainapp.OcenaSmestajDTO ocene = 10;</code>
+     */
+    public com.xml2023.mainapp.OcenaSmestajDTO.Builder getOceneBuilder(
+        int index) {
+      return getOceneFieldBuilder().getBuilder(index);
+    }
+    /**
+     * <code>repeated .com.xml2023.mainapp.OcenaSmestajDTO ocene = 10;</code>
+     */
+    public com.xml2023.mainapp.OcenaSmestajDTOOrBuilder getOceneOrBuilder(
+        int index) {
+      if (oceneBuilder_ == null) {
+        return ocene_.get(index);  } else {
+        return oceneBuilder_.getMessageOrBuilder(index);
+      }
+    }
+    /**
+     * <code>repeated .com.xml2023.mainapp.OcenaSmestajDTO ocene = 10;</code>
+     */
+    public java.util.List<? extends com.xml2023.mainapp.OcenaSmestajDTOOrBuilder> 
+         getOceneOrBuilderList() {
+      if (oceneBuilder_ != null) {
+        return oceneBuilder_.getMessageOrBuilderList();
+      } else {
+        return java.util.Collections.unmodifiableList(ocene_);
+      }
+    }
+    /**
+     * <code>repeated .com.xml2023.mainapp.OcenaSmestajDTO ocene = 10;</code>
+     */
+    public com.xml2023.mainapp.OcenaSmestajDTO.Builder addOceneBuilder() {
+      return getOceneFieldBuilder().addBuilder(
+          com.xml2023.mainapp.OcenaSmestajDTO.getDefaultInstance());
+    }
+    /**
+     * <code>repeated .com.xml2023.mainapp.OcenaSmestajDTO ocene = 10;</code>
+     */
+    public com.xml2023.mainapp.OcenaSmestajDTO.Builder addOceneBuilder(
+        int index) {
+      return getOceneFieldBuilder().addBuilder(
+          index, com.xml2023.mainapp.OcenaSmestajDTO.getDefaultInstance());
+    }
+    /**
+     * <code>repeated .com.xml2023.mainapp.OcenaSmestajDTO ocene = 10;</code>
+     */
+    public java.util.List<com.xml2023.mainapp.OcenaSmestajDTO.Builder> 
+         getOceneBuilderList() {
+      return getOceneFieldBuilder().getBuilderList();
+    }
+    private com.google.protobuf.RepeatedFieldBuilderV3<
+        com.xml2023.mainapp.OcenaSmestajDTO, com.xml2023.mainapp.OcenaSmestajDTO.Builder, com.xml2023.mainapp.OcenaSmestajDTOOrBuilder> 
+        getOceneFieldBuilder() {
+      if (oceneBuilder_ == null) {
+        oceneBuilder_ = new com.google.protobuf.RepeatedFieldBuilderV3<
+            com.xml2023.mainapp.OcenaSmestajDTO, com.xml2023.mainapp.OcenaSmestajDTO.Builder, com.xml2023.mainapp.OcenaSmestajDTOOrBuilder>(
+                ocene_,
+                ((bitField0_ & 0x00000200) == 0x00000200),
+                getParentForChildren(),
+                isClean());
+        ocene_ = null;
+      }
+      return oceneBuilder_;
     }
     @java.lang.Override
     public final Builder setUnknownFields(

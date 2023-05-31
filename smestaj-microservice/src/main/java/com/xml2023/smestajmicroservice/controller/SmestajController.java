@@ -1,12 +1,14 @@
 package com.xml2023.smestajmicroservice.controller;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.stream.Collectors;
 
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -106,6 +108,16 @@ public class SmestajController {
 			return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 		}else {
 			return new ResponseEntity<OcenaSmestajaDTO>(retVal, HttpStatus.OK);
+		}
+	}
+	
+	@GetMapping("/getRecommended/{userId}")
+	public ResponseEntity<?> getRecommended(@PathVariable(value = "userId") String userId){
+		Collection<SmestajDTO> retList = this.smestajService.getRecommended(userId.substring(1, userId.length() - 1));
+		if(retList.isEmpty()) {
+			return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+		}else {
+			return new ResponseEntity<Collection<SmestajDTO>>(retList, HttpStatus.OK);
 		}
 	}
 }

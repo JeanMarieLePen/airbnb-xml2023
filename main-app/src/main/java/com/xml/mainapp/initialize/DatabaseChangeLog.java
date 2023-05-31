@@ -12,14 +12,17 @@ import com.xml.mainapp.model.users.Host;
 import com.xml.mainapp.model.users.Korisnik;
 import com.xml.mainapp.model.users.StatusNaloga;
 import com.xml.mainapp.model.users.TipKorisnika;
+//import com.xml.mainapp.neo4j.model.OcenaSmestaj;
+import com.xml.mainapp.neo4j.model.Smestaj;
 import com.xml.mainapp.repositories.KorisnikRep;
+import com.xml.mainapp.repositories.Neo4JKorisnikRep;
 import com.xml.mainapp.repositories.PogodnostRepository;
 
 @ChangeLog
 public class DatabaseChangeLog {
 
 	@ChangeSet(order = "001", id = "seedDatabase", author = "")
-	public void seedDatabase(PogodnostRepository pogRep, KorisnikRep korRep) {
+	public void seedDatabase(PogodnostRepository pogRep, KorisnikRep korRep, Neo4JKorisnikRep neo4jKorRep) {
 		List<Adresa> listaAdresa = new ArrayList<Adresa>();
 		listaAdresa.add(makeNewAdresa("Novi Sad, Maksima Gorkog 12", 10.22, 52.02002));
 		listaAdresa.add(makeNewAdresa("Kladovo, Omladinska 6", 10.22, 52.02002));
@@ -44,6 +47,18 @@ public class DatabaseChangeLog {
 		listaKorisnika.add(makeNewHost("npele96@gmail.com", "Nikola", "npele96", "$2a$12$.RdHV2luFjgp5vR2LQSjWeLjU3WRzUEOmaqqsL51CD/L.5sPFoxoq", "Petkovic", StatusNaloga.AKTIVAN, TipKorisnika.HOST, listaAdresa.get(3), false, false, true, true, true, true, true));
 	
 		korRep.insert(listaKorisnika);
+		
+		List<com.xml.mainapp.neo4j.model.Korisnik> listaNeo4j = new ArrayList<com.xml.mainapp.neo4j.model.Korisnik>();
+		for(Korisnik k : listaKorisnika.stream().filter(k -> k.getTipKorisnika().equals(TipKorisnika.GUEST)).toList()) {
+			com.xml.mainapp.neo4j.model.Korisnik tmpKor = new com.xml.mainapp.neo4j.model.Korisnik();
+			tmpKor.setId(k.getId());
+//			tmpKor.setDateOcene(new ArrayList<OcenaSmestaj>());
+			tmpKor.setRezervisani(new ArrayList<Smestaj>());
+			listaNeo4j.add(tmpKor);
+		}
+		neo4jKorRep.saveAll(listaNeo4j);
+		
+		
 	}
 	
 	public Adresa makeNewAdresa(String adrStr, double lat, double lng) {

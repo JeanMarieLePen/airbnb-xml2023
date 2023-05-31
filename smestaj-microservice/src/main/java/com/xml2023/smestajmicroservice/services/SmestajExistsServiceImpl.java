@@ -21,6 +21,7 @@ import com.xml2023.mainapp.AnySmestajBelongToHostResponse;
 import com.xml2023.mainapp.CenovnikDTO;
 import com.xml2023.mainapp.DeleteSmestajsForHostRequest;
 import com.xml2023.mainapp.DeleteSmestajsForHostResponse;
+import com.xml2023.mainapp.OcenaSmestajDTO;
 import com.xml2023.mainapp.SlikaDTO;
 import com.xml2023.mainapp.SmestajDTO;
 import com.xml2023.mainapp.SmestajExistsRequest;
@@ -35,12 +36,16 @@ import com.xml2023.mainapp.TerminZauzmiRequest;
 import com.xml2023.mainapp.TerminZauzmiResponse;
 import com.xml2023.mainapp.getListaSmestajaByUserIdRequest;
 import com.xml2023.mainapp.getListaSmestajaByUserIdResponse;
+import com.xml2023.mainapp.getOceneBySmestajIdRequest;
+import com.xml2023.mainapp.getOceneBySmestajIdResponse;
 import com.xml2023.mainapp.getSmestajByIdRequest;
 import com.xml2023.mainapp.getSmestajByIdResponse;
 import com.xml2023.smestajmicroservice.model.data.Adresa;
 import com.xml2023.smestajmicroservice.model.data.Cenovnik;
+import com.xml2023.smestajmicroservice.model.data.OcenaSmestaj;
 import com.xml2023.smestajmicroservice.model.data.Smestaj;
 import com.xml2023.smestajmicroservice.model.data.Termin;
+import com.xml2023.smestajmicroservice.repositories.OcenaSmestajRep;
 import com.xml2023.smestajmicroservice.repositories.SmestajRep;
 
 import io.grpc.stub.StreamObserver;
@@ -48,6 +53,9 @@ import io.grpc.stub.StreamObserver;
 @Service
 public class SmestajExistsServiceImpl extends SmestajGrpcImplBase{
 	@Autowired SmestajRep sRep;
+	
+	@Autowired
+	private OcenaSmestajRep osRep;
 	
 	@Override
 	public void exists(SmestajExistsRequest request, StreamObserver<SmestajExistsResponse> responseObserver) {
@@ -261,6 +269,35 @@ public class SmestajExistsServiceImpl extends SmestajGrpcImplBase{
 			responseObserver.onCompleted();
 		}
 	}
+
+	@Override
+	public void getOceneSmestaja(getOceneBySmestajIdRequest request,
+			StreamObserver<getOceneBySmestajIdResponse> responseObserver) {
+		// TODO Auto-generated method stub
+		String idSmestaja = request.getSmestajId();
+		Smestaj s = this.sRep.findById(idSmestaja).orElse(null);
+		List<OcenaSmestaj> oceneList = new ArrayList<OcenaSmestaj>();
+		if(s != null) {
+			oceneList = osRep.findAllBySmestaj(idSmestaja).stream().toList();
+		}
+		List<OcenaSmestajDTO> retList = new ArrayList<OcenaSmestajDTO>();
+		for(OcenaSmestaj os : oceneList) {
+			retList.add(mapToOcenaSmestajDTO(os));
+		}
+		getOceneBySmestajIdResponse.Builder response = getOceneBySmestajIdResponse.newBuilder();
+		response.addAllOcene(retList);
+		responseObserver.onNext(response.build());
+		responseObserver.onCompleted();
+	}
 	
+	public OcenaSmestajDTO mapToOcenaSmestajDTO(OcenaSmestaj os){
+		OcenaSmestajDTO.Builder retVal = OcenaSmestajDTO.newBuilder();
+		retVal.setId(os.getId());
+		retVal.setOcena(os.getOcena());
+		retVal.setIdSmestaja(os.getSmestaj());
+		retVal.setIdKorisnika(os.getGost());
+		retVal.setDatumIVreme(convertToTimeStamp(os.getDatum()));
+		return retVal.build();
+	}
 	
 }

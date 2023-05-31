@@ -2,6 +2,7 @@ package com.xml2023.smestajmicroservice.dtos;
 
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 
 public class OcenaSmestajaDTO {
@@ -9,7 +10,7 @@ public class OcenaSmestajaDTO {
 	private String smestaj;
 	private String gost;
 	private int ocena;
-	private LocalDate datum;
+	private LocalDateTime datum;
 	
 	
 	public OcenaSmestajaDTO() {
@@ -17,7 +18,7 @@ public class OcenaSmestajaDTO {
 	}
 
 
-	public OcenaSmestajaDTO(String id, String smestaj, String gost, int ocena, LocalDate datum) {
+	public OcenaSmestajaDTO(String id, String smestaj, String gost, int ocena, LocalDateTime datum) {
 		super();
 		this.id = id;
 		this.smestaj = smestaj;
@@ -67,12 +68,12 @@ public class OcenaSmestajaDTO {
 	}
 
 
-	public LocalDate getDatum() {
+	public LocalDateTime getDatum() {
 		return datum;
 	}
 
 
-	public void setDatum(LocalDate datum) {
+	public void setDatum(LocalDateTime datum) {
 		this.datum = datum;
 	}
 	

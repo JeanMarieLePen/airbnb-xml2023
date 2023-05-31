@@ -283,6 +283,38 @@ public final class SmestajGrpcGrpc {
      return getBelongsToHostMethod;
   }
 
+  private static volatile io.grpc.MethodDescriptor<com.xml2023.mainapp.getOceneBySmestajIdRequest,
+      com.xml2023.mainapp.getOceneBySmestajIdResponse> getGetOceneSmestajaMethod;
+
+  @io.grpc.stub.annotations.RpcMethod(
+      fullMethodName = SERVICE_NAME + '/' + "getOceneSmestaja",
+      requestType = com.xml2023.mainapp.getOceneBySmestajIdRequest.class,
+      responseType = com.xml2023.mainapp.getOceneBySmestajIdResponse.class,
+      methodType = io.grpc.MethodDescriptor.MethodType.UNARY)
+  public static io.grpc.MethodDescriptor<com.xml2023.mainapp.getOceneBySmestajIdRequest,
+      com.xml2023.mainapp.getOceneBySmestajIdResponse> getGetOceneSmestajaMethod() {
+    io.grpc.MethodDescriptor<com.xml2023.mainapp.getOceneBySmestajIdRequest, com.xml2023.mainapp.getOceneBySmestajIdResponse> getGetOceneSmestajaMethod;
+    if ((getGetOceneSmestajaMethod = SmestajGrpcGrpc.getGetOceneSmestajaMethod) == null) {
+      synchronized (SmestajGrpcGrpc.class) {
+        if ((getGetOceneSmestajaMethod = SmestajGrpcGrpc.getGetOceneSmestajaMethod) == null) {
+          SmestajGrpcGrpc.getGetOceneSmestajaMethod = getGetOceneSmestajaMethod = 
+              io.grpc.MethodDescriptor.<com.xml2023.mainapp.getOceneBySmestajIdRequest, com.xml2023.mainapp.getOceneBySmestajIdResponse>newBuilder()
+              .setType(io.grpc.MethodDescriptor.MethodType.UNARY)
+              .setFullMethodName(generateFullMethodName(
+                  "com.xml2023.mainapp.SmestajGrpc", "getOceneSmestaja"))
+              .setSampledToLocalTracing(true)
+              .setRequestMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(
+                  com.xml2023.mainapp.getOceneBySmestajIdRequest.getDefaultInstance()))
+              .setResponseMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(
+                  com.xml2023.mainapp.getOceneBySmestajIdResponse.getDefaultInstance()))
+                  .setSchemaDescriptor(new SmestajGrpcMethodDescriptorSupplier("getOceneSmestaja"))
+                  .build();
+          }
+        }
+     }
+     return getGetOceneSmestajaMethod;
+  }
+
   /**
    * Creates a new async stub that supports all call types for the service
    */
@@ -366,6 +398,13 @@ public final class SmestajGrpcGrpc {
       asyncUnimplementedUnaryCall(getBelongsToHostMethod(), responseObserver);
     }
 
+    /**
+     */
+    public void getOceneSmestaja(com.xml2023.mainapp.getOceneBySmestajIdRequest request,
+        io.grpc.stub.StreamObserver<com.xml2023.mainapp.getOceneBySmestajIdResponse> responseObserver) {
+      asyncUnimplementedUnaryCall(getGetOceneSmestajaMethod(), responseObserver);
+    }
+
     @java.lang.Override public final io.grpc.ServerServiceDefinition bindService() {
       return io.grpc.ServerServiceDefinition.builder(getServiceDescriptor())
           .addMethod(
@@ -424,6 +463,13 @@ public final class SmestajGrpcGrpc {
                 com.xml2023.mainapp.AnySmestajBelongToHostRequest,
                 com.xml2023.mainapp.AnySmestajBelongToHostResponse>(
                   this, METHODID_BELONGS_TO_HOST)))
+          .addMethod(
+            getGetOceneSmestajaMethod(),
+            asyncUnaryCall(
+              new MethodHandlers<
+                com.xml2023.mainapp.getOceneBySmestajIdRequest,
+                com.xml2023.mainapp.getOceneBySmestajIdResponse>(
+                  this, METHODID_GET_OCENE_SMESTAJA)))
           .build();
     }
   }
@@ -509,6 +555,14 @@ public final class SmestajGrpcGrpc {
       asyncUnaryCall(
           getChannel().newCall(getBelongsToHostMethod(), getCallOptions()), request, responseObserver);
     }
+
+    /**
+     */
+    public void getOceneSmestaja(com.xml2023.mainapp.getOceneBySmestajIdRequest request,
+        io.grpc.stub.StreamObserver<com.xml2023.mainapp.getOceneBySmestajIdResponse> responseObserver) {
+      asyncUnaryCall(
+          getChannel().newCall(getGetOceneSmestajaMethod(), getCallOptions()), request, responseObserver);
+    }
   }
 
   /**
@@ -583,6 +637,13 @@ public final class SmestajGrpcGrpc {
     public com.xml2023.mainapp.AnySmestajBelongToHostResponse belongsToHost(com.xml2023.mainapp.AnySmestajBelongToHostRequest request) {
       return blockingUnaryCall(
           getChannel(), getBelongsToHostMethod(), getCallOptions(), request);
+    }
+
+    /**
+     */
+    public com.xml2023.mainapp.getOceneBySmestajIdResponse getOceneSmestaja(com.xml2023.mainapp.getOceneBySmestajIdRequest request) {
+      return blockingUnaryCall(
+          getChannel(), getGetOceneSmestajaMethod(), getCallOptions(), request);
     }
   }
 
@@ -667,6 +728,14 @@ public final class SmestajGrpcGrpc {
       return futureUnaryCall(
           getChannel().newCall(getBelongsToHostMethod(), getCallOptions()), request);
     }
+
+    /**
+     */
+    public com.google.common.util.concurrent.ListenableFuture<com.xml2023.mainapp.getOceneBySmestajIdResponse> getOceneSmestaja(
+        com.xml2023.mainapp.getOceneBySmestajIdRequest request) {
+      return futureUnaryCall(
+          getChannel().newCall(getGetOceneSmestajaMethod(), getCallOptions()), request);
+    }
   }
 
   private static final int METHODID_EXISTS = 0;
@@ -677,6 +746,7 @@ public final class SmestajGrpcGrpc {
   private static final int METHODID_ZAUZMI_TERMIN = 5;
   private static final int METHODID_OSLOBODI_TERMIN = 6;
   private static final int METHODID_BELONGS_TO_HOST = 7;
+  private static final int METHODID_GET_OCENE_SMESTAJA = 8;
 
   private static final class MethodHandlers<Req, Resp> implements
       io.grpc.stub.ServerCalls.UnaryMethod<Req, Resp>,
@@ -726,6 +796,10 @@ public final class SmestajGrpcGrpc {
         case METHODID_BELONGS_TO_HOST:
           serviceImpl.belongsToHost((com.xml2023.mainapp.AnySmestajBelongToHostRequest) request,
               (io.grpc.stub.StreamObserver<com.xml2023.mainapp.AnySmestajBelongToHostResponse>) responseObserver);
+          break;
+        case METHODID_GET_OCENE_SMESTAJA:
+          serviceImpl.getOceneSmestaja((com.xml2023.mainapp.getOceneBySmestajIdRequest) request,
+              (io.grpc.stub.StreamObserver<com.xml2023.mainapp.getOceneBySmestajIdResponse>) responseObserver);
           break;
         default:
           throw new AssertionError();
@@ -796,6 +870,7 @@ public final class SmestajGrpcGrpc {
               .addMethod(getZauzmiTerminMethod())
               .addMethod(getOslobodiTerminMethod())
               .addMethod(getBelongsToHostMethod())
+              .addMethod(getGetOceneSmestajaMethod())
               .build();
         }
       }

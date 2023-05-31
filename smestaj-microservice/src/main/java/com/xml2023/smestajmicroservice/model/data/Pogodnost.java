@@ -11,12 +11,11 @@ import org.springframework.data.neo4j.core.schema.Node;
 import javax.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 
-@Node
+
 public class Pogodnost implements Serializable{
 
 	private static final long serialVersionUID = -776142387481773478L;
 	@Id
-	@org.springframework.data.neo4j.core.schema.Id
 	private String id;
 
 	@NotBlank

@@ -2,6 +2,7 @@ package com.xml.mainapp.services;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +19,10 @@ import com.xml.mainapp.model.users.Host;
 import com.xml.mainapp.model.users.Korisnik;
 import com.xml.mainapp.model.users.StatusNaloga;
 import com.xml.mainapp.model.users.TipKorisnika;
+//import com.xml.mainapp.neo4j.model.OcenaSmestaj;
+import com.xml.mainapp.neo4j.model.Smestaj;
 import com.xml.mainapp.repositories.KorisnikRep;
+import com.xml.mainapp.repositories.Neo4JKorisnikRep;
 import com.xml.mainapp.security.MessageQueueConfig;
 
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
@@ -32,6 +36,8 @@ public class LoginService {
 	private KorisnikMapper korMapper;
 	@Autowired
 	private RabbitTemplate template;
+	@Autowired
+	private Neo4JKorisnikRep neo4jKorRep;
 	
 	public LoginDTO login(LoginDTO logDTO) {
 		Korisnik k = this.korisnikRep.findByEmail(logDTO.getEmail());
@@ -74,6 +80,14 @@ public class LoginService {
 				g.setBrojOtkazivanja(0);
 				korisnikRep.save(g);
 			}
+			
+			
+			//DODAVANJE CVORA KORISNIK U GRAF BAZU; IZDVOJENI SU SAMO PARAMETRI OD INTERESA
+			com.xml.mainapp.neo4j.model.Korisnik tmpKor = new com.xml.mainapp.neo4j.model.Korisnik();
+			tmpKor.setId(newUser.getId());
+//			tmpKor.setDateOcene(new ArrayList<OcenaSmestaj>());
+			tmpKor.setRezervisani(new ArrayList<Smestaj>());
+			neo4jKorRep.save(tmpKor);
 			
 			this.template.convertAndSend(MessageQueueConfig.EXCHANGE, MessageQueueConfig.ROUTING_KEY, regDTO);
 			System.out.println("POSLATO NA QUEUE");
