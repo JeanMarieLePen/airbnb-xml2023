@@ -103,6 +103,10 @@ class DataService{
     giveRatingToHost(userId, hostId, ocenaObj){
         return axios.post(`${API_URL}/korisnik/giveRatingToHost/${userId}/${hostId}`, ocenaObj);
     }
+
+    getRecommended(id){
+        return axios.get(`${API_URL}/smestaj/getRecommended/${id}`);
+    }
 }
 
 

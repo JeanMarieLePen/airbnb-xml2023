@@ -40,6 +40,9 @@
 
     </div>
 
+    <div >
+        <Preporuceni :preporuceni="preporuceni" style="margin-bottom:100px;"></Preporuceni>
+    </div>
     <div v-if="smestaj.length > 0">
         <Template v-bind:listaSmestaja="prop"></Template> 
        <!-- <p>{{ this.smestajString }}</p>-->
@@ -52,13 +55,17 @@
 import VueDatePicker from '@vuepic/vue-datepicker';
 import dataService from '@/services/dataService';
 import PretragaTemplate from './PretragaTemplate.vue'
+import Preporuceni from './Preporuceni.vue';
+import parserMixin from '@/mixins/mixin';
 export default {
     components: {
         datepicker:VueDatePicker,
         Template: PretragaTemplate,
+        Preporuceni: Preporuceni
     },
     data() {
         return {
+            preporuceni:[],
             prop:{
                 brojDana:'1',
                 listaSmestaja:[],
@@ -168,10 +175,27 @@ export default {
             this.parametri.minOcena='';
             this.parametri.maxOcena='';   
             this.parametri.brGosti='';
+        },
+        getRecommended(id){
+            console.log("DOBAVLJANJE PREPORUCENIH");
+            dataService.getRecommended(id).then(response => {
+                console.log("DOBAVLJENI PREPORUCENI");
+                this.preporuceni = response.data;
+            });
         }
     },
     created() {
-        this.search()
+        this.search();
+        let userId = null;
+        if(localStorage.getItem('xmljwt')){
+            let userObj = parserMixin.methods.parseXmlJwt();
+            userId = userObj.id;
+            console.log("ID KORISNIKA: " + this.userId);
+        }
+        if(userId != null){
+            this.getRecommended(userId);
+        }
+        
     },
     copmuted: {}
 

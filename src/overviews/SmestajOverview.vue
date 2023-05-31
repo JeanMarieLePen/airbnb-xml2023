@@ -249,8 +249,8 @@ export default{
         rateSmestaj(){
             console.log("OCENI SMESTAJ")
             console.log("DATA OCENA: " + this.ocenaSmestaja.ocena);
-            //this.ocenaSmestaja.ocena = rating;
-            this.ocenaSmestaja.datum = moment(new Date()).format("YYYY-MM-DD");
+            //this.ocenaSmestaja.ocena = rating;2007-12-03T10:15:30. 
+            this.ocenaSmestaja.datum = moment(new Date()).format("YYYY-MM-DDThh:mm:ss");
             dataService.giveRatingToSmestaj(this.userId, this.$route.params.id, this.ocenaSmestaja).then(response => {
                 console.log("uspesno ocenjeno");
             });
