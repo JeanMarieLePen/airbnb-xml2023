@@ -7,6 +7,7 @@ import com.xml2023.smestajmicroservice.model.data.Smestaj;
 public class SmestajPretragaDTO {
 	private String id;
 	private String hostId;
+	private boolean hostIstaknuti;
 	private AdresaDTO adresa;
 	private Collection<String> slike;
 	private int minGosti;
@@ -14,10 +15,10 @@ public class SmestajPretragaDTO {
 	private double ukCena;
 	private double prosecnaOcena;
 	private boolean poSmestaju;
-	
+	private Collection<String> pogodnosti;
 	
 	public SmestajPretragaDTO(String id, String hostId, AdresaDTO adresa,
-			Collection<String> slike, int minGosti, int maxGosti, double ukCena, double prosecnaOcena, boolean poSmestaju) {
+			Collection<String> slike, int minGosti, int maxGosti, double ukCena, double prosecnaOcena, boolean poSmestaju, boolean hostIstaknuti, Collection<String> pogodnosti) {
 		super();
 		this.id = id;
 		this.hostId = hostId;
@@ -28,12 +29,34 @@ public class SmestajPretragaDTO {
 		this.ukCena = ukCena;
 		this.prosecnaOcena = prosecnaOcena;
 		this.poSmestaju=poSmestaju;
+		this.hostIstaknuti = hostIstaknuti;
+		this.pogodnosti = pogodnosti;
 	}
 	
 
 	public SmestajPretragaDTO() {
 		super();
 		// TODO Auto-generated constructor stub
+	}
+
+
+	public Collection<String> getPogodnosti() {
+		return pogodnosti;
+	}
+
+
+	public void setPogodnosti(Collection<String> pogodnosti) {
+		this.pogodnosti = pogodnosti;
+	}
+
+
+	public boolean isHostIstaknuti() {
+		return hostIstaknuti;
+	}
+
+
+	public void setHostIstaknuti(boolean hostIstaknuti) {
+		this.hostIstaknuti = hostIstaknuti;
 	}
 
 

@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.app2.flights.dtos.PorudzbinaDTO;
+import com.app2.flights.dtos.PorudzbinaDTOToken;
 import com.app2.flights.dtos.PorudzbinaDTOnova;
 import com.app2.flights.mappers.PorudzbinaMapper;
 import com.app2.flights.model.data.Let;
@@ -102,6 +103,35 @@ public class PorudzbinaService {
 	public PorudzbinaDTO novaRez(PorudzbinaDTOnova p) {
 		Let l = letRep.findById(p.getLet()).orElse(null);		
 		RegKor k = (RegKor) kRep.findById(p.getKupac()).orElse(null);
+		if(l == null || k == null) {
+			return null;
+		}else {
+			if(brZauzetihMesta(l) + p.getBrojKarata() <= l.getKapacitet()) {
+				System.out.println("NOVA PORUDZBINA");
+				Porudzbina nova = new Porudzbina();
+				nova.setBrojKarata(p.getBrojKarata());
+				nova.setKupac(k.getId());
+				nova.setLet(l.getId());
+				nova.setUkupnaCena(p.getBrojKarata() * l.getCena());
+				nova.setStatus(StatusPorudzbine.REZERVISANA);
+				porRep.save(nova);
+				
+				l.getListaPorudzbina().add(nova.getId());
+				letRep.save(l);
+				
+				k.getPorudzbine().add(nova.getId());
+				kRep.save(k);
+				
+				return porMapper.toDTO(nova);
+			}else {
+				return null;
+			}
+		}
+	}
+	
+	public PorudzbinaDTO novaRezToken(PorudzbinaDTOToken p) {
+		Let l = letRep.findById(p.getLet()).orElse(null);		
+		RegKor k = kRep.findRegKorByEmail(p.getEmailKupca()).orElse(null);
 		if(l == null || k == null) {
 			return null;
 		}else {

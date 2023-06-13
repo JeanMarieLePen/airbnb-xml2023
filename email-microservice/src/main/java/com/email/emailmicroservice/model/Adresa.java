@@ -3,25 +3,15 @@ package com.email.emailmicroservice.model;
 import java.io.Serializable;
 
 import org.hibernate.validator.constraints.Length;
-import org.springframework.data.mongodb.core.mapping.Document;
-
-import javax.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-@Document(collection = "adresa_db")
+import javax.persistence.*;
 public class Adresa implements Serializable{
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 3844742117528552755L;
 
 	@Id
 	private String id;
-	
-	@Version
-	@Column(columnDefinition = "integer DEFAULT 0", nullable = false)
-	private Integer version;
 	
 	@NotBlank
 	@Length(min = 5, max = 100)

@@ -171,11 +171,16 @@ public class KorisnikGrpcImpl extends KorisnikGrpcImplBase{
 	public void istaknutiHost(DobioStatusIstaknutogRequest request,
 			StreamObserver<DobioStatusIstaknutogResponse> responseObserver) {
 		String idKorisnika = request.getIdKorisnika();
-		NotificationHostDTO notifikacija = new NotificationHostDTO();
-		notifikacija.setIstaknuti(true);
-		notifikacija.setTipNotifikacije(TipNotifikacije.STATUS_ISTAKNUTOG);
-		notifikacija.setTekst("status istaknutog hosta: " + true);
-		cmnListener.sendNotificationToHost(notifikacija);
+		Host h = (Host) this.korRep.findById(idKorisnika).orElse(null);
+		if(h != null) {
+			if(h.isStatusNotification()) {
+				NotificationHostDTO notifikacija = new NotificationHostDTO();
+				notifikacija.setIstaknuti(request.getStatus());
+				notifikacija.setTipNotifikacije(TipNotifikacije.STATUS_ISTAKNUTOG);
+				notifikacija.setTekst("status istaknutog hosta: " + request.getStatus());
+				cmnListener.sendNotificationToHost(notifikacija);
+			}
+		}
 		DobioStatusIstaknutogResponse.Builder response = DobioStatusIstaknutogResponse.newBuilder().setResult(true);
 		responseObserver.onNext(response.build());
 		responseObserver.onCompleted();	

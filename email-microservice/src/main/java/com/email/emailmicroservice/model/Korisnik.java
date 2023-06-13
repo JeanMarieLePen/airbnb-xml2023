@@ -1,17 +1,15 @@
 package com.email.emailmicroservice.model;
 
 import jakarta.annotation.Nullable;
-import javax.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Collection;
 
 import org.hibernate.validator.constraints.Length;
-import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
-
 
 @Document(collection = "korisnici_db")
 public class Korisnik implements Serializable {
@@ -48,7 +46,6 @@ public class Korisnik implements Serializable {
 	@NotBlank
 	@Length(min=2, max=100)
     private String prezime;
-    @DBRef
     @NotNull
     private Adresa adresa;
 

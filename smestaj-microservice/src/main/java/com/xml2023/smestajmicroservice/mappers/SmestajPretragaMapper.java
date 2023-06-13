@@ -2,6 +2,7 @@ package com.xml2023.smestajmicroservice.mappers;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.Month;
 import java.time.temporal.ChronoField;
 import java.util.ArrayList;
 import java.util.Base64;
@@ -12,10 +13,18 @@ import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import com.xml2023.mainapp.HostBasicDTO;
+import com.xml2023.mainapp.KorisnikGrpcGrpc;
+import com.xml2023.mainapp.KorisnikGrpcGrpc.KorisnikGrpcBlockingStub;
+import com.xml2023.mainapp.getHostRequest;
+import com.xml2023.mainapp.getHostResponse;
 import com.xml2023.smestajmicroservice.dtos.SmestajPretragaDTO;
 import com.xml2023.smestajmicroservice.model.data.OcenaSmestaj;
 import com.xml2023.smestajmicroservice.model.data.Smestaj;
 import com.xml2023.smestajmicroservice.repositories.OcenaSmestajRep;
+
+import io.grpc.ManagedChannel;
+import io.grpc.ManagedChannelBuilder;
 
 @Component
 public class SmestajPretragaMapper {
@@ -31,6 +40,10 @@ public class SmestajPretragaMapper {
 		dto.setMinGosti(s.getMinGosti());
 		dto.setHostId(s.getVlasnik());
 
+		dto.setHostIstaknuti(getHost(s.getVlasnik()).getIstaknuti());
+		if(s.getPogodnosti()!= null) {
+			dto.setPogodnosti(s.getPogodnosti());
+		}
 		Collection<String> tempSlike = new ArrayList<String>();
 		if(s.getSlike() != null) {
 			for(byte[] tmp : s.getSlike()) {
@@ -45,6 +58,14 @@ public class SmestajPretragaMapper {
 		
 	} 
 	
+	public HostBasicDTO getHost(String hostId) {
+		ManagedChannel channel = ManagedChannelBuilder.forAddress("localhost", 7979).usePlaintext().build();
+		KorisnikGrpcBlockingStub bs = KorisnikGrpcGrpc.newBlockingStub(channel);
+		getHostRequest rqst = getHostRequest.newBuilder().setHostId(hostId).build();
+		getHostResponse rspns = bs.getHost(rqst);
+		return rspns.getHost();
+	}
+	
 	public float getProsecnaOcena(String id) {
 		Collection<OcenaSmestaj> ocene= oRep.findAllBySmestaj(id);;
 		float uk=0;
@@ -56,7 +77,15 @@ public class SmestajPretragaMapper {
 	//https://www.baeldung.com/java-between-dates
 	//TODO provera praznika, leta i neradnih dana
 	public float ukupnaCena(Smestaj s, LocalDateTime pocetak, LocalDateTime kraj) {
-		if(pocetak==null || kraj==null) return 0;
+		if(pocetak==null || kraj==null) {
+			if(isWeekend2(LocalDateTime.now())) {
+				return s.getCenovnik().getCenaVikend();
+			}
+			if(isInTheSummer(LocalDateTime.now())) {
+				return s.getCenovnik().getCenaLeto();
+			}
+			return s.getCenovnik().getCena();
+		}
 		float uk=0;
 		LocalDate pocDate=pocetak.toLocalDate();
 		LocalDate krajDate=kraj.toLocalDate();
@@ -78,4 +107,17 @@ public class SmestajPretragaMapper {
         return (localDate.get(ChronoField.DAY_OF_WEEK) == 6) 
                 || (localDate.get(ChronoField.DAY_OF_WEEK) == 7);
 	}	
+	private static boolean isWeekend2(LocalDateTime localDate) {
+        // get Day of week for the passed LocalDate
+        return (localDate.get(ChronoField.DAY_OF_WEEK) == 6) 
+                || (localDate.get(ChronoField.DAY_OF_WEEK) == 7);
+	}	
+	private static boolean isInTheSummer(LocalDateTime localDate) {
+        Month month = localDate.getMonth();
+        if (month == Month.JUNE || month == Month.JULY || month == Month.AUGUST) {
+            return true;
+        }else {
+        	return false;
+        }
+	}
 }

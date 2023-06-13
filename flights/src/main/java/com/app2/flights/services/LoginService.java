@@ -51,17 +51,15 @@ public class LoginService {
 			return null;
 		}
 		Korisnik newUser = this.korMapper.fromDTOReg(regDTO);
+		BCryptPasswordEncoder enc = new BCryptPasswordEncoder();
+		newUser.setTip(TipKorisnika.REG_KOR);
+		newUser.setStatus(StatusNaloga.NA_CEKANJU);
+		newUser.setPassword(new String(enc.encode(regDTO.getPassword())));
 		if(newUser != null) {
-			BCryptPasswordEncoder enc = new BCryptPasswordEncoder();
-			newUser.setTip(TipKorisnika.REG_KOR);
-			newUser.setStatus(StatusNaloga.NA_CEKANJU);
-			newUser.setPassword(new String(enc.encode(regDTO.getPassword())));
-			this.korisnikRep.save(newUser);
-//			this.template.convertAndSend(MessageQueueConfig.EXCHANGE, MessageQueueConfig.ROUTING_KEY, regDTO);
-//			System.out.println("POSLATO NA QUEUE");
-			
-			this.emailService.sendActivationEmail(newUser);
-			korisnikRep.save(newUser);
+			RegKor regKor = new RegKor(newUser);
+			this.korisnikRep.save(regKor);
+			this.emailService.sendActivationEmail(regKor);
+			korisnikRep.save(regKor);
 			return regDTO;
 		}
 		return null;

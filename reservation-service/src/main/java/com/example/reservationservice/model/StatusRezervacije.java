@@ -6,7 +6,8 @@ public enum StatusRezervacije implements Serializable{
 	PENDING(0),
 	REZERVISANA(1),
 	ODBIJENA(2),
-	OTKAZANA(3);
+	OTKAZANA(3),
+	OTKAZAO_HOST(4);
 	
 	private final int status;
 	

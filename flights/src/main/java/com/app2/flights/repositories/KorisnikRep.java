@@ -11,4 +11,5 @@ public interface KorisnikRep extends MongoRepository<Korisnik, String>{
 	public Korisnik findByEmail(String email);
 	public Korisnik findByUsername(String username);
 	Optional<RegKor> findByApiTokenToken(String token);
+	Optional<RegKor> findRegKorByEmail(String email);
 }

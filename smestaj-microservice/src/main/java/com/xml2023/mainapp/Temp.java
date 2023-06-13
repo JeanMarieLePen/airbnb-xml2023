@@ -440,126 +440,126 @@ public final class Temp {
       "\003 \001(\005\"+\n\031NekoOcenioSmestajResponse\022\016\n\006re" +
       "sult\030\001 \001(\010\"<\n\026NekoOcenioHostaRequest\022\023\n\013" +
       "idKorisnika\030\001 \001(\t\022\r\n\005ocena\030\002 \001(\005\")\n\027Neko" +
-      "OcenioHostaResponse\022\016\n\006result\030\001 \001(\010\"3\n\034D" +
+      "OcenioHostaResponse\022\016\n\006result\030\001 \001(\010\"C\n\034D" +
       "obioStatusIstaknutogRequest\022\023\n\013idKorisni" +
-      "ka\030\001 \001(\t\"/\n\035DobioStatusIstaknutogRespons" +
-      "e\022\016\n\006result\030\001 \001(\010\" \n\016getHostRequest\022\016\n\006h" +
-      "ostId\030\001 \001(\t\"B\n\017getHostResponse\022/\n\004host\030\001" +
-      " \001(\0132!.com.xml2023.mainapp.HostBasicDTO\"" +
-      "O\n\014HostBasicDTO\022\021\n\tistaknuti\030\001 \001(\010\022\025\n\rre" +
-      "zAutomatski\030\002 \001(\010\022\025\n\rprosecnaOcena\030\003 \001(\003" +
-      "\"%\n\022rezOtkazanaRequest\022\017\n\007guestId\030\001 \001(\t\"" +
-      ")\n\023rezOtkazanaResponse\022\022\n\npenalDodat\030\001 \001" +
-      "(\010\"?\n&reservationApprovedNotificationReq" +
-      "uest\022\025\n\ridRezervacije\030\001 \001(\t\"=\n\'reservati" +
-      "onApprovedNotificationResponse\022\022\n\nisporu" +
-      "ceno\030\001 \001(\010\"9\n\"NovaRezervacijaNotifikacij" +
-      "aRequest\022\023\n\013idKorisnika\030\001 \001(\t\"5\n#NovaRez" +
-      "ervacijaNotifikacijaResponse\022\016\n\006stanje\030\001" +
-      " \001(\010\"=\n&OtkazanaRezervacijaNotifikacijaR" +
-      "equest\022\023\n\013idKorisnika\030\001 \001(\t\"9\n\'OtkazanaR" +
-      "ezervacijaNotifikacijaResponse\022\016\n\006stanje" +
-      "\030\001 \001(\010\"8\n!NovaOcenaHostaNotifikacijaRequ" +
-      "est\022\023\n\013idKorisnika\030\001 \001(\t\"4\n\"NovaOcenaHos" +
-      "taNotifikacijaResponse\022\016\n\006stanje\030\001 \001(\010\";" +
-      "\n$NovaOcenaSmestajaNotifikacijaRequest\022\023" +
-      "\n\013idKorisnika\030\001 \001(\t\"7\n%NovaOcenaSmestaja" +
-      "NotifikacijaResponse\022\016\n\006stanje\030\001 \001(\010\":\n#" +
-      "StatusIstaknutogNotifikacijaRequest\022\023\n\013i" +
-      "dKorisnika\030\001 \001(\t\"6\n$StatusIstaknutogNoti" +
-      "fikacijaResponse\022\016\n\006stanje\030\001 \001(\010\"C\n\035AnyS" +
-      "mestajBelongToHostRequest\022\016\n\006hostId\030\001 \001(" +
-      "\t\022\022\n\nsmestajIds\030\002 \003(\t\"1\n\036AnySmestajBelon" +
-      "gToHostResponse\022\017\n\007belongs\030\001 \001(\0102j\n\017Gree" +
-      "tingService\022W\n\010greeting\022$.com.xml2023.ma" +
-      "inapp.KorisnikRequest\032%.com.xml2023.main" +
-      "app.KorisnikResponse2\233\010\n\013SmestajGrpc\022_\n\006" +
-      "exists\022).com.xml2023.mainapp.SmestajExis" +
-      "tsRequest\032*.com.xml2023.mainapp.SmestajE" +
-      "xistsResponse\022u\n\024getSmestajIdsForHost\022-." +
-      "com.xml2023.mainapp.SmestajIdsForHostReq" +
-      "uest\032..com.xml2023.mainapp.SmestajIdsFor" +
-      "HostResponse\022~\n\025deketeSnestajsForHost\0221." +
-      "com.xml2023.mainapp.DeleteSmestajsForHos" +
-      "tRequest\0322.com.xml2023.mainapp.DeleteSme" +
-      "stajsForHostResponse\022i\n\016getSmestajById\022*" +
-      ".com.xml2023.mainapp.getSmestajByIdReque" +
-      "st\032+.com.xml2023.mainapp.getSmestajByIdR" +
-      "esponse\022\207\001\n\030getListaSmestajaByUserId\0224.c" +
-      "om.xml2023.mainapp.getListaSmestajaByUse" +
-      "rIdRequest\0325.com.xml2023.mainapp.getList" +
-      "aSmestajaByUserIdResponse\022c\n\014zauzmiTermi" +
-      "n\022(.com.xml2023.mainapp.TerminZauzmiRequ" +
-      "est\032).com.xml2023.mainapp.TerminZauzmiRe" +
-      "sponse\022i\n\016oslobodiTermin\022*.com.xml2023.m" +
-      "ainapp.TerminOslobodiRequest\032+.com.xml20" +
-      "23.mainapp.TerminOslobodiResponse\022x\n\rbel" +
-      "ongsToHost\0222.com.xml2023.mainapp.AnySmes" +
-      "tajBelongToHostRequest\0323.com.xml2023.mai" +
-      "napp.AnySmestajBelongToHostResponse\022u\n\020g" +
-      "etOceneSmestaja\022/.com.xml2023.mainapp.ge" +
-      "tOceneBySmestajIdRequest\0320.com.xml2023.m" +
-      "ainapp.getOceneBySmestajIdResponse2\375\005\n\017R" +
-      "ezervacijaGrpc\022g\n\006exists\022-.com.xml2023.m" +
-      "ainapp.RezervacijaExistsRequest\032..com.xm" +
-      "l2023.mainapp.RezervacijaExistsResponse\022" +
-      "v\n\031reservationsForUserExists\022+.com.xml20" +
-      "23.mainapp.ActiveResExistsRequest\032,.com." +
-      "xml2023.mainapp.ActiveResExistsResponse\022" +
-      "u\n\022getRezervacijaById\022..com.xml2023.main" +
-      "app.getRezervacijaByIdRequest\032/.com.xml2" +
-      "023.mainapp.getRezervacijaByIdResponse\022\220" +
-      "\001\n\033getListaRezervacijaByUserId\0227.com.xml" +
-      "2023.mainapp.getListaRezervacijaByUserId" +
-      "Request\0328.com.xml2023.mainapp.getListaRe" +
-      "zervacijaByUserIdResponse\022\204\001\n\023resExistsF" +
-      "orSmestaj\0225.com.xml2023.mainapp.ActiveRe" +
-      "sExistsForSmestajRequest\0326.com.xml2023.m" +
-      "ainapp.ActiveResExistsForSmestajResponse" +
-      "\022x\n\025getActiveReservations\022..com.xml2023." +
-      "mainapp.ActiveReservationsRequest\032/.com." +
-      "xml2023.mainapp.ActiveReservationsRespon" +
-      "se2\277\014\n\014KorisnikGrpc\022T\n\007getHost\022#.com.xml" +
-      "2023.mainapp.getHostRequest\032$.com.xml202" +
-      "3.mainapp.getHostResponse\022`\n\013rezOtkazana" +
-      "\022\'.com.xml2023.mainapp.rezOtkazanaReques" +
-      "t\032(.com.xml2023.mainapp.rezOtkazanaRespo" +
-      "nse\022\213\001\n\016rezObavestenje\022;.com.xml2023.mai" +
-      "napp.reservationApprovedNotificationRequ" +
-      "est\032<.com.xml2023.mainapp.reservationApp" +
-      "rovedNotificationResponse\022g\n\014newRezNotif" +
-      "y\022*.com.xml2023.mainapp.NekoRezervisaoRe" +
-      "quest\032+.com.xml2023.mainapp.NekoRezervis" +
-      "aoResponse\022b\n\rnewQuitNotify\022\'.com.xml202" +
-      "3.mainapp.NekoOtkazaoRequest\032(.com.xml20" +
-      "23.mainapp.NekoOtkazaoResponse\022o\n\016newRan" +
-      "kSmestaj\022-.com.xml2023.mainapp.NekoOceni" +
-      "oSmestajRequest\032..com.xml2023.mainapp.Ne" +
-      "koOcenioSmestajResponse\022h\n\013newRankHost\022+" +
-      ".com.xml2023.mainapp.NekoOcenioHostaRequ" +
-      "est\032,.com.xml2023.mainapp.NekoOcenioHost" +
-      "aResponse\022v\n\ristaknutiHost\0221.com.xml2023" +
-      ".mainapp.DobioStatusIstaknutogRequest\0322." +
-      "com.xml2023.mainapp.DobioStatusIstaknuto" +
-      "gResponse\022\205\001\n\020novaRezNotStatus\0227.com.xml" +
-      "2023.mainapp.NovaRezervacijaNotifikacija" +
-      "Request\0328.com.xml2023.mainapp.NovaRezerv" +
-      "acijaNotifikacijaResponse\022\221\001\n\024otkazanaRe" +
-      "zNotStatus\022;.com.xml2023.mainapp.Otkazan" +
-      "aRezervacijaNotifikacijaRequest\032<.com.xm" +
-      "l2023.mainapp.OtkazanaRezervacijaNotifik" +
-      "acijaResponse\022\212\001\n\027novaOcenaHostaNotStatu" +
-      "s\0226.com.xml2023.mainapp.NovaOcenaHostaNo" +
-      "tifikacijaRequest\0327.com.xml2023.mainapp." +
-      "NovaOcenaHostaNotifikacijaResponse\022\223\001\n\032n" +
-      "ovaOcenaSmestajaNotStatus\0229.com.xml2023." +
-      "mainapp.NovaOcenaSmestajaNotifikacijaReq" +
-      "uest\032:.com.xml2023.mainapp.NovaOcenaSmes" +
-      "tajaNotifikacijaResponse\022\211\001\n\022istaknutiNo" +
-      "tStatus\0228.com.xml2023.mainapp.StatusIsta" +
-      "knutogNotifikacijaRequest\0329.com.xml2023." +
-      "mainapp.StatusIstaknutogNotifikacijaResp" +
-      "onseB\002P\001b\006proto3"
+      "ka\030\001 \001(\t\022\016\n\006status\030\002 \001(\010\"/\n\035DobioStatusI" +
+      "staknutogResponse\022\016\n\006result\030\001 \001(\010\" \n\016get" +
+      "HostRequest\022\016\n\006hostId\030\001 \001(\t\"B\n\017getHostRe" +
+      "sponse\022/\n\004host\030\001 \001(\0132!.com.xml2023.maina" +
+      "pp.HostBasicDTO\"O\n\014HostBasicDTO\022\021\n\tistak" +
+      "nuti\030\001 \001(\010\022\025\n\rrezAutomatski\030\002 \001(\010\022\025\n\rpro" +
+      "secnaOcena\030\003 \001(\003\"%\n\022rezOtkazanaRequest\022\017" +
+      "\n\007guestId\030\001 \001(\t\")\n\023rezOtkazanaResponse\022\022" +
+      "\n\npenalDodat\030\001 \001(\010\"?\n&reservationApprove" +
+      "dNotificationRequest\022\025\n\ridRezervacije\030\001 " +
+      "\001(\t\"=\n\'reservationApprovedNotificationRe" +
+      "sponse\022\022\n\nisporuceno\030\001 \001(\010\"9\n\"NovaRezerv" +
+      "acijaNotifikacijaRequest\022\023\n\013idKorisnika\030" +
+      "\001 \001(\t\"5\n#NovaRezervacijaNotifikacijaResp" +
+      "onse\022\016\n\006stanje\030\001 \001(\010\"=\n&OtkazanaRezervac" +
+      "ijaNotifikacijaRequest\022\023\n\013idKorisnika\030\001 " +
+      "\001(\t\"9\n\'OtkazanaRezervacijaNotifikacijaRe" +
+      "sponse\022\016\n\006stanje\030\001 \001(\010\"8\n!NovaOcenaHosta" +
+      "NotifikacijaRequest\022\023\n\013idKorisnika\030\001 \001(\t" +
+      "\"4\n\"NovaOcenaHostaNotifikacijaResponse\022\016" +
+      "\n\006stanje\030\001 \001(\010\";\n$NovaOcenaSmestajaNotif" +
+      "ikacijaRequest\022\023\n\013idKorisnika\030\001 \001(\t\"7\n%N" +
+      "ovaOcenaSmestajaNotifikacijaResponse\022\016\n\006" +
+      "stanje\030\001 \001(\010\":\n#StatusIstaknutogNotifika" +
+      "cijaRequest\022\023\n\013idKorisnika\030\001 \001(\t\"6\n$Stat" +
+      "usIstaknutogNotifikacijaResponse\022\016\n\006stan" +
+      "je\030\001 \001(\010\"C\n\035AnySmestajBelongToHostReques" +
+      "t\022\016\n\006hostId\030\001 \001(\t\022\022\n\nsmestajIds\030\002 \003(\t\"1\n" +
+      "\036AnySmestajBelongToHostResponse\022\017\n\007belon" +
+      "gs\030\001 \001(\0102j\n\017GreetingService\022W\n\010greeting\022" +
+      "$.com.xml2023.mainapp.KorisnikRequest\032%." +
+      "com.xml2023.mainapp.KorisnikResponse2\233\010\n" +
+      "\013SmestajGrpc\022_\n\006exists\022).com.xml2023.mai" +
+      "napp.SmestajExistsRequest\032*.com.xml2023." +
+      "mainapp.SmestajExistsResponse\022u\n\024getSmes" +
+      "tajIdsForHost\022-.com.xml2023.mainapp.Smes" +
+      "tajIdsForHostRequest\032..com.xml2023.maina" +
+      "pp.SmestajIdsForHostResponse\022~\n\025deketeSn" +
+      "estajsForHost\0221.com.xml2023.mainapp.Dele" +
+      "teSmestajsForHostRequest\0322.com.xml2023.m" +
+      "ainapp.DeleteSmestajsForHostResponse\022i\n\016" +
+      "getSmestajById\022*.com.xml2023.mainapp.get" +
+      "SmestajByIdRequest\032+.com.xml2023.mainapp" +
+      ".getSmestajByIdResponse\022\207\001\n\030getListaSmes" +
+      "tajaByUserId\0224.com.xml2023.mainapp.getLi" +
+      "staSmestajaByUserIdRequest\0325.com.xml2023" +
+      ".mainapp.getListaSmestajaByUserIdRespons" +
+      "e\022c\n\014zauzmiTermin\022(.com.xml2023.mainapp." +
+      "TerminZauzmiRequest\032).com.xml2023.mainap" +
+      "p.TerminZauzmiResponse\022i\n\016oslobodiTermin" +
+      "\022*.com.xml2023.mainapp.TerminOslobodiReq" +
+      "uest\032+.com.xml2023.mainapp.TerminOslobod" +
+      "iResponse\022x\n\rbelongsToHost\0222.com.xml2023" +
+      ".mainapp.AnySmestajBelongToHostRequest\0323" +
+      ".com.xml2023.mainapp.AnySmestajBelongToH" +
+      "ostResponse\022u\n\020getOceneSmestaja\022/.com.xm" +
+      "l2023.mainapp.getOceneBySmestajIdRequest" +
+      "\0320.com.xml2023.mainapp.getOceneBySmestaj" +
+      "IdResponse2\375\005\n\017RezervacijaGrpc\022g\n\006exists" +
+      "\022-.com.xml2023.mainapp.RezervacijaExists" +
+      "Request\032..com.xml2023.mainapp.Rezervacij" +
+      "aExistsResponse\022v\n\031reservationsForUserEx" +
+      "ists\022+.com.xml2023.mainapp.ActiveResExis" +
+      "tsRequest\032,.com.xml2023.mainapp.ActiveRe" +
+      "sExistsResponse\022u\n\022getRezervacijaById\022.." +
+      "com.xml2023.mainapp.getRezervacijaByIdRe" +
+      "quest\032/.com.xml2023.mainapp.getRezervaci" +
+      "jaByIdResponse\022\220\001\n\033getListaRezervacijaBy" +
+      "UserId\0227.com.xml2023.mainapp.getListaRez" +
+      "ervacijaByUserIdRequest\0328.com.xml2023.ma" +
+      "inapp.getListaRezervacijaByUserIdRespons" +
+      "e\022\204\001\n\023resExistsForSmestaj\0225.com.xml2023." +
+      "mainapp.ActiveResExistsForSmestajRequest" +
+      "\0326.com.xml2023.mainapp.ActiveResExistsFo" +
+      "rSmestajResponse\022x\n\025getActiveReservation" +
+      "s\022..com.xml2023.mainapp.ActiveReservatio" +
+      "nsRequest\032/.com.xml2023.mainapp.ActiveRe" +
+      "servationsResponse2\277\014\n\014KorisnikGrpc\022T\n\007g" +
+      "etHost\022#.com.xml2023.mainapp.getHostRequ" +
+      "est\032$.com.xml2023.mainapp.getHostRespons" +
+      "e\022`\n\013rezOtkazana\022\'.com.xml2023.mainapp.r" +
+      "ezOtkazanaRequest\032(.com.xml2023.mainapp." +
+      "rezOtkazanaResponse\022\213\001\n\016rezObavestenje\022;" +
+      ".com.xml2023.mainapp.reservationApproved" +
+      "NotificationRequest\032<.com.xml2023.mainap" +
+      "p.reservationApprovedNotificationRespons" +
+      "e\022g\n\014newRezNotify\022*.com.xml2023.mainapp." +
+      "NekoRezervisaoRequest\032+.com.xml2023.main" +
+      "app.NekoRezervisaoResponse\022b\n\rnewQuitNot" +
+      "ify\022\'.com.xml2023.mainapp.NekoOtkazaoReq" +
+      "uest\032(.com.xml2023.mainapp.NekoOtkazaoRe" +
+      "sponse\022o\n\016newRankSmestaj\022-.com.xml2023.m" +
+      "ainapp.NekoOcenioSmestajRequest\032..com.xm" +
+      "l2023.mainapp.NekoOcenioSmestajResponse\022" +
+      "h\n\013newRankHost\022+.com.xml2023.mainapp.Nek" +
+      "oOcenioHostaRequest\032,.com.xml2023.mainap" +
+      "p.NekoOcenioHostaResponse\022v\n\ristaknutiHo" +
+      "st\0221.com.xml2023.mainapp.DobioStatusIsta" +
+      "knutogRequest\0322.com.xml2023.mainapp.Dobi" +
+      "oStatusIstaknutogResponse\022\205\001\n\020novaRezNot" +
+      "Status\0227.com.xml2023.mainapp.NovaRezerva" +
+      "cijaNotifikacijaRequest\0328.com.xml2023.ma" +
+      "inapp.NovaRezervacijaNotifikacijaRespons" +
+      "e\022\221\001\n\024otkazanaRezNotStatus\022;.com.xml2023" +
+      ".mainapp.OtkazanaRezervacijaNotifikacija" +
+      "Request\032<.com.xml2023.mainapp.OtkazanaRe" +
+      "zervacijaNotifikacijaResponse\022\212\001\n\027novaOc" +
+      "enaHostaNotStatus\0226.com.xml2023.mainapp." +
+      "NovaOcenaHostaNotifikacijaRequest\0327.com." +
+      "xml2023.mainapp.NovaOcenaHostaNotifikaci" +
+      "jaResponse\022\223\001\n\032novaOcenaSmestajaNotStatu" +
+      "s\0229.com.xml2023.mainapp.NovaOcenaSmestaj" +
+      "aNotifikacijaRequest\032:.com.xml2023.maina" +
+      "pp.NovaOcenaSmestajaNotifikacijaResponse" +
+      "\022\211\001\n\022istaknutiNotStatus\0228.com.xml2023.ma" +
+      "inapp.StatusIstaknutogNotifikacijaReques" +
+      "t\0329.com.xml2023.mainapp.StatusIstaknutog" +
+      "NotifikacijaResponseB\002P\001b\006proto3"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
         new com.google.protobuf.Descriptors.FileDescriptor.    InternalDescriptorAssigner() {
@@ -849,7 +849,7 @@ public final class Temp {
     internal_static_com_xml2023_mainapp_DobioStatusIstaknutogRequest_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_com_xml2023_mainapp_DobioStatusIstaknutogRequest_descriptor,
-        new java.lang.String[] { "IdKorisnika", });
+        new java.lang.String[] { "IdKorisnika", "Status", });
     internal_static_com_xml2023_mainapp_DobioStatusIstaknutogResponse_descriptor =
       getDescriptor().getMessageTypes().get(46);
     internal_static_com_xml2023_mainapp_DobioStatusIstaknutogResponse_fieldAccessorTable = new

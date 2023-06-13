@@ -11,6 +11,7 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import com.app2.flights.model.user.Korisnik;
+import com.app2.flights.model.user.RegKor;
 import com.app2.flights.repositories.KorisnikRep;
 
 
@@ -30,7 +31,7 @@ public class EmailService {
 	private static String host="http://localhost:8084";
 	
 	@Async
-	public void sendActivationEmail(Korisnik k) {
+	public void sendActivationEmail(RegKor k) {
 		SimpleMailMessage mail = new SimpleMailMessage();
 		mail.setTo(k.getEmail());
 		mail.setFrom(env.getProperty("spring.mail.username"));

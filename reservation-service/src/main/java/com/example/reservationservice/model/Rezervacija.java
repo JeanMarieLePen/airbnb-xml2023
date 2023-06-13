@@ -20,7 +20,7 @@ public class Rezervacija implements Serializable{
 
 	@Id
 	private String id;
-
+	
 	
 	private String smestaj;	
 	private String gost;
@@ -33,13 +33,14 @@ public class Rezervacija implements Serializable{
 	private int brojGostiju;
 	@Enumerated
 	private StatusRezervacije status;
+	private double cena;
 	
 	public Rezervacija() {
 		super();
 	}
 
 	public Rezervacija(String id, String smestaj, String gost, @NotNull LocalDateTime odDatum,
-			@NotNull LocalDateTime doDatum, @PositiveOrZero int brojGostiju, StatusRezervacije status) {
+			@NotNull LocalDateTime doDatum, @PositiveOrZero int brojGostiju, StatusRezervacije status, double cena) {
 		super();
 		this.id = id;
 		this.smestaj = smestaj;
@@ -48,6 +49,7 @@ public class Rezervacija implements Serializable{
 		this.doDatum = doDatum;
 		this.brojGostiju = brojGostiju;
 		this.status = status;
+		this.cena=cena;
 	}
 
 	public String getId() {
@@ -108,6 +110,14 @@ public class Rezervacija implements Serializable{
 
 	public static long getSerialversionuid() {
 		return serialVersionUID;
+	}
+
+	public double getCena() {
+		return cena;
+	}
+
+	public void setCena(double cena) {
+		this.cena = cena;
 	}
 	
 }

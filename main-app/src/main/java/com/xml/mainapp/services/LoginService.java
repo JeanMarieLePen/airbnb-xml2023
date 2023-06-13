@@ -3,6 +3,8 @@ package com.xml.mainapp.services;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Base64;
+import java.util.Collection;
 
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -54,34 +56,75 @@ public class LoginService {
 		if(k!= null) {
 			return null;
 		}
+		
 		Korisnik newUser = this.korMapper.fromDTOReg(regDTO);
 		Adresa a = new Adresa();
 		a.setAdresa(regDTO.getAdresa().getAdresa());
 		a.setLat(regDTO.getAdresa().getLat());
 		a.setLng(regDTO.getAdresa().getLng());
 		newUser.setAdresa(a);
+		
+		BCryptPasswordEncoder enc = new BCryptPasswordEncoder();
+		newUser.setTipKorisnika(regDTO.getTipKorisnika());
+		newUser.setStatusNaloga(StatusNaloga.NA_CEKANJU);
+		newUser.setLozinka(new String(enc.encode(regDTO.getLozinka())));
+		
+		if(newUser.getTipKorisnika().equals(TipKorisnika.GUEST)) {
+			Guest g = new Guest();
+			g.setId(newUser.getId());
+			g.setAdresa(newUser.getAdresa());
+			g.setBrojOtkazivanja(0);
+			g.setEmail(newUser.getEmail());
+			g.setIme(newUser.getIme());
+			g.setPrezime(newUser.getPrezime());
+			g.setKorIme(newUser.getKorIme());
+			g.setTipKorisnika(newUser.getTipKorisnika());
+			g.setStatusNaloga(newUser.getStatusNaloga());
+			g.setLozinka(newUser.getLozinka());
+			if(regDTO.getSlike() != null) {
+				Collection<byte[]> tempSlike = new ArrayList<byte[]>();
+				for(String s: regDTO.getSlike()) {
+					byte[] data = Base64.getDecoder().decode(s.split(",")[1]);
+					tempSlike.add(data);
+				}
+				g.setSlike(tempSlike);
+			}
+			g.setObradjenaRezervacijaNotifikacija(true);
+			g.setActivationLink("");
+			korisnikRep.save(g);
+		}
+		if(newUser.getTipKorisnika().equals(TipKorisnika.HOST)) {
+			Host g = new Host();
+			g.setId(newUser.getId());
+			g.setAdresa(newUser.getAdresa());
+			g.setEmail(newUser.getEmail());
+			g.setIme(newUser.getIme());
+			g.setPrezime(newUser.getPrezime());
+			g.setKorIme(newUser.getKorIme());
+			g.setTipKorisnika(newUser.getTipKorisnika());
+			g.setStatusNaloga(newUser.getStatusNaloga());
+			g.setLozinka(newUser.getLozinka());
+			if(regDTO.getSlike() != null) {
+				Collection<byte[]> tempSlike = new ArrayList<byte[]>();
+				for(String s: regDTO.getSlike()) {
+					byte[] data = Base64.getDecoder().decode(s.split(",")[1]);
+					tempSlike.add(data);
+				}
+				g.setSlike(tempSlike);
+			}
+			g.setRezAutomatski(false);
+			g.setIstaknuti(false);
+			
+			g.setCanceledNotification(true);
+			g.setNewNotification(true);
+			g.setRatedAccomodationNotification(true);
+			g.setRatedHostNotification(true);
+			g.setStatusNotification(true);
+			g.setActivationLink("");
+			korisnikRep.save(g);
+		}
+		
 		if(newUser != null) {
-			BCryptPasswordEncoder enc = new BCryptPasswordEncoder();
-			newUser.setTipKorisnika(regDTO.getTipKorisnika());
-			newUser.setStatusNaloga(StatusNaloga.NA_CEKANJU);
-			newUser.setLozinka(new String(enc.encode(regDTO.getLozinka())));
-			korisnikRep.save(newUser);
-			
-			if(newUser.getTipKorisnika().equals(TipKorisnika.HOST)) {
-				Host h = new Host();
-				h.setId(newUser.getId());
-				h.setRezAutomatski(false);
-				h.setIstaknuti(false);
-				korisnikRep.save(h);
-			}
-			if(newUser.getTipKorisnika().equals(TipKorisnika.GUEST)) {
-				Guest g = new Guest();
-				g.setId(newUser.getId());
-				g.setBrojOtkazivanja(0);
-				korisnikRep.save(g);
-			}
-			
-			
 			//DODAVANJE CVORA KORISNIK U GRAF BAZU; IZDVOJENI SU SAMO PARAMETRI OD INTERESA
 			com.xml.mainapp.neo4j.model.Korisnik tmpKor = new com.xml.mainapp.neo4j.model.Korisnik();
 			tmpKor.setId(newUser.getId());
@@ -93,7 +136,7 @@ public class LoginService {
 			System.out.println("POSLATO NA QUEUE");
 			return regDTO;
 		}
-		return null;
+		return regDTO;
 	}
 	//mora da vraca isti tip podataka kao metoda anotirana sa CircuitBreaker
 	public RegisterDTO emailServiceFallback(Exception e) {

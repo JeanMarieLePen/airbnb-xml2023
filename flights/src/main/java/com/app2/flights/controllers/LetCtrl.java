@@ -86,7 +86,7 @@ public class LetCtrl {
 	}
 
 	@PostMapping("/pretraga")
-	public ResponseEntity<List<LetDTOSimple>> pretraga(@RequestBody PretragaDTO dto){
+	public ResponseEntity<List<LetDTOSimple>> pretraga(@Validated @RequestBody PretragaDTO dto){
 		List<LetDTOSimple> lista= letService.pretraga(dto) ;
 		return new ResponseEntity<List<LetDTOSimple>> (lista, HttpStatus.OK);
 	}

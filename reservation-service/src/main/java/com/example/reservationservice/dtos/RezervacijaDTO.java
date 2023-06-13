@@ -7,6 +7,7 @@ import com.example.reservationservice.model.StatusRezervacije;
 
 
 public class RezervacijaDTO {
+	private String adresa;
 	private String id;
 	private String smestaj;
 	private String gost;
@@ -22,8 +23,9 @@ public class RezervacijaDTO {
 
 
 	public RezervacijaDTO(String id, String smestaj, String gost, LocalDateTime odDatum, LocalDateTime doDatum,
-			int brojGostiju, StatusRezervacije status) {
+			int brojGostiju, StatusRezervacije status, String adresa) {
 		super();
+		this.adresa = adresa;
 		this.id = id;
 		this.smestaj = smestaj;
 		this.gost = gost;
@@ -41,6 +43,16 @@ public class RezervacijaDTO {
 
 	public void setId(String id) {
 		this.id = id;
+	}
+
+
+	public String getAdresa() {
+		return adresa;
+	}
+
+
+	public void setAdresa(String adresa) {
+		this.adresa = adresa;
 	}
 
 

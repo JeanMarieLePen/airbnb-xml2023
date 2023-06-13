@@ -29,6 +29,8 @@ import com.example.reservationservice.repositories.RezervacijaRep;
 import com.google.protobuf.Timestamp;
 import com.xml2023.mainapp.AnySmestajBelongToHostRequest;
 import com.xml2023.mainapp.AnySmestajBelongToHostResponse;
+import com.xml2023.mainapp.DobioStatusIstaknutogRequest;
+import com.xml2023.mainapp.DobioStatusIstaknutogResponse;
 import com.xml2023.mainapp.GreetingServiceGrpc;
 import com.xml2023.mainapp.GreetingServiceGrpc.GreetingServiceBlockingStub;
 import com.xml2023.mainapp.HostBasicDTO;
@@ -50,6 +52,8 @@ import com.xml2023.mainapp.SmestajGrpcGrpc;
 import com.xml2023.mainapp.SmestajGrpcGrpc.SmestajGrpcBlockingStub;
 import com.xml2023.mainapp.SmestajIdsForHostRequest;
 import com.xml2023.mainapp.SmestajIdsForHostResponse;
+import com.xml2023.mainapp.StatusIstaknutogNotifikacijaRequest;
+import com.xml2023.mainapp.StatusIstaknutogNotifikacijaResponse;
 import com.xml2023.mainapp.TerminDTO;
 import com.xml2023.mainapp.TerminOslobodiRequest;
 import com.xml2023.mainapp.TerminOslobodiResponse;
@@ -86,12 +90,6 @@ public class RezervacijaService {
 	private Neo4JSmestajRep neo4jSmestajRep;
 	
 	public RezervacijaDTO makeReservation(String userId, String smestajId, RezervacijaDTO r) {
-//		
-//		ManagedChannel channel = ManagedChannelBuilder.forAddress("localhost", 7979).usePlaintext().build();
-//		GreetingServiceBlockingStub greetServBlockStub = GreetingServiceGrpc.newBlockingStub(channel);
-//		KorisnikRequest zahtev = KorisnikRequest.newBuilder().setId(userId).build();
-//		KorisnikResponse odgovor = greetServBlockStub.greeting(zahtev);
-//		
 		//proveri ostale rez za smestaj, da li je slobodan
 		Collection<Rezervacija> rezRezervisane = rezervacijaRep.findAllBySmestajAndStatus(smestajId, StatusRezervacije.REZERVISANA).orElse(new ArrayList<Rezervacija>());
 		//Collection<Rezervacija> rezPending=rezervacijaRep.findBySmestajIdAndStatus(smestajId, StatusRezervacije.PENDING).orElse(new ArrayList<Rezervacija>());
@@ -113,7 +111,7 @@ public class RezervacijaService {
 		//TODO sta sa cenom?
 		float cena= cenaServ.ukupnaCena(smestaj, r.getOdDatum(), r.getDoDatum());
 		Rezervacija rez = rezMapper.fromDTO(r, smestajId, userId);
-
+		rez.setCena(cena);
 		//ZAVISNO OD TOGA DA LI JE VLASNIK SMESTAJA ODABRAO DA SE REZERVACIJE MODERIRAJU AUTOMATSKI ILI RUCNO
 		HostBasicDTO host= getHostBasic(smestaj.getVlasnik());		
 		
@@ -126,7 +124,6 @@ public class RezervacijaService {
 			if(rspns.getZauzet()) {
 				rez.setStatus(StatusRezervacije.REZERVISANA);
 				
-				
 			}else {
 				return null;
 			}
@@ -134,6 +131,12 @@ public class RezervacijaService {
 			rez.setStatus(StatusRezervacije.PENDING);
 		}
 		rezervacijaRep.save(rez);
+		
+		//utvrdi da li je Host zavredio status istaknutog 
+		boolean isIstaknuti = determineIfIstaknuti(smestaj.getVlasnik());
+		//ako jeste, izmeni mu status u true, ako nije izmeni u false
+		boolean statusPromenjen = izmeniStatusHosta(smestaj.getVlasnik(), isIstaknuti);
+		System.out.println("USPESNO PROMENJEN STATUS HOSTA U: " + isIstaknuti);
 		
 		//U GRAF BAZU SE UPISUJE REZERVISANI SMESTAJ OBOSTRANO;
 		Korisnik kor = this.neo4jKorisnikRep.findById(userId).orElse(null);
@@ -148,6 +151,7 @@ public class RezervacijaService {
 		}
 		return rezMapper.toDTO(rez);
 	}
+	
 	
 //	public List<OcenaSmestaj> getOceneSmestaja(String id){
 //		ManagedChannel channel = ManagedChannelBuilder.forAddress("localhost", 7977).usePlaintext().build();
@@ -171,7 +175,20 @@ public class RezervacijaService {
 //		retVal.setKorisnikDavalac(dto.getIdKorisnika());
 //		return retVal;
 //	}
-	
+	public boolean izmeniStatusHosta(String idHosta, boolean istaknuti) {
+		ManagedChannel channel = ManagedChannelBuilder.forAddress("localhost", 7979).usePlaintext().build();
+		KorisnikGrpcBlockingStub korBlockingStub = KorisnikGrpcGrpc.newBlockingStub(channel);
+		DobioStatusIstaknutogRequest rqst = DobioStatusIstaknutogRequest.newBuilder().setIdKorisnika(idHosta).setStatus(istaknuti).build();
+		DobioStatusIstaknutogResponse rspns = korBlockingStub.istaknutiHost(rqst);
+		return rspns.getResult();
+	}
+	public boolean promenaStatusaHostaNotificationEnabled(String idVlasnika) {
+		ManagedChannel channel = ManagedChannelBuilder.forAddress("localhost", 7979).usePlaintext().build();
+		KorisnikGrpcBlockingStub bs = KorisnikGrpcGrpc.newBlockingStub(channel);
+		StatusIstaknutogNotifikacijaRequest rqst = StatusIstaknutogNotifikacijaRequest.newBuilder().setIdKorisnika(idVlasnika).build();
+		StatusIstaknutogNotifikacijaResponse rspns = bs.istaknutiNotStatus(rqst);
+		return rspns.getStanje();
+	}
 	public boolean novaRezervacijaNotificationEnabled(String idVlasnika) {
 		ManagedChannel channel = ManagedChannelBuilder.forAddress("localhost", 7979).usePlaintext().build();
 		KorisnikGrpcBlockingStub bs = KorisnikGrpcGrpc.newBlockingStub(channel);
@@ -225,6 +242,12 @@ public class RezervacijaService {
 			newCancelationNotify(r);
 		}
 		
+		//utvrdi da li je Host zavredio status istaknutog 
+		boolean isIstaknuti = determineIfIstaknuti(smestaj.getVlasnik());
+		//ako jeste, izmeni mu status u true, ako nije izmeni u false
+		boolean statusPromenjen = izmeniStatusHosta(smestaj.getVlasnik(), isIstaknuti);
+		System.out.println("USPESNO PROMENJEN STATUS HOSTA U: " + isIstaknuti);
+		
 		return rezMapper.toDTO(r);
 	}
 	public boolean otkazanaRezervacijaNotificationEnabled(String idVlasnika) {
@@ -243,24 +266,6 @@ public class RezervacijaService {
 			System.out.println("USPESNO POSLATO OBAVESTENJE HOSTU");
 		}
 	}
-
-	//TODO: treba li ovo uopste?
-//	public RezervacijaDTO editReservation(RezervacijaDTO edited) {
-//		Rezervacija r = rezervacijaRep.findById(edited.getId()).orElse(null);
-//		if(r==null) {
-//			return null;
-//		}
-//		r.setBrojGostiju(edited.getBrojGostiju());
-//		r.setDoDatum(edited.getDoDatum());
-//		r.setOdDatum(edited.getOdDatum());
-//		if(r.getSmestaj().getVlasnik().isRezAutomatski()) {
-//			r.setStatus(StatusRezervacije.REZERVISANA);
-//		}else {
-//			r.setStatus(StatusRezervacije.PENDING);
-//		}
-//		rezervacijaRep.save(r);
-//		return rezMapper.toDTO(r);
-//	}
 	
 	public Collection<RezervacijaDTO> getAllReservationsByHostId(String id) {
 		// TODO Auto-generated method stub
@@ -406,5 +411,64 @@ public class RezervacijaService {
 		AnySmestajBelongToHostRequest req= AnySmestajBelongToHostRequest.newBuilder().addAllSmestajIds(smestajsId).build();
 		AnySmestajBelongToHostResponse resp= smBlockStub.belongsToHost(req);
 		return resp.getBelongs();
+	}
+	
+	public List<SmestajDTO> getAllSmestajByHost(String id) {
+		ManagedChannel channel = ManagedChannelBuilder.forAddress("localhost", 7977).usePlaintext().build();
+		SmestajGrpcBlockingStub smestajServBlockStub=SmestajGrpcGrpc.newBlockingStub(channel);
+		getListaSmestajaByUserIdRequest req= getListaSmestajaByUserIdRequest.newBuilder().setId(id).build();
+		getListaSmestajaByUserIdResponse resp= smestajServBlockStub.getListaSmestajaByUserId(req);
+		return resp.getListaSmestajaList();
+	}
+	private boolean determineIfIstaknuti(String hostId) {
+		boolean isIstaknuti = false;
+		
+		//dobavi listu rezervacija HOST-a i izvuci ID-ove razlicitih smestaja koji su rezervisani
+		List<String> idsRezervisanihSmestaja = this.getAllReservationsByHostId(hostId).stream().map(RezervacijaDTO::getSmestaj).distinct().toList();
+		if(idsRezervisanihSmestaja.size() < 5) {
+			return isIstaknuti;
+		}
+		
+		//nepotrebne liste, napravljene cisto radi lakse provere
+		List<String> idsOtkazanihRezervacija = this.getAllReservationsByHostId(hostId).stream().filter(r -> r.getStatus().equals(StatusRezervacije.OTKAZANA)).map(RezervacijaDTO::getId).toList();
+		List<String> idsSvihRezervacija = this.getAllReservationsByHostId(hostId).stream().map(RezervacijaDTO::getId).toList();
+		//ako je broj otkazanih rezervacija veci od 5 posto ukupnog broja rezervacija
+		if(idsOtkazanihRezervacija.size() > 0.05 * idsSvihRezervacija.size()) {
+			return isIstaknuti;
+		}
+		//ako je prosecna ocena manja od 4.7
+		if(this.getHostBasic(hostId).getProsecnaOcena() < 4.7) {
+			return isIstaknuti;
+		}
+		
+		List<RezervacijaDTO> tempLista = this.getAllReservationsByHostId(hostId).stream().toList();
+		int brDana = 0;
+		for(RezervacijaDTO rdto : tempLista) {
+			Duration duration = Duration.between(rdto.getOdDatum(), rdto.getDoDatum());
+			int days = (int) duration.toDays();
+			brDana = brDana + days;
+		}
+		if(brDana < 50) {
+			return isIstaknuti;
+		}
+		
+		isIstaknuti = true;
+		return isIstaknuti;
+	}
+
+
+	public RezervacijaDTO getRezervacijaById(String id) {
+		// TODO Auto-generated method stub
+		Rezervacija r = this.rezervacijaRep.findById(id).orElse(null);
+		
+		SmestajDTO smestaj= getSmestaj(r.getSmestaj());
+		
+		if(r == null) {
+			return null;
+		}else {
+			RezervacijaDTO retVal = this.rezMapper.toDTO(r);
+			retVal.setAdresa(smestaj.getAdresa().getAdresa());
+			return retVal;
+		}
 	}
 }

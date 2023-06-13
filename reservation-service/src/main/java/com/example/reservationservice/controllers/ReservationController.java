@@ -130,4 +130,14 @@ public class ReservationController {
 		return new ResponseEntity<Boolean>(retVal, HttpStatus.OK);
 	}
 	
+	@GetMapping("/getReservationById/{id}")
+	public ResponseEntity<?> getReservation(@PathVariable(value = "id") String id){
+		RezervacijaDTO retVal = this.rezervacijaService.getRezervacijaById(id);
+		if(retVal == null) {
+			return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+		}else {
+			return new ResponseEntity<RezervacijaDTO>(retVal, HttpStatus.OK);
+		}
+	}
+	
 }

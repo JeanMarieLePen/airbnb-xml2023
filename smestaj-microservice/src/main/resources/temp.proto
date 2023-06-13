@@ -234,6 +234,7 @@ message NekoOcenioHostaResponse{
 
 message DobioStatusIstaknutogRequest{
 	string idKorisnika = 1;
+	bool status = 2;
 }
 message DobioStatusIstaknutogResponse{
 	bool result = 1;

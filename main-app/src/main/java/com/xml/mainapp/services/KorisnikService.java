@@ -8,6 +8,7 @@ import java.time.ZoneOffset;
 import java.util.ArrayList;
 import java.util.Base64;
 import java.util.Collection;
+import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -56,6 +57,8 @@ import com.xml2023.mainapp.ActiveResExistsRequest;
 import com.xml2023.mainapp.ActiveResExistsResponse;
 import com.xml2023.mainapp.DeleteSmestajsForHostRequest;
 import com.xml2023.mainapp.DeleteSmestajsForHostResponse;
+import com.xml2023.mainapp.DobioStatusIstaknutogRequest;
+import com.xml2023.mainapp.DobioStatusIstaknutogResponse;
 import com.xml2023.mainapp.KorisnikGrpcGrpc;
 import com.xml2023.mainapp.KorisnikGrpcGrpc.KorisnikGrpcBlockingStub;
 import com.xml2023.mainapp.NekoOcenioHostaRequest;
@@ -66,6 +69,8 @@ import com.xml2023.mainapp.RezervacijaGrpcGrpc;
 import com.xml2023.mainapp.RezervacijaGrpcGrpc.RezervacijaGrpcBlockingStub;
 import com.xml2023.mainapp.SlikaDTO;
 import com.xml2023.mainapp.SmestajGrpcGrpc;
+import com.xml2023.mainapp.StatusIstaknutogNotifikacijaRequest;
+import com.xml2023.mainapp.StatusIstaknutogNotifikacijaResponse;
 import com.xml2023.mainapp.getListaRezervacijaByUserIdRequest;
 import com.xml2023.mainapp.getListaRezervacijaByUserIdResponse;
 import com.xml2023.mainapp.getListaSmestajaByUserIdRequest;
@@ -98,28 +103,28 @@ public class KorisnikService {
 			return null;
 		}else {
 			if(k.getTipKorisnika().equals(TipKorisnika.GUEST)) {
-				GuestDTO retVal =guestMapper.toDTO((Guest)k, null); 
-				Guest g = (Guest) this.korisnikRep.findById(id).orElse(null);
-				retVal.setObradjenaRezervacijaNotifikacija(g.isObradjenaRezervacijaNotifikacija());
+				Guest tmp = this.korisnikRep.findGuestById(id);
+				GuestDTO retVal =guestMapper.toDTO(tmp, null); 
+				retVal.setObradjenaRezervacijaNotifikacija(tmp.isObradjenaRezervacijaNotifikacija());
 				return retVal;
 			}
 			//mora da se premapira
 			if(k.getTipKorisnika().equals(TipKorisnika.HOST)) {
-				HostDTO retVal = hostMapper.toDTO((Host)k, null);
-				Host h = (Host) this.korisnikRep.findById(id).orElse(null);
+				Host tmp = this.korisnikRep.findHostById(id);
+				HostDTO retVal = hostMapper.toDTO(tmp, null);
 				
 				//nepotrebno, al ajde
-				retVal.setIstaknuti(h.isIstaknuti());
-				retVal.setRezAutomatski(h.isRezAutomatski());
-				retVal.setCanceledNotification(h.isCanceledNotification());
-				retVal.setNewNotification(h.isNewNotification());
-				retVal.setRatedAccomodationNotification(h.isRatedAccomodationNotification());
-				retVal.setRatedHostNotification(h.isRatedHostNotification());
-				retVal.setStatusNotification(h.isStatusNotification());
+				retVal.setIstaknuti(tmp.isIstaknuti());
+				retVal.setRezAutomatski(tmp.isRezAutomatski());
+				retVal.setCanceledNotification(tmp.isCanceledNotification());
+				retVal.setNewNotification(tmp.isNewNotification());
+				retVal.setRatedAccomodationNotification(tmp.isRatedAccomodationNotification());
+				retVal.setRatedHostNotification(tmp.isRatedHostNotification());
+				retVal.setStatusNotification(tmp.isStatusNotification());
 				
 				
 				
-				Collection<com.xml2023.mainapp.SmestajDTO> smestajList = getAllSmestajForHost(h.getId());
+				Collection<com.xml2023.mainapp.SmestajDTO> smestajList = getAllSmestajForHost(tmp.getId());
 				
 				Collection<SmestajDTO> tempList = new ArrayList<SmestajDTO>();
 				if(!smestajList.isEmpty()) {
@@ -416,11 +421,37 @@ public class KorisnikService {
 		}
 		oRep.save(o);
 		
-		
+		boolean statusIzmenjen = izmeniStatusHosta(hostId, determineIfIstaknuti(hostId));
+		if(statusIzmenjen) {
+			System.out.println("USPESNO IZMENJEN STATUS HOSTA");
+		}
 		return new OcenaHostBasicDTO(o);
 	}
 	
+	private boolean determineIfIstaknuti(String hostId) {
+		List<OcenaHost> listaOcena = this.oRep.findAllByVlasnik(hostId).orElse(null).stream().toList();
+		double prosek = 0;
+		if(listaOcena != null) {
+			if(listaOcena.isEmpty() == false) {
+				int suma = listaOcena.stream().mapToInt(OcenaHost::getOcena).sum();
+				int brOcena = listaOcena.size();
+				prosek = suma / brOcena;
+			}
+		}
+		if(prosek > 4.7) {
+			return true;
+		}else {
+			return false;
+		}
+	}
 	
+	public boolean izmeniStatusHosta(String idHosta, boolean istaknuti) {
+		ManagedChannel channel = ManagedChannelBuilder.forAddress("localhost", 7979).usePlaintext().build();
+		KorisnikGrpcBlockingStub korBlockingStub = KorisnikGrpcGrpc.newBlockingStub(channel);
+		DobioStatusIstaknutogRequest rqst = DobioStatusIstaknutogRequest.newBuilder().setIdKorisnika(idHosta).setStatus(istaknuti).build();
+		DobioStatusIstaknutogResponse rspns = korBlockingStub.istaknutiHost(rqst);
+		return rspns.getResult();
+	}
 	public boolean novaOcenaHostaNotificationEnabled(String idVlasnika) {
 		ManagedChannel channel = ManagedChannelBuilder.forAddress("localhost", 7979).usePlaintext().build();
 		KorisnikGrpcBlockingStub bs = KorisnikGrpcGrpc.newBlockingStub(channel);

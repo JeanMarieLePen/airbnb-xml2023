@@ -16,4 +16,9 @@ public interface DobioStatusIstaknutogRequestOrBuilder extends
    */
   com.google.protobuf.ByteString
       getIdKorisnikaBytes();
+
+  /**
+   * <code>bool status = 2;</code>
+   */
+  boolean getStatus();
 }

@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.app2.flights.dtos.KorisnikDTO;
 import com.app2.flights.dtos.LetDTO;
 import com.app2.flights.dtos.PorudzbinaDTO;
+import com.app2.flights.dtos.PorudzbinaDTOToken;
 import com.app2.flights.dtos.PorudzbinaDTOnova;
 import com.app2.flights.dtos.RegKorDTO;
 import com.app2.flights.dtos.TokenCreateDTO;
@@ -65,11 +66,8 @@ public class RegKorCtrl {
 	}
 	
 	@PostMapping("/reservationWithToken")
-	public ResponseEntity<PorudzbinaDTO> reservation2(@Validated @RequestBody PorudzbinaDTOnova p){
-		p.setKupac(p.getKupac().substring(1, p.getKupac().length() - 1));
-		//System.out.println(p.toString());
-
-		PorudzbinaDTO retVal = porudzbinaService.novaRez(p); //porudzbinaService.reservation(p);
+	public ResponseEntity<PorudzbinaDTO> reservation2(@Validated @RequestBody PorudzbinaDTOToken p){
+		PorudzbinaDTO retVal = porudzbinaService.novaRezToken(p); //porudzbinaService.reservation(p);
 		if(retVal == null) {
 			return new ResponseEntity<PorudzbinaDTO>(HttpStatus.NO_CONTENT);
 		}else {
