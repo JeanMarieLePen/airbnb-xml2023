@@ -201,6 +201,7 @@ import moment from 'moment';
                     console.log("DODELA VREDNOSTI");
                     this.tokenTekst = response.data.tokenTekst;
                     this.vaziDo = response.data.vremeVazenja;
+                    this.$router.push(`/edit`);
                 }
             });
         },

@@ -104,8 +104,10 @@ import axios from 'axios'
                     errorRemoval:'',
                 },
                 profile:{
-                    adresa:{},
                     kategorija:{},
+                    adresa:{
+                        adresa:'',
+                    }
                 },
                 btnEnabled:false,
                 userId : '',
@@ -134,16 +136,14 @@ import axios from 'axios'
                         console.log("USER PROFILE: " + JSON.stringify(response.data));
                         this.profile = response.data;
                         if(response.data.slike != null){
-                            if(response.data.slike.length > 0){
-                                console.log("BROJ SLIKA: " + this.profile.slike.length);
-                                let tempSlike = [];
-                                for(let i = 0; i < this.profile.slike.length; i++){
-                                    console.log("AAA")
-                                    tempSlike.push('data:image/png;base64,' + this.profile.slike[i]);
-                                }
-                                this.profile.slike = tempSlike;
-                                console.log("SLIKA POSLE FORMATIRANJA: " + JSON.stringify(this.profile.slike[0]))
+                            console.log("BROJ SLIKA: " + this.profile.slike.length);
+                            let tempSlike = [];
+                            for(let i = 0; i < this.profile.slike.length; i++){
+                                console.log("AAA")
+                                tempSlike.push('data:image/png;base64,' + this.profile.slike[i]);
                             }
+                            this.profile.slike = tempSlike;
+                            console.log("SLIKA POSLE FORMATIRANJA: " + JSON.stringify(this.profile.slike[0]))
                         }
                     });
                 }catch(error){

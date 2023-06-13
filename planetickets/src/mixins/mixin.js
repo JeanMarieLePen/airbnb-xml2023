@@ -45,6 +45,13 @@ const tempParser = {
                         // localStorage.setItem('parsToken', null);
                     }
                 }
+            }else{
+                let userObj = new Object();
+                userObj.id = -1;
+                userObj.role = "NEREGISTROVANI";
+                userObj.email = "none";
+                console.log(JSON.stringify(userObj));
+                return userObj;
             }
             
         },

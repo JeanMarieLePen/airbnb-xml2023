@@ -119,8 +119,9 @@ import moment from 'moment';
                 })
             },
             ObrisiLet(idUser, idLet){
-                dataService.ukloniLet(idLet);
-                this.$router.go();
+                dataService.ukloniLet(idLet).then(response => {
+                    this.$router.push(`/dash`);
+                })
             },
 
         }

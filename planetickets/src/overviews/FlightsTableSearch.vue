@@ -45,7 +45,7 @@
                     <td v-if="this.getBrKarata()>0">{{this.getUkCena(letT.cena)}}</td>
                     <td>{{letT.brSlobMesta}}</td>
                     <td > 
-                        <button v-if="userObj.role=='ADMINISTRATOR'" style="margin-left:30px;" v-on:click="ObrisiLet(this.userObj.id,letT.id)" class="btn btn-primary">Ukloni</button>
+                        <button v-if="userObj.role=='ADMINISTRATOR' && letT.kapacitet === letT.brSlobMesta" style="margin-left:30px;" v-on:click="ObrisiLet(this.userObj.id,letT.id)" class="btn btn-primary">Ukloni</button>
                         <button v-if="userObj.role=='REG_KOR' && letT.brSlobMesta>=this.getBrKarata() && this.getBrKarata()>0" style="margin-left:30px;" v-on:click="brzaREz(letT.id)" class="btn btn-primary">BrzaRez</button>
                     </td>
                 </tr>
@@ -91,8 +91,10 @@ import parserMixin from '@/mixins/mixin'
             this.$router.push(`/overview/${id}` );
             },
             ObrisiLet(idUser, idLet){
-                dataService.ukloniLet(idLet);
-                this.$router.go();
+                console.log("Ukloni let: " + idLet);
+                dataService.ukloniLet(idLet).then(response => {
+                    this.$router.push(`/search`);
+                });
             },
             getUkCena(cena){
                 return cena*this.getBrKarata();

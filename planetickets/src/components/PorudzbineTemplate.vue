@@ -78,8 +78,11 @@ import { assertCallExpression } from '@babel/types';
                this.$router.push(`/overview/${id}` );
             },
             ukloniNar(user, por){
-                dataService.ukloniRez(user,por)
-                this.$router.go();
+                dataService.ukloniRez(user,por).then(response => {
+                    console.log("UKLONJENA NARUDZBINA");
+                    this.$router.go();
+                });
+                
             },
             tempSort(s){
             if (s === this.currentSort) {
