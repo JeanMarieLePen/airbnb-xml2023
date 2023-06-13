@@ -30,6 +30,7 @@
                         </div>
                         <div class="card-footer bg-white text-white text-center " style="height:100px;">
                             <button v-show="calcTime2(r) >= 24 && r.status == 'REZERVISANA'" @click="cancelRezervaciju(r, index)" style="margin-top:20px;" class="btn btn-warning">Otkazi</button>
+                            <button style="margin-left:5px;margin-top:20px;" @click="buyTickets(r.id)" class="btn btn-primary" v-show="role === 'GUEST' && r.status == 'REZERVISANA'">Karte</button>
                             <div style="margin:10px;" v-if="messages[index].successMessage" v-html="messages[index].successMessage" class="alert alert-success">
                             
                             </div>
@@ -74,6 +75,9 @@ export default {
         }
     },
     methods:{
+        buyTickets(id){
+            this.$router.push(`/tickets/${id}`);
+        },
         showPendingOnly(){
             this.showPending = true;
             this.showAll = false;

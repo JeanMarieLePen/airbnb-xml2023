@@ -107,6 +107,15 @@ class DataService{
     getRecommended(id){
         return axios.get(`${API_URL}/smestaj/getRecommended/${id}`);
     }
+    getRezervacijaById(id){
+        return axios.get(`${API_URL}/rezervacija/getReservationById/${id}`);
+    }
+    getPreporuceniLetovi(pretraga){
+        return axios.post(`${API_URL}/let/pretraga`, pretraga);
+    }
+    buyTicketsViaToken(rez, token){
+        return axios.post(`${API_URL}/regkor/reservationWithToken/${token}`, rez)
+    }
 }
 
 

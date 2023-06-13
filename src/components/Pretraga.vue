@@ -43,8 +43,35 @@
     <div >
         <Preporuceni :preporuceni="preporuceni" style="margin-bottom:100px;"></Preporuceni>
     </div>
+
+    <div style="margin-bottom:100px;margin-left:10px;">
+        <h2>FILTRIRANJE REZULTATA:</h2>
+        <button class="pending-button" @click="showFilters()">Filteri</button>
+        <div style="margin-left:30px;" v-if="prikaziFiltere">
+            <input type="number" placeholder="Minimalna cena..." style="margin-right:10px;" v-model="cenaMinFilter">
+            <input type="number" placeholder="Maksimalna cena..." style="margin-right:10px;" v-model="cenaMaxFilter">
+            <label>Istaknuti Host
+                <input type="checkbox" @change="istaknutiHostShow()" v-model="istaknutiHost">
+            </label>
+            <div style="overflow: auto; height:100px; width:20%">
+                <table >
+                <tbody>
+                    <tr v-for="(pgd, index) in pogodnosti" :key="index">
+                        <td>
+                            {{pgd}}
+                        </td>
+                        <td>
+                            <input v-model="pogodnostiTruthMatrix[index]" @change="pogodnostUkljucena(pgd)" type="checkbox">
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            </div>
+            
+        </div>
+    </div>
     <div v-if="smestaj.length > 0">
-        <Template v-bind:listaSmestaja="prop"></Template> 
+        <Template v-bind:listaSmestaja="filtriraniSmestaj"></Template> 
        <!-- <p>{{ this.smestajString }}</p>-->
     </div>
     <div v-if="smestaj.length == 0">
@@ -65,6 +92,11 @@ export default {
     },
     data() {
         return {
+            cenaMinFilter:0,
+            cenaMaxFilter:0,
+            istaknutiHost:false,
+            pogodnosti:[],
+            prikaziFiltere:false,
             preporuceni:[],
             prop:{
                 brojDana:'1',
@@ -106,10 +138,30 @@ export default {
                 maxOcena: '',
                 pocetak: '',
                 kraj: '',
-            }
+            },
+            pogodnostiTruthMatrix:[],
         }
     },
     methods: {
+        pogodnostUkljucena(pgd){
+            console.log("POGODNOST UKLJUCENA: " + pgd);
+        },
+        istaknutiHostShow(){
+            console.log("ISTAKNUTI HOST FILTER: " + this.istaknutiHost);
+        },
+        showFilters(){
+            this.prikaziFiltere = !this.prikaziFiltere;
+        },
+        getAllPogodnosti(){
+            dataService.getAllPogodnosti().then(response => {
+                console.log("DOBAVLJENE POGODNOSTI: " + response.data.length);
+                console.log(JSON.stringify(response.data));
+                this.pogodnosti = response.data;
+                for(let i = 0; i < this.pogodnosti.length; i++){
+                    this.pogodnostiTruthMatrix.push(false);
+                }
+            });
+        },
         getDani(date1, date2){
             let d1=new Date(date1);
             let d2=new Date(date2);
@@ -182,10 +234,66 @@ export default {
                 console.log("DOBAVLJENI PREPORUCENI");
                 this.preporuceni = response.data;
             });
+        },
+        filterByPrice(tempSmestaj){
+            if(this.cenaMinFilter > 0 && this.cenaMaxFilter <= 0){
+                console.log("FILTRIRANJE PO MINIMALNOJ CENI");
+                let retLista = tempSmestaj => tempSmestaj.ukCena >= this.cenaMinFilter;
+                return retLista;
+            }else if(this.cenaMinFilter <= 0 && this.cenaMaxFilter > 0){
+                console.log("FILTRIRANJE PO MAKSIMALNOJ CENI");
+                let retLista = tempSmestaj =>  tempSmestaj.ukCena <= this.cenaMaxFilter;
+                return retLista;
+            }else if(this.cenaMinFilter == 0 && this.cenaMaxFilter == 0){
+                 return () => true;
+            }else{
+                console.log("FILTRIRANJE PO OBE CENE");
+                let retLista = tempSmestaj => tempSmestaj.ukCena >= this.cenaMinFilter && tempSmestaj.ukCena <= this.cenaMaxFilter;
+                return retLista;
+            }
+
+        },
+        filterByIstaknuti(tempSmestaj){
+            let kriterijum = tempSmestaj => tempSmestaj.hostIstaknuti == this.istaknutiHost ? true : false;
+            return kriterijum;
+        },
+        filterByPogodnosti(){
+            console.log("FILTER BY POGODNOSTI")
+            return tempSmestaj => {
+                if(this.pogodnostiTruthMatrix.includes(true)){
+                    let tmpPogodnosti = tempSmestaj.pogodnosti.slice();
+                    let cntr = tmpPogodnosti.length;
+                    if(cntr === 0){
+                        return false;
+                    }
+                    let selektovani = this.pogodnostiTruthMatrix;
+                    let matches = 0;
+                    for(let i = 0; i < cntr; i++){
+                        console.log("BROJ PROLAZA: " + i)
+                        let pgd = tmpPogodnosti[i];
+                        let isSelected = selektovani[this.pogodnosti.indexOf(pgd)];
+                        
+                        if(isSelected){
+                            matches++;
+                        }
+                    }
+                    let brojSelektovanih = selektovani.reduce((count, currentValue) => {
+                        if(currentValue === true){
+                            return count + 1;
+                        }else{
+                            return count;
+                        }
+                    }, 0);
+                    console.log("BROJ SELEKTOVANIH: " + brojSelektovanih)
+                    return matches === brojSelektovanih;
+                }
+                return true;
+            }
         }
     },
     created() {
         this.search();
+        this.getAllPogodnosti();
         let userId = null;
         if(localStorage.getItem('xmljwt')){
             let userObj = parserMixin.methods.parseXmlJwt();
@@ -197,7 +305,18 @@ export default {
         }
         
     },
-    copmuted: {}
+    computed: {
+        filtriraniSmestaj(){
+            // let retList = this.smestaj.filter(this.filterByPrice());
+            return this.smestaj.filter(this.filterByPrice()).filter(this.filterByIstaknuti()).filter(this.filterByPogodnosti());
+            // return this.smestaj.filter(smTemp => {
+            //     console.log("BROJ SMESTAJA: " + this.smestaj.length);
+            //     let tmpList = smTemp.ukCena >= this.cenaMinFilter && smTemp.ukCena <= this.cenaMaxFilter;
+            //     console.log("OSTAJE U LISTI: " + tmpList)
+            //     return tmpList;
+            // });
+        }
+    }
 
 }
 </script>
@@ -260,7 +379,30 @@ export default {
     margin-bottom: 15px;
     margin-top: 15px;
     margin-left: 20px;
+}
 
+.itemTmp {
+  width: 15%;
+  box-sizing: border-box;
+  padding: 10px;
+  float: left;
+}
+.pending-button {
+    border-radius: 6rem;
+    color: #0275d8;
+    border: 2px solid #0275d8;
+    background-color: white;
+    width: 150px;
+    font-size: 15px;
+    padding: 10px;
+    margin: 0px;
+    cursor: pointer;
+    transition-duration: 0.4s;
+    margin-bottom: 20px;
+}
 
+.pending-button:hover {
+    background-color: #0275d8;
+    color: white;
 }
 </style>

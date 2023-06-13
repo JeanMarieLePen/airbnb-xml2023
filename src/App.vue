@@ -117,15 +117,18 @@ export default {
     console.log("PRVA STRANICA");
 
     let tempObj = parserMixin.methods.parseXmlJwt();
-    console.log("ULOGA JE: " + tempObj.role)
-    if(tempObj.role == 'GUEST'){
-      console.log("USLO U GOSTA");
-      this.emitter.emit("roleAssigned", tempObj.role);
-    }else if(tempObj.role == 'HOST'){
-      this.emitter.emit("roleAssigned", tempObj.role);
-    }else{
-      this.emitter.emit("roleAssigned", '');
+    if(tempObj != null){
+      console.log("ULOGA JE: " + tempObj.role)
+      if(tempObj.role == 'GUEST'){
+        console.log("USLO U GOSTA");
+        this.emitter.emit("roleAssigned", tempObj.role);
+      }else if(tempObj.role == 'HOST'){
+        this.emitter.emit("roleAssigned", tempObj.role);
+      }else{
+        this.emitter.emit("roleAssigned", '');
+      }
     }
+    
     
   },
   components:{

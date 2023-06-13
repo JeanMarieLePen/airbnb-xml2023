@@ -14,7 +14,15 @@ import PregledRezervacija from '../overviews/PregledRezervacija'
 import EditSmestaj from '../components/EditSmestaj'
 import Moderacija from '../overviews/ModeracijaRezervacija'
 import Pretraga from '../components/Pretraga'
+import KupovinaKarata from '../components/KupovinaKarata' 
+
+
 const routes = [
+  {
+    path:'/tickets/:id',
+    name:KupovinaKarata,
+    component:KupovinaKarata
+  },
   {
     path:`/moderate`,
     name:Moderacija,
