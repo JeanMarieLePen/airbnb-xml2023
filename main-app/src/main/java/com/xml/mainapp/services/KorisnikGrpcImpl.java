@@ -55,7 +55,7 @@ public class KorisnikGrpcImpl extends KorisnikGrpcImplBase{
 		// TODO Auto-generated method stub
 		System.out.println("INSIDE getHost");
 		String hostId = request.getHostId();
-		Host h = (Host) this.korRep.findById(hostId).orElse(null);
+		Host h = this.korRep.findHostById(hostId);
 		getHostResponse.Builder response = getHostResponse.newBuilder();
 		response.setHost(mapHost(h));
 		responseObserver.onNext(response.build());
@@ -74,7 +74,7 @@ public class KorisnikGrpcImpl extends KorisnikGrpcImplBase{
 	public void rezOtkazana(rezOtkazanaRequest request, StreamObserver<rezOtkazanaResponse> responseObserver) {
 		// TODO Auto-generated method stub
 		String id = request.getGuestId();
-		Guest g = (Guest) this.korRep.findById(id).orElse(null);
+		Guest g = this.korRep.findGuestById(id);
 		boolean penal = false;
 		if(g != null) {
 			g.setBrojOtkazivanja(g.getBrojOtkazivanja() + 1);
@@ -171,7 +171,7 @@ public class KorisnikGrpcImpl extends KorisnikGrpcImplBase{
 	public void istaknutiHost(DobioStatusIstaknutogRequest request,
 			StreamObserver<DobioStatusIstaknutogResponse> responseObserver) {
 		String idKorisnika = request.getIdKorisnika();
-		Host h = (Host) this.korRep.findById(idKorisnika).orElse(null);
+		Host h = this.korRep.findHostById(idKorisnika);
 		if(h != null) {
 			if(h.isStatusNotification()) {
 				NotificationHostDTO notifikacija = new NotificationHostDTO();
@@ -190,7 +190,7 @@ public class KorisnikGrpcImpl extends KorisnikGrpcImplBase{
 	public void novaRezNotStatus(NovaRezervacijaNotifikacijaRequest request,
 			StreamObserver<NovaRezervacijaNotifikacijaResponse> responseObserver) {
 		String idKorisnika = request.getIdKorisnika();
-		Host k = (Host)korRep.findById(idKorisnika).orElse(null);
+		Host k = this.korRep.findHostById(idKorisnika);
 		NovaRezervacijaNotifikacijaResponse response = NovaRezervacijaNotifikacijaResponse.newBuilder().setStanje(k.isNewNotification()).build();
 		responseObserver.onNext(response);
 		responseObserver.onCompleted();	
@@ -200,7 +200,7 @@ public class KorisnikGrpcImpl extends KorisnikGrpcImplBase{
 	public void otkazanaRezNotStatus(OtkazanaRezervacijaNotifikacijaRequest request,
 			StreamObserver<OtkazanaRezervacijaNotifikacijaResponse> responseObserver) {
 		String idKorisnika = request.getIdKorisnika();
-		Host k = (Host)korRep.findById(idKorisnika).orElse(null);
+		Host k = this.korRep.findHostById(idKorisnika);
 		OtkazanaRezervacijaNotifikacijaResponse response = OtkazanaRezervacijaNotifikacijaResponse.newBuilder().setStanje(k.isCanceledNotification()).build();
 		responseObserver.onNext(response);
 		responseObserver.onCompleted();	
@@ -210,7 +210,7 @@ public class KorisnikGrpcImpl extends KorisnikGrpcImplBase{
 	public void novaOcenaHostaNotStatus(NovaOcenaHostaNotifikacijaRequest request,
 			StreamObserver<NovaOcenaHostaNotifikacijaResponse> responseObserver) {
 		String idKorisnika = request.getIdKorisnika();
-		Host k = (Host)korRep.findById(idKorisnika).orElse(null);
+		Host k = this.korRep.findHostById(idKorisnika);
 		NovaOcenaHostaNotifikacijaResponse response = NovaOcenaHostaNotifikacijaResponse.newBuilder().setStanje(k.isRatedHostNotification()).build();
 		responseObserver.onNext(response);
 		responseObserver.onCompleted();	
@@ -220,7 +220,7 @@ public class KorisnikGrpcImpl extends KorisnikGrpcImplBase{
 	public void novaOcenaSmestajaNotStatus(NovaOcenaSmestajaNotifikacijaRequest request,
 			StreamObserver<NovaOcenaSmestajaNotifikacijaResponse> responseObserver) {
 		String idKorisnika = request.getIdKorisnika();
-		Host k = (Host)korRep.findById(idKorisnika).orElse(null);
+		Host k = this.korRep.findHostById(idKorisnika);
 		NovaOcenaSmestajaNotifikacijaResponse response = NovaOcenaSmestajaNotifikacijaResponse.newBuilder().setStanje(k.isRatedAccomodationNotification()).build();
 		responseObserver.onNext(response);
 		responseObserver.onCompleted();	
@@ -230,7 +230,7 @@ public class KorisnikGrpcImpl extends KorisnikGrpcImplBase{
 	public void istaknutiNotStatus(StatusIstaknutogNotifikacijaRequest request,
 			StreamObserver<StatusIstaknutogNotifikacijaResponse> responseObserver) {
 		String idKorisnika = request.getIdKorisnika();
-		Host k = (Host)korRep.findById(idKorisnika).orElse(null);
+		Host k = this.korRep.findHostById(idKorisnika);
 		StatusIstaknutogNotifikacijaResponse response = StatusIstaknutogNotifikacijaResponse.newBuilder().setStanje(k.isStatusNotification()).build();
 		responseObserver.onNext(response);
 		responseObserver.onCompleted();	

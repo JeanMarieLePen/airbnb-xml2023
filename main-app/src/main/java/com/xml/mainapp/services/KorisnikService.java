@@ -200,7 +200,7 @@ public class KorisnikService {
 
 	public HostDTO findHostById(String id) {
 		System.out.println("TRAZENI HOST : "+id);
-		Host h = (Host) this.korisnikRep.findById(id).orElse(null);
+		Host h = this.korisnikRep.findHostById(id);
 		if(h == null) {
 			return null;
 		}
@@ -217,7 +217,7 @@ public class KorisnikService {
 	}
 	
 	public KorisnikDTO updateProfileById(String id, UpdateProfileDTO2 udto) {
-		Host k = (Host)this.korisnikRep.findById(id).orElse(null);
+		Host k = this.korisnikRep.findHostById(id);
 		if(k == null || (korisnikRep.findByEmail(udto.getHostDTO().getEmail()) != null && !korisnikRep.findByEmail(udto.getHostDTO().getEmail()).getId().equals(id)) || (korisnikRep.findByKorIme(udto.getHostDTO().getKorIme()) != null) && 
 				!korisnikRep.findByKorIme(udto.getHostDTO().getKorIme()).getId().equals(id)) {
 			return null;
@@ -262,14 +262,14 @@ public class KorisnikService {
 			}
 			korisnikRep.save(k);
 			if(k.getTipKorisnika().equals(TipKorisnika.HOST)) {
-				Host h = (Host) korisnikRep.findById(k.getId()).orElse(null);
+				Host h = this.korisnikRep.findHostById(id);
 				if(h!=null) {
 					h.setRezAutomatski(udto.getHostDTO().isRezAutomatski());
 				}
 				korisnikRep.save(h);
 			}
 			if(k.getTipKorisnika().equals(TipKorisnika.GUEST)) {
-				Guest g = (Guest) korisnikRep.findById(k.getId()).orElse(null);
+				Guest g = this.korisnikRep.findGuestById(k.getId());
 				if(g!= null) {
 					
 				}
@@ -283,7 +283,7 @@ public class KorisnikService {
 //	@Transactional
 //	@CachePut(value="Korisnik", key="#id")
 	public KorisnikDTO updateProfileById(String id, UpdateProfileDTO udto) {
-		Guest k = (Guest)this.korisnikRep.findById(id).orElse(null);
+		Guest k = this.korisnikRep.findGuestById(id);
 		if(k == null || (korisnikRep.findByEmail(udto.getGuestDTO().getEmail()) != null && !korisnikRep.findByEmail(udto.getGuestDTO().getEmail()).getId().equals(id)) || (korisnikRep.findByKorIme(udto.getGuestDTO().getKorIme()) != null) && 
 				!korisnikRep.findByKorIme(udto.getGuestDTO().getKorIme()).getId().equals(id)) {
 			return null;
@@ -317,7 +317,7 @@ public class KorisnikService {
 			k.setObradjenaRezervacijaNotifikacija(udto.getGuestDTO().isObradjenaRezervacijaNotifikacija());
 			korisnikRep.save(k);
 			if(k.getTipKorisnika().equals(TipKorisnika.GUEST)) {
-				Guest g = (Guest) korisnikRep.findById(k.getId()).orElse(null);
+				Guest g = this.korisnikRep.findGuestById(k.getId());
 				
 				if(g!= null) {
 					
@@ -329,7 +329,7 @@ public class KorisnikService {
 	}
 	
 	  public Collection<RezervacijaDTO> getAllReservationByUserId(String id) { 
-		  Guest g = (Guest) korisnikRep.findById(id).orElse(null);
+		  Guest g = this.korisnikRep.findGuestById(id);
 		  if(g == null) return null; 
 		  Collection<RezervacijaDTO> retList = new ArrayList<RezervacijaDTO>();
 //		  if(retList != null) { for(Rezervacija r : g.getRezervacije()) { 
@@ -352,7 +352,7 @@ public class KorisnikService {
 		}
 		
 		if(k.getTipKorisnika().equals(TipKorisnika.GUEST)) {
-			Guest g = (Guest) korisnikRep.findById(id).orElse(null);
+			Guest g = this.korisnikRep.findGuestById(id);
 			ManagedChannel channel = ManagedChannelBuilder.forAddress("localhost", 7978).usePlaintext().build();
 			RezervacijaGrpcBlockingStub blockStub= RezervacijaGrpcGrpc.newBlockingStub(channel);
 			ActiveResExistsRequest req=ActiveResExistsRequest.newBuilder().setUserId(g.getId()).setTip("gost").build();
@@ -367,7 +367,7 @@ public class KorisnikService {
 		}
 		
 		if(k.getTipKorisnika().equals(TipKorisnika.HOST)) {
-			Host h = (Host) korisnikRep.findById(id).orElse(null);
+			Host h =  this.korisnikRep.findHostById(id);
 			ManagedChannel channel = ManagedChannelBuilder.forAddress("localhost", 7978).usePlaintext().build();
 			RezervacijaGrpcBlockingStub blockStub= RezervacijaGrpcGrpc.newBlockingStub(channel);
 			ActiveResExistsRequest req=ActiveResExistsRequest.newBuilder().setUserId(h.getId()).setTip("host").build();

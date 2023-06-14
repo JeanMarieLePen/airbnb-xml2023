@@ -190,7 +190,7 @@ public class SmestajService {
 		
 		this.korisnikNeoRep.save(kor);
 		
-		if(novaOcenaSmestajaNotificationEnabled(smestajId)) {
+		if(novaOcenaSmestajaNotificationEnabled(userId)) {
 			newSmestajOcenaNotify(o);
 		}
 		return new OcenaSmestajaDTO(o.getId(), o.getSmestaj(), o.getGost(), o.getOcena(), o.getDatum());
@@ -221,50 +221,59 @@ public class SmestajService {
 	private Neo4jClient neo4jClient;
 	
 	public List<SmestajDTO> getRecommended(String userId) {
-		// TODO Auto-generated method stub
-//		List<com.xml2023.mainapp.neo4j.model.Smestaj> tmpLista = this.smestajNeoRep.findRecommended(userId);
-//		String cypher = "MATCH (k1: Korisnik)-[:REZERVISE]->(:Smestaj)<-[:REZERVISE]-(k2:Korisnik) WHERE id(k1) = $userId  AND k1 <> k2 RETURN k2";
-//		String cypher = "";
-//		Map<String, Object> params = new HashMap<>();
-//		params.put("userId", userId);
-//		List<Korisnik> similarKorisnici = neo4jTemplate.findAll(cypher, params, Korisnik.class);
-//		String cypher = String.format("MATCH (u1:Korisnik {id: '%s'})-[:REZERVISE]->(a:Smestaj)" +
-//			    "<-[:REZERVISE]-(u2:Korisnik)-[r1:OCENJUJE]->(a)" +
-//			    "WITH u1, u2, a, AVG(r1.ocena) AS avg_rating, r1" +
-//			    "MATCH (u1)-[:OCENJUJE]->(a)<-[r2:OCENJUJE]-(u2)" +
-//			    "WITH u1, u2, a, avg_rating, r1, r2" +
-//			    "WHERE u1 <> u2 AND abs(dateTime(r2.datumIVreme).epochSeconds" +
-//			    "   - dateTime(r2.datumIVreme).epochSeconds) < 2592000000" +
-//			    "WITH u1, u2, collect(a) AS common_accommodations, avg_rating" +
-//			    "WHERE size(common_accommodations) > 0" +
-//			    "WITH u1, u2, common_accommodations, avg_rating, count(*) AS similarity_score" +
-//			    "WHERE similarity_score >= 1" +
-//			    "WITH common_accommodations, avg_rating, [a IN common_accommodations WHERE size(()-[:OCENJUJE]->(a)) >= 2 AND avg_rating >= 3.0] AS good_accommodations" +
-//			    "ORDER BY avg_rating DESC LIMIT 10" +
-//			    "RETURN good_accommodations", userId);
-//		String cypher = String.format("MATCH (u1:Korisnik {id: '$userId'})-[:REZERVISE]->(a:Smestaj)" +
-//			    "<-[:REZERVISE]-(u2:Korisnik)-[r1:OCENJUJE]->(a)" +
+//		
+//		String cypher = String.format("MATCH (k:Korisnik {id:'%s'})-[:REZERVISE]->(s1:Smestaj)\n" +
+//		        "WITH collect(s1.id) AS reservedSmestaji\n" +
+//		        "MATCH (o:Korisnik)-[:REZERVISE]->(s2:Smestaj)\n" +
+//		        "WHERE s2.id IN reservedSmestaji AND o.id <> '%s'\n" +
+//		        "WITH collect(s2.id) AS similarSmestaji\n" +
+//		        "MATCH (s3:Smestaj)\n" +
+//		        "WHERE s3.id IN similarSmestaji AND s3.vlasnik_id <> '%s'\n" +
+//		        "AND NOT EXISTS {\n" +
+//		        "  MATCH (s4:Smestaj)<-[:OCENJUJE]-(:Korisnik {id:'%s'}) \n" +
+//		        "  WHERE s4.id IN similarSmestaji AND s4.id <> s3.id AND s4.vlasnik_id <> '%s'\n" +
+//		        "}\n" +
+//		        "WITH s3, similarSmestaji\n" +
+//		        "MATCH (s3)<-[rat:OCENJUJE]-()\n" +
+//		        "WHERE datetime(rat.datumIVreme).year = 2021\n" +
+//		        "WITH s3, similarSmestaji, AVG(toFloat(rat.ocena)) AS smestajOcena\n" +
+//		        "WITH s3, smestajOcena,\n" +
+//		        "  REDUCE(sum = 0.0, i IN [n IN similarSmestaji WHERE n <> s3.id] |\n" +
+//		        "    sum + CASE WHEN EXISTS((:Smestaj {id: i})<-[:REZERVISE]-(:Korisnik {id: '%s'})<-[:OCENJUJE]-())\n" +
+//		        "      THEN 1.0/size((:Smestaj {id: i})<-[:REZERVISE]-(:Korisnik {id: '%s'})<-[:OCENJUJE]-()) ELSE 0 END\n" +
+//		        "  ) AS similarity\n" +
+//		        "WHERE similarity >= 0.2\n" +
+//		        "RETURN s3.id AS smestajId, smestajOcena + similarity AS ukupnaOcena\n" +
+//		        "ORDER BY ukupnaOcena DESC\n" +
+//		        "LIMIT 10", userId, userId, userId, userId, userId, userId, userId);
+
+		String cypher = String.format("MATCH (k:Korisnik)-[:REZERVISE]->(s:Smestaj)<-[rat:OCENJUJE]-(o:Korisnik)\n" +
+		        "WHERE k.id = '%s' AND o.id <> '%s'\n" +
+		        "WITH s, collect(DISTINCT rat.sme_taj_id) AS otherAccommodationIds\n" +
+		        "MATCH (s2:Smestaj)\n" +
+		        "WHERE s2.id IN otherAccommodationIds\n" +
+		        "WITH s, s2, size(otherAccommodationIds) AS numSimilarUsers, avg(toFloat(s2.prosecnaOcena)) AS avgRating, otherAccommodationIds\n" +
+		        "WHERE numSimilarUsers >= 2 AND avgRating >= 3\n" +
+		        "MATCH (s)<-[:REZERVISE]-(o)-[r:OCENJUJE]->(s2)\n" +
+		        "WHERE s2.id IN otherAccommodationIds AND o.id <> '%s'\n" +
+		        "AND datetime(r.datumIVreme).month >= datetime().month - 3 AND r.ocena >= 3\n" +
+		        "WITH s, count(*) AS numGoodRatings, numSimilarUsers, avgRating\n" +
+		        "WHERE numGoodRatings > 5\n" +
+		        "WITH s, (toFloat(numGoodRatings) / toFloat(numSimilarUsers)) AS similarity, avgRating, numSimilarUsers\n" +
+		        "RETURN s.id AS smestajId, similarity + avgRating AS ukupnaOcena\n" +
+		        "ORDER BY ukupnaOcena DESC\n" +
+		        "LIMIT 10", userId, userId, userId);
+
+		
+//		String cypher = String.format("MATCH (u1:Korisnik {id:'%s'})-[:REZERVISE]->(a:Smestaj)" +
+//			    "<-[:REZERVISE]-(u2:Korisnik)-[r1:OCENJUJE]->(a) " +
 //			    "WITH u1, u2, a, AVG(r1.ocena) AS avg_rating, r1 " +
-//			    "MATCH (u1)-[:OCENJUJE]->(a)<-[r2:OCENJUJE]-(u2)" +
+//			    "MATCH (u1)-[:OCENJUJE]->(a)<-[r2:OCENJUJE]-(u2) " +
 //			    "WITH u1, u2, a, avg_rating, r1, r2 " +
-//			    "WHERE u1 <> u2 AND abs(dateTime(r2.datumIVreme).epochSeconds" +
+//			    "WHERE u1 <> u2 AND abs(dateTime(r2.datumIVreme).epochSeconds " +
 //			    "   - dateTime(r2.datumIVreme).epochSeconds) < 2592000000 " +
-//			    "WITH u1, u2, collect(a) AS common_accommodations, avg_rating " +
-//			    "WHERE size(common_accommodations) > 0 " +
-//			    "WITH u1, u2, common_accommodations, avg_rating, count(*) AS similarity_score " +
-//			    "WHERE similarity_score >= 1 " +
-//			    "WITH common_accommodations, avg_rating, [a IN common_accommodations WHERE size(()-[:OCENJUJE]->(a)) >= 2 AND avg_rating >= 3.0] AS good_accommodations " +
-//			    "ORDER BY avg_rating DESC LIMIT 10 " +
-//			    "RETURN good_accommodations");
-		String cypher = String.format("MATCH (u1:Korisnik {id:'%s'})-[:REZERVISE]->(a:Smestaj)" +
-			    "<-[:REZERVISE]-(u2:Korisnik)-[r1:OCENJUJE]->(a) " +
-			    "WITH u1, u2, a, AVG(r1.ocena) AS avg_rating, r1 " +
-			    "MATCH (u1)-[:OCENJUJE]->(a)<-[r2:OCENJUJE]-(u2) " +
-			    "WITH u1, u2, a, avg_rating, r1, r2 " +
-			    "WHERE u1 <> u2 AND abs(dateTime(r2.datumIVreme).epochSeconds " +
-			    "   - dateTime(r2.datumIVreme).epochSeconds) < 2592000000 " +
-			    "WITH u1, u2, collect(a) AS common_accommodations, avg_rating "
-			    + "RETURN common_accommodations", userId); 
+//			    "WITH u1, u2, collect(a) AS common_accommodations, avg_rating "
+//			    + "RETURN common_accommodations", userId); 
 		
 		
 		Collection<Map<String,Object>> result = neo4jClient.query(cypher).fetch().all();
