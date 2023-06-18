@@ -172,27 +172,37 @@ public class SmestajService {
 		ocenaRep.save(o);
 		
 		Korisnik kor = this.korisnikNeoRep.findById(userId).orElse(null);
-		com.xml2023.mainapp.neo4j.model.Smestaj sme = this.smestajNeoRep.findById(smestajId).orElse(null);
-		com.xml2023.mainapp.neo4j.model.OcenaSmestaj tmpOcena = new com.xml2023.mainapp.neo4j.model.OcenaSmestaj();
-		tmpOcena.setDatumIVreme(LocalDateTime.now());
-		tmpOcena.setOcena(ocena.getOcena());
-		tmpOcena.setSmestaj(sme);
-		kor.getDateOcene().add(tmpOcena);
-//		sme.getDobijeneOcene().add(tmpOcena);
-		
-//		this.ocenaNeoRep.save(tmpOcena);
-		this.korisnikNeoRep.save(kor);
-//		this.smestajNeoRep.save(sme);
-
 		if(kor != null) {
-			kor.getDateOcene().add(tmpOcena);
+			com.xml2023.mainapp.neo4j.model.Smestaj sme = this.smestajNeoRep.findById(smestajId).orElse(null);		
+			//ako ocena vec postoji
+			boolean vecPostoji = false;
+			for(com.xml2023.mainapp.neo4j.model.OcenaSmestaj tt : kor.getDateOcene()) {
+				if(tt.getSmestaj().getId().equals(smestajId)) {
+					vecPostoji = true;
+					tt.setDatumIVreme(LocalDateTime.now());
+					tt.setOcena(o.getOcena());
+					this.korisnikNeoRep.save(kor);
+					break;
+				}
+			}
+			if(vecPostoji == false) {
+				com.xml2023.mainapp.neo4j.model.OcenaSmestaj tmpOcena = new com.xml2023.mainapp.neo4j.model.OcenaSmestaj();
+				tmpOcena.setDatumIVreme(LocalDateTime.now());
+				tmpOcena.setOcena(ocena.getOcena());
+				tmpOcena.setSmestaj(sme);
+				kor.getDateOcene().add(tmpOcena);
+				this.korisnikNeoRep.save(kor);
+			}
+//			this.korisnikNeoRep.save(kor);
 		}
 		
-		this.korisnikNeoRep.save(kor);
-		
-		if(novaOcenaSmestajaNotificationEnabled(userId)) {
-			newSmestajOcenaNotify(o);
+		Smestaj s = this.smestajRep.findById(smestajId).orElse(null);
+		if(s != null) {
+			if(novaOcenaSmestajaNotificationEnabled(s.getVlasnik())) {
+				newSmestajOcenaNotify(o);
+			}
 		}
+		
 		return new OcenaSmestajaDTO(o.getId(), o.getSmestaj(), o.getGost(), o.getOcena(), o.getDatum());
 	}
 	
@@ -208,7 +218,7 @@ public class SmestajService {
 	public void newSmestajOcenaNotify(OcenaSmestaj os) {
 		ManagedChannel channel = ManagedChannelBuilder.forAddress("localhost", 7979).usePlaintext().build();
 		KorisnikGrpcBlockingStub bs = KorisnikGrpcGrpc.newBlockingStub(channel);
-		NekoOcenioSmestajRequest rqst = NekoOcenioSmestajRequest.newBuilder().setIdKorisnika(os.getGost()).setIdSmestaja(os.getSmestaj()).build();
+		NekoOcenioSmestajRequest rqst = NekoOcenioSmestajRequest.newBuilder().setIdKorisnika(os.getGost()).setIdSmestaja(os.getSmestaj()).setOcena(os.getOcena()).build();
 		NekoOcenioSmestajResponse rspns = bs.newRankSmestaj(rqst);
 		if(rspns.getResult()) {
 			System.out.println("USPESNO POSLATO OBAVESTENJE O NOVOJ OCENI SMESTAJA");
@@ -221,61 +231,24 @@ public class SmestajService {
 	private Neo4jClient neo4jClient;
 	
 	public List<SmestajDTO> getRecommended(String userId) {
-//		
-//		String cypher = String.format("MATCH (k:Korisnik {id:'%s'})-[:REZERVISE]->(s1:Smestaj)\n" +
-//		        "WITH collect(s1.id) AS reservedSmestaji\n" +
-//		        "MATCH (o:Korisnik)-[:REZERVISE]->(s2:Smestaj)\n" +
-//		        "WHERE s2.id IN reservedSmestaji AND o.id <> '%s'\n" +
-//		        "WITH collect(s2.id) AS similarSmestaji\n" +
-//		        "MATCH (s3:Smestaj)\n" +
-//		        "WHERE s3.id IN similarSmestaji AND s3.vlasnik_id <> '%s'\n" +
-//		        "AND NOT EXISTS {\n" +
-//		        "  MATCH (s4:Smestaj)<-[:OCENJUJE]-(:Korisnik {id:'%s'}) \n" +
-//		        "  WHERE s4.id IN similarSmestaji AND s4.id <> s3.id AND s4.vlasnik_id <> '%s'\n" +
-//		        "}\n" +
-//		        "WITH s3, similarSmestaji\n" +
-//		        "MATCH (s3)<-[rat:OCENJUJE]-()\n" +
-//		        "WHERE datetime(rat.datumIVreme).year = 2021\n" +
-//		        "WITH s3, similarSmestaji, AVG(toFloat(rat.ocena)) AS smestajOcena\n" +
-//		        "WITH s3, smestajOcena,\n" +
-//		        "  REDUCE(sum = 0.0, i IN [n IN similarSmestaji WHERE n <> s3.id] |\n" +
-//		        "    sum + CASE WHEN EXISTS((:Smestaj {id: i})<-[:REZERVISE]-(:Korisnik {id: '%s'})<-[:OCENJUJE]-())\n" +
-//		        "      THEN 1.0/size((:Smestaj {id: i})<-[:REZERVISE]-(:Korisnik {id: '%s'})<-[:OCENJUJE]-()) ELSE 0 END\n" +
-//		        "  ) AS similarity\n" +
-//		        "WHERE similarity >= 0.2\n" +
-//		        "RETURN s3.id AS smestajId, smestajOcena + similarity AS ukupnaOcena\n" +
+
+//		String cypher = String.format("MATCH (k:Korisnik)-[:REZERVISE]->(s:Smestaj)<-[rat:OCENJUJE]-(o:Korisnik)\n" +
+//		        "WHERE k.id = '%s' AND o.id <> '%s'\n" +
+//		        "WITH s, collect(DISTINCT s.id) AS otherAccommodationIds\n" +
+//		        "MATCH (s2:Smestaj)\n" +
+//		        "WHERE s2.id IN otherAccommodationIds\n" +
+//		        "WITH s, s2, size(otherAccommodationIds) AS numSimilarUsers, avg(toFloat(s2.ocena)) AS avgRating, otherAccommodationIds\n" +
+//		        "WHERE numSimilarUsers >= 2 AND avgRating >= 3\n" +
+//		        "MATCH (s)<-[:REZERVISE]-(o)-[r:OCENJUJE]->(s2)\n" +
+//		        "WHERE s2.id IN otherAccommodationIds AND o.id <> '%s'\n" +
+//		        "AND datetime(r.datumIVreme).month >= datetime().month - 3 AND r.ocena >= 3\n" +
+//		        "WITH s, count(*) AS numGoodRatings, numSimilarUsers, avgRating\n" +
+//		        "WHERE numGoodRatings > 5\n" +
+//		        "WITH s, (toFloat(numGoodRatings) / toFloat(numSimilarUsers)) AS similarity, avgRating, numSimilarUsers\n" +
+//		        "RETURN s.id AS smestajId, similarity + avgRating AS ukupnaOcena\n" +
 //		        "ORDER BY ukupnaOcena DESC\n" +
-//		        "LIMIT 10", userId, userId, userId, userId, userId, userId, userId);
-
-		String cypher = String.format("MATCH (k:Korisnik)-[:REZERVISE]->(s:Smestaj)<-[rat:OCENJUJE]-(o:Korisnik)\n" +
-		        "WHERE k.id = '%s' AND o.id <> '%s'\n" +
-		        "WITH s, collect(DISTINCT rat.sme_taj_id) AS otherAccommodationIds\n" +
-		        "MATCH (s2:Smestaj)\n" +
-		        "WHERE s2.id IN otherAccommodationIds\n" +
-		        "WITH s, s2, size(otherAccommodationIds) AS numSimilarUsers, avg(toFloat(s2.prosecnaOcena)) AS avgRating, otherAccommodationIds\n" +
-		        "WHERE numSimilarUsers >= 2 AND avgRating >= 3\n" +
-		        "MATCH (s)<-[:REZERVISE]-(o)-[r:OCENJUJE]->(s2)\n" +
-		        "WHERE s2.id IN otherAccommodationIds AND o.id <> '%s'\n" +
-		        "AND datetime(r.datumIVreme).month >= datetime().month - 3 AND r.ocena >= 3\n" +
-		        "WITH s, count(*) AS numGoodRatings, numSimilarUsers, avgRating\n" +
-		        "WHERE numGoodRatings > 5\n" +
-		        "WITH s, (toFloat(numGoodRatings) / toFloat(numSimilarUsers)) AS similarity, avgRating, numSimilarUsers\n" +
-		        "RETURN s.id AS smestajId, similarity + avgRating AS ukupnaOcena\n" +
-		        "ORDER BY ukupnaOcena DESC\n" +
-		        "LIMIT 10", userId, userId, userId);
-
-		
-//		String cypher = String.format("MATCH (u1:Korisnik {id:'%s'})-[:REZERVISE]->(a:Smestaj)" +
-//			    "<-[:REZERVISE]-(u2:Korisnik)-[r1:OCENJUJE]->(a) " +
-//			    "WITH u1, u2, a, AVG(r1.ocena) AS avg_rating, r1 " +
-//			    "MATCH (u1)-[:OCENJUJE]->(a)<-[r2:OCENJUJE]-(u2) " +
-//			    "WITH u1, u2, a, avg_rating, r1, r2 " +
-//			    "WHERE u1 <> u2 AND abs(dateTime(r2.datumIVreme).epochSeconds " +
-//			    "   - dateTime(r2.datumIVreme).epochSeconds) < 2592000000 " +
-//			    "WITH u1, u2, collect(a) AS common_accommodations, avg_rating "
-//			    + "RETURN common_accommodations", userId); 
-		
-		
+//		        "LIMIT 10", userId, userId, userId);
+		String cypher = String.format("MATCH (k1:Korisnik {id: '%s'})-[:REZERVISE]->(s:Smestaj)<-[:REZERVISE]-(k2:Korisnik) where k2.id <> k1.id MATCH (k2)-[oc1:OCENJUJE]->(s)<-[oc2:OCENJUJE]-(k1) WHERE abs(oc1.ocena - oc2.ocena) <= 1 WITH s, collect(DISTINCT s.id) AS listaSmestaja MATCH(s2:Smestaj)-[o:OCENJUJE]-() WHERE s2.id IN listaSmestaja WITH s2, avg(toFloat(o.ocena)) AS avgOcena WHERE avgOcena >= 3 WITH collect(DISTINCT s2.id) as listaSmestaja2 OPTIONAL MATCH(s3:Smestaj)-[oc3:OCENJUJE]-() WHERE s3.id IN listaSmestaja2 AND oc3.datumIVreme >= datetime().month - 3 AND oc3.ocena < 3 WITH COUNT(oc3) as num_ratings, collect(DISTINCT s3.id) as listaSmestaja3, listaSmestaja2 MATCH(s4:Smestaj) WHERE s4.id IN listaSmestaja2 and NOT s4.id IN listaSmestaja3 WITH collect(DISTINCT s4) as listaSmestajaFinal UNWIND listaSmestajaFinal AS smestaj MATCH (s5:Smestaj {id: smestaj.id}) MATCH(k3:Korisnik)-[oc4:OCENJUJE]->(s5) WHERE oc4.ocena IS NOT NULL WITH s5, avg(toFloat(oc4.ocena)) as avg_rating RETURN s5 AS smestaji ORDER BY avg_rating DESC LIMIT 10", userId);
 		Collection<Map<String,Object>> result = neo4jClient.query(cypher).fetch().all();
 		
 //		List<com.xml2023.mainapp.neo4j.model.Smestaj> goodAccomodation = new ArrayList<com.xml2023.mainapp.neo4j.model.Smestaj>();
@@ -288,19 +261,31 @@ public class SmestajService {
 			for(Map.Entry<String, Object> entry : tmp.entrySet()) {
 				String key = entry.getKey();
 				Object value = entry.getValue();
-				Collection<InternalNode> tmpList = (Collection<InternalNode>) value;
-				for(InternalNode in : tmpList) {
-					Value idSmestaja = in.get("id");
-					String idSme = idSmestaja.toString();
-					idSme = idSme.substring(1, idSme.length() - 1);
-					if(idSme != null) {
-						Smestaj acc = this.smestajRep.findById(idSme).orElse(null);
-						if(acc != null) {
-							retList.add(smestajMapper.toDTO(acc));
-						}
-						
+				InternalNode value2 = (InternalNode) value;
+//				Collection<InternalNode> tmpList = (Collection<InternalNode>) value;
+				
+				
+				Value idSmestaja = value2.get("id");
+				String idSmeTemp = idSmestaja.toString();
+				String idSme = idSmeTemp.substring(1, idSmeTemp.length()-1);
+				if(idSme != null) {
+					Smestaj acc = this.smestajRep.findById(idSme).orElse(null);
+					if(acc != null) {
+						retList.add(smestajMapper.toDTO(acc));
 					}
 				}
+//				for(InternalNode in : tmpList) {
+//					Value idSmestaja = in.get("id");
+//					String idSme = idSmestaja.toString();
+//					idSme = idSme.substring(1, idSme.length() - 1);
+//					if(idSme != null) {
+//						Smestaj acc = this.smestajRep.findById(idSme).orElse(null);
+//						if(acc != null) {
+//							retList.add(smestajMapper.toDTO(acc));
+//						}
+//						
+//					}
+//				}
 				
 			}
 		}

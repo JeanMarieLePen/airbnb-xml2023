@@ -242,6 +242,7 @@ message DobioStatusIstaknutogResponse{
 service KorisnikGrpc{
 	rpc getHost(getHostRequest) returns (getHostResponse);
 	rpc rezOtkazana(rezOtkazanaRequest) returns (rezOtkazanaResponse);
+	rpc rezOtkazanaHost(rezOtkazanaHostRequest) returns (rezOtkazanaHostResponse);
 	rpc rezObavestenje(reservationApprovedNotificationRequest) returns (reservationApprovedNotificationResponse);
 	rpc newRezNotify(NekoRezervisaoRequest) returns (NekoRezervisaoResponse);
 	rpc newQuitNotify(NekoOtkazaoRequest) returns (NekoOtkazaoResponse);
@@ -273,6 +274,15 @@ message rezOtkazanaRequest{
 }
 
 message rezOtkazanaResponse{
+	bool penalDodat = 1;
+}
+
+message rezOtkazanaHostRequest{
+	string hostId = 1;
+	string resId = 2;
+}
+
+message rezOtkazanaHostResponse{
 	bool penalDodat = 1;
 }
 

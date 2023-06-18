@@ -111,7 +111,7 @@ public class KorisnikService {
 			//mora da se premapira
 			if(k.getTipKorisnika().equals(TipKorisnika.HOST)) {
 				Host tmp = this.korisnikRep.findHostById(id);
-				HostDTO retVal = hostMapper.toDTO(tmp, null);
+				HostDTO retVal = hostMapper.toDTO2(tmp);
 				
 				//nepotrebno, al ajde
 				retVal.setIstaknuti(tmp.isIstaknuti());
@@ -137,7 +137,13 @@ public class KorisnikService {
 				Collection<OcenaHost> ocene=oRep.findAllByVlasnik(id).orElse(new ArrayList<OcenaHost>());
 				retVal.setOcene(ocene.stream().map(x->new OcenaHostBasicDTO(x)).collect(Collectors.toList()));
 				float prosek= retVal.getOcene().stream().mapToInt(x->x.getOcena()).sum();
-				retVal.setProsecnaOcena(prosek/retVal.getOcene().size());
+				if(prosek > 0) {
+					retVal.setProsecnaOcena(prosek/retVal.getOcene().size());
+				}else {
+					prosek = 0;
+					retVal.setProsecnaOcena(prosek);
+				}
+				
 				
 				return retVal;
 			}	
@@ -420,6 +426,10 @@ public class KorisnikService {
 			o.setOcena(ocena.getOcena());
 		}
 		oRep.save(o);
+		
+		if(novaOcenaHostaNotificationEnabled(hostId)) {
+			newHostOcenaNotify(o);
+		}
 		
 		boolean statusIzmenjen = izmeniStatusHosta(hostId, determineIfIstaknuti(hostId));
 		if(statusIzmenjen) {

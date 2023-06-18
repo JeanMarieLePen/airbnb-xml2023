@@ -56,6 +56,16 @@ public class ReservationController {
 		}
 	}
 	
+	@PutMapping("/cancelReservationByHost/{hostId}/{rezervacijaId}")
+	public ResponseEntity<RezervacijaDTO> cancelReservationByHost(@PathVariable(value = "hostId") String hostId, @PathVariable(value = "rezervacijaId") String rezervacijaId){
+		RezervacijaDTO retVal = this.rezervacijaService.cancelHost(hostId.substring(1, hostId.length() - 1), rezervacijaId);
+		if(retVal == null) {
+			return new ResponseEntity<RezervacijaDTO>(HttpStatus.NO_CONTENT);
+		}else {
+			return new ResponseEntity<RezervacijaDTO>(retVal, HttpStatus.OK);
+		}
+	}
+	
 	@GetMapping("/getAllReservationsByUserGuest/{id}")
 	public ResponseEntity<Collection<RezervacijaDTO>> getAllReservationsByUserGuest(@PathVariable(value = "id") String id){
 		Collection<RezervacijaDTO> retList = this.rezervacijaService.getAllReservationByUserGuestId(id.substring(1, id.length() - 1));

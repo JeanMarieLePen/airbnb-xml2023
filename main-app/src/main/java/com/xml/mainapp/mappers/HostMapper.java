@@ -50,6 +50,38 @@ public class HostMapper {
 		return h;
 	}
 	
+	public HostDTO toDTO2(Host h) {
+		HostDTO dto = new HostDTO();
+		dto.setAdresa(aMapper.toDTO(h.getAdresa()));
+		dto.setEmail(h.getEmail());
+		dto.setIme(h.getIme());
+		dto.setPrezime(h.getPrezime());
+		dto.setKorIme(h.getKorIme());
+		dto.setId(h.getId());
+		dto.setLozinka(h.getLozinka());
+		dto.setTipKorisnika(h.getTipKorisnika());
+		dto.setStatusNaloga(h.getStatusNaloga());
+		dto.setIstaknuti(h.isIstaknuti());
+		dto.setRezAutomatski(h.isRezAutomatski());
+		
+		if(h.getSlike() != null) {
+			Collection<String> tempSlike = new ArrayList<String>();
+			for(byte[] s : h.getSlike()) {
+				String tempSlika = Base64.getEncoder().encodeToString(s);
+				tempSlike.add(tempSlika);
+			}
+			dto.setSlike(tempSlike);
+		}
+		
+		dto.setCanceledNotification(h.isCanceledNotification());
+		dto.setNewNotification(h.isNewNotification());
+		dto.setRatedHostNotification(h.isRatedHostNotification());
+		dto.setRatedAccomodationNotification(h.isRatedAccomodationNotification());
+		dto.setStatusNotification(h.isStatusNotification());
+		dto.setProsecnaOcena(0);
+		return dto;
+	}
+	
 	public HostDTO toDTO(Host h, Collection<SmestajDTO> smestajList) {
 		HostDTO dto = new HostDTO();
 		dto.setAdresa(aMapper.toDTO(h.getAdresa()));

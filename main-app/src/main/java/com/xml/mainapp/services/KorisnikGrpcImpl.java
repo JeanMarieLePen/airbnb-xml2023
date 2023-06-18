@@ -37,8 +37,11 @@ import com.xml2023.mainapp.getHostRequest;
 import com.xml2023.mainapp.getHostResponse;
 import com.xml2023.mainapp.reservationApprovedNotificationRequest;
 import com.xml2023.mainapp.reservationApprovedNotificationResponse;
+import com.xml2023.mainapp.rezOtkazanaHostRequest;
+import com.xml2023.mainapp.rezOtkazanaHostResponse;
 import com.xml2023.mainapp.rezOtkazanaRequest;
 import com.xml2023.mainapp.rezOtkazanaResponse;
+import com.xml2023.mainapp.rezOtkazanaResponseOrBuilder;
 
 import io.grpc.stub.StreamObserver;
 
@@ -88,11 +91,27 @@ public class KorisnikGrpcImpl extends KorisnikGrpcImplBase{
 	}
 
 	@Override
+	public void rezOtkazanaHost(rezOtkazanaHostRequest request,
+			StreamObserver<rezOtkazanaHostResponse> responseObserver) {
+		// TODO Auto-generated method stub
+		String id = request.getHostId();
+		NotificationDTO notifikacija = new NotificationDTO();
+		notifikacija.setIdRezervacije(request.getResId());
+		notifikacija.setTekst("Otkazana je rezervacija sa ID-om: " + notifikacija.getIdRezervacije());
+		cmnListener.sendNotification(notifikacija);
+		rezOtkazanaHostResponse.Builder response = rezOtkazanaHostResponse.newBuilder();
+		response.setPenalDodat(true);
+		responseObserver.onNext(response.build());
+		responseObserver.onCompleted();
+	}
+
+	@Override
 	public void rezObavestenje(reservationApprovedNotificationRequest request,
 			StreamObserver<reservationApprovedNotificationResponse> responseObserver) {
 			String id = request.getIdRezervacije();
 			NotificationDTO notifikacija = new NotificationDTO();
 			notifikacija.setIdRezervacije(id);
+			notifikacija.setTekst("Odobrena je rezervacija sa ID-om: " + id);
 			cmnListener.sendNotification(notifikacija);
 			reservationApprovedNotificationResponse.Builder response = reservationApprovedNotificationResponse.newBuilder();
 			response.setIsporuceno(true);

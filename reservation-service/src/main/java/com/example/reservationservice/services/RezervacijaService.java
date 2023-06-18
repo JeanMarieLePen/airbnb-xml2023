@@ -69,6 +69,8 @@ import com.xml2023.mainapp.getSmestajByIdRequest;
 import com.xml2023.mainapp.getSmestajByIdResponse;
 import com.xml2023.mainapp.reservationApprovedNotificationRequest;
 import com.xml2023.mainapp.reservationApprovedNotificationResponse;
+import com.xml2023.mainapp.rezOtkazanaHostRequest;
+import com.xml2023.mainapp.rezOtkazanaHostResponse;
 import com.xml2023.mainapp.rezOtkazanaRequest;
 import com.xml2023.mainapp.rezOtkazanaResponse;
 
@@ -211,6 +213,41 @@ public class RezervacijaService {
 		t.setPocetak(convertToTimeStamp(localDateTime));
 		t.setKraj(convertToTimeStamp(localDateTime2));
 		return t.build();
+	}
+	
+	
+	public RezervacijaDTO cancelHost(String userId, String rezervacijaId) {
+		Rezervacija r = rezervacijaRep.findById(rezervacijaId).orElse(null);
+		if(r==null) {
+			return null;
+		}
+		LocalDateTime temp = LocalDateTime.now();
+		Duration duration = Duration.between(temp, r.getOdDatum());
+		long days = duration.toDays();
+		if(days <= 1) {
+			return null;
+		}
+		
+		ManagedChannel channel = ManagedChannelBuilder.forAddress("localhost", 7977).usePlaintext().build();
+		SmestajGrpcBlockingStub smestajBlockingStub = SmestajGrpcGrpc.newBlockingStub(channel);
+		TerminOslobodiRequest rqst = TerminOslobodiRequest.newBuilder().setSmestajId(r.getSmestaj()).setTermin(mapTermin(r.getOdDatum(), r.getDoDatum())).build();
+		TerminOslobodiResponse rspns = smestajBlockingStub.oslobodiTermin(rqst);
+		if(rspns.getOslobodjen()) {
+			r.setStatus(StatusRezervacije.OTKAZANA);
+		}else {
+			return null;
+		}
+		hostOtkazaoRez(userId, rezervacijaId);
+		rezervacijaRep.save(r);
+		//da bih dobavio id vlasnika
+		SmestajDTO smestaj= getSmestaj(r.getSmestaj());
+//		
+//		//utvrdi da li je Host zavredio status istaknutog 
+//		boolean isIstaknuti = determineIfIstaknuti(smestaj.getVlasnik());
+//		//ako jeste, izmeni mu status u true, ako nije izmeni u false
+//		boolean statusPromenjen = izmeniStatusHosta(smestaj.getVlasnik(), isIstaknuti);
+//		System.out.println("USPESNO PROMENJEN STATUS HOSTA U: " + isIstaknuti);
+		return rezMapper.toDTO(r);
 	}
 	
 	public RezervacijaDTO cancelReservation(String userId, String rezervacijaId) {
@@ -376,6 +413,12 @@ public class RezervacijaService {
 		rezOtkazanaResponse res= korServBlockStub.rezOtkazana(req);
 		Boolean uspeh= res.getPenalDodat();
 		//todo
+	}
+	private void hostOtkazaoRez(String hostId, String resId) {
+		ManagedChannel channel = ManagedChannelBuilder.forAddress("localhost", 7979).usePlaintext().build();
+		KorisnikGrpcBlockingStub korServBlockStub= KorisnikGrpcGrpc.newBlockingStub(channel);
+		rezOtkazanaHostRequest req = rezOtkazanaHostRequest.newBuilder().setHostId(hostId).setResId(resId).build();
+		rezOtkazanaHostResponse res= korServBlockStub.rezOtkazanaHost(req);
 	}
 
 	public boolean canGiveRating(String userId, String smestajId) {

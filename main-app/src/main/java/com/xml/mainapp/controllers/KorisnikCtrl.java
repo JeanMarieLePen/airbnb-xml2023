@@ -49,7 +49,7 @@ public class KorisnikCtrl {
 	@PreAuthorize("hasAnyAuthority('GUEST', 'HOST')")
 	@GetMapping("/getHostById/{id}")
 	public ResponseEntity<KorisnikDTO> getHostById(@PathVariable(name="id") String id){
-		KorisnikDTO retVal = this.korisnikService.getUserById(id);
+		KorisnikDTO retVal = this.korisnikService.getUserById(id.substring(1, id.length() - 1));
 		if(retVal == null) {
 			return new ResponseEntity<KorisnikDTO>(HttpStatus.NO_CONTENT);
 		}else {

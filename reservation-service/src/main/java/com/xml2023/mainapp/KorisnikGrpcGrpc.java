@@ -91,6 +91,38 @@ public final class KorisnikGrpcGrpc {
      return getRezOtkazanaMethod;
   }
 
+  private static volatile io.grpc.MethodDescriptor<com.xml2023.mainapp.rezOtkazanaHostRequest,
+      com.xml2023.mainapp.rezOtkazanaHostResponse> getRezOtkazanaHostMethod;
+
+  @io.grpc.stub.annotations.RpcMethod(
+      fullMethodName = SERVICE_NAME + '/' + "rezOtkazanaHost",
+      requestType = com.xml2023.mainapp.rezOtkazanaHostRequest.class,
+      responseType = com.xml2023.mainapp.rezOtkazanaHostResponse.class,
+      methodType = io.grpc.MethodDescriptor.MethodType.UNARY)
+  public static io.grpc.MethodDescriptor<com.xml2023.mainapp.rezOtkazanaHostRequest,
+      com.xml2023.mainapp.rezOtkazanaHostResponse> getRezOtkazanaHostMethod() {
+    io.grpc.MethodDescriptor<com.xml2023.mainapp.rezOtkazanaHostRequest, com.xml2023.mainapp.rezOtkazanaHostResponse> getRezOtkazanaHostMethod;
+    if ((getRezOtkazanaHostMethod = KorisnikGrpcGrpc.getRezOtkazanaHostMethod) == null) {
+      synchronized (KorisnikGrpcGrpc.class) {
+        if ((getRezOtkazanaHostMethod = KorisnikGrpcGrpc.getRezOtkazanaHostMethod) == null) {
+          KorisnikGrpcGrpc.getRezOtkazanaHostMethod = getRezOtkazanaHostMethod = 
+              io.grpc.MethodDescriptor.<com.xml2023.mainapp.rezOtkazanaHostRequest, com.xml2023.mainapp.rezOtkazanaHostResponse>newBuilder()
+              .setType(io.grpc.MethodDescriptor.MethodType.UNARY)
+              .setFullMethodName(generateFullMethodName(
+                  "com.xml2023.mainapp.KorisnikGrpc", "rezOtkazanaHost"))
+              .setSampledToLocalTracing(true)
+              .setRequestMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(
+                  com.xml2023.mainapp.rezOtkazanaHostRequest.getDefaultInstance()))
+              .setResponseMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(
+                  com.xml2023.mainapp.rezOtkazanaHostResponse.getDefaultInstance()))
+                  .setSchemaDescriptor(new KorisnikGrpcMethodDescriptorSupplier("rezOtkazanaHost"))
+                  .build();
+          }
+        }
+     }
+     return getRezOtkazanaHostMethod;
+  }
+
   private static volatile io.grpc.MethodDescriptor<com.xml2023.mainapp.reservationApprovedNotificationRequest,
       com.xml2023.mainapp.reservationApprovedNotificationResponse> getRezObavestenjeMethod;
 
@@ -486,6 +518,13 @@ public final class KorisnikGrpcGrpc {
 
     /**
      */
+    public void rezOtkazanaHost(com.xml2023.mainapp.rezOtkazanaHostRequest request,
+        io.grpc.stub.StreamObserver<com.xml2023.mainapp.rezOtkazanaHostResponse> responseObserver) {
+      asyncUnimplementedUnaryCall(getRezOtkazanaHostMethod(), responseObserver);
+    }
+
+    /**
+     */
     public void rezObavestenje(com.xml2023.mainapp.reservationApprovedNotificationRequest request,
         io.grpc.stub.StreamObserver<com.xml2023.mainapp.reservationApprovedNotificationResponse> responseObserver) {
       asyncUnimplementedUnaryCall(getRezObavestenjeMethod(), responseObserver);
@@ -577,6 +616,13 @@ public final class KorisnikGrpcGrpc {
                 com.xml2023.mainapp.rezOtkazanaRequest,
                 com.xml2023.mainapp.rezOtkazanaResponse>(
                   this, METHODID_REZ_OTKAZANA)))
+          .addMethod(
+            getRezOtkazanaHostMethod(),
+            asyncUnaryCall(
+              new MethodHandlers<
+                com.xml2023.mainapp.rezOtkazanaHostRequest,
+                com.xml2023.mainapp.rezOtkazanaHostResponse>(
+                  this, METHODID_REZ_OTKAZANA_HOST)))
           .addMethod(
             getRezObavestenjeMethod(),
             asyncUnaryCall(
@@ -690,6 +736,14 @@ public final class KorisnikGrpcGrpc {
         io.grpc.stub.StreamObserver<com.xml2023.mainapp.rezOtkazanaResponse> responseObserver) {
       asyncUnaryCall(
           getChannel().newCall(getRezOtkazanaMethod(), getCallOptions()), request, responseObserver);
+    }
+
+    /**
+     */
+    public void rezOtkazanaHost(com.xml2023.mainapp.rezOtkazanaHostRequest request,
+        io.grpc.stub.StreamObserver<com.xml2023.mainapp.rezOtkazanaHostResponse> responseObserver) {
+      asyncUnaryCall(
+          getChannel().newCall(getRezOtkazanaHostMethod(), getCallOptions()), request, responseObserver);
     }
 
     /**
@@ -815,6 +869,13 @@ public final class KorisnikGrpcGrpc {
 
     /**
      */
+    public com.xml2023.mainapp.rezOtkazanaHostResponse rezOtkazanaHost(com.xml2023.mainapp.rezOtkazanaHostRequest request) {
+      return blockingUnaryCall(
+          getChannel(), getRezOtkazanaHostMethod(), getCallOptions(), request);
+    }
+
+    /**
+     */
     public com.xml2023.mainapp.reservationApprovedNotificationResponse rezObavestenje(com.xml2023.mainapp.reservationApprovedNotificationRequest request) {
       return blockingUnaryCall(
           getChannel(), getRezObavestenjeMethod(), getCallOptions(), request);
@@ -927,6 +988,14 @@ public final class KorisnikGrpcGrpc {
 
     /**
      */
+    public com.google.common.util.concurrent.ListenableFuture<com.xml2023.mainapp.rezOtkazanaHostResponse> rezOtkazanaHost(
+        com.xml2023.mainapp.rezOtkazanaHostRequest request) {
+      return futureUnaryCall(
+          getChannel().newCall(getRezOtkazanaHostMethod(), getCallOptions()), request);
+    }
+
+    /**
+     */
     public com.google.common.util.concurrent.ListenableFuture<com.xml2023.mainapp.reservationApprovedNotificationResponse> rezObavestenje(
         com.xml2023.mainapp.reservationApprovedNotificationRequest request) {
       return futureUnaryCall(
@@ -1016,17 +1085,18 @@ public final class KorisnikGrpcGrpc {
 
   private static final int METHODID_GET_HOST = 0;
   private static final int METHODID_REZ_OTKAZANA = 1;
-  private static final int METHODID_REZ_OBAVESTENJE = 2;
-  private static final int METHODID_NEW_REZ_NOTIFY = 3;
-  private static final int METHODID_NEW_QUIT_NOTIFY = 4;
-  private static final int METHODID_NEW_RANK_SMESTAJ = 5;
-  private static final int METHODID_NEW_RANK_HOST = 6;
-  private static final int METHODID_ISTAKNUTI_HOST = 7;
-  private static final int METHODID_NOVA_REZ_NOT_STATUS = 8;
-  private static final int METHODID_OTKAZANA_REZ_NOT_STATUS = 9;
-  private static final int METHODID_NOVA_OCENA_HOSTA_NOT_STATUS = 10;
-  private static final int METHODID_NOVA_OCENA_SMESTAJA_NOT_STATUS = 11;
-  private static final int METHODID_ISTAKNUTI_NOT_STATUS = 12;
+  private static final int METHODID_REZ_OTKAZANA_HOST = 2;
+  private static final int METHODID_REZ_OBAVESTENJE = 3;
+  private static final int METHODID_NEW_REZ_NOTIFY = 4;
+  private static final int METHODID_NEW_QUIT_NOTIFY = 5;
+  private static final int METHODID_NEW_RANK_SMESTAJ = 6;
+  private static final int METHODID_NEW_RANK_HOST = 7;
+  private static final int METHODID_ISTAKNUTI_HOST = 8;
+  private static final int METHODID_NOVA_REZ_NOT_STATUS = 9;
+  private static final int METHODID_OTKAZANA_REZ_NOT_STATUS = 10;
+  private static final int METHODID_NOVA_OCENA_HOSTA_NOT_STATUS = 11;
+  private static final int METHODID_NOVA_OCENA_SMESTAJA_NOT_STATUS = 12;
+  private static final int METHODID_ISTAKNUTI_NOT_STATUS = 13;
 
   private static final class MethodHandlers<Req, Resp> implements
       io.grpc.stub.ServerCalls.UnaryMethod<Req, Resp>,
@@ -1052,6 +1122,10 @@ public final class KorisnikGrpcGrpc {
         case METHODID_REZ_OTKAZANA:
           serviceImpl.rezOtkazana((com.xml2023.mainapp.rezOtkazanaRequest) request,
               (io.grpc.stub.StreamObserver<com.xml2023.mainapp.rezOtkazanaResponse>) responseObserver);
+          break;
+        case METHODID_REZ_OTKAZANA_HOST:
+          serviceImpl.rezOtkazanaHost((com.xml2023.mainapp.rezOtkazanaHostRequest) request,
+              (io.grpc.stub.StreamObserver<com.xml2023.mainapp.rezOtkazanaHostResponse>) responseObserver);
           break;
         case METHODID_REZ_OBAVESTENJE:
           serviceImpl.rezObavestenje((com.xml2023.mainapp.reservationApprovedNotificationRequest) request,
@@ -1160,6 +1234,7 @@ public final class KorisnikGrpcGrpc {
               .setSchemaDescriptor(new KorisnikGrpcFileDescriptorSupplier())
               .addMethod(getGetHostMethod())
               .addMethod(getRezOtkazanaMethod())
+              .addMethod(getRezOtkazanaHostMethod())
               .addMethod(getRezObavestenjeMethod())
               .addMethod(getNewRezNotifyMethod())
               .addMethod(getNewQuitNotifyMethod())
