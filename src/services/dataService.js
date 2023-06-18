@@ -68,13 +68,13 @@ class DataService{
         return axios.get(`${API_URL}/rezervacija/getAllReservationsByUserGuest/${id}`);
     }
     getOwnerById(id){
-        return axios.get(`${API_URL}/korisnik/${id}`);
-    }
-    getOwnerById(id){
         return axios.get(`${API_URL}/korisnik/getHostById/${id}`);
     }
     cancelRezervaciju(userId, reservationId){
         return axios.put(`${API_URL}/rezervacija/cancelReservation/${userId}/${reservationId}`);
+    }
+    cancelRezervacijuByHost(hostId, reservationId){
+        return axios.put(`${API_URL}/rezervacija/cancelReservationByHost/${hostId}/${reservationId}`);
     }
     approveReservation(reservationId, ownerId){
         return axios.put(`${API_URL}/rezervacija/approveReservation/${ownerId}/${reservationId}`);

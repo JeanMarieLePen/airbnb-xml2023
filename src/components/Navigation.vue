@@ -133,7 +133,7 @@ export default {
                             this.receivedNotification = JSON.parse(tick.body);
                             // this.emitter.emit("GuestRezervacijaEvent", this.receivedNotification);
                             console.log("REZERVACIJA NAKON PARSIRANJA: " + this.receivedNotification);
-                            this.addNotification(this.receivedNotification.idRezervacije);
+                            this.addNotification(this.receivedNotification.tekst);
 
                             // this.emitter.emit('addNotification', this.receivedNotification.idRezervacije);
                             this.receivedNotification = null;

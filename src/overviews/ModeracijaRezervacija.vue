@@ -128,6 +128,32 @@ export default {
                 this.getRezervacije();
             });
         },
+        cancelRezervaciju(rezervacija, index){
+            try{
+                dataService.cancelRezervacijuByHost(this.userId, rezervacija.id).then(response => {
+                    console.log("Otkazana rezervacija");
+                    if(response.status === 200){
+                        this.messages[index].successMessage = '<h4>Uspesno otkazana rezervacija.</h4>';
+                        setTimeout(() => {
+                            this.messages[index].successMessage = '';
+                        }, 4000);
+                        setTimeout(() => {
+                            this.getRezervacije();
+                        }, 4050);
+                    }else{
+                        this.messages[index].errorMessage = '<h4>Doslo je do greske.</h4>';
+                        setTimeout(() => {
+                            this.messages[index].errorMessage = '';
+                        }, 4000);
+                        setTimeout(() => {
+                            this.getRezervacije();
+                        }, 4050);
+                    }
+                });
+            }catch(error){
+
+            }
+        },
         reject(r, index){
             dataService.rejectReservation(r.id, this.userId).then(response => {
                 console.log("ODBIJENA REZERVACIJA");
@@ -176,32 +202,6 @@ export default {
             console.log("diffDays: " + diffDays)
             console.log("diffHours: " + diffHours)
             return diffHours;
-        },
-        cancelRezervaciju(rezervacija, index){
-            try{
-                dataService.cancelRezervaciju(rezervacija.id, this.userId).then(response => {
-                    console.log("Otkazana rezervacija");
-                    if(response.status === 200){
-                        this.messages[index].successMessage = '<h4>Uspesno otkazana rezervacija.</h4>';
-                        setTimeout(() => {
-                            this.messages[index].successMessage = '';
-                        }, 4000);
-                        setTimeout(() => {
-                            this.getRezervacije();
-                        }, 4050);
-                    }else{
-                        this.messages[index].errorMessage = '<h4>Doslo je do greske.</h4>';
-                        setTimeout(() => {
-                            this.messages[index].errorMessage = '';
-                        }, 4000);
-                        setTimeout(() => {
-                            this.getRezervacije();
-                        }, 4050);
-                    }
-                });
-            }catch(error){
-
-            }
         },
         getRezervacije(){
             return dataService.getRezervacijeByHost(this.userId).then(response => {

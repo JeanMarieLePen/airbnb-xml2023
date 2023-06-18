@@ -346,8 +346,8 @@ import 'vueperslides/dist/vueperslides.css'
                             console.log("USER PROFILE: " + JSON.stringify(response.data));
                             this.profile = response.data;
                             console.log(JSON.stringify(this.profile))
-                            console.log("AUTOMATSKA OBRADA: " + this.profile.rezAutomatski)
-                            console.log("OBRADA NOTIFIKACIJA: " + this.profile.obradjenaRezervacijaNotifikacija);
+                            console.log("AUTOMATSKA OBRADA: " + this.profile.rezAutomatski);
+                            // console.log("OBRADA NOTIFIKACIJA: " + this.profile.obradjenaRezervacijaNotifikacija);
                             if(this.profile.slike){
                                 console.log("BROJ SLIKA: " + this.profile.slike.length);
                                 let tempSlike = [];

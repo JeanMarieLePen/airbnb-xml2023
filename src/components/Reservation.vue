@@ -1,5 +1,5 @@
 <template>
-    <div style="margin-left:50px; margin-top:30px;width:50%">
+    <div style="margin-left:50px; margin-bottom:100px; margin-top:30px;width:50%">
         <h2>Rezervisanje smestaja ID-a: {{smestaj.id}}</h2>
         <!-- class="table table-borderless" -->
             <table>
@@ -109,16 +109,16 @@
                             <button @click="createReservation()" class="btn btn-success">Rezervisi</button>
                         </td>
                     </tr>
-                    <tr v-if="messages.errorMessage || messages.successMessage || messages.errorMessage" style="height:100px;">
+                    <tr v-if="messages.errorParametri || messages.successResponse || messages.errorResponse" style="height:100px;">
                         <td colspan="3">
-                            <div style="margin-bottom:20px;">
-                                <div style="margin-bottom:20px;" v-if="messages.errorUnosDatuma" v-html="messages.errorUnosDatuma" class="alert alert-danger">
+                            <div>
+                                <div v-if="messages.errorParametri" v-html="messages.errorParametri" class="alert alert-danger">
 
                                 </div>
-                                <div style="margin-bottom:20px;" v-if="messages.successMessage" v-html="messages.successMessage" class="alert alert-success">
+                                <div v-if="messages.successResponse" v-html="messages.successResponse" class="alert alert-success">
 
                                 </div>
-                                <div style="margin-bottom:20px;" v-if="messages.errorMessage" v-html="messages.errorMessage" class="alert alert-danger">
+                                <div v-if="messages.errorResponse" v-html="messages.errorResponse" class="alert alert-danger">
 
                                 </div>
                             </div>
@@ -221,15 +221,13 @@ export default{
             }else{
                 dataService.makeReservation(this.reservation, this.userId, this.$route.params.id).then(response => {
                     if(response.status === 200){
-                        this.messages.successResponse = '<h4>Uspesno ste rezervisali smestaj.';
+                        this.messages.successResponse = "<h4>Uspesno ste rezervisali smestaj.";
                         setTimeout(() => {
                             this.messages.successResponse = '';
-                        }, 5000);
-                        setTimeout(() => {
                             this.$router.push(`/dash`);
                         }, 5000);
                     }else{
-                        this.messages.errorResponse = '<h4>Doslo je do greske. Pokusajte ponovo.';
+                        this.messages.errorResponse ="<h4>Doslo je do greske. Pokusajte ponovo.";
                         setTimeout(() => {
                             this.messages.errorResponse = '';
                         }, 5000);
@@ -255,6 +253,7 @@ export default{
             messages:{
                 successResponse:'',
                 errorResponse:'',
+                errorParametri:'',
             },
             smestaj:{
             },

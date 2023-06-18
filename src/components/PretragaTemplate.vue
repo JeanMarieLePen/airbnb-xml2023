@@ -1,8 +1,8 @@
 <template>
     <section style="margin-left: 10px; margin-bottom:100px;">
         <div>
-            <div class="row">
-                <div class="col-md-4" v-bind:key="index" v-for="(sTemp, index) in listaSmestaja">
+            <div class="row" style="margin-bottom:100px;">
+                <div style="margin-bottom:200px;" class="col-md-4" v-bind:key="index" v-for="(sTemp, index) in listaSmestaja">
                     <div style="width:90%;height:300px; margin-bottom:100px;" class="card">
                        <img  :src="getAnImage(sTemp)" style="width:100%; height:100%;" alt="card image collar"> 
                        <div class="card-body">
