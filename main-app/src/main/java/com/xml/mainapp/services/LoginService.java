@@ -56,7 +56,7 @@ public class LoginService {
 		if(k!= null) {
 			return null;
 		}
-		
+		String tempId="";
 		Korisnik newUser = this.korMapper.fromDTOReg(regDTO);
 		Adresa a = new Adresa();
 		a.setAdresa(regDTO.getAdresa().getAdresa());
@@ -92,6 +92,7 @@ public class LoginService {
 			g.setObradjenaRezervacijaNotifikacija(true);
 			g.setActivationLink("");
 			korisnikRep.save(g);
+			tempId=g.getId();
 		}
 		if(newUser.getTipKorisnika().equals(TipKorisnika.HOST)) {
 			Host g = new Host();
@@ -122,12 +123,13 @@ public class LoginService {
 			g.setStatusNotification(true);
 			g.setActivationLink("");
 			korisnikRep.save(g);
+			tempId=g.getId();
 		}
 		
 		if(newUser != null) {
 			//DODAVANJE CVORA KORISNIK U GRAF BAZU; IZDVOJENI SU SAMO PARAMETRI OD INTERESA
 			com.xml.mainapp.neo4j.model.Korisnik tmpKor = new com.xml.mainapp.neo4j.model.Korisnik();
-			tmpKor.setId(newUser.getId());
+			tmpKor.setId(tempId);
 //			tmpKor.setDateOcene(new ArrayList<OcenaSmestaj>());
 			tmpKor.setRezervisani(new ArrayList<Smestaj>());
 			neo4jKorRep.save(tmpKor);

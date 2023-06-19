@@ -64,6 +64,7 @@ message TerminZauzmiRequest{
 }
 message TerminZauzmiResponse{
 	bool zauzet = 1;
+	string terminId = 2;
 }
 message TerminOslobodiRequest{
 	string smestajId = 1;

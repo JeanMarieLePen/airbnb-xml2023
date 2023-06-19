@@ -10,11 +10,18 @@ import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.connection.ClusterInfo;
 import org.springframework.stereotype.Service;
 
 import com.example.reservationservice.dtos.RezervacijaDTO;
+import com.example.reservationservice.exceptions.AccommodationUnavailableException;
+import com.example.reservationservice.exceptions.Neo4jDatabaseException;
+import com.example.reservationservice.exceptions.PriceCalculationException;
+import com.example.reservationservice.exceptions.ReservationCreationException;
+import com.example.reservationservice.exceptions.ReservationTerminException;
 import com.example.reservationservice.mappers.RezervacijaMapper;
 
 import com.example.reservationservice.model.Rezervacija;
@@ -90,6 +97,200 @@ public class RezervacijaService {
 	private Neo4JKorisnikRep neo4jKorisnikRep;
 	@Autowired
 	private Neo4JSmestajRep neo4jSmestajRep;
+	
+	private Runnable undoReservationCreation;
+    private Runnable undoTerminBooking;
+    private Runnable undoNeo4jStep;
+	
+    private static final Logger LOGGER = LoggerFactory.getLogger(RezervacijaService.class);
+	
+    
+    //PROBAJ JOS NEKI KORAK DA RAZLOZIS AKO MISLIS DA TREBA; OD MENE OVOLIKO ZA SAD
+	public RezervacijaDTO makeReservationSaga(String userId, String smestajId, RezervacijaDTO r) throws Exception{
+		try {
+			//korak 1: Dostupnost
+			checkAvailability(smestajId, r.getOdDatum(), r.getOdDatum());
+			LOGGER.info("Step 1: Provera dostupnosti zavrsena");
+			
+			//korak 2: Racunanje cene
+			float cena = calculatePrice(smestajId, r.getOdDatum(), r.getDoDatum());
+			LOGGER.info("Step 2: Racunanje cene zavrseno");
+			
+			//korak 3: Kreiranje rezervacije
+			Rezervacija rez = createReservationStep(userId, smestajId, r, cena);
+			LOGGER.info("Step 3: Kreiranje rezervacije na osnovu prosledjenog DTO-a zavrseno");
+			
+			this.undoReservationCreation = () -> {
+				try {
+					rezervacijaRep.delete(rez);
+				}catch(Exception e) {
+					LOGGER.error("Greska revertu rezervacije", e);
+				}
+			};			
+			
+			
+			//zauzimanje termina za rezervaciju
+			String terminId = makeReservationStep(smestajId, rez, r.getOdDatum(), r.getDoDatum());
+			LOGGER.info("Step 4: Zauzimanje termina zavrseno");
+			
+			 this.undoTerminBooking = () -> {
+				try {
+					
+					//mi ne koristimo terminId za oslobadjanje termina ali ako je neophodno, mozemo i tako
+					//u prevodu  terminId ne sluzi nicemu ovde
+					this.oslobodiTermin(rez, terminId);
+				}catch (Exception e) {
+					LOGGER.error("Greska pri revertu termina", e);
+				}
+			};
+			
+			
+			//upisivanje u neo4j bazu
+			this.neo4jStep(userId, smestajId, rez);
+			LOGGER.info("Step 5: Cuvanje u Neo4j bazu zavrseno");
+			
+			this.undoNeo4jStep = () -> {
+	            try {
+	            	Korisnik kor = this.neo4jKorisnikRep.findById(userId).orElse(null);
+	        		Smestaj sme = this.neo4jSmestajRep.findById(smestajId).orElse(null);
+	        		if(kor != null) {
+	        			kor.getRezervisani().remove(sme);
+	        		}
+	        		this.neo4jKorisnikRep.save(kor);
+	            } catch (Exception e) {
+	            	LOGGER.error("Greska pri revertu upisa u neo4j bazu", e);
+	            }
+	        };
+			
+			//cuvanje rezervacije
+			rezervacijaRep.save(rez);
+			LOGGER.info("Step 6: Uspesno cuvanje u bazu");
+			//povratna vrednost
+			return rezMapper.toDTO(rez);
+		}catch (AccommodationUnavailableException e) {
+			//nema hendlovanja jer se ne desava neka promena nad bazom ili nesto slicno
+			LOGGER.error("Step 1 failed: Greska u proveri dostupnosti", e);
+		}catch (PriceCalculationException e) {
+			//nema hendlovanja jer se ne desava neka promena nad bazom ili nesto slicno
+			LOGGER.error("Step 2 failed: Greska pri racunanju cene", e);
+		}catch(ReservationCreationException e) {
+			LOGGER.error("Step 3 failed: Greska pri kreiranju rezervacije na osnovu prosledjeno DTO-a", e);
+			this.undoReservationCreation.run();
+			
+		}catch(ReservationTerminException e){
+			LOGGER.error("Step 4 failed: Greska pri zauzimanju termina", e);
+			this.undoReservationCreation.run();
+			this.undoTerminBooking.run();
+			
+		}catch(Neo4jDatabaseException e) {
+			LOGGER.error("Step 5 failed: Greska pri pokusaju upisa u neo4j bazu", e);
+			this.undoReservationCreation.run();
+			this.undoTerminBooking.run();
+			this.undoNeo4jStep.run();
+			
+		}
+		return null;
+	}
+	
+	public boolean oslobodiTermin(Rezervacija r, String terminId) {
+		ManagedChannel channel = ManagedChannelBuilder.forAddress("localhost", 7977).usePlaintext().build();
+		SmestajGrpcBlockingStub smestajBlockingStub = SmestajGrpcGrpc.newBlockingStub(channel);
+		TerminOslobodiRequest rqst = TerminOslobodiRequest.newBuilder().setSmestajId(r.getSmestaj()).setTermin(mapTermin(r.getOdDatum(), r.getDoDatum())).build();
+		TerminOslobodiResponse rspns = smestajBlockingStub.oslobodiTermin(rqst);
+		if(rspns.getOslobodjen()) {
+			r.setStatus(StatusRezervacije.OTKAZANA);
+		}
+		return true;
+	}
+	
+	public void checkAvailability(String smestajId, LocalDateTime odDatum, LocalDateTime doDatum) throws AccommodationUnavailableException {
+		Collection<Rezervacija> rezRezervisane = rezervacijaRep.findAllBySmestajAndStatus(smestajId, StatusRezervacije.REZERVISANA).orElse(new ArrayList<Rezervacija>());
+		//Collection<Rezervacija> rezPending=rezervacijaRep.findBySmestajIdAndStatus(smestajId, StatusRezervacije.PENDING).orElse(new ArrayList<Rezervacija>());
+		Termin t= new Termin(odDatum, doDatum);
+		if(rezRezervisane.size()>0) {
+			for(Rezervacija rez: rezRezervisane) {
+				Boolean preklapanje= t.preklapanjeSa(new Termin(rez.getOdDatum(),rez.getDoDatum()));
+				if(preklapanje) {
+					throw new AccommodationUnavailableException("Smestaj nije dostupan za taj opseg datuma.");
+				}
+			}
+		}
+		//GRPC: provera smestaja, upitaj za nedostupne termine i cenovnik izabranog smestaja
+		SmestajDTO smestaj= getSmestaj(smestajId);
+		if(smestaj.getNedostupniCount()>0) {
+			for(TerminDTO ter : smestaj.getNedostupniList()) {
+				Boolean preklop = t.preklapanjeSa(new Termin(convertFromTimeStamp(ter.getPocetak()), convertFromTimeStamp(ter.getKraj())));
+				if(preklop) {
+					throw new AccommodationUnavailableException("Smestaj nije dostupan za taj opseg datuma.");
+				}
+			}
+		}
+	}
+//	public void getSmestajStep();
+	
+	public float calculatePrice(String smestajId , LocalDateTime odDatum, LocalDateTime doDatum) throws PriceCalculationException{
+		SmestajDTO smestaj = getSmestaj(smestajId);
+		float cena = cenaServ.ukupnaCena(smestaj, odDatum, doDatum);
+		return cena;
+	}
+	
+	private Rezervacija createReservationStep(String userId, String smestajId, RezervacijaDTO r, float cena) throws ReservationCreationException{
+		Rezervacija rez = rezMapper.fromDTO(r, smestajId, userId);
+		if(rez == null) {
+			throw new ReservationCreationException("Greska pri formiranju entiteta rezervacije.");
+		}
+		rez.setCena(cena);
+		rez.setStatus(StatusRezervacije.PENDING);
+//		this.rezervacijaRep.save(rez);
+		return rez;
+	}
+	
+	private String makeReservationStep(String smestajId, Rezervacija r, LocalDateTime odDatum, LocalDateTime doDatum) throws ReservationTerminException {
+		SmestajDTO smestaj = getSmestaj(smestajId);
+		ManagedChannel channel = ManagedChannelBuilder.forAddress("localhost", 7977).usePlaintext().build();
+		SmestajGrpcBlockingStub smestajBlockingStub = SmestajGrpcGrpc.newBlockingStub(channel);
+		TerminZauzmiRequest rqst = TerminZauzmiRequest.newBuilder().setSmestajId(smestajId).setTermin(mapTermin(r.getOdDatum(), r.getDoDatum())).build();
+		TerminZauzmiResponse rspns = smestajBlockingStub.zauzmiTermin(rqst);
+		if(rspns.getZauzet()) {
+			r.setStatus(setStatusRez(smestaj.getVlasnik()));			
+		}else {
+			throw new ReservationTerminException("Greska pri zauzimanju termina");
+		}
+		return rspns.getTerminId();
+	}
+	
+	private void neo4jStep(String userId, String smestajId, Rezervacija rez) throws Neo4jDatabaseException{
+		SmestajDTO smestaj = getSmestaj(smestajId);
+		String idVlasnika = smestaj.getVlasnik();
+		//utvrdi da li je Host zavredio status istaknutog 
+		boolean isIstaknuti = determineIfIstaknuti(idVlasnika);
+		//ako jeste, izmeni mu status u true, ako nije izmeni u false
+		boolean statusPromenjen = izmeniStatusHosta(idVlasnika, isIstaknuti);
+		System.out.println("USPESNO PROMENJEN STATUS HOSTA U: " + isIstaknuti);
+		
+		//U GRAF BAZU SE UPISUJE REZERVISANI SMESTAJ OBOSTRANO;
+		Korisnik kor = this.neo4jKorisnikRep.findById(userId).orElse(null);
+		Smestaj sme = this.neo4jSmestajRep.findById(smestajId).orElse(null);
+		if(kor == null || sme == null) {
+			throw new Neo4jDatabaseException("Neo4jDatabase je nedostupna. Revert");
+		}
+		if(kor != null) {
+			kor.getRezervisani().add(sme);
+		}
+		this.neo4jKorisnikRep.save(kor);
+		
+		if(novaRezervacijaNotificationEnabled(idVlasnika)) {
+			newReservationNotify(rez);
+		}
+	}
+	private StatusRezervacije setStatusRez(String idVlasnik) {
+		HostBasicDTO host= getHostBasic(idVlasnik);
+		if(host.getRezAutomatski()) {
+			return StatusRezervacije.REZERVISANA;
+		}else {
+			return StatusRezervacije.PENDING;
+		}
+	}
 	
 	public RezervacijaDTO makeReservation(String userId, String smestajId, RezervacijaDTO r) {
 		//proveri ostale rez za smestaj, da li je slobodan

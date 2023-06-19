@@ -17,6 +17,7 @@ private static final long serialVersionUID = 0L;
   }
   private TerminZauzmiResponse() {
     zauzet_ = false;
+    terminId_ = "";
   }
 
   @java.lang.Override
@@ -46,6 +47,12 @@ private static final long serialVersionUID = 0L;
           case 8: {
 
             zauzet_ = input.readBool();
+            break;
+          }
+          case 18: {
+            java.lang.String s = input.readStringRequireUtf8();
+
+            terminId_ = s;
             break;
           }
           default: {
@@ -89,6 +96,40 @@ private static final long serialVersionUID = 0L;
     return zauzet_;
   }
 
+  public static final int TERMINID_FIELD_NUMBER = 2;
+  private volatile java.lang.Object terminId_;
+  /**
+   * <code>string terminId = 2;</code>
+   */
+  public java.lang.String getTerminId() {
+    java.lang.Object ref = terminId_;
+    if (ref instanceof java.lang.String) {
+      return (java.lang.String) ref;
+    } else {
+      com.google.protobuf.ByteString bs = 
+          (com.google.protobuf.ByteString) ref;
+      java.lang.String s = bs.toStringUtf8();
+      terminId_ = s;
+      return s;
+    }
+  }
+  /**
+   * <code>string terminId = 2;</code>
+   */
+  public com.google.protobuf.ByteString
+      getTerminIdBytes() {
+    java.lang.Object ref = terminId_;
+    if (ref instanceof java.lang.String) {
+      com.google.protobuf.ByteString b = 
+          com.google.protobuf.ByteString.copyFromUtf8(
+              (java.lang.String) ref);
+      terminId_ = b;
+      return b;
+    } else {
+      return (com.google.protobuf.ByteString) ref;
+    }
+  }
+
   private byte memoizedIsInitialized = -1;
   @java.lang.Override
   public final boolean isInitialized() {
@@ -106,6 +147,9 @@ private static final long serialVersionUID = 0L;
     if (zauzet_ != false) {
       output.writeBool(1, zauzet_);
     }
+    if (!getTerminIdBytes().isEmpty()) {
+      com.google.protobuf.GeneratedMessageV3.writeString(output, 2, terminId_);
+    }
     unknownFields.writeTo(output);
   }
 
@@ -118,6 +162,9 @@ private static final long serialVersionUID = 0L;
     if (zauzet_ != false) {
       size += com.google.protobuf.CodedOutputStream
         .computeBoolSize(1, zauzet_);
+    }
+    if (!getTerminIdBytes().isEmpty()) {
+      size += com.google.protobuf.GeneratedMessageV3.computeStringSize(2, terminId_);
     }
     size += unknownFields.getSerializedSize();
     memoizedSize = size;
@@ -137,6 +184,8 @@ private static final long serialVersionUID = 0L;
     boolean result = true;
     result = result && (getZauzet()
         == other.getZauzet());
+    result = result && getTerminId()
+        .equals(other.getTerminId());
     result = result && unknownFields.equals(other.unknownFields);
     return result;
   }
@@ -151,6 +200,8 @@ private static final long serialVersionUID = 0L;
     hash = (37 * hash) + ZAUZET_FIELD_NUMBER;
     hash = (53 * hash) + com.google.protobuf.Internal.hashBoolean(
         getZauzet());
+    hash = (37 * hash) + TERMINID_FIELD_NUMBER;
+    hash = (53 * hash) + getTerminId().hashCode();
     hash = (29 * hash) + unknownFields.hashCode();
     memoizedHashCode = hash;
     return hash;
@@ -286,6 +337,8 @@ private static final long serialVersionUID = 0L;
       super.clear();
       zauzet_ = false;
 
+      terminId_ = "";
+
       return this;
     }
 
@@ -313,6 +366,7 @@ private static final long serialVersionUID = 0L;
     public com.xml2023.mainapp.TerminZauzmiResponse buildPartial() {
       com.xml2023.mainapp.TerminZauzmiResponse result = new com.xml2023.mainapp.TerminZauzmiResponse(this);
       result.zauzet_ = zauzet_;
+      result.terminId_ = terminId_;
       onBuilt();
       return result;
     }
@@ -363,6 +417,10 @@ private static final long serialVersionUID = 0L;
       if (other == com.xml2023.mainapp.TerminZauzmiResponse.getDefaultInstance()) return this;
       if (other.getZauzet() != false) {
         setZauzet(other.getZauzet());
+      }
+      if (!other.getTerminId().isEmpty()) {
+        terminId_ = other.terminId_;
+        onChanged();
       }
       this.mergeUnknownFields(other.unknownFields);
       onChanged();
@@ -415,6 +473,75 @@ private static final long serialVersionUID = 0L;
     public Builder clearZauzet() {
       
       zauzet_ = false;
+      onChanged();
+      return this;
+    }
+
+    private java.lang.Object terminId_ = "";
+    /**
+     * <code>string terminId = 2;</code>
+     */
+    public java.lang.String getTerminId() {
+      java.lang.Object ref = terminId_;
+      if (!(ref instanceof java.lang.String)) {
+        com.google.protobuf.ByteString bs =
+            (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        terminId_ = s;
+        return s;
+      } else {
+        return (java.lang.String) ref;
+      }
+    }
+    /**
+     * <code>string terminId = 2;</code>
+     */
+    public com.google.protobuf.ByteString
+        getTerminIdBytes() {
+      java.lang.Object ref = terminId_;
+      if (ref instanceof String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
+        terminId_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+    /**
+     * <code>string terminId = 2;</code>
+     */
+    public Builder setTerminId(
+        java.lang.String value) {
+      if (value == null) {
+    throw new NullPointerException();
+  }
+  
+      terminId_ = value;
+      onChanged();
+      return this;
+    }
+    /**
+     * <code>string terminId = 2;</code>
+     */
+    public Builder clearTerminId() {
+      
+      terminId_ = getDefaultInstance().getTerminId();
+      onChanged();
+      return this;
+    }
+    /**
+     * <code>string terminId = 2;</code>
+     */
+    public Builder setTerminIdBytes(
+        com.google.protobuf.ByteString value) {
+      if (value == null) {
+    throw new NullPointerException();
+  }
+  checkByteStringIsUtf8(value);
+      
+      terminId_ = value;
       onChanged();
       return this;
     }

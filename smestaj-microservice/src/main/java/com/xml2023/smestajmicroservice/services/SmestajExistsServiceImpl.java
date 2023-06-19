@@ -82,6 +82,9 @@ public class SmestajExistsServiceImpl extends SmestajGrpcImplBase{
 		String id = request.getSmestajId();
 		TerminDTO t = request.getTermin();
 		Smestaj s = this.sRep.findById(id).orElse(null);
+		
+		TerminZauzmiResponse.Builder response = TerminZauzmiResponse.newBuilder();
+		
 		boolean zauzet = false;
 		if(s != null) {
 			Termin tmp = new Termin();
@@ -89,10 +92,10 @@ public class SmestajExistsServiceImpl extends SmestajGrpcImplBase{
 			tmp.setKraj(convertFromTimeStamp(t.getKraj()));
 			s.getNedostupni().add(tmp);
 			zauzet = true;
+			response.setZauzet(zauzet);
+			response.setTerminId(tmp.getId());
 		}
 		this.sRep.save(s);
-		TerminZauzmiResponse.Builder response = TerminZauzmiResponse.newBuilder();
-		response.setZauzet(zauzet);
 		responseObserver.onNext(response.build());
 		responseObserver.onCompleted();
 	}	

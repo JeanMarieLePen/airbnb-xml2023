@@ -11,4 +11,14 @@ public interface TerminZauzmiResponseOrBuilder extends
    * <code>bool zauzet = 1;</code>
    */
   boolean getZauzet();
+
+  /**
+   * <code>string terminId = 2;</code>
+   */
+  java.lang.String getTerminId();
+  /**
+   * <code>string terminId = 2;</code>
+   */
+  com.google.protobuf.ByteString
+      getTerminIdBytes();
 }

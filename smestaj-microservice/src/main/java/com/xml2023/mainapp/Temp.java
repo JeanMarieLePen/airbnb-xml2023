@@ -374,208 +374,208 @@ public final class Temp {
       "rvacijaExistsResponse\022\027\n\017responsemessage" +
       "\030\001 \001(\t\022\024\n\014responseCode\030\002 \001(\005\"X\n\023TerminZa" +
       "uzmiRequest\022\021\n\tsmestajId\030\001 \001(\t\022.\n\006termin" +
-      "\030\002 \001(\0132\036.com.xml2023.mainapp.TerminDTO\"&" +
-      "\n\024TerminZauzmiResponse\022\016\n\006zauzet\030\001 \001(\010\"Z" +
-      "\n\025TerminOslobodiRequest\022\021\n\tsmestajId\030\001 \001" +
-      "(\t\022.\n\006termin\030\002 \001(\0132\036.com.xml2023.mainapp" +
-      ".TerminDTO\",\n\026TerminOslobodiResponse\022\022\n\n" +
-      "oslobodjen\030\001 \001(\010\"\205\001\n\031ActiveReservationsR" +
-      "equest\022\021\n\tsmestajId\030\001 \001(\t\022+\n\007pocetak\030\002 \001" +
-      "(\0132\032.google.protobuf.Timestamp\022(\n\004kraj\030\003" +
-      " \001(\0132\032.google.protobuf.Timestamp\"[\n\032Acti" +
-      "veReservationsResponse\022=\n\020listaRezervaci" +
-      "ja\030\001 \003(\0132#.com.xml2023.mainapp.Rezervaci" +
-      "jaDTO\"2\n ActiveResExistsForSmestajReques" +
-      "t\022\016\n\006userId\030\001 \001(\t\"3\n!ActiveResExistsForS" +
-      "mestajResponse\022\016\n\006exists\030\001 \001(\010\"5\n\026Active" +
-      "ResExistsRequest\022\016\n\006userId\030\001 \001(\t\022\013\n\003tip\030" +
-      "\002 \001(\t\")\n\027ActiveResExistsResponse\022\016\n\006exis" +
-      "ts\030\001 \001(\005\"*\n\030SmestajIdsForHostRequest\022\016\n\006" +
-      "userId\030\001 \001(\t\"/\n\031SmestajIdsForHostRespons" +
-      "e\022\022\n\nsmestajIds\030\001 \003(\t\".\n\034DeleteSmestajsF" +
-      "orHostRequest\022\016\n\006hostId\030\001 \001(\t\"0\n\035DeleteS" +
-      "mestajsForHostResponse\022\017\n\007success\030\001 \001(\005\"" +
-      "-\n\037getListaSmestajaByUserIdRequest\022\n\n\002id" +
-      "\030\001 \001(\t\"Z\n getListaSmestajaByUserIdRespon" +
-      "se\0226\n\rlistaSmestaja\030\001 \003(\0132\037.com.xml2023." +
-      "mainapp.SmestajDTO\"*\n\025getSmestajByIdRequ" +
-      "est\022\021\n\tsmestajId\030\001 \001(\t\"J\n\026getSmestajById" +
-      "Response\0220\n\007odgovor\030\001 \001(\0132\037.com.xml2023." +
-      "mainapp.SmestajDTO\"\333\002\n\nSmestajDTO\022\n\n\002id\030" +
-      "\001 \001(\t\022\017\n\007vlasnik\030\002 \001(\t\022\022\n\npogodnosti\030\003 \003" +
-      "(\t\022,\n\005slika\030\004 \003(\0132\035.com.xml2023.mainapp." +
-      "SlikaDTO\022\020\n\010minGosti\030\005 \001(\005\022\017\n\007maxGost\030\006 " +
-      "\001(\005\0222\n\nnedostupni\030\007 \003(\0132\036.com.xml2023.ma" +
-      "inapp.TerminDTO\0222\n\010cenovnik\030\010 \001(\0132 .com." +
-      "xml2023.mainapp.CenovnikDTO\022.\n\006adresa\030\t " +
-      "\001(\0132\036.com.xml2023.mainapp.AdresaDTO\0223\n\005o" +
-      "cene\030\n \003(\0132$.com.xml2023.mainapp.OcenaSm" +
-      "estajDTO\"\206\001\n\017OcenaSmestajDTO\022\n\n\002id\030\001 \001(\t" +
-      "\022\r\n\005ocena\030\002 \001(\005\022\022\n\nidSmestaja\030\003 \001(\t\022\023\n\013i" +
-      "dKorisnika\030\004 \001(\t\022/\n\013datumIVreme\030\005 \001(\0132\032." +
-      "google.protobuf.Timestamp\"/\n\032getOceneByS" +
-      "mestajIdRequest\022\021\n\tsmestajId\030\001 \001(\t\"R\n\033ge" +
-      "tOceneBySmestajIdResponse\0223\n\005ocene\030\001 \003(\013" +
-      "2$.com.xml2023.mainapp.OcenaSmestajDTO\"0" +
-      "\n\"getListaRezervacijaByUserIdRequest\022\n\n\002" +
-      "id\030\001 \001(\t\"d\n#getListaRezervacijaByUserIdR" +
-      "esponse\022=\n\020listaRezervacija\030\001 \003(\0132#.com." +
-      "xml2023.mainapp.RezervacijaDTO\"2\n\031getRez" +
-      "ervacijaByIdRequest\022\025\n\rrezervacijaId\030\001 \001" +
-      "(\t\"R\n\032getRezervacijaByIdResponse\0224\n\007odgo" +
-      "vor\030\001 \001(\0132#.com.xml2023.mainapp.Rezervac" +
-      "ijaDTO\"\300\002\n\016RezervacijaDTO\022\n\n\002id\030\001 \001(\t\022\017\n" +
-      "\007smestaj\030\002 \001(\t\022\014\n\004gost\030\003 \001(\t\022+\n\007odDatum\030" +
-      "\004 \001(\0132\032.google.protobuf.Timestamp\022+\n\007doD" +
-      "atum\030\005 \001(\0132\032.google.protobuf.Timestamp\022\023" +
-      "\n\013brojGostiju\030\006 \001(\005\022E\n\006status\030\007 \001(\01625.co" +
-      "m.xml2023.mainapp.RezervacijaDTO.StatusR" +
-      "ezervacije\"M\n\021StatusRezervacije\022\013\n\007PENDI" +
-      "NG\020\000\022\017\n\013REZERVISANA\020\001\022\014\n\010ODBIJENA\020\002\022\014\n\010O" +
-      "TKAZANA\020\003\"A\n\tAdresaDTO\022\n\n\002id\030\001 \001(\t\022\016\n\006ad" +
-      "resa\030\002 \001(\t\022\013\n\003lat\030\003 \001(\001\022\013\n\003lng\030\004 \001(\001\"j\n\013" +
-      "CenovnikDTO\022\022\n\npoSmestaju\030\001 \001(\010\022\014\n\004cena\030" +
-      "\002 \001(\003\022\023\n\013cenaPraznik\030\003 \001(\003\022\022\n\ncenaVikend" +
-      "\030\004 \001(\003\022\020\n\010cenaLeto\030\005 \001(\003\"\031\n\010SlikaDTO\022\r\n\005" +
-      "slika\030\001 \001(\t\"b\n\tTerminDTO\022+\n\007pocetak\030\001 \001(" +
-      "\0132\032.google.protobuf.Timestamp\022(\n\004kraj\030\002 " +
-      "\001(\0132\032.google.protobuf.Timestamp\"@\n\025NekoR" +
-      "ezervisaoRequest\022\023\n\013idKorisnika\030\001 \001(\t\022\022\n" +
-      "\nidSmestaja\030\002 \001(\t\"(\n\026NekoRezervisaoRespo" +
-      "nse\022\016\n\006result\030\001 \001(\010\"=\n\022NekoOtkazaoReques" +
-      "t\022\023\n\013idKorisnika\030\001 \001(\t\022\022\n\nidSmestaja\030\002 \001" +
-      "(\t\"%\n\023NekoOtkazaoResponse\022\016\n\006result\030\001 \001(" +
-      "\010\"R\n\030NekoOcenioSmestajRequest\022\023\n\013idKoris" +
-      "nika\030\001 \001(\t\022\022\n\nidSmestaja\030\002 \001(\t\022\r\n\005ocena\030" +
-      "\003 \001(\005\"+\n\031NekoOcenioSmestajResponse\022\016\n\006re" +
-      "sult\030\001 \001(\010\"<\n\026NekoOcenioHostaRequest\022\023\n\013" +
-      "idKorisnika\030\001 \001(\t\022\r\n\005ocena\030\002 \001(\005\")\n\027Neko" +
-      "OcenioHostaResponse\022\016\n\006result\030\001 \001(\010\"C\n\034D" +
-      "obioStatusIstaknutogRequest\022\023\n\013idKorisni" +
-      "ka\030\001 \001(\t\022\016\n\006status\030\002 \001(\010\"/\n\035DobioStatusI" +
-      "staknutogResponse\022\016\n\006result\030\001 \001(\010\" \n\016get" +
-      "HostRequest\022\016\n\006hostId\030\001 \001(\t\"B\n\017getHostRe" +
-      "sponse\022/\n\004host\030\001 \001(\0132!.com.xml2023.maina" +
-      "pp.HostBasicDTO\"O\n\014HostBasicDTO\022\021\n\tistak" +
-      "nuti\030\001 \001(\010\022\025\n\rrezAutomatski\030\002 \001(\010\022\025\n\rpro" +
-      "secnaOcena\030\003 \001(\003\"%\n\022rezOtkazanaRequest\022\017" +
-      "\n\007guestId\030\001 \001(\t\")\n\023rezOtkazanaResponse\022\022" +
-      "\n\npenalDodat\030\001 \001(\010\"7\n\026rezOtkazanaHostReq" +
-      "uest\022\016\n\006hostId\030\001 \001(\t\022\r\n\005resId\030\002 \001(\t\"-\n\027r" +
-      "ezOtkazanaHostResponse\022\022\n\npenalDodat\030\001 \001" +
-      "(\010\"?\n&reservationApprovedNotificationReq" +
-      "uest\022\025\n\ridRezervacije\030\001 \001(\t\"=\n\'reservati" +
-      "onApprovedNotificationResponse\022\022\n\nisporu" +
-      "ceno\030\001 \001(\010\"9\n\"NovaRezervacijaNotifikacij" +
-      "aRequest\022\023\n\013idKorisnika\030\001 \001(\t\"5\n#NovaRez" +
-      "ervacijaNotifikacijaResponse\022\016\n\006stanje\030\001" +
-      " \001(\010\"=\n&OtkazanaRezervacijaNotifikacijaR" +
-      "equest\022\023\n\013idKorisnika\030\001 \001(\t\"9\n\'OtkazanaR" +
-      "ezervacijaNotifikacijaResponse\022\016\n\006stanje" +
-      "\030\001 \001(\010\"8\n!NovaOcenaHostaNotifikacijaRequ" +
-      "est\022\023\n\013idKorisnika\030\001 \001(\t\"4\n\"NovaOcenaHos" +
-      "taNotifikacijaResponse\022\016\n\006stanje\030\001 \001(\010\";" +
-      "\n$NovaOcenaSmestajaNotifikacijaRequest\022\023" +
-      "\n\013idKorisnika\030\001 \001(\t\"7\n%NovaOcenaSmestaja" +
-      "NotifikacijaResponse\022\016\n\006stanje\030\001 \001(\010\":\n#" +
-      "StatusIstaknutogNotifikacijaRequest\022\023\n\013i" +
-      "dKorisnika\030\001 \001(\t\"6\n$StatusIstaknutogNoti" +
-      "fikacijaResponse\022\016\n\006stanje\030\001 \001(\010\"C\n\035AnyS" +
-      "mestajBelongToHostRequest\022\016\n\006hostId\030\001 \001(" +
-      "\t\022\022\n\nsmestajIds\030\002 \003(\t\"1\n\036AnySmestajBelon" +
-      "gToHostResponse\022\017\n\007belongs\030\001 \001(\0102j\n\017Gree" +
-      "tingService\022W\n\010greeting\022$.com.xml2023.ma" +
-      "inapp.KorisnikRequest\032%.com.xml2023.main" +
-      "app.KorisnikResponse2\233\010\n\013SmestajGrpc\022_\n\006" +
-      "exists\022).com.xml2023.mainapp.SmestajExis" +
-      "tsRequest\032*.com.xml2023.mainapp.SmestajE" +
-      "xistsResponse\022u\n\024getSmestajIdsForHost\022-." +
-      "com.xml2023.mainapp.SmestajIdsForHostReq" +
-      "uest\032..com.xml2023.mainapp.SmestajIdsFor" +
-      "HostResponse\022~\n\025deketeSnestajsForHost\0221." +
-      "com.xml2023.mainapp.DeleteSmestajsForHos" +
-      "tRequest\0322.com.xml2023.mainapp.DeleteSme" +
-      "stajsForHostResponse\022i\n\016getSmestajById\022*" +
-      ".com.xml2023.mainapp.getSmestajByIdReque" +
-      "st\032+.com.xml2023.mainapp.getSmestajByIdR" +
-      "esponse\022\207\001\n\030getListaSmestajaByUserId\0224.c" +
-      "om.xml2023.mainapp.getListaSmestajaByUse" +
-      "rIdRequest\0325.com.xml2023.mainapp.getList" +
-      "aSmestajaByUserIdResponse\022c\n\014zauzmiTermi" +
-      "n\022(.com.xml2023.mainapp.TerminZauzmiRequ" +
-      "est\032).com.xml2023.mainapp.TerminZauzmiRe" +
-      "sponse\022i\n\016oslobodiTermin\022*.com.xml2023.m" +
-      "ainapp.TerminOslobodiRequest\032+.com.xml20" +
-      "23.mainapp.TerminOslobodiResponse\022x\n\rbel" +
-      "ongsToHost\0222.com.xml2023.mainapp.AnySmes" +
-      "tajBelongToHostRequest\0323.com.xml2023.mai" +
-      "napp.AnySmestajBelongToHostResponse\022u\n\020g" +
-      "etOceneSmestaja\022/.com.xml2023.mainapp.ge" +
-      "tOceneBySmestajIdRequest\0320.com.xml2023.m" +
-      "ainapp.getOceneBySmestajIdResponse2\375\005\n\017R" +
-      "ezervacijaGrpc\022g\n\006exists\022-.com.xml2023.m" +
-      "ainapp.RezervacijaExistsRequest\032..com.xm" +
-      "l2023.mainapp.RezervacijaExistsResponse\022" +
-      "v\n\031reservationsForUserExists\022+.com.xml20" +
-      "23.mainapp.ActiveResExistsRequest\032,.com." +
-      "xml2023.mainapp.ActiveResExistsResponse\022" +
-      "u\n\022getRezervacijaById\022..com.xml2023.main" +
-      "app.getRezervacijaByIdRequest\032/.com.xml2" +
-      "023.mainapp.getRezervacijaByIdResponse\022\220" +
-      "\001\n\033getListaRezervacijaByUserId\0227.com.xml" +
-      "2023.mainapp.getListaRezervacijaByUserId" +
-      "Request\0328.com.xml2023.mainapp.getListaRe" +
-      "zervacijaByUserIdResponse\022\204\001\n\023resExistsF" +
-      "orSmestaj\0225.com.xml2023.mainapp.ActiveRe" +
-      "sExistsForSmestajRequest\0326.com.xml2023.m" +
-      "ainapp.ActiveResExistsForSmestajResponse" +
-      "\022x\n\025getActiveReservations\022..com.xml2023." +
-      "mainapp.ActiveReservationsRequest\032/.com." +
-      "xml2023.mainapp.ActiveReservationsRespon" +
-      "se2\255\r\n\014KorisnikGrpc\022T\n\007getHost\022#.com.xml" +
-      "2023.mainapp.getHostRequest\032$.com.xml202" +
-      "3.mainapp.getHostResponse\022`\n\013rezOtkazana" +
-      "\022\'.com.xml2023.mainapp.rezOtkazanaReques" +
-      "t\032(.com.xml2023.mainapp.rezOtkazanaRespo" +
-      "nse\022l\n\017rezOtkazanaHost\022+.com.xml2023.mai" +
-      "napp.rezOtkazanaHostRequest\032,.com.xml202" +
-      "3.mainapp.rezOtkazanaHostResponse\022\213\001\n\016re" +
-      "zObavestenje\022;.com.xml2023.mainapp.reser" +
-      "vationApprovedNotificationRequest\032<.com." +
-      "xml2023.mainapp.reservationApprovedNotif" +
-      "icationResponse\022g\n\014newRezNotify\022*.com.xm" +
-      "l2023.mainapp.NekoRezervisaoRequest\032+.co" +
-      "m.xml2023.mainapp.NekoRezervisaoResponse" +
-      "\022b\n\rnewQuitNotify\022\'.com.xml2023.mainapp." +
-      "NekoOtkazaoRequest\032(.com.xml2023.mainapp" +
-      ".NekoOtkazaoResponse\022o\n\016newRankSmestaj\022-" +
-      ".com.xml2023.mainapp.NekoOcenioSmestajRe" +
-      "quest\032..com.xml2023.mainapp.NekoOcenioSm" +
-      "estajResponse\022h\n\013newRankHost\022+.com.xml20" +
-      "23.mainapp.NekoOcenioHostaRequest\032,.com." +
-      "xml2023.mainapp.NekoOcenioHostaResponse\022" +
-      "v\n\ristaknutiHost\0221.com.xml2023.mainapp.D" +
-      "obioStatusIstaknutogRequest\0322.com.xml202" +
-      "3.mainapp.DobioStatusIstaknutogResponse\022" +
-      "\205\001\n\020novaRezNotStatus\0227.com.xml2023.maina" +
-      "pp.NovaRezervacijaNotifikacijaRequest\0328." +
-      "com.xml2023.mainapp.NovaRezervacijaNotif" +
-      "ikacijaResponse\022\221\001\n\024otkazanaRezNotStatus" +
-      "\022;.com.xml2023.mainapp.OtkazanaRezervaci" +
-      "jaNotifikacijaRequest\032<.com.xml2023.main" +
-      "app.OtkazanaRezervacijaNotifikacijaRespo" +
-      "nse\022\212\001\n\027novaOcenaHostaNotStatus\0226.com.xm" +
-      "l2023.mainapp.NovaOcenaHostaNotifikacija" +
-      "Request\0327.com.xml2023.mainapp.NovaOcenaH" +
-      "ostaNotifikacijaResponse\022\223\001\n\032novaOcenaSm" +
-      "estajaNotStatus\0229.com.xml2023.mainapp.No" +
-      "vaOcenaSmestajaNotifikacijaRequest\032:.com" +
-      ".xml2023.mainapp.NovaOcenaSmestajaNotifi" +
-      "kacijaResponse\022\211\001\n\022istaknutiNotStatus\0228." +
-      "com.xml2023.mainapp.StatusIstaknutogNoti" +
-      "fikacijaRequest\0329.com.xml2023.mainapp.St" +
-      "atusIstaknutogNotifikacijaResponseB\002P\001b\006" +
-      "proto3"
+      "\030\002 \001(\0132\036.com.xml2023.mainapp.TerminDTO\"8" +
+      "\n\024TerminZauzmiResponse\022\016\n\006zauzet\030\001 \001(\010\022\020" +
+      "\n\010terminId\030\002 \001(\t\"Z\n\025TerminOslobodiReques" +
+      "t\022\021\n\tsmestajId\030\001 \001(\t\022.\n\006termin\030\002 \001(\0132\036.c" +
+      "om.xml2023.mainapp.TerminDTO\",\n\026TerminOs" +
+      "lobodiResponse\022\022\n\noslobodjen\030\001 \001(\010\"\205\001\n\031A" +
+      "ctiveReservationsRequest\022\021\n\tsmestajId\030\001 " +
+      "\001(\t\022+\n\007pocetak\030\002 \001(\0132\032.google.protobuf.T" +
+      "imestamp\022(\n\004kraj\030\003 \001(\0132\032.google.protobuf" +
+      ".Timestamp\"[\n\032ActiveReservationsResponse" +
+      "\022=\n\020listaRezervacija\030\001 \003(\0132#.com.xml2023" +
+      ".mainapp.RezervacijaDTO\"2\n ActiveResExis" +
+      "tsForSmestajRequest\022\016\n\006userId\030\001 \001(\t\"3\n!A" +
+      "ctiveResExistsForSmestajResponse\022\016\n\006exis" +
+      "ts\030\001 \001(\010\"5\n\026ActiveResExistsRequest\022\016\n\006us" +
+      "erId\030\001 \001(\t\022\013\n\003tip\030\002 \001(\t\")\n\027ActiveResExis" +
+      "tsResponse\022\016\n\006exists\030\001 \001(\005\"*\n\030SmestajIds" +
+      "ForHostRequest\022\016\n\006userId\030\001 \001(\t\"/\n\031Smesta" +
+      "jIdsForHostResponse\022\022\n\nsmestajIds\030\001 \003(\t\"" +
+      ".\n\034DeleteSmestajsForHostRequest\022\016\n\006hostI" +
+      "d\030\001 \001(\t\"0\n\035DeleteSmestajsForHostResponse" +
+      "\022\017\n\007success\030\001 \001(\005\"-\n\037getListaSmestajaByU" +
+      "serIdRequest\022\n\n\002id\030\001 \001(\t\"Z\n getListaSmes" +
+      "tajaByUserIdResponse\0226\n\rlistaSmestaja\030\001 " +
+      "\003(\0132\037.com.xml2023.mainapp.SmestajDTO\"*\n\025" +
+      "getSmestajByIdRequest\022\021\n\tsmestajId\030\001 \001(\t" +
+      "\"J\n\026getSmestajByIdResponse\0220\n\007odgovor\030\001 " +
+      "\001(\0132\037.com.xml2023.mainapp.SmestajDTO\"\333\002\n" +
+      "\nSmestajDTO\022\n\n\002id\030\001 \001(\t\022\017\n\007vlasnik\030\002 \001(\t" +
+      "\022\022\n\npogodnosti\030\003 \003(\t\022,\n\005slika\030\004 \003(\0132\035.co" +
+      "m.xml2023.mainapp.SlikaDTO\022\020\n\010minGosti\030\005" +
+      " \001(\005\022\017\n\007maxGost\030\006 \001(\005\0222\n\nnedostupni\030\007 \003(" +
+      "\0132\036.com.xml2023.mainapp.TerminDTO\0222\n\010cen" +
+      "ovnik\030\010 \001(\0132 .com.xml2023.mainapp.Cenovn" +
+      "ikDTO\022.\n\006adresa\030\t \001(\0132\036.com.xml2023.main" +
+      "app.AdresaDTO\0223\n\005ocene\030\n \003(\0132$.com.xml20" +
+      "23.mainapp.OcenaSmestajDTO\"\206\001\n\017OcenaSmes" +
+      "tajDTO\022\n\n\002id\030\001 \001(\t\022\r\n\005ocena\030\002 \001(\005\022\022\n\nidS" +
+      "mestaja\030\003 \001(\t\022\023\n\013idKorisnika\030\004 \001(\t\022/\n\013da" +
+      "tumIVreme\030\005 \001(\0132\032.google.protobuf.Timest" +
+      "amp\"/\n\032getOceneBySmestajIdRequest\022\021\n\tsme" +
+      "stajId\030\001 \001(\t\"R\n\033getOceneBySmestajIdRespo" +
+      "nse\0223\n\005ocene\030\001 \003(\0132$.com.xml2023.mainapp" +
+      ".OcenaSmestajDTO\"0\n\"getListaRezervacijaB" +
+      "yUserIdRequest\022\n\n\002id\030\001 \001(\t\"d\n#getListaRe" +
+      "zervacijaByUserIdResponse\022=\n\020listaRezerv" +
+      "acija\030\001 \003(\0132#.com.xml2023.mainapp.Rezerv" +
+      "acijaDTO\"2\n\031getRezervacijaByIdRequest\022\025\n" +
+      "\rrezervacijaId\030\001 \001(\t\"R\n\032getRezervacijaBy" +
+      "IdResponse\0224\n\007odgovor\030\001 \001(\0132#.com.xml202" +
+      "3.mainapp.RezervacijaDTO\"\300\002\n\016Rezervacija" +
+      "DTO\022\n\n\002id\030\001 \001(\t\022\017\n\007smestaj\030\002 \001(\t\022\014\n\004gost" +
+      "\030\003 \001(\t\022+\n\007odDatum\030\004 \001(\0132\032.google.protobu" +
+      "f.Timestamp\022+\n\007doDatum\030\005 \001(\0132\032.google.pr" +
+      "otobuf.Timestamp\022\023\n\013brojGostiju\030\006 \001(\005\022E\n" +
+      "\006status\030\007 \001(\01625.com.xml2023.mainapp.Reze" +
+      "rvacijaDTO.StatusRezervacije\"M\n\021StatusRe" +
+      "zervacije\022\013\n\007PENDING\020\000\022\017\n\013REZERVISANA\020\001\022" +
+      "\014\n\010ODBIJENA\020\002\022\014\n\010OTKAZANA\020\003\"A\n\tAdresaDTO" +
+      "\022\n\n\002id\030\001 \001(\t\022\016\n\006adresa\030\002 \001(\t\022\013\n\003lat\030\003 \001(" +
+      "\001\022\013\n\003lng\030\004 \001(\001\"j\n\013CenovnikDTO\022\022\n\npoSmest" +
+      "aju\030\001 \001(\010\022\014\n\004cena\030\002 \001(\003\022\023\n\013cenaPraznik\030\003" +
+      " \001(\003\022\022\n\ncenaVikend\030\004 \001(\003\022\020\n\010cenaLeto\030\005 \001" +
+      "(\003\"\031\n\010SlikaDTO\022\r\n\005slika\030\001 \001(\t\"b\n\tTerminD" +
+      "TO\022+\n\007pocetak\030\001 \001(\0132\032.google.protobuf.Ti" +
+      "mestamp\022(\n\004kraj\030\002 \001(\0132\032.google.protobuf." +
+      "Timestamp\"@\n\025NekoRezervisaoRequest\022\023\n\013id" +
+      "Korisnika\030\001 \001(\t\022\022\n\nidSmestaja\030\002 \001(\t\"(\n\026N" +
+      "ekoRezervisaoResponse\022\016\n\006result\030\001 \001(\010\"=\n" +
+      "\022NekoOtkazaoRequest\022\023\n\013idKorisnika\030\001 \001(\t" +
+      "\022\022\n\nidSmestaja\030\002 \001(\t\"%\n\023NekoOtkazaoRespo" +
+      "nse\022\016\n\006result\030\001 \001(\010\"R\n\030NekoOcenioSmestaj" +
+      "Request\022\023\n\013idKorisnika\030\001 \001(\t\022\022\n\nidSmesta" +
+      "ja\030\002 \001(\t\022\r\n\005ocena\030\003 \001(\005\"+\n\031NekoOcenioSme" +
+      "stajResponse\022\016\n\006result\030\001 \001(\010\"<\n\026NekoOcen" +
+      "ioHostaRequest\022\023\n\013idKorisnika\030\001 \001(\t\022\r\n\005o" +
+      "cena\030\002 \001(\005\")\n\027NekoOcenioHostaResponse\022\016\n" +
+      "\006result\030\001 \001(\010\"C\n\034DobioStatusIstaknutogRe" +
+      "quest\022\023\n\013idKorisnika\030\001 \001(\t\022\016\n\006status\030\002 \001" +
+      "(\010\"/\n\035DobioStatusIstaknutogResponse\022\016\n\006r" +
+      "esult\030\001 \001(\010\" \n\016getHostRequest\022\016\n\006hostId\030" +
+      "\001 \001(\t\"B\n\017getHostResponse\022/\n\004host\030\001 \001(\0132!" +
+      ".com.xml2023.mainapp.HostBasicDTO\"O\n\014Hos" +
+      "tBasicDTO\022\021\n\tistaknuti\030\001 \001(\010\022\025\n\rrezAutom" +
+      "atski\030\002 \001(\010\022\025\n\rprosecnaOcena\030\003 \001(\003\"%\n\022re" +
+      "zOtkazanaRequest\022\017\n\007guestId\030\001 \001(\t\")\n\023rez" +
+      "OtkazanaResponse\022\022\n\npenalDodat\030\001 \001(\010\"7\n\026" +
+      "rezOtkazanaHostRequest\022\016\n\006hostId\030\001 \001(\t\022\r" +
+      "\n\005resId\030\002 \001(\t\"-\n\027rezOtkazanaHostResponse" +
+      "\022\022\n\npenalDodat\030\001 \001(\010\"?\n&reservationAppro" +
+      "vedNotificationRequest\022\025\n\ridRezervacije\030" +
+      "\001 \001(\t\"=\n\'reservationApprovedNotification" +
+      "Response\022\022\n\nisporuceno\030\001 \001(\010\"9\n\"NovaReze" +
+      "rvacijaNotifikacijaRequest\022\023\n\013idKorisnik" +
+      "a\030\001 \001(\t\"5\n#NovaRezervacijaNotifikacijaRe" +
+      "sponse\022\016\n\006stanje\030\001 \001(\010\"=\n&OtkazanaRezerv" +
+      "acijaNotifikacijaRequest\022\023\n\013idKorisnika\030" +
+      "\001 \001(\t\"9\n\'OtkazanaRezervacijaNotifikacija" +
+      "Response\022\016\n\006stanje\030\001 \001(\010\"8\n!NovaOcenaHos" +
+      "taNotifikacijaRequest\022\023\n\013idKorisnika\030\001 \001" +
+      "(\t\"4\n\"NovaOcenaHostaNotifikacijaResponse" +
+      "\022\016\n\006stanje\030\001 \001(\010\";\n$NovaOcenaSmestajaNot" +
+      "ifikacijaRequest\022\023\n\013idKorisnika\030\001 \001(\t\"7\n" +
+      "%NovaOcenaSmestajaNotifikacijaResponse\022\016" +
+      "\n\006stanje\030\001 \001(\010\":\n#StatusIstaknutogNotifi" +
+      "kacijaRequest\022\023\n\013idKorisnika\030\001 \001(\t\"6\n$St" +
+      "atusIstaknutogNotifikacijaResponse\022\016\n\006st" +
+      "anje\030\001 \001(\010\"C\n\035AnySmestajBelongToHostRequ" +
+      "est\022\016\n\006hostId\030\001 \001(\t\022\022\n\nsmestajIds\030\002 \003(\t\"" +
+      "1\n\036AnySmestajBelongToHostResponse\022\017\n\007bel" +
+      "ongs\030\001 \001(\0102j\n\017GreetingService\022W\n\010greetin" +
+      "g\022$.com.xml2023.mainapp.KorisnikRequest\032" +
+      "%.com.xml2023.mainapp.KorisnikResponse2\233" +
+      "\010\n\013SmestajGrpc\022_\n\006exists\022).com.xml2023.m" +
+      "ainapp.SmestajExistsRequest\032*.com.xml202" +
+      "3.mainapp.SmestajExistsResponse\022u\n\024getSm" +
+      "estajIdsForHost\022-.com.xml2023.mainapp.Sm" +
+      "estajIdsForHostRequest\032..com.xml2023.mai" +
+      "napp.SmestajIdsForHostResponse\022~\n\025dekete" +
+      "SnestajsForHost\0221.com.xml2023.mainapp.De" +
+      "leteSmestajsForHostRequest\0322.com.xml2023" +
+      ".mainapp.DeleteSmestajsForHostResponse\022i" +
+      "\n\016getSmestajById\022*.com.xml2023.mainapp.g" +
+      "etSmestajByIdRequest\032+.com.xml2023.maina" +
+      "pp.getSmestajByIdResponse\022\207\001\n\030getListaSm" +
+      "estajaByUserId\0224.com.xml2023.mainapp.get" +
+      "ListaSmestajaByUserIdRequest\0325.com.xml20" +
+      "23.mainapp.getListaSmestajaByUserIdRespo" +
+      "nse\022c\n\014zauzmiTermin\022(.com.xml2023.mainap" +
+      "p.TerminZauzmiRequest\032).com.xml2023.main" +
+      "app.TerminZauzmiResponse\022i\n\016oslobodiTerm" +
+      "in\022*.com.xml2023.mainapp.TerminOslobodiR" +
+      "equest\032+.com.xml2023.mainapp.TerminOslob" +
+      "odiResponse\022x\n\rbelongsToHost\0222.com.xml20" +
+      "23.mainapp.AnySmestajBelongToHostRequest" +
+      "\0323.com.xml2023.mainapp.AnySmestajBelongT" +
+      "oHostResponse\022u\n\020getOceneSmestaja\022/.com." +
+      "xml2023.mainapp.getOceneBySmestajIdReque" +
+      "st\0320.com.xml2023.mainapp.getOceneBySmest" +
+      "ajIdResponse2\375\005\n\017RezervacijaGrpc\022g\n\006exis" +
+      "ts\022-.com.xml2023.mainapp.RezervacijaExis" +
+      "tsRequest\032..com.xml2023.mainapp.Rezervac" +
+      "ijaExistsResponse\022v\n\031reservationsForUser" +
+      "Exists\022+.com.xml2023.mainapp.ActiveResEx" +
+      "istsRequest\032,.com.xml2023.mainapp.Active" +
+      "ResExistsResponse\022u\n\022getRezervacijaById\022" +
+      "..com.xml2023.mainapp.getRezervacijaById" +
+      "Request\032/.com.xml2023.mainapp.getRezerva" +
+      "cijaByIdResponse\022\220\001\n\033getListaRezervacija" +
+      "ByUserId\0227.com.xml2023.mainapp.getListaR" +
+      "ezervacijaByUserIdRequest\0328.com.xml2023." +
+      "mainapp.getListaRezervacijaByUserIdRespo" +
+      "nse\022\204\001\n\023resExistsForSmestaj\0225.com.xml202" +
+      "3.mainapp.ActiveResExistsForSmestajReque" +
+      "st\0326.com.xml2023.mainapp.ActiveResExists" +
+      "ForSmestajResponse\022x\n\025getActiveReservati" +
+      "ons\022..com.xml2023.mainapp.ActiveReservat" +
+      "ionsRequest\032/.com.xml2023.mainapp.Active" +
+      "ReservationsResponse2\255\r\n\014KorisnikGrpc\022T\n" +
+      "\007getHost\022#.com.xml2023.mainapp.getHostRe" +
+      "quest\032$.com.xml2023.mainapp.getHostRespo" +
+      "nse\022`\n\013rezOtkazana\022\'.com.xml2023.mainapp" +
+      ".rezOtkazanaRequest\032(.com.xml2023.mainap" +
+      "p.rezOtkazanaResponse\022l\n\017rezOtkazanaHost" +
+      "\022+.com.xml2023.mainapp.rezOtkazanaHostRe" +
+      "quest\032,.com.xml2023.mainapp.rezOtkazanaH" +
+      "ostResponse\022\213\001\n\016rezObavestenje\022;.com.xml" +
+      "2023.mainapp.reservationApprovedNotifica" +
+      "tionRequest\032<.com.xml2023.mainapp.reserv" +
+      "ationApprovedNotificationResponse\022g\n\014new" +
+      "RezNotify\022*.com.xml2023.mainapp.NekoReze" +
+      "rvisaoRequest\032+.com.xml2023.mainapp.Neko" +
+      "RezervisaoResponse\022b\n\rnewQuitNotify\022\'.co" +
+      "m.xml2023.mainapp.NekoOtkazaoRequest\032(.c" +
+      "om.xml2023.mainapp.NekoOtkazaoResponse\022o" +
+      "\n\016newRankSmestaj\022-.com.xml2023.mainapp.N" +
+      "ekoOcenioSmestajRequest\032..com.xml2023.ma" +
+      "inapp.NekoOcenioSmestajResponse\022h\n\013newRa" +
+      "nkHost\022+.com.xml2023.mainapp.NekoOcenioH" +
+      "ostaRequest\032,.com.xml2023.mainapp.NekoOc" +
+      "enioHostaResponse\022v\n\ristaknutiHost\0221.com" +
+      ".xml2023.mainapp.DobioStatusIstaknutogRe" +
+      "quest\0322.com.xml2023.mainapp.DobioStatusI" +
+      "staknutogResponse\022\205\001\n\020novaRezNotStatus\0227" +
+      ".com.xml2023.mainapp.NovaRezervacijaNoti" +
+      "fikacijaRequest\0328.com.xml2023.mainapp.No" +
+      "vaRezervacijaNotifikacijaResponse\022\221\001\n\024ot" +
+      "kazanaRezNotStatus\022;.com.xml2023.mainapp" +
+      ".OtkazanaRezervacijaNotifikacijaRequest\032" +
+      "<.com.xml2023.mainapp.OtkazanaRezervacij" +
+      "aNotifikacijaResponse\022\212\001\n\027novaOcenaHosta" +
+      "NotStatus\0226.com.xml2023.mainapp.NovaOcen" +
+      "aHostaNotifikacijaRequest\0327.com.xml2023." +
+      "mainapp.NovaOcenaHostaNotifikacijaRespon" +
+      "se\022\223\001\n\032novaOcenaSmestajaNotStatus\0229.com." +
+      "xml2023.mainapp.NovaOcenaSmestajaNotifik" +
+      "acijaRequest\032:.com.xml2023.mainapp.NovaO" +
+      "cenaSmestajaNotifikacijaResponse\022\211\001\n\022ist" +
+      "aknutiNotStatus\0228.com.xml2023.mainapp.St" +
+      "atusIstaknutogNotifikacijaRequest\0329.com." +
+      "xml2023.mainapp.StatusIstaknutogNotifika" +
+      "cijaResponseB\002P\001b\006proto3"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
         new com.google.protobuf.Descriptors.FileDescriptor.    InternalDescriptorAssigner() {
@@ -637,7 +637,7 @@ public final class Temp {
     internal_static_com_xml2023_mainapp_TerminZauzmiResponse_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_com_xml2023_mainapp_TerminZauzmiResponse_descriptor,
-        new java.lang.String[] { "Zauzet", });
+        new java.lang.String[] { "Zauzet", "TerminId", });
     internal_static_com_xml2023_mainapp_TerminOslobodiRequest_descriptor =
       getDescriptor().getMessageTypes().get(8);
     internal_static_com_xml2023_mainapp_TerminOslobodiRequest_fieldAccessorTable = new
