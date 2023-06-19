@@ -11,5 +11,7 @@ ADD target/email-service.jar email-service.jar
 #</plugin>
 #Ovaj dependency u pom.xml da bi se preskocilo testiranje konekcije
 #RUN mvn install -Dmaven.test.skip -DskipTests
-ENTRYPOINT [ "java", "-jar", "/email-service.jar"]
+ADD https://github.com/open-telemetry/opentelemetry-java-instrumentation/releases/latest/download/opentelemetry-javaagent.jar .
+ENV JAVA_TOOL_OPTIONS "-javaagent:./opentelemetry-javaagent.jar"
+ENTRYPOINT [ "java", "-jar", "email-service.jar"]
 

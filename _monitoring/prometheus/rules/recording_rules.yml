@@ -1,0 +1,55 @@
+groups:
+  - name: node_rules
+    rules:
+      - record: job:node_memory_MemAvailable_bytes:available
+        expr: (node_memory_MemAvailable_bytes / node_memory_MemTotal_bytes ) * 100
+
+  - name: instance_rules
+    rules:
+      - record: instance:process_cpu_seconds:rate5m
+        expr: avg without(job)(rate(process_cpu_seconds_total[5m]))
+
+      - record: TEST #OK
+        expr: sum(rate(prometheus_http_requests_total{code=~"2..|3.."}[24h]))
+      - record: ZAHTEVI_USPESNI_24H #OK
+        expr:  sum_over_time(prometheus_http_requests_total{code=~"2..|3.."}[24h]) #sum(rate(prometheus_http_requests_total{code=~"2..|3.."}[24h]))
+      - record: ZAHTEVI_NEUSPESNI_24H #
+        expr: sum_over_time(prometheus_http_requests_total{code=~"4..|5.."}[24h]) #sum_over_time(prometheus_http_requests_total{code=~"4..|5.."}[24h])
+      - record: ZAHTEVI_SVI_24H_SUM_RATE #OK
+        expr: sum(rate(prometheus_http_requests_total{code=~"2..|3..|4..|5.."}[24h]))
+      - record: ZAHTEVI_SVI_24H_SOT #OK
+        expr: sum_over_time(prometheus_http_requests_total{}[24h])
+      #- record: ZAHTEVI_BROJ_POSETILACA(IP,TIMESTAMP,BROWSER)
+      #  expr: count_over_time(distinct_count by (remote_addr, user_agent) (prometheus_http_requests_total)[24h]) 
+      #- record: ZAHTEVI_404_SA_ENDPOINTIMA_24H
+      #  expr: sum(rate(http_requests_total{status="404"}[24h])) by (endpoint)
+      #- record: ZAHTEVI_404_SA_ENDPOINTIMA_24H_handler
+      #  expr: sum(rate(prometheus_http_requests_total{status="404"}[24h])) by (handler)
+     # - record: ZAHTEVI_UKUPAN_PROTOK_24H
+        #expr: sum_over_time((prometheus_http_request_size_bytes_sum[24h] + prometheus_http_response_size_bytes_sum[24h]) / 1024 / 1024 / 1024)
+        #expr: (sum_over_time(prometheus_http_request_size_bytes_sum[24h]) + sum_over_time(prometheus_http_response_size_bytes_sum[24h])) / 1024 / 1024 / 1024
+     #   expr: (sum(rate(prometheus_http_request_size_bytes_sum[24h])) + sum(rate(prometheus_http_response_size_bytes_sum[24h]))) / 1024 / 1024 / 1024
+
+      - record: ZAHTEVI_UKUPAN_PROTOK_24H_REQ
+        expr: sum(rate(prometheus_http_request_size_bytes_sum{}[24h])) #/ 1024 /1024 / 1024
+      - record: ZAHTEVI_PROTOK_24H_RESPONSE
+        expr: sum_over_time(prometheus_http_response_size_bytes_sum[24h])/1024/1024/1024
+      - record: ZAHTEVI_404_ENDPOINT_24H
+        expr: sum_over_time(prometheus_http_requests_total{code=~"404"}[24h])
+      - record: ZAHTEVI_UKUPNI
+        expr: sum without (instance) (prometheus_http_requests_total)
+      - record: endpoint_unique_visitors_by_ip_browser
+        expr: count(count_values("ip", sum_over_time(prometheus_http_request_duration_seconds{status_code=~"2.."}[5m]))) by (endpoint, user_agent) > count(count_values("ip", sum_over_time(prometheus_http_request_duration_seconds{status_code=~"2.."}[5m]))) by (endpoint)
+      - record: ZAHTEVI_UNIQUE_IP_BROWSER_TIMESTAMP_ENDPOINT
+        expr: count(count_values("ip", sum_over_time(prometheus_http_request_duration_seconds_sum{}[5m]))) by (endpoint, user_agent, timestamp)
+
+  # - name: http_requests
+  #   rules:
+  #   - alert: too_many_http_requests_200
+  #     expr: sum(rate(prometheus_http_requests_total{status_code="200"}[24h])) > 1000
+  #     for: 5m
+  #     labels:
+  #       severity: warning
+  #     annotations:
+  #       summary: Too many HTTP requests with status code 200
+  #       description: There were {{ $value }} HTTP requests with status code 200 in the last 24 hours, which is above the threshold of 1000.

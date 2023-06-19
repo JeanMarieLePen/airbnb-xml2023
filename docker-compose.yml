@@ -1,5 +1,75 @@
 version: '3.9'
+x-logging: &fluent-bit
+  driver: fluentd
+  options:
+    fluentd-address: ${FLUENT_BIT_ADDRESS}:24224
+
 services:
+    #environment:
+   #  - EUREKA_SERVER=http://eureka-service:8761/eureka/
+  rabbitmq:
+    image: rabbitmq:3.9-management-alpine
+    hostname: rabbitmq
+    container_name: rabbitmq
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    environment:
+      - RABBITMQ_DEFAULT_USER=guest
+      - RABBITMQ_DEFAULT_PASS=guest
+    networks:
+      - airbnb
+      - monitoring
+  redis:
+    container_name: redis
+    image: redis:6.0-alpine
+    ports:
+      - "6379:6379"
+    networks:
+      - airbnb
+      - monitoring
+
+  mongodb:
+    container_name: mongodb
+    hostname: mongodb
+    image: mongo:4.4
+    ports:
+      - "27017:27017"
+    networks:
+      - airbnb
+      - monitoring
+    logging: *fluent-bit
+    volumes: 
+      - ./mongodb/data/db:/data/db
+    depends_on:
+      - neo4j
+
+  neo4j:
+    container_name: neo4j
+    #hostname: neo4j
+    image: neo4j:4.3.0
+    restart: unless-stopped
+    ports:
+      - 7474:7474
+      - 7687:7687
+    volumes:
+      - ./neo/conf:/conf
+      - ./neo/data:/data
+      - ./neo/import:/import
+      - ./neo/logs:/logs
+      - ./neo/plugins:/plugins
+    environment: 
+      # Raise memory limits
+      - NEO4J_dbms_memory_pagecache_size=1G
+      - NEO4J_dbms.memory.heap.initial_size=1G
+      - NEO4J_dbms_memory_heap_max__size=1G 
+      #- NEO4J_AUTH=neo4j/12341234
+      - NEO4J_AUTH=none
+    networks:
+      - airbnb
+      - monitoring
+
+
   eureka-service:
     image: eureka-service
     build: ./eureka
@@ -7,44 +77,155 @@ services:
     container_name: eureka
     ports:
       - 8761:8761
+    networks:
+      - airbnb
+      - monitoring
+    logging: *fluent-bit
+    depends_on:
+      - rabbitmq
+      - mongodb
+      - redis
+
+
   gateway-service:
     image: gateway-service
+    build: ./eureka-gateway
+    container_name: gateway-service
     ports:
       - "7777:7777"
-    environment:
-      - EUREKA_SERVER=http://eureka:8761/eureka/
-  rabbitmq:
-    image: rabbitmq:3.9-management-alpine
-    ports:
-      - "5672:5672"
-      - "15672:15672"
-    environment:
-      - RABBITMQ_DEFAULT_USER=guest
-      - RABBITMQ_DEFAULT_PASS=guest
-  redis:
-    image: redis:6.0-alpine
-    ports:
-      - "6379:6379"
+    networks:
+      - airbnb
+      - monitoring
+    depends_on:
+      - eureka-service
 
-  mongodb:
-    image: mongo:4.4
-    ports:
-      - "27017:27017"
 
-  # reglog-service:
-  #   image: reglog-service
+  reglog:
+    image: reglog-service
+    build: ./main-app
+    ports:
+      - "8082:8082"
+    environment:
+      #- EUREKA_SERVER=http://EUREKA-SERVICE:8761/eureka/
+      - SPRING_RABBITMQ_HOST=rabbitmq
+      - SPRING_RABBITMQ_USERNAME=guest
+      - SPRING_RABBITMQ_PASSWORD=guest
+      - SPRING_REDIS_HOST=redis
+      - SPRING_DATA_MONGODB_HOST=mongodb
+      - JAEGER_DOMAIN=${JAEGER_DOMAIN}
+      - OTEL_SERVICE_NAME=reglog
+      - OTEL_METRICS_EXPORTER=prometheus
+      - OTEL_TRACES_EXPORTER=jaeger
+      - OTEL_EXPORTER_JAEGER_ENDPOINT=http://jaeger:14250
+      - ORG_NEO4J_DRIVER_URI=bolt://neo4j:7687
+    depends_on:
+      - gateway-service
+    networks:
+      - airbnb
+      - monitoring
+    logging: *fluent-bit
+    links:
+      - mongodb:mongodb
+
+  
+  email:
+    image: email-service
+    build: ./email-microservice
+    ports: 
+      - "8083:8083"
+    depends_on:
+      - gateway-service
+    environment:
+      #- EUREKA_SERVER=http://EUREKA-SERVICE:8761/eureka/
+      - SPRING_RABBITMQ_HOST=rabbitmq
+      - SPRING_RABBITMQ_USERNAME=guest
+      - SPRING_RABBITMQ_PASSWORD=guest
+      - SPRING_REDIS_HOST=redis
+      - SPRING_DATA_MONGODB_HOST=mongodb
+      - JAEGER_DOMAIN=${JAEGER_DOMAIN}
+      - OTEL_SERVICE_NAME=email
+      - OTEL_METRICS_EXPORTER=prometheus
+      - OTEL_TRACES_EXPORTER=jaeger
+      - OTEL_EXPORTER_JAEGER_ENDPOINT=http://jaeger:14250
+    logging: *fluent-bit
+    networks:
+      - airbnb
+      - monitoring
+    links:
+      - mongodb:mongodb
+
+
+  smestaj:
+    image: smestaj-service
+    build: ./smestaj-microservice
+    ports:
+      - "8090:8090"
+    environment:
+      #- EUREKA_SERVER=http://EUREKA-SERVICE:8761/eureka/
+      - SPRING_RABBITMQ_HOST=rabbitmq
+      - SPRING_RABBITMQ_USERNAME=guest
+      - SPRING_RABBITMQ_PASSWORD=guest
+      - SPRING_REDIS_HOST=redis
+      - SPRING_DATA_MONGODB_HOST=mongodb
+      - JAEGER_DOMAIN=${JAEGER_DOMAIN}
+      - OTEL_SERVICE_NAME=smestaj
+      - OTEL_METRICS_EXPORTER=prometheus
+      - OTEL_TRACES_EXPORTER=jaeger
+      - OTEL_EXPORTER_JAEGER_ENDPOINT=http://jaeger:14250
+      - ORG_NEO4J_DRIVER_URI=bolt://neo4j:7687
+
+    depends_on:
+      - gateway-service
+    networks:
+      - airbnb
+      - monitoring
+    logging: *fluent-bit
+    links:
+      - mongodb:mongodb
+  #
+  #
+  #
+  # reservation:
+  #   image: reservation-service
+  #   build: ./reservation-service
   #   ports:
-  #     - "8082:8082"
+  #     - "8091:8091"
   #   environment:
-  #     - EUREKA_SERVER=http://eureka:8761/eureka/
+  #     #- EUREKA_SERVER=http://EUREKA-SERVICE:8761/eureka/
   #     - SPRING_RABBITMQ_HOST=rabbitmq
   #     - SPRING_RABBITMQ_USERNAME=guest
   #     - SPRING_RABBITMQ_PASSWORD=guest
   #     - SPRING_REDIS_HOST=redis
   #     - SPRING_DATA_MONGODB_HOST=mongodb
+  #     - JAEGER_DOMAIN=${JAEGER_DOMAIN}
+  #     - OTEL_SERVICE_NAME=rezervacija
+  #     - OTEL_METRICS_EXPORTER=prometheus
+  #     - OTEL_TRACES_EXPORTER=jaeger
+  #     - OTEL_EXPORTER_JAEGER_ENDPOINT=http://jaeger:14250
   #   depends_on:
-  #     - eureka-service
-  #     - rabbitmq
-  #     - redis
-  #     - mongodb
+  #     - gateway-service
+  #   networks:
+  #     - airbnb
+  #     - monitoring
+  #   logging: *fluent-bit
+  
+volumes:
+  database-data:
+    name: server-database
+  # mongo:
+  #   name: mongo
+
+networks:
+  airbnb:
+    name: airbnb
+    driver: bridge
+  monitoring:
+    external: true
+
+        
+
+
+
       
+
+    

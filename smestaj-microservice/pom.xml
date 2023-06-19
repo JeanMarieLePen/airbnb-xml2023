@@ -200,6 +200,18 @@
    		 	<artifactId>hibernate-core</artifactId>   
     		<version>5.3.2.Final</version>
 		</dependency>
+		
+		        			<!-- Za monitoring -->		
+		<dependency>
+            <groupId>io.opentracing.contrib</groupId>
+            <artifactId>opentracing-spring-jaeger-cloud-starter</artifactId>
+            <version>3.3.1</version>
+        </dependency>
+        <dependency>
+            <groupId>io.micrometer</groupId>
+            <artifactId>micrometer-registry-prometheus</artifactId>
+        </dependency>
+		<!-- END: Za monitoring-->
 	</dependencies>
 	<dependencyManagement>
 		<dependencies>
@@ -262,6 +274,8 @@
 				</configuration>
 			</plugin>
 		</plugins>
+		<finalName>smestaj-service</finalName>
+
 	</build>
 
 </project>

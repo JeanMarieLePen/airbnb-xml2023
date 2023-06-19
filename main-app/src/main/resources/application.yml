@@ -1,13 +1,14 @@
-#eureka:
-  #client:
-    #register-with-eureka: true
-    #fetch-registry: true
-    #service-url:
-    #  defaultZone: http://eureka-service:8761/eureka
-   #   #defaultZone: http://localhost:8761/eureka/
-  #instance:
- #   preferIpAddress: true
-#    #hostname: localhost
+eureka:
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      #defaultZone: http://${EUREKA_HOST:localhost}:8761/eureka/
+      #defaultZone: http://EUREKA-SERVICE:8761/eureka/
+      defaultZone: http://localhost:8761/eureka/
+  instance:
+   preferIpAddress: true
+   #hostname: localhost
 
 management:
   health:
@@ -28,11 +29,12 @@ resilience4j.circuitbreaker:
       eventConsumerBufferSize: 10
       failureRateThreshold: 50
       minimumNumberOfCalls: 5
-      automaticTransitionFromOpenToHalfOpenEnable: true
+      automaticTransitionFromOpenToHalfOpenEnabled: true
       waitDurationInOpenState: 50s
       permittedNumberOfCallsInHalfOpenState: 3
       slidingWindowSize: 10
       slidingWindowType: COUNT_BASED
+
       
       
       
@@ -50,4 +52,11 @@ resilience4j.ratelimiter:
       registerHealthIndicator: false
       limitForPeriod: 10
       limitRefreshPeriod: 10s
-      timeoutDuration: 3s      
+      timeoutDuration: 3s    
+      
+      
+#spring:  
+#  data:
+#    jdbc:
+#      repositories:
+#        enabled: false
