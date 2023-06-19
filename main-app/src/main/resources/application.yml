@@ -4,23 +4,30 @@ eureka:
     fetch-registry: true
     service-url:
       #defaultZone: http://${EUREKA_HOST:localhost}:8761/eureka/
-      #defaultZone: http://EUREKA-SERVICE:8761/eureka/
-      defaultZone: http://localhost:8761/eureka/
+      defaultZone: http://EUREKA-SERVICE:8761/eureka/
+      #defaultZone: http://localhost:8761/eureka/
   instance:
    preferIpAddress: true
    #hostname: localhost
 
-management:
-  health:
-    circuitbreakers:
-      enabled: true
-  endpoints:
-    web:
-      exposure:
-        include: health
-  endpoint:
-    health:
-      show-details: always
+#management:
+#  health:
+#    circuitbreakers:
+#      enabled: true
+#  endpoints:
+#    web:
+#      exposure:
+#        include: prometheus, metrics, info, health, shutdown, beans
+#  endpoint:
+#    health:
+#      show-details: always
+#      show-components: always
+#      probes:
+#        enabled: true
+#    prometheus:
+#      enabled: true
+#    metrics:
+#      enabled: true
 
 resilience4j.circuitbreaker:
   instances:

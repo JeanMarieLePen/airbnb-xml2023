@@ -25,7 +25,8 @@ public class SecurityConfig{
 	
 	@Bean
 	public SecurityFilterChain filterChain(HttpSecurity http) throws Exception{
-		http.cors().and().csrf().disable().authorizeHttpRequests().requestMatchers("/login/**", "/main-app-websockets/**", "/main-app-websockets/host/**")
+		http.cors().and().csrf().disable().authorizeHttpRequests().requestMatchers("/login/**", "/main-app-websockets/**", "/main-app-websockets/host/**") 
+		//, "/actuator/*", "/actuator", "/actuator/prometheus"
 		.permitAll()
 		.anyRequest().authenticated()
 		.and()

@@ -19,6 +19,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.xml2023.smestajmicroservice.MetrikeMetode;
 import com.xml2023.smestajmicroservice.dtos.OcenaSmestajaDTO;
 import com.xml2023.smestajmicroservice.dtos.PretragaDTO;
 import com.xml2023.smestajmicroservice.dtos.SmestajDTO;
@@ -34,15 +36,18 @@ public class SmestajController {
 	@Autowired
 	private SmestajService smestajService;
 	@Autowired PretragaService pServ;
-	
+	@Autowired MetrikeMetode met;
 	@PostMapping("/create")
-	public ResponseEntity<SmestajDTO> createNew(@RequestBody SmestajDTO smestaj){
+	public ResponseEntity<SmestajDTO> createNew(@RequestBody SmestajDTO smestaj) throws JsonProcessingException{
 		SmestajDTO retVal = this.smestajService.createNew(smestaj);
+		ResponseEntity<SmestajDTO> resp= new ResponseEntity<SmestajDTO>(HttpStatus.OK);
 		if(retVal == null) {
-			return new ResponseEntity<SmestajDTO>(HttpStatus.NO_CONTENT);
+			resp = new ResponseEntity<SmestajDTO>(HttpStatus.NO_CONTENT);
 		}else {
-			return new ResponseEntity<SmestajDTO>(retVal, HttpStatus.OK);
+			resp = new ResponseEntity<SmestajDTO>(retVal, HttpStatus.OK);
 		}
+		met.createNewMetrike(resp, "/create");
+		return resp;
 	}
 	
 	@PutMapping("/edit/{smestajId}/{vlasnikId}")

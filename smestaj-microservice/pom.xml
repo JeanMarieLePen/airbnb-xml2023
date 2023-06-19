@@ -212,6 +212,16 @@
             <artifactId>micrometer-registry-prometheus</artifactId>
         </dependency>
 		<!-- END: Za monitoring-->
+		<!-- https://mvnrepository.com/artifact/javax.servlet/javax.servlet-api -->
+<dependency>
+    <groupId>javax.servlet</groupId>
+    <artifactId>javax.servlet-api</artifactId>
+    <version>4.0.1</version>
+</dependency>
+<dependency>  <groupId>io.micrometer</groupId>
+   <artifactId>micrometer-core</artifactId>
+   </dependency>
+   
 	</dependencies>
 	<dependencyManagement>
 		<dependencies>

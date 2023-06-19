@@ -21,14 +21,20 @@
       metrics_path: '/actuator/prometheus'
       static_configs:
         - targets: ['reglog:8082']
+      basic_auth:
+        username: 'npele96@gmail.com'
+        password: '1234'
+
     - job_name: 'smestaj'
       metrics_path: '/actuator/prometheus'
       static_configs:
         - targets: ['smestaj:8090']
+
+
     - job_name: 'rezervacija'
       metrics_path: '/actuator/prometheus'
       static_configs:
-        - targets: ['rezervacija:8091']
+        - targets: ['reservation:8091']
     # - job_name: 'restorani'
     #   metrics_path: '/actuator/prometheus'
     #   static_configs:
@@ -45,3 +51,18 @@
     - job_name: 'cAdvisor'
       static_configs:
         - targets: [ 'cadvisor:8080' ]
+
+    # - job_name: 'email-airbnb'
+    #   metrics_path: '/actuator/prometheus'
+    #   static_configs:
+    #     - targets: ['airbnb:8083']
+
+    - job_name: 'email-email'
+      metrics_path: '/actuator/prometheus'
+      static_configs:
+        - targets: ['email:8083']
+      
+    # - job_name: 'email-localhost'
+    #   metrics_path: '/actuator/prometheus'
+    #   static_configs:
+    #     - targets: ['localhost:8083']

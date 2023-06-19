@@ -53,3 +53,9 @@ groups:
   #     annotations:
   #       summary: Too many HTTP requests with status code 200
   #       description: There were {{ $value }} HTTP requests with status code 200 in the last 24 hours, which is above the threshold of 1000.
+
+  - name: DemoAlerts
+    rules:
+      - alert: InstanceDown 
+        expr: up{job="services"} < 1 
+        for: 5m
