@@ -39,7 +39,9 @@ import io.grpc.stub.StreamObserver;
 
 @Service
 public class RezervacijaExistsServiceImpl extends RezervacijaGrpcImplBase {
-
+    private String reservationHost= "reservation";
+	private String smestajHost = "smestaj";
+	private String reglogHost= "reglog";
 	@Autowired RezervacijaRep rRep;
 	@Override
 	public void exists(RezervacijaExistsRequest request, StreamObserver<RezervacijaExistsResponse> responseObserver) {
@@ -70,7 +72,7 @@ public class RezervacijaExistsServiceImpl extends RezervacijaGrpcImplBase {
 		{
 			b= rRep.findAll().stream().anyMatch(x->x.getGost().equals(userId) && x.getStatus().equals(StatusRezervacije.REZERVISANA));
 		}else {
-			ManagedChannel channel = ManagedChannelBuilder.forAddress("localhost", 7977).usePlaintext().build();
+			ManagedChannel channel = ManagedChannelBuilder.forAddress(smestajHost, 7977).usePlaintext().build();
 			SmestajGrpcBlockingStub blockStub= SmestajGrpcGrpc.newBlockingStub(channel);
 			SmestajIdsForHostRequest req= SmestajIdsForHostRequest.newBuilder().setUserId(userId).build();
 			SmestajIdsForHostResponse resIds= blockStub.getSmestajIdsForHost(req);

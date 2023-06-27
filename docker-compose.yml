@@ -33,6 +33,8 @@ services:
     container_name: mongodb
     hostname: mongodb
     image: mongo:4.4
+    # environment:
+    # - MONGO_INITDB_DATABASE=project
     ports:
       - "27017:27017"
     networks:
@@ -105,6 +107,7 @@ services:
     build: ./main-app
     ports:
       - "8082:8082"
+      - "7979:7979"
     environment:
       #- EUREKA_SERVER=http://EUREKA-SERVICE:8761/eureka/
       - SPRING_RABBITMQ_HOST=rabbitmq
@@ -162,6 +165,7 @@ services:
     build: ./smestaj-microservice
     ports:
       - "8090:8090"
+      - "7977:7977"
     environment:
       #- EUREKA_SERVER=http://EUREKA-SERVICE:8761/eureka/
       - SPRING_RABBITMQ_HOST=rabbitmq
@@ -184,32 +188,83 @@ services:
     logging: *fluent-bit
     links:
       - mongodb:mongodb
-  #
-  #
-  #
-  # reservation:
-  #   image: reservation-service
-  #   build: ./reservation-service
+  
+  reservation:
+    image: reservation-service
+    build: ./reservation-service
+    ports:
+      - "8091:8091"
+      - "7978:7978"
+    environment:
+      #- EUREKA_SERVER=http://EUREKA-SERVICE:8761/eureka/
+      - SPRING_RABBITMQ_HOST=rabbitmq
+      - SPRING_RABBITMQ_USERNAME=guest
+      - SPRING_RABBITMQ_PASSWORD=guest
+      - SPRING_REDIS_HOST=redis
+      - SPRING_DATA_MONGODB_HOST=mongodb
+      - JAEGER_DOMAIN=${JAEGER_DOMAIN}
+      - OTEL_SERVICE_NAME=reservation
+      - OTEL_METRICS_EXPORTER=prometheus
+      - OTEL_TRACES_EXPORTER=jaeger
+      - OTEL_EXPORTER_JAEGER_ENDPOINT=http://jaeger:14250
+      - ORG_NEO4J_DRIVER_URI=bolt://neo4j:7687
+
+    depends_on:
+      - gateway-service
+    networks:
+      - airbnb
+      - monitoring
+    logging: *fluent-bit
+
+  mongo-express:
+    image: mongo-express
+    environment:
+      - ME_CONFIG_MONGODB_SERVER=mongodb
+      - ME_CONFIG_MONGODB_PORT=27017
+      - ME_CONFIG_MONGODB_ENABLE_ADMIN=false
+      # - ME_CONFIG_MONGODB_AUTH_DATABASE=admin
+      # - ME_CONFIG_MONGODB_AUTH_USERNAME=${MONGO_ROOT_USER}
+      # - ME_CONFIG_MONGODB_AUTH_PASSWORD=${MONGO_ROOT_PASSWORD}
+      # - ME_CONFIG_BASICAUTH_USERNAME=${MONGOEXPRESS_LOGIN}
+      # - ME_CONFIG_BASICAUTH_PASSWORD=${MONGOEXPRESS_PASSWORD}
+    depends_on:
+      - mongodb
+    ports:
+      - "8888:8081"
+    networks:
+      - airbnb
+
+  
+
+  airbnb_front:
+    build: ./airbnb-xml2023-front-smestaj
+    command: npm run serve
+    ports:
+      - 8081:8081
+    volumes:
+      - .:/usr/app/
+      - /usr/app/node_modules
+
+  # flights_mongodb:
+  #   image: "mongo:4.4.3"
+  #   restart: always
   #   ports:
-  #     - "8091:8091"
-  #   environment:
-  #     #- EUREKA_SERVER=http://EUREKA-SERVICE:8761/eureka/
-  #     - SPRING_RABBITMQ_HOST=rabbitmq
-  #     - SPRING_RABBITMQ_USERNAME=guest
-  #     - SPRING_RABBITMQ_PASSWORD=guest
-  #     - SPRING_REDIS_HOST=redis
-  #     - SPRING_DATA_MONGODB_HOST=mongodb
-  #     - JAEGER_DOMAIN=${JAEGER_DOMAIN}
-  #     - OTEL_SERVICE_NAME=rezervacija
-  #     - OTEL_METRICS_EXPORTER=prometheus
-  #     - OTEL_TRACES_EXPORTER=jaeger
-  #     - OTEL_EXPORTER_JAEGER_ENDPOINT=http://jaeger:14250
-  #   depends_on:
-  #     - gateway-service
-  #   networks:
-  #     - airbnb
-  #     - monitoring
-  #   logging: *fluent-bit
+  #     - 27018:27017
+  # flights:
+  #   build: ./flights
+  #   restart: always
+  #   ports:
+  #     - 8084:8084
+  #   links:
+  #     - flights_mongodb:app_db
+  # flights_front:
+  #   build: ./planetickets
+  #   command: npm run serve
+  #   ports:
+  #     - 8079:8080
+  #   volumes:
+  #     - .:/usr/app/
+  #     - /usr/app/node_modules  
   
 volumes:
   database-data:

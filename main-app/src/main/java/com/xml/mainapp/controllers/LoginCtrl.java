@@ -50,7 +50,7 @@ public class LoginCtrl {
 	private MyUserDetailsService myUserDetailsService;
 	@Autowired
 	private GenerateJwt generateJwt;
-	@Autowired MeterRegistry mReg;
+	//@Autowired MeterRegistry mReg;
 	@GetMapping("/test")
 	public String testEndPoint() {
 		String port = environment.getProperty("local.server.port");
@@ -77,10 +77,10 @@ public class LoginCtrl {
 			e.printStackTrace();
 			
 			
-			mReg.counter("http_requests_total","method","get", "status", "204", "uri","login/authenticate").increment();
+			//mReg.counter("http_requests_total","method","get", "status", "204", "uri","login/authenticate").increment();
 			ResponseEntity<LoginResponseDTO> rsp= new ResponseEntity<LoginResponseDTO>(HttpStatus.NO_CONTENT);
-			int i= rsp.toString().getBytes().length;
-			mReg.counter("http_response_size_bytes","method","get", "status", "204", "uri","login/authenticate", "size", Integer.toString(i) ).increment();
+			//int i= rsp.toString().getBytes().length;
+			//mReg.counter("http_response_size_bytes","method","get", "status", "204", "uri","login/authenticate", "size", Integer.toString(i) ).increment();
 
 			return new ResponseEntity<LoginResponseDTO>(HttpStatus.NO_CONTENT);
 		}
@@ -91,7 +91,7 @@ public class LoginCtrl {
 		final String jwt = generateJwt.generateToken(userDetails);
 		System.out.println("TOKEN KOJI SE SALJE U ODGOVORU NA ZAHTEV ZA LOGIN: " + jwt);
 		
-		mReg.counter("http_requests_total","method","get", "status", "200", "uri","login/authenticate").increment();
+		//mReg.counter("http_requests_total","method","get", "status", "200", "uri","login/authenticate").increment();
 		
 		return ResponseEntity.ok(new LoginResponseDTO(jwt));
 		

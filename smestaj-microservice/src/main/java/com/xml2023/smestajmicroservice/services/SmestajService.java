@@ -69,6 +69,10 @@ public class SmestajService {
 	@Autowired
 	private Neo4JKorisnikRep korisnikNeoRep;
 	
+	//private String reservationHost= "reservation";
+	private String smestajHost = "smestaj";
+	private String reglogHost= "reglog";
+	
 	public SmestajDTO createNew(SmestajDTO s) {
 		//u maperu se definisu i cuvaju svi objekti koji su ugnjezdeni u objekat smestaj
 		Smestaj tmp = smestajMapper.fromDTO(s);
@@ -116,7 +120,7 @@ public class SmestajService {
 			return null;
 		}
 		//da li ima trenutno aktivnih rezervacija prema tom smestaju
-		ManagedChannel channel = ManagedChannelBuilder.forAddress("localhost", 7978).usePlaintext().build();
+		ManagedChannel channel = ManagedChannelBuilder.forAddress("reservation", 7978).usePlaintext().build();
 		RezervacijaGrpcBlockingStub rezServBlockStub = RezervacijaGrpcGrpc.newBlockingStub(channel);
 		ActiveResExistsForSmestajRequest req = ActiveResExistsForSmestajRequest.newBuilder().setUserId(smestajId).build();
 		ActiveResExistsForSmestajResponse response = rezServBlockStub.resExistsForSmestaj(req);
@@ -208,7 +212,7 @@ public class SmestajService {
 	
 	//provera da li je host id-a idVlasnik u svojim podesavanjima ukljucio obavestenja za novu ocenu smestaja
 	public boolean novaOcenaSmestajaNotificationEnabled(String idVlasnika) {
-		ManagedChannel channel = ManagedChannelBuilder.forAddress("localhost", 7979).usePlaintext().build();
+		ManagedChannel channel = ManagedChannelBuilder.forAddress(reglogHost, 7979).usePlaintext().build();
 		KorisnikGrpcBlockingStub bs = KorisnikGrpcGrpc.newBlockingStub(channel);
 		NovaOcenaSmestajaNotifikacijaRequest rqst = NovaOcenaSmestajaNotifikacijaRequest.newBuilder().setIdKorisnika(idVlasnika).build();
 		NovaOcenaSmestajaNotifikacijaResponse rspns = bs.novaOcenaSmestajaNotStatus(rqst);
@@ -216,7 +220,7 @@ public class SmestajService {
 	}
 	
 	public void newSmestajOcenaNotify(OcenaSmestaj os) {
-		ManagedChannel channel = ManagedChannelBuilder.forAddress("localhost", 7979).usePlaintext().build();
+		ManagedChannel channel = ManagedChannelBuilder.forAddress(reglogHost, 7979).usePlaintext().build();
 		KorisnikGrpcBlockingStub bs = KorisnikGrpcGrpc.newBlockingStub(channel);
 		NekoOcenioSmestajRequest rqst = NekoOcenioSmestajRequest.newBuilder().setIdKorisnika(os.getGost()).setIdSmestaja(os.getSmestaj()).setOcena(os.getOcena()).build();
 		NekoOcenioSmestajResponse rspns = bs.newRankSmestaj(rqst);

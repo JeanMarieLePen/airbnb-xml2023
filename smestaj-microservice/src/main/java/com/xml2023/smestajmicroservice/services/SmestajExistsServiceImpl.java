@@ -79,6 +79,7 @@ public class SmestajExistsServiceImpl extends SmestajGrpcImplBase{
 	@Override
 	public void zauzmiTermin(TerminZauzmiRequest request, StreamObserver<TerminZauzmiResponse> responseObserver) {
 		// TODO Auto-generated method stub
+		System.out.println("ZAUZIMANJE TERMINA, smestajId:" +request.getSmestajId());
 		String id = request.getSmestajId();
 		TerminDTO t = request.getTermin();
 		Smestaj s = this.sRep.findById(id).orElse(null);

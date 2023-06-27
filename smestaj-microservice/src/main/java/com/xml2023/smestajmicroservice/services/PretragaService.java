@@ -39,6 +39,9 @@ public class PretragaService {
 	@Autowired 
 	private SmestajPretragaMapper smMap;
 	@Autowired OcenaSmestajRep oRep;
+	
+	private String rezService="reservation";
+	
 	public Collection<SmestajPretragaDTO> pretraga(PretragaDTO dto){
 		Query query = new Query();
 		if(dto.getAdresa()!=null && !dto.getAdresa().getAdresa().trim().equals("")) {
@@ -89,7 +92,7 @@ public class PretragaService {
 	public boolean isSlobodan(Smestaj s, LocalDateTime pocetak, LocalDateTime kraj) {
 //		List<Rezervacija> rezervacijeAktIPreklop= s.getRezervacije().stream().filter(x->x.getStatus().equals(StatusRezervacije.REZERVISANA) && 
 //				preklop(x.getOdDatum(),x.getDoDatum(),pocetak,kraj)).collect(Collectors.toList());
-		ManagedChannel channel = ManagedChannelBuilder.forAddress("localhost", 7978).usePlaintext().build();
+		ManagedChannel channel = ManagedChannelBuilder.forAddress(rezService, 7978).usePlaintext().build();
 		RezervacijaGrpcBlockingStub rezServBlockStub = RezervacijaGrpcGrpc.newBlockingStub(channel);
 		
 		ActiveReservationsRequest.Builder req = ActiveReservationsRequest.newBuilder();

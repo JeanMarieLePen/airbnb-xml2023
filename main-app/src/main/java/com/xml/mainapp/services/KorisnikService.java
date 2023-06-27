@@ -94,6 +94,11 @@ public class KorisnikService {
 	private GuestMapper guestMapper;
 	@Autowired OcenaHostRep oRep;
 	
+	private String reservationHost= "reservation";
+	private String smestajHost = "smestaj";
+	private String reglogHost= "reglog";
+	
+	
 //	@Cacheable(key="#id", value = "Korisnik")
 	public KorisnikDTO getUserById(String id) {
 		// TODO Auto-generated method stub
@@ -359,7 +364,7 @@ public class KorisnikService {
 		
 		if(k.getTipKorisnika().equals(TipKorisnika.GUEST)) {
 			Guest g = this.korisnikRep.findGuestById(id);
-			ManagedChannel channel = ManagedChannelBuilder.forAddress("localhost", 7978).usePlaintext().build();
+			ManagedChannel channel = ManagedChannelBuilder.forAddress(reservationHost, 7978).usePlaintext().build();
 			RezervacijaGrpcBlockingStub blockStub= RezervacijaGrpcGrpc.newBlockingStub(channel);
 			ActiveResExistsRequest req=ActiveResExistsRequest.newBuilder().setUserId(g.getId()).setTip("gost").build();
 			ActiveResExistsResponse res=blockStub.reservationsForUserExists(req);
@@ -374,7 +379,7 @@ public class KorisnikService {
 		
 		if(k.getTipKorisnika().equals(TipKorisnika.HOST)) {
 			Host h =  this.korisnikRep.findHostById(id);
-			ManagedChannel channel = ManagedChannelBuilder.forAddress("localhost", 7978).usePlaintext().build();
+			ManagedChannel channel = ManagedChannelBuilder.forAddress(reservationHost, 7978).usePlaintext().build();
 			RezervacijaGrpcBlockingStub blockStub= RezervacijaGrpcGrpc.newBlockingStub(channel);
 			ActiveResExistsRequest req=ActiveResExistsRequest.newBuilder().setUserId(h.getId()).setTip("host").build();
 			ActiveResExistsResponse res=blockStub.reservationsForUserExists(req);
@@ -385,7 +390,7 @@ public class KorisnikService {
 			}
 			
 			//TODO: posalji zahtev smestaju za brisanje korisnikovih smestaja
-			ManagedChannel channelSmestaj = ManagedChannelBuilder.forAddress("localhost", 7977).usePlaintext().build();
+			ManagedChannel channelSmestaj = ManagedChannelBuilder.forAddress(smestajHost, 7977).usePlaintext().build();
 			SmestajGrpcBlockingStub blockStubSm= SmestajGrpcGrpc.newBlockingStub(channelSmestaj);
 			DeleteSmestajsForHostRequest delReq= DeleteSmestajsForHostRequest.newBuilder().setHostId(id).build();
 			DeleteSmestajsForHostResponse delRes= blockStubSm.deketeSnestajsForHost(delReq);
@@ -399,7 +404,7 @@ public class KorisnikService {
 		return null;
 	}	
 	private Collection<com.xml2023.mainapp.SmestajDTO>getAllSmestajForHost(String hostId) {
-		ManagedChannel channelSmestaj = ManagedChannelBuilder.forAddress("localhost", 7977).usePlaintext().build();
+		ManagedChannel channelSmestaj = ManagedChannelBuilder.forAddress(smestajHost, 7977).usePlaintext().build();
 		SmestajGrpcBlockingStub blockStubSm= SmestajGrpcGrpc.newBlockingStub(channelSmestaj);
 		getListaSmestajaByUserIdRequest reqLista= getListaSmestajaByUserIdRequest.newBuilder().setId(hostId).build();
 		getListaSmestajaByUserIdResponse resLista= blockStubSm.getListaSmestajaByUserId(reqLista);
@@ -407,7 +412,7 @@ public class KorisnikService {
 	}
 	
 	private Collection<com.xml2023.mainapp.RezervacijaDTO> getAllRezervacijaForGuest(String guestId){
-		ManagedChannel channelRez = ManagedChannelBuilder.forAddress("localhost", 7977).usePlaintext().build();
+		ManagedChannel channelRez = ManagedChannelBuilder.forAddress(reservationHost, 7978).usePlaintext().build();
 		RezervacijaGrpcBlockingStub blockStubRez= RezervacijaGrpcGrpc.newBlockingStub(channelRez);
 		getListaRezervacijaByUserIdRequest reqRez= getListaRezervacijaByUserIdRequest.newBuilder().setId(guestId).build();
 		getListaRezervacijaByUserIdResponse resRez= blockStubRez.getListaRezervacijaByUserId(reqRez);
@@ -456,14 +461,14 @@ public class KorisnikService {
 	}
 	
 	public boolean izmeniStatusHosta(String idHosta, boolean istaknuti) {
-		ManagedChannel channel = ManagedChannelBuilder.forAddress("localhost", 7979).usePlaintext().build();
+		ManagedChannel channel = ManagedChannelBuilder.forAddress(reglogHost, 7979).usePlaintext().build();
 		KorisnikGrpcBlockingStub korBlockingStub = KorisnikGrpcGrpc.newBlockingStub(channel);
 		DobioStatusIstaknutogRequest rqst = DobioStatusIstaknutogRequest.newBuilder().setIdKorisnika(idHosta).setStatus(istaknuti).build();
 		DobioStatusIstaknutogResponse rspns = korBlockingStub.istaknutiHost(rqst);
 		return rspns.getResult();
 	}
 	public boolean novaOcenaHostaNotificationEnabled(String idVlasnika) {
-		ManagedChannel channel = ManagedChannelBuilder.forAddress("localhost", 7979).usePlaintext().build();
+		ManagedChannel channel = ManagedChannelBuilder.forAddress(reglogHost, 7979).usePlaintext().build();
 		KorisnikGrpcBlockingStub bs = KorisnikGrpcGrpc.newBlockingStub(channel);
 		NovaOcenaHostaNotifikacijaRequest rqst = NovaOcenaHostaNotifikacijaRequest.newBuilder().setIdKorisnika(idVlasnika).build();
 		NovaOcenaHostaNotifikacijaResponse rspns = bs.novaOcenaHostaNotStatus(rqst);
@@ -471,7 +476,7 @@ public class KorisnikService {
 	}
 	
 	public void newHostOcenaNotify(OcenaHost oh) {
-		ManagedChannel channel = ManagedChannelBuilder.forAddress("localhost", 7979).usePlaintext().build();
+		ManagedChannel channel = ManagedChannelBuilder.forAddress(reglogHost, 7979).usePlaintext().build();
 		KorisnikGrpcBlockingStub bs = KorisnikGrpcGrpc.newBlockingStub(channel);
 		NekoOcenioHostaRequest rqst = NekoOcenioHostaRequest.newBuilder().setIdKorisnika(oh.getGost()).setOcena(oh.getOcena()).build();
 		NekoOcenioHostaResponse rspns = bs.newRankHost(rqst);
