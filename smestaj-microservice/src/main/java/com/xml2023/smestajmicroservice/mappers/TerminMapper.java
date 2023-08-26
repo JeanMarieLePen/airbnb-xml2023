@@ -17,7 +17,7 @@ public class TerminMapper {
 		TerminDTO tdto = new TerminDTO();
 		tdto.setKraj(t.getKraj());
 		tdto.setPocetak(t.getPocetak());
-		tdto.setId(t.getId());
+//		tdto.setId(t.getId());
 		return tdto;
 	}
 

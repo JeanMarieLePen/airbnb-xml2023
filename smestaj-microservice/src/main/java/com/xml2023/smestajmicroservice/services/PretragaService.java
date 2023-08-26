@@ -7,6 +7,7 @@ import java.time.ZoneOffset;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -56,14 +57,23 @@ public class PretragaService {
 		}
 		//query
 		List<Smestaj> pronadjeni=monTempl.find(query, Smestaj.class);
-		System.out.println("Prondajenih u bazi :"+pronadjeni.size());
+		System.out.println("Pronadjenih u bazi :"+pronadjeni.size());
 		
+		System.out.println("FILTERI ZAKOMENTARISANI");
 		//filter datumi rez i nedostupni datumi
 		if(dto.getPocetak()!=null && dto.getKraj()!=null) {
 			pronadjeni=pronadjeni.stream().filter(x-> isSlobodan(x, dto.getPocetak(), dto.getKraj())).collect(Collectors.toList());
 		}
-
-		List<SmestajPretragaDTO> dtos = pronadjeni.stream().map(x-> smMap.toDTO(x, dto.getPocetak(), dto.getKraj())).collect(Collectors.toList());
+		
+//		List<SmestajPretragaDTO> dtos = pronadjeni.stream().map(x-> smMap.toDTO(x, dto.getPocetak(), dto.getKraj())).collect(Collectors.toList());
+		
+		List<SmestajPretragaDTO> dtos = new ArrayList<>();
+		System.out.println("POCETAK KONVERZIJE");
+		for (Smestaj obj : pronadjeni) {
+			System.out.println("ITERACIJA KONVERZIJE");
+			dtos.add(smMap.toDTO(obj, dto.getPocetak(), dto.getKraj()));
+		}
+		
 		//filter za cene
 		if(dto.getMinCena()>-1) {
 			dtos=dtos.stream().filter(x-> x.getUkCena()>=dto.getMinCena()).collect(Collectors.toList());
@@ -76,9 +86,16 @@ public class PretragaService {
 			String trazenaAdresa=dto.getAdresa().getAdresa().toLowerCase().trim();
 			dtos=dtos.stream().filter(x->x.getAdresa().getAdresa().toLowerCase().contains(trazenaAdresa)).collect(Collectors.toList());
 		}
-		if(dtos.isEmpty()) return new ArrayList<SmestajPretragaDTO>();
-		else
-		return dtos;
+		System.out.println("DTOS lista[broj elemenata]:  " + dtos.size());
+		if(dtos.isEmpty()) {
+			System.out.println("LISTA PRAZNA");
+			return new ArrayList<SmestajPretragaDTO>();
+		}
+			
+		else {
+			System.out.println("LISTA NIJE PRAZNA");
+			return dtos;
+		}
 	}
 	
 	public Timestamp convertToTimeStamp(LocalDateTime ldt) {
@@ -90,19 +107,35 @@ public class PretragaService {
 	}
 	//provera dostupnosti preko rezervacija i nedosupnih termina
 	public boolean isSlobodan(Smestaj s, LocalDateTime pocetak, LocalDateTime kraj) {
+		
+		System.out.println("POCETAK GRPC KOMUNIKACIJE IZMEDJU SMESTAJ I RESERVATION");
 //		List<Rezervacija> rezervacijeAktIPreklop= s.getRezervacije().stream().filter(x->x.getStatus().equals(StatusRezervacije.REZERVISANA) && 
 //				preklop(x.getOdDatum(),x.getDoDatum(),pocetak,kraj)).collect(Collectors.toList());
-		ManagedChannel channel = ManagedChannelBuilder.forAddress(rezService, 7978).usePlaintext().build();
+		ManagedChannel channel = ManagedChannelBuilder.forAddress("reservation", 7978).usePlaintext().build();
 		RezervacijaGrpcBlockingStub rezServBlockStub = RezervacijaGrpcGrpc.newBlockingStub(channel);
 		
 		ActiveReservationsRequest.Builder req = ActiveReservationsRequest.newBuilder();
 		ActiveReservationsResponse rezervacijaAkt = rezServBlockStub.getActiveReservations(req.setSmestajId(s.getId()).setPocetak(convertToTimeStamp(pocetak)).setKraj(convertToTimeStamp(kraj)).build());
+		
+		channel.shutdown();
+
+		boolean terminated = false;
+		while (!terminated) {
+		  try {
+		    // Wait for the channel to terminate gracefully
+		    terminated = channel.awaitTermination(10, TimeUnit.SECONDS);
+		  } catch (InterruptedException e) {
+		    // Handle the exception if necessary
+		    e.printStackTrace();
+		  }
+		}
 		
 		List<RezervacijaDTO> rezervacijeAktIPreklop = rezervacijaAkt.getListaRezervacijaList().stream().filter(x -> 
 			this.preklop(convertFromTimeStamp(x.getOdDatum()), convertFromTimeStamp(x.getDoDatum()), pocetak, kraj)).collect(Collectors.toList());
 		
 		
 		List<Termin> preklopSaNedostupnima= s.getNedostupni().stream().filter(x->preklop(x.getPocetak(),x.getKraj(),pocetak,kraj)).collect(Collectors.toList());
+		System.out.println("KRAJ GRPC KOMUNIKACIJE IZMEDJU SMESTAJ I RESERVATION");
 		if(rezervacijeAktIPreklop.size()>0 || preklopSaNedostupnima.size()>0) return false;
 		else return true;
 	}

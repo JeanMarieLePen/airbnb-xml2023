@@ -83,18 +83,21 @@ public class SmestajExistsServiceImpl extends SmestajGrpcImplBase{
 		String id = request.getSmestajId();
 		TerminDTO t = request.getTermin();
 		Smestaj s = this.sRep.findById(id).orElse(null);
-		
+		System.out.println("ID SMESTAJA IZ BAZE: " + s.getId());
 		TerminZauzmiResponse.Builder response = TerminZauzmiResponse.newBuilder();
 		
 		boolean zauzet = false;
 		if(s != null) {
 			Termin tmp = new Termin();
+//			System.out.println("ID NOVOG TERMINA: " + tmp.getId());
 			tmp.setPocetak(convertFromTimeStamp(t.getPocetak()));
 			tmp.setKraj(convertFromTimeStamp(t.getKraj()));
 			s.getNedostupni().add(tmp);
 			zauzet = true;
 			response.setZauzet(zauzet);
-			response.setTerminId(tmp.getId());
+//			response.setTerminId(tmp.getId());
+			response.setTerminId("RANDOMSTRING");
+			System.out.println("ODGOVOR: " + response.toString());
 		}
 		this.sRep.save(s);
 		responseObserver.onNext(response.build());
@@ -181,7 +184,7 @@ public class SmestajExistsServiceImpl extends SmestajGrpcImplBase{
 	public void getListaSmestajaByUserId(getListaSmestajaByUserIdRequest request,
 			StreamObserver<getListaSmestajaByUserIdResponse> responseObserver) {
 		// TODO Auto-generated method stub
-		
+		System.out.println("GRPC: USLO U SMESTAJ SERVICE");
 		String userId = request.getId();
 		List<Smestaj> listaSmestaja = this.sRep.findAll().stream().filter(s -> s.getVlasnik().equals(userId)).toList();
 		getListaSmestajaByUserIdResponse.Builder response = getListaSmestajaByUserIdResponse.newBuilder();
@@ -195,6 +198,8 @@ public class SmestajExistsServiceImpl extends SmestajGrpcImplBase{
 		}
 		responseObserver.onNext(response.build());
 		responseObserver.onCompleted();
+		
+		System.out.println("GRPC: IZLAZI IZ SMESTAJ SERVICE-a");
 	}
 	
 	public AdresaDTO mapAdresa(Adresa a) {

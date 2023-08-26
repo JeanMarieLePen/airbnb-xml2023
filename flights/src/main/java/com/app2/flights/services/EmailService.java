@@ -29,7 +29,7 @@ public class EmailService {
 	
 	private SimpleMailMessage mail;
 	private static String host="http://localhost:8084";
-	
+//	private static String host="http://flights:8084";
 	@Async
 	public void sendActivationEmail(RegKor k) {
 		SimpleMailMessage mail = new SimpleMailMessage();

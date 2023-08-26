@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.Base64;
 import java.util.Collection;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,8 +33,9 @@ public class SmestajPretragaMapper {
 	@Autowired OcenaSmestajRep oRep;
 	public SmestajPretragaDTO toDTO(Smestaj s, LocalDateTime pocetak, LocalDateTime kraj) {
 		
+		System.out.println("Pocetak konverzije entiteta: " + s.getId());
 		SmestajPretragaDTO dto = new SmestajPretragaDTO();
-		
+		System.out.println("Objekat: " + s.toString());
 		dto.setAdresa(aMapper.toDTO(s.getAdresa()));
 		dto.setId(s.getId());
 		dto.setMaxGosti(s.getMaxGosti());
@@ -54,15 +56,28 @@ public class SmestajPretragaMapper {
 		dto.setProsecnaOcena(getProsecnaOcena(s.getId()));
 		dto.setUkCena(ukupnaCena(s, pocetak, kraj));
 		dto.setPoSmestaju(s.getCenovnik().isPoSmestaju());
+		System.out.println("KONVERZIJA ENTITETA ID-a: " + s.getId() + ": USPESNA");
 		return dto;
 		
 	} 
 	
 	public HostBasicDTO getHost(String hostId) {
-		ManagedChannel channel = ManagedChannelBuilder.forAddress("localhost", 7979).usePlaintext().build();
+		ManagedChannel channel = ManagedChannelBuilder.forAddress("reglog", 7979).usePlaintext().build();
 		KorisnikGrpcBlockingStub bs = KorisnikGrpcGrpc.newBlockingStub(channel);
 		getHostRequest rqst = getHostRequest.newBuilder().setHostId(hostId).build();
 		getHostResponse rspns = bs.getHost(rqst);
+		channel.shutdown();
+
+		boolean terminated = false;
+		while (!terminated) {
+		  try {
+		    // Wait for the channel to terminate gracefully
+		    terminated = channel.awaitTermination(10, TimeUnit.SECONDS);
+		  } catch (InterruptedException e) {
+		    // Handle the exception if necessary
+		    e.printStackTrace();
+		  }
+		}
 		return rspns.getHost();
 	}
 	

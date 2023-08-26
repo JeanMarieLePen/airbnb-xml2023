@@ -8,6 +8,7 @@ import java.time.ZoneOffset;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
@@ -200,6 +201,18 @@ public class RezervacijaService {
 		SmestajGrpcBlockingStub smestajBlockingStub = SmestajGrpcGrpc.newBlockingStub(channel);
 		TerminOslobodiRequest rqst = TerminOslobodiRequest.newBuilder().setSmestajId(r.getSmestaj()).setTermin(mapTermin(r.getOdDatum(), r.getDoDatum())).build();
 		TerminOslobodiResponse rspns = smestajBlockingStub.oslobodiTermin(rqst);
+		channel.shutdown();
+
+		boolean terminated = false;
+		while (!terminated) {
+		  try {
+		    // Wait for the channel to terminate gracefully
+		    terminated = channel.awaitTermination(10, TimeUnit.SECONDS);
+		  } catch (InterruptedException e) {
+		    // Handle the exception if necessary
+		    e.printStackTrace();
+		  }
+		}
 		if(rspns.getOslobodjen()) {
 			r.setStatus(StatusRezervacije.OTKAZANA);
 		}
@@ -254,6 +267,18 @@ public class RezervacijaService {
 		SmestajGrpcBlockingStub smestajBlockingStub = SmestajGrpcGrpc.newBlockingStub(channel);
 		TerminZauzmiRequest rqst = TerminZauzmiRequest.newBuilder().setSmestajId(smestajId).setTermin(mapTermin(r.getOdDatum(), r.getDoDatum())).build();
 		TerminZauzmiResponse rspns = smestajBlockingStub.zauzmiTermin(rqst);
+		channel.shutdown();
+
+		boolean terminated = false;
+		while (!terminated) {
+		  try {
+		    // Wait for the channel to terminate gracefully
+		    terminated = channel.awaitTermination(10, TimeUnit.SECONDS);
+		  } catch (InterruptedException e) {
+		    // Handle the exception if necessary
+		    e.printStackTrace();
+		  }
+		}
 		if(rspns.getZauzet()) {
 			r.setStatus(setStatusRez(smestaj.getVlasnik()));			
 		}else {
@@ -327,6 +352,18 @@ public class RezervacijaService {
 			SmestajGrpcBlockingStub smestajBlockingStub = SmestajGrpcGrpc.newBlockingStub(channel);
 			TerminZauzmiRequest rqst = TerminZauzmiRequest.newBuilder().setSmestajId(smestajId).setTermin(mapTermin(r.getOdDatum(), r.getDoDatum())).build();
 			TerminZauzmiResponse rspns = smestajBlockingStub.zauzmiTermin(rqst);
+			channel.shutdown();
+
+			boolean terminated = false;
+			while (!terminated) {
+			  try {
+			    // Wait for the channel to terminate gracefully
+			    terminated = channel.awaitTermination(10, TimeUnit.SECONDS);
+			  } catch (InterruptedException e) {
+			    // Handle the exception if necessary
+			    e.printStackTrace();
+			  }
+			}
 			if(rspns.getZauzet()) {
 				rez.setStatus(StatusRezervacije.REZERVISANA);
 				
@@ -386,6 +423,18 @@ public class RezervacijaService {
 		KorisnikGrpcBlockingStub korBlockingStub = KorisnikGrpcGrpc.newBlockingStub(channel);
 		DobioStatusIstaknutogRequest rqst = DobioStatusIstaknutogRequest.newBuilder().setIdKorisnika(idHosta).setStatus(istaknuti).build();
 		DobioStatusIstaknutogResponse rspns = korBlockingStub.istaknutiHost(rqst);
+		channel.shutdown();
+
+		boolean terminated = false;
+		while (!terminated) {
+		  try {
+		    // Wait for the channel to terminate gracefully
+		    terminated = channel.awaitTermination(10, TimeUnit.SECONDS);
+		  } catch (InterruptedException e) {
+		    // Handle the exception if necessary
+		    e.printStackTrace();
+		  }
+		}
 		return rspns.getResult();
 	}
 	public boolean promenaStatusaHostaNotificationEnabled(String idVlasnika) {
@@ -393,6 +442,18 @@ public class RezervacijaService {
 		KorisnikGrpcBlockingStub bs = KorisnikGrpcGrpc.newBlockingStub(channel);
 		StatusIstaknutogNotifikacijaRequest rqst = StatusIstaknutogNotifikacijaRequest.newBuilder().setIdKorisnika(idVlasnika).build();
 		StatusIstaknutogNotifikacijaResponse rspns = bs.istaknutiNotStatus(rqst);
+		channel.shutdown();
+
+		boolean terminated = false;
+		while (!terminated) {
+		  try {
+		    // Wait for the channel to terminate gracefully
+		    terminated = channel.awaitTermination(10, TimeUnit.SECONDS);
+		  } catch (InterruptedException e) {
+		    // Handle the exception if necessary
+		    e.printStackTrace();
+		  }
+		}
 		return rspns.getStanje();
 	}
 	public boolean novaRezervacijaNotificationEnabled(String idVlasnika) {
@@ -400,6 +461,18 @@ public class RezervacijaService {
 		KorisnikGrpcBlockingStub bs = KorisnikGrpcGrpc.newBlockingStub(channel);
 		NovaRezervacijaNotifikacijaRequest rqst = NovaRezervacijaNotifikacijaRequest.newBuilder().setIdKorisnika(idVlasnika).build();
 		NovaRezervacijaNotifikacijaResponse rspns = bs.novaRezNotStatus(rqst);
+		channel.shutdown();
+
+		boolean terminated = false;
+		while (!terminated) {
+		  try {
+		    // Wait for the channel to terminate gracefully
+		    terminated = channel.awaitTermination(10, TimeUnit.SECONDS);
+		  } catch (InterruptedException e) {
+		    // Handle the exception if necessary
+		    e.printStackTrace();
+		  }
+		}
 		return rspns.getStanje();
 	}
 	
@@ -408,6 +481,18 @@ public class RezervacijaService {
 		KorisnikGrpcBlockingStub bs = KorisnikGrpcGrpc.newBlockingStub(channel);
 		NekoRezervisaoRequest rqst = NekoRezervisaoRequest.newBuilder().setIdSmestaja(r.getSmestaj()).setIdKorisnika(r.getGost()).build();
 		NekoRezervisaoResponse rspns = bs.newRezNotify(rqst);
+		channel.shutdown();
+
+		boolean terminated = false;
+		while (!terminated) {
+		  try {
+		    // Wait for the channel to terminate gracefully
+		    terminated = channel.awaitTermination(10, TimeUnit.SECONDS);
+		  } catch (InterruptedException e) {
+		    // Handle the exception if necessary
+		    e.printStackTrace();
+		  }
+		}
 		if(rspns.getResult()) {
 			System.out.println("USPESNO POSLATO OBAVESTENJE HOSTU");
 		}
@@ -436,6 +521,18 @@ public class RezervacijaService {
 		SmestajGrpcBlockingStub smestajBlockingStub = SmestajGrpcGrpc.newBlockingStub(channel);
 		TerminOslobodiRequest rqst = TerminOslobodiRequest.newBuilder().setSmestajId(r.getSmestaj()).setTermin(mapTermin(r.getOdDatum(), r.getDoDatum())).build();
 		TerminOslobodiResponse rspns = smestajBlockingStub.oslobodiTermin(rqst);
+		channel.shutdown();
+
+		boolean terminated = false;
+		while (!terminated) {
+		  try {
+		    // Wait for the channel to terminate gracefully
+		    terminated = channel.awaitTermination(10, TimeUnit.SECONDS);
+		  } catch (InterruptedException e) {
+		    // Handle the exception if necessary
+		    e.printStackTrace();
+		  }
+		}
 		if(rspns.getOslobodjen()) {
 			r.setStatus(StatusRezervacije.OTKAZANA);
 		}else {
@@ -470,6 +567,18 @@ public class RezervacijaService {
 		SmestajGrpcBlockingStub smestajBlockingStub = SmestajGrpcGrpc.newBlockingStub(channel);
 		TerminOslobodiRequest rqst = TerminOslobodiRequest.newBuilder().setSmestajId(r.getSmestaj()).setTermin(mapTermin(r.getOdDatum(), r.getDoDatum())).build();
 		TerminOslobodiResponse rspns = smestajBlockingStub.oslobodiTermin(rqst);
+		channel.shutdown();
+
+		boolean terminated = false;
+		while (!terminated) {
+		  try {
+		    // Wait for the channel to terminate gracefully
+		    terminated = channel.awaitTermination(10, TimeUnit.SECONDS);
+		  } catch (InterruptedException e) {
+		    // Handle the exception if necessary
+		    e.printStackTrace();
+		  }
+		}
 		if(rspns.getOslobodjen()) {
 			r.setStatus(StatusRezervacije.OTKAZANA);
 		}else {
@@ -496,6 +605,18 @@ public class RezervacijaService {
 		KorisnikGrpcBlockingStub bs = KorisnikGrpcGrpc.newBlockingStub(channel);
 		OtkazanaRezervacijaNotifikacijaRequest rqst = OtkazanaRezervacijaNotifikacijaRequest.newBuilder().setIdKorisnika(idVlasnika).build();
 		OtkazanaRezervacijaNotifikacijaResponse rspns = bs.otkazanaRezNotStatus(rqst);
+		channel.shutdown();
+
+		boolean terminated = false;
+		while (!terminated) {
+		  try {
+		    // Wait for the channel to terminate gracefully
+		    terminated = channel.awaitTermination(10, TimeUnit.SECONDS);
+		  } catch (InterruptedException e) {
+		    // Handle the exception if necessary
+		    e.printStackTrace();
+		  }
+		}
 		return rspns.getStanje();
 	}
 	public void newCancelationNotify(Rezervacija r) {
@@ -503,6 +624,18 @@ public class RezervacijaService {
 		KorisnikGrpcBlockingStub bs = KorisnikGrpcGrpc.newBlockingStub(channel);
 		NekoOtkazaoRequest rqst = NekoOtkazaoRequest.newBuilder().setIdKorisnika(r.getGost()).setIdSmestaja(r.getSmestaj()).build();
 		NekoOtkazaoResponse rspns = bs.newQuitNotify(rqst);
+		channel.shutdown();
+
+		boolean terminated = false;
+		while (!terminated) {
+		  try {
+		    // Wait for the channel to terminate gracefully
+		    terminated = channel.awaitTermination(10, TimeUnit.SECONDS);
+		  } catch (InterruptedException e) {
+		    // Handle the exception if necessary
+		    e.printStackTrace();
+		  }
+		}
 		if(rspns.getResult()) {
 			System.out.println("USPESNO POSLATO OBAVESTENJE HOSTU");
 		}
@@ -510,12 +643,27 @@ public class RezervacijaService {
 	
 	public Collection<RezervacijaDTO> getAllReservationsByHostId(String id) {
 		// TODO Auto-generated method stub
+		
+		System.out.println("GRPC KOMUNIKACIJA IZMEDJU RESERVATION i SMESTAJ SERVICE-a");
+		
 		Collection<RezervacijaDTO> retList = new ArrayList<RezervacijaDTO>();
 		ManagedChannel channel = ManagedChannelBuilder.forAddress(smestajHost, 7977).usePlaintext().build();
 		SmestajGrpcBlockingStub smestajBlockingStub = SmestajGrpcGrpc.newBlockingStub(channel);
 		SmestajIdsForHostRequest rqst = SmestajIdsForHostRequest.newBuilder().setUserId(id).build();
 		SmestajIdsForHostResponse rspns = smestajBlockingStub.getSmestajIdsForHost(rqst);
-		
+		channel.shutdown();
+
+		boolean terminated = false;
+		while (!terminated) {
+		  try {
+		    // Wait for the channel to terminate gracefully
+		    terminated = channel.awaitTermination(10, TimeUnit.SECONDS);
+		  } catch (InterruptedException e) {
+		    // Handle the exception if necessary
+		    e.printStackTrace();
+		  }
+		}
+		System.out.println("KRAJ GRPC KOMUNIKACIJE IZMEDJU RESERVATION i SMESTAJ SERVICE-a");
 		Collection<Rezervacija> rezervacije = this.rezervacijaRep.findAll();
 		if(!rezervacije.isEmpty()) {
 			for(String s : rspns.getSmestajIdsList()) {
@@ -540,12 +688,36 @@ public class RezervacijaService {
 		SmestajGrpcBlockingStub smestajBlockingStub = SmestajGrpcGrpc.newBlockingStub(channel);
 		TerminZauzmiRequest rqst = TerminZauzmiRequest.newBuilder().setSmestajId(r.getSmestaj()).setTermin(mapTermin(r.getOdDatum(), r.getDoDatum())).build();
 		TerminZauzmiResponse rspns = smestajBlockingStub.zauzmiTermin(rqst);
+		channel.shutdown();
+
+		boolean terminated = false;
+		while (!terminated) {
+		  try {
+		    // Wait for the channel to terminate gracefully
+		    terminated = channel.awaitTermination(10, TimeUnit.SECONDS);
+		  } catch (InterruptedException e) {
+		    // Handle the exception if necessary
+		    e.printStackTrace();
+		  }
+		}
 		if(rspns.getZauzet()) {
 			r.setStatus(StatusRezervacije.REZERVISANA);
 			reservationApprovedNotificationRequest req = reservationApprovedNotificationRequest.newBuilder().setIdRezervacije(r.getId()).build();
 			ManagedChannel channel2 = ManagedChannelBuilder.forAddress(reglogHost, 7979).usePlaintext().build();
 			KorisnikGrpcBlockingStub blockStub = KorisnikGrpcGrpc.newBlockingStub(channel2);
 			reservationApprovedNotificationResponse res = blockStub.rezObavestenje(req);
+			channel.shutdown();
+
+			terminated = false;
+			while (!terminated) {
+			  try {
+			    // Wait for the channel to terminate gracefully
+			    terminated = channel.awaitTermination(10, TimeUnit.SECONDS);
+			  } catch (InterruptedException e) {
+			    // Handle the exception if necessary
+			    e.printStackTrace();
+			  }
+			}
 			//ako nije uspesno preneo obavestenje da je obavljena rezervacija, prekini izvrsavanje
 			if(!res.getIsporuceno()) {
 				return null;
@@ -593,6 +765,18 @@ public class RezervacijaService {
 		SmestajGrpcBlockingStub smestajServBlockStub=SmestajGrpcGrpc.newBlockingStub(channel);
 		getSmestajByIdRequest req= getSmestajByIdRequest.newBuilder().setSmestajId(id).build();
 		getSmestajByIdResponse resp= smestajServBlockStub.getSmestajById(req);
+		channel.shutdown();
+
+		boolean terminated = false;
+		while (!terminated) {
+		  try {
+		    // Wait for the channel to terminate gracefully
+		    terminated = channel.awaitTermination(10, TimeUnit.SECONDS);
+		  } catch (InterruptedException e) {
+		    // Handle the exception if necessary
+		    e.printStackTrace();
+		  }
+		}
 		return resp.getOdgovor();
 	}
 	public HostBasicDTO getHostBasic(String id) {
@@ -600,6 +784,18 @@ public class RezervacijaService {
 		KorisnikGrpcBlockingStub korServBlockStub= KorisnikGrpcGrpc.newBlockingStub(channel);
 		getHostRequest req= getHostRequest.newBuilder().setHostId(id).build();
 		getHostResponse res= korServBlockStub.getHost(req);
+		channel.shutdown();
+
+		boolean terminated = false;
+		while (!terminated) {
+		  try {
+		    // Wait for the channel to terminate gracefully
+		    terminated = channel.awaitTermination(10, TimeUnit.SECONDS);
+		  } catch (InterruptedException e) {
+		    // Handle the exception if necessary
+		    e.printStackTrace();
+		  }
+		}
 		return res.getHost();
 
 	}
@@ -615,6 +811,18 @@ public class RezervacijaService {
 		KorisnikGrpcBlockingStub korServBlockStub= KorisnikGrpcGrpc.newBlockingStub(channel);
 		rezOtkazanaRequest req= rezOtkazanaRequest.newBuilder().setGuestId(userId).build();
 		rezOtkazanaResponse res= korServBlockStub.rezOtkazana(req);
+		channel.shutdown();
+
+		boolean terminated = false;
+		while (!terminated) {
+		  try {
+		    // Wait for the channel to terminate gracefully
+		    terminated = channel.awaitTermination(10, TimeUnit.SECONDS);
+		  } catch (InterruptedException e) {
+		    // Handle the exception if necessary
+		    e.printStackTrace();
+		  }
+		}
 		Boolean uspeh= res.getPenalDodat();
 		//todo
 	}
@@ -623,6 +831,18 @@ public class RezervacijaService {
 		KorisnikGrpcBlockingStub korServBlockStub= KorisnikGrpcGrpc.newBlockingStub(channel);
 		rezOtkazanaHostRequest req = rezOtkazanaHostRequest.newBuilder().setHostId(hostId).setResId(resId).build();
 		rezOtkazanaHostResponse res= korServBlockStub.rezOtkazanaHost(req);
+		channel.shutdown();
+
+		boolean terminated = false;
+		while (!terminated) {
+		  try {
+		    // Wait for the channel to terminate gracefully
+		    terminated = channel.awaitTermination(10, TimeUnit.SECONDS);
+		  } catch (InterruptedException e) {
+		    // Handle the exception if necessary
+		    e.printStackTrace();
+		  }
+		}
 	}
 
 	public boolean canGiveRating(String userId, String smestajId) {
@@ -657,6 +877,18 @@ public class RezervacijaService {
 		SmestajGrpcBlockingStub smBlockStub= SmestajGrpcGrpc.newBlockingStub(channel);
 		AnySmestajBelongToHostRequest req= AnySmestajBelongToHostRequest.newBuilder().addAllSmestajIds(smestajsId).build();
 		AnySmestajBelongToHostResponse resp= smBlockStub.belongsToHost(req);
+		channel.shutdown();
+
+		boolean terminated = false;
+		while (!terminated) {
+		  try {
+		    // Wait for the channel to terminate gracefully
+		    terminated = channel.awaitTermination(10, TimeUnit.SECONDS);
+		  } catch (InterruptedException e) {
+		    // Handle the exception if necessary
+		    e.printStackTrace();
+		  }
+		}
 		return resp.getBelongs();
 	}
 	
@@ -665,6 +897,18 @@ public class RezervacijaService {
 		SmestajGrpcBlockingStub smestajServBlockStub=SmestajGrpcGrpc.newBlockingStub(channel);
 		getListaSmestajaByUserIdRequest req= getListaSmestajaByUserIdRequest.newBuilder().setId(id).build();
 		getListaSmestajaByUserIdResponse resp= smestajServBlockStub.getListaSmestajaByUserId(req);
+		channel.shutdown();
+
+		boolean terminated = false;
+		while (!terminated) {
+		  try {
+		    // Wait for the channel to terminate gracefully
+		    terminated = channel.awaitTermination(10, TimeUnit.SECONDS);
+		  } catch (InterruptedException e) {
+		    // Handle the exception if necessary
+		    e.printStackTrace();
+		  }
+		}
 		return resp.getListaSmestajaList();
 	}
 	private boolean determineIfIstaknuti(String hostId) {
