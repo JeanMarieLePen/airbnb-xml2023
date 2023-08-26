@@ -11,6 +11,7 @@ import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.context.annotation.Bean;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
 import com.github.cloudyrock.spring.v5.EnableMongock;
@@ -26,6 +27,7 @@ import io.grpc.ServerBuilder;
 @EnableScheduling
 @EnableCaching
 @EnableMongock
+@RestController //dodato radi monitoring, primeceno da postoji u smestaju i rezervaciji i email-u
 public class MainAppApplication {
 
 	public static void main(String[] args) throws IOException, Exception {

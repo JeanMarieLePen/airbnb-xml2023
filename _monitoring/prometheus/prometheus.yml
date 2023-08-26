@@ -21,9 +21,9 @@
       metrics_path: '/actuator/prometheus'
       static_configs:
         - targets: ['reglog:8082']
-      basic_auth:
-        username: 'npele96@gmail.com'
-        password: '1234'
+      # basic_auth:
+      #   username: 'npele96@gmail.com'
+      #   password: '1234'
 
     - job_name: 'smestaj'
       metrics_path: '/actuator/prometheus'

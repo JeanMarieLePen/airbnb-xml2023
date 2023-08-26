@@ -145,10 +145,10 @@
             <artifactId>opentracing-spring-jaeger-cloud-starter</artifactId>
             <version>3.3.1</version>
         </dependency>
-        <dependency>
+   <!--     <dependency>
             <groupId>io.micrometer</groupId>
             <artifactId>micrometer-registry-prometheus</artifactId>
-        </dependency>
+        </dependency> -->
 		<!-- END: Za monitoring-->		
 		</dependencies>
 	</dependencyManagement>

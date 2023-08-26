@@ -28,7 +28,13 @@ eureka:
 #      enabled: true
 #    metrics:
 #      enabled: true
-
+#  metrics:
+#  prometheus:
+#    metrics:
+#      export:
+#        enabled: true
+        
+        
 resilience4j.circuitbreaker:
   instances:
     reservationService:

@@ -16,7 +16,10 @@ public class CorsConfig {
 			public void addCorsMappings(CorsRegistry registry) {
 //				registry.addMapping("/login/**").allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
 				registry.addMapping("/**").allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
-				.allowedHeaders("*").allowedOrigins("http://localhost:8081" ,"http://172.22.0.7:9090");
+				.allowedHeaders("*").allowedOrigins("http://localhost:8081" , "http://reglog:8082","reglog:8082","http://localhost:8082");
+				
+				registry.addMapping("/actuator/**").allowedMethods("*").allowedHeaders("*")
+				.allowedHeaders("*").allowedOrigins("http://localhost:8081" , "http://reglog:8082","reglog:8082","http://localhost:8082", "host");
 			}
 		};
 	}
