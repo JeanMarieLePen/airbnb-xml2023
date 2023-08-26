@@ -101,6 +101,7 @@ public class SmestajController {
 	public ResponseEntity<Collection<SmestajPretragaDTO>> pretraga(@RequestBody PretragaDTO dto){
 		System.out.println("Pretraga");
 		Collection<SmestajPretragaDTO> lista=pServ.pretraga(dto);
+		System.out.println("ZAVRSENA PRETRAGA");
 		return new ResponseEntity<Collection<SmestajPretragaDTO>>(lista,HttpStatus.OK);
 	}
 	

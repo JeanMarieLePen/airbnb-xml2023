@@ -1,27 +1,16 @@
 package com.xml2023.smestajmicroservice.model.data;
 
+
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
-
-import javax.persistence.*;
-
-import org.springframework.data.neo4j.core.schema.Node;
-
-
 public class Termin implements Serializable{
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 334341200024100711L;
 
-	@Id
-	private String id;
-	
+	private static final long serialVersionUID = 334341200024100711L;
 	private LocalDateTime pocetak;
 	private LocalDateTime kraj;
-	
+		
 	public Termin() {
 		super();
 	}
@@ -30,14 +19,6 @@ public class Termin implements Serializable{
 		// TODO Auto-generated constructor stub
 		this.pocetak = odDatum;
 		this.kraj = doDatum;
-	}
-
-	public String getId() {
-		return id;
-	}
-
-	public void setId(String id) {
-		this.id = id;
 	}
 
 	public LocalDateTime getPocetak() {
@@ -55,6 +36,8 @@ public class Termin implements Serializable{
 	public void setKraj(LocalDateTime kraj) {
 		this.kraj = kraj;
 	}
+
+
 	// komparatori//////////////////////////////////////////////////////////////////////////////////////
 		public boolean zavrsen() {
 			return kraj.isBefore(LocalDateTime.now());

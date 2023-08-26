@@ -2,6 +2,8 @@ package com.app2.flights.model.user;
 
 import java.util.Collection;
 
+import javax.persistence.ElementCollection;
+
 import org.hibernate.validator.constraints.Length;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;
@@ -46,6 +48,7 @@ public class Korisnik {
 	@Nullable
     private String activationLink;
 	
+	@ElementCollection
 	@Nullable
     private Collection<byte[]> slike;
 	

@@ -107,9 +107,8 @@ services:
     build: ./main-app
     ports:
       - "8082:8082"
-      - "7979:7979"
+      # - "7979:7979"
     environment:
-      #- EUREKA_SERVER=http://EUREKA-SERVICE:8761/eureka/
       - SPRING_RABBITMQ_HOST=rabbitmq
       - SPRING_RABBITMQ_USERNAME=guest
       - SPRING_RABBITMQ_PASSWORD=guest
@@ -128,8 +127,6 @@ services:
       - airbnb
       - monitoring
     logging: *fluent-bit
-    links:
-      - mongodb:mongodb
 
   
   email:
@@ -165,9 +162,8 @@ services:
     build: ./smestaj-microservice
     ports:
       - "8090:8090"
-      - "7977:7977"
+      # - "7977:7977"
     environment:
-      #- EUREKA_SERVER=http://EUREKA-SERVICE:8761/eureka/
       - SPRING_RABBITMQ_HOST=rabbitmq
       - SPRING_RABBITMQ_USERNAME=guest
       - SPRING_RABBITMQ_PASSWORD=guest
@@ -179,22 +175,19 @@ services:
       - OTEL_TRACES_EXPORTER=jaeger
       - OTEL_EXPORTER_JAEGER_ENDPOINT=http://jaeger:14250
       - ORG_NEO4J_DRIVER_URI=bolt://neo4j:7687
-
     depends_on:
       - gateway-service
     networks:
       - airbnb
       - monitoring
     logging: *fluent-bit
-    links:
-      - mongodb:mongodb
   
   reservation:
     image: reservation-service
     build: ./reservation-service
     ports:
       - "8091:8091"
-      - "7978:7978"
+      # - "7978:7978"
     environment:
       #- EUREKA_SERVER=http://EUREKA-SERVICE:8761/eureka/
       - SPRING_RABBITMQ_HOST=rabbitmq
@@ -221,7 +214,7 @@ services:
     environment:
       - ME_CONFIG_MONGODB_SERVER=mongodb
       - ME_CONFIG_MONGODB_PORT=27017
-      - ME_CONFIG_MONGODB_ENABLE_ADMIN=false
+      - ME_CONFIG_MONGODB_ENABLE_ADMIN=true
       # - ME_CONFIG_MONGODB_AUTH_DATABASE=admin
       # - ME_CONFIG_MONGODB_AUTH_USERNAME=${MONGO_ROOT_USER}
       # - ME_CONFIG_MONGODB_AUTH_PASSWORD=${MONGO_ROOT_PASSWORD}
@@ -250,21 +243,30 @@ services:
   #   restart: always
   #   ports:
   #     - 27018:27017
-  # flights:
-  #   build: ./flights
-  #   restart: always
-  #   ports:
-  #     - 8084:8084
-  #   links:
-  #     - flights_mongodb:app_db
-  # flights_front:
-  #   build: ./planetickets
-  #   command: npm run serve
-  #   ports:
-  #     - 8079:8080
-  #   volumes:
-  #     - .:/usr/app/
-  #     - /usr/app/node_modules  
+
+
+  flights:
+    build: ./flights
+    restart: always
+    ports:
+      - 8084:8084 
+    depends_on:
+      - gateway-service
+    networks:
+      - airbnb
+      - monitoring
+    environment:
+      - SPRING_DATA_MONGODB_HOST=mongodb
+
+
+  flights_front:
+    build: ./planetickets
+    command: npm run serve
+    ports:
+      - 8079:8080
+    volumes:
+      - .:/usr/app/
+      - /usr/app/node_modules  
   
 volumes:
   database-data:

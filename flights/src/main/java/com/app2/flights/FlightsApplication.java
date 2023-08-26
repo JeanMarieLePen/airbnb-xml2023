@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.context.annotation.Bean;
 import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
@@ -20,6 +21,7 @@ import com.app2.flights.model.user.StatusNaloga;
 import com.app2.flights.model.user.TipKorisnika;
 import com.app2.flights.repositories.KorisnikRep;
 import com.app2.flights.services.FlightsServiceGrpc;
+import com.github.cloudyrock.spring.v5.EnableMongock;
 import com.xml2023.flights.FlightsGrpc;
 import com.xml2023.flights.FlightsGrpc.FlightsImplBase;
 
@@ -27,10 +29,10 @@ import io.grpc.Server;
 import io.grpc.ServerBuilder;
 
 @SpringBootApplication
-@EnableMongoRepositories
 @EnableDiscoveryClient
-//@EnableMongock
 @EnableScheduling
+@EnableCaching
+@EnableMongock
 public class FlightsApplication {
 
 	//autowired se ne moze koristiti u okviru main metode jer je ona static
@@ -39,52 +41,52 @@ public class FlightsApplication {
 	//on upotrebi tamo gde je potrebno. Problem je u tome sto ce se instanciranje izvrsiti nakon izvrsavanja main metode
 	//tako da RegKorRep u main metodi zapravo NULL
 	//zbog toga uvodimo runner metodu
-	@Autowired
-	private KorisnikRep korRep;
+//	@Autowired
+//	private KorisnikRep korRep;
 	public static void main(String[] args) {
 		SpringApplication.run(FlightsApplication.class, args);
 
 	}
-	@Bean
-    CommandLineRunner runner(){
-        return args -> {
-        	
-        	if(korRep.findAll().stream().filter(k -> k.getTip().equals(TipKorisnika.ADMINISTRATOR)).count() == 0) {
-        		dodajAdmina("admin1");
-        	}
-        	if(korRep.findAll().stream().filter(k -> k.getTip().equals(TipKorisnika.REG_KOR)).count() == 0) {
-        		System.out.println("BROJ KORISNIKAAAA: " + korRep.findAll().size());
-        		BCryptPasswordEncoder bc = new BCryptPasswordEncoder();
-            	RegKor rk = new RegKor();
-        		rk.setActivationLink(null);
-        		rk.setEmail("mongodb@test.com");
-        		rk.setIme("Zdravko");
-        		rk.setUsername("zdravinjo");
-        		rk.setPrezime("Tomasevic");
-        		rk.setPassword(bc.encode("1234"));
-        		rk.setStatus(StatusNaloga.AKTIVAN);
-        		rk.setTip(TipKorisnika.REG_KOR);
-        		rk.setPorudzbine(new ArrayList<String>());
-        		Adresa a = new Adresa();
-        		a.setAdresa("Lava Nikolajevica, 21, Beograd");
-        		a.setLat(21.525);
-        		a.setLng(24.63632);
-        		rk.setAdresa(a);
-        		korRep.save(rk);
-        		System.out.println("BROJ KORISNIKA: " + korRep.findAll().size());
-        		return;
-        	};
-        };
-    }
-	
-	public void dodajAdmina(String username) {
-    	BCryptPasswordEncoder bc = new BCryptPasswordEncoder();
-    	Adresa adr= new Adresa("Lava Nikolajevica, 21, Beograd",21.525,24.63632);
-
-    	Administrator a= new Administrator("admin", "adminovic", "adminMail@hhh.com",username, bc.encode("1234"),
-    			adr, TipKorisnika.ADMINISTRATOR, StatusNaloga.AKTIVAN);
-    	korRep.save(a);   	
-	}
+//	@Bean
+//    CommandLineRunner runner(){
+//        return args -> {
+//        	
+//        	if(korRep.findAll().stream().filter(k -> k.getTip().equals(TipKorisnika.ADMINISTRATOR)).count() == 0) {
+//        		dodajAdmina("admin1");
+//        	}
+//        	if(korRep.findAll().stream().filter(k -> k.getTip().equals(TipKorisnika.REG_KOR)).count() == 0) {
+//        		System.out.println("BROJ KORISNIKAAAA: " + korRep.findAll().size());
+//        		BCryptPasswordEncoder bc = new BCryptPasswordEncoder();
+//            	RegKor rk = new RegKor();
+//        		rk.setActivationLink(null);
+//        		rk.setEmail("mongodb@test.com");
+//        		rk.setIme("Zdravko");
+//        		rk.setUsername("zdravinjo");
+//        		rk.setPrezime("Tomasevic");
+//        		rk.setPassword(bc.encode("1234"));
+//        		rk.setStatus(StatusNaloga.AKTIVAN);
+//        		rk.setTip(TipKorisnika.REG_KOR);
+//        		rk.setPorudzbine(new ArrayList<String>());
+//        		Adresa a = new Adresa();
+//        		a.setAdresa("Lava Nikolajevica, 21, Beograd");
+//        		a.setLat(21.525);
+//        		a.setLng(24.63632);
+//        		rk.setAdresa(a);
+//        		korRep.save(rk);
+//        		System.out.println("BROJ KORISNIKA: " + korRep.findAll().size());
+//        		return;
+//        	};
+//        };
+//    }
+//	
+//	public void dodajAdmina(String username) {
+//    	BCryptPasswordEncoder bc = new BCryptPasswordEncoder();
+//    	Adresa adr= new Adresa("Lava Nikolajevica, 21, Beograd",21.525,24.63632);
+//
+//    	Administrator a= new Administrator("admin", "adminovic", "adminMail@hhh.com",username, bc.encode("1234"),
+//    			adr, TipKorisnika.ADMINISTRATOR, StatusNaloga.AKTIVAN);
+//    	korRep.save(a);   	
+//	}
 	
 	@Bean int port() {
 		return 7976;

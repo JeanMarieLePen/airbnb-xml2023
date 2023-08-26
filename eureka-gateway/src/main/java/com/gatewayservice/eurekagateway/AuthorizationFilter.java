@@ -58,7 +58,7 @@ public class AuthorizationFilter implements GlobalFilter, Ordered{
 	
 	//provera da li prosledjeni gatewayApiKey odgovara nekom korisniku
 	private boolean isAuthorized(String routeId, String apiKey) {
-		ManagedChannel channel = ManagedChannelBuilder.forAddress("localhost", 7976).usePlaintext().build();
+		ManagedChannel channel = ManagedChannelBuilder.forAddress("flights", 7976).usePlaintext().build();
 		TokenValidanRequest rqst = TokenValidanRequest.newBuilder().setApiToken(apiKey).build();
 		FlightsBlockingStub bs = FlightsGrpc.newBlockingStub(channel);
 		TokenValidanResponse response = bs.validateToken(rqst);

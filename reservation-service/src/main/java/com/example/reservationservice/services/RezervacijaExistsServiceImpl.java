@@ -6,6 +6,7 @@ import java.time.ZoneId;
 import java.time.ZoneOffset;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -76,6 +77,18 @@ public class RezervacijaExistsServiceImpl extends RezervacijaGrpcImplBase {
 			SmestajGrpcBlockingStub blockStub= SmestajGrpcGrpc.newBlockingStub(channel);
 			SmestajIdsForHostRequest req= SmestajIdsForHostRequest.newBuilder().setUserId(userId).build();
 			SmestajIdsForHostResponse resIds= blockStub.getSmestajIdsForHost(req);
+			channel.shutdown();
+
+			boolean terminated = false;
+			while (!terminated) {
+			  try {
+			    // Wait for the channel to terminate gracefully
+			    terminated = channel.awaitTermination(10, TimeUnit.SECONDS);
+			  } catch (InterruptedException e) {
+			    // Handle the exception if necessary
+			    e.printStackTrace();
+			  }
+			}
 			ArrayList<String> ids=new ArrayList<String>();
 			for(int i= 0 ; i<=resIds.getSmestajIdsCount();i++) {
 				ids.add(resIds.getSmestajIds(i));

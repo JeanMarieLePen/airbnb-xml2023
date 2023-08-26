@@ -8,6 +8,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 import org.neo4j.driver.Result;
@@ -120,10 +121,25 @@ public class SmestajService {
 			return null;
 		}
 		//da li ima trenutno aktivnih rezervacija prema tom smestaju
+		System.out.println("GRPC KOMUNIKACIJA NA RELACIJI SMESTAJ - RESERVATION SERVICE[provera da li postoje aktivne rezervacije vezane za smestaj]");
 		ManagedChannel channel = ManagedChannelBuilder.forAddress("reservation", 7978).usePlaintext().build();
 		RezervacijaGrpcBlockingStub rezServBlockStub = RezervacijaGrpcGrpc.newBlockingStub(channel);
 		ActiveResExistsForSmestajRequest req = ActiveResExistsForSmestajRequest.newBuilder().setUserId(smestajId).build();
 		ActiveResExistsForSmestajResponse response = rezServBlockStub.resExistsForSmestaj(req);
+		channel.shutdown();
+
+		boolean terminated = false;
+		while (!terminated) {
+		  try {
+		    // Wait for the channel to terminate gracefully
+		    terminated = channel.awaitTermination(10, TimeUnit.SECONDS);
+		  } catch (InterruptedException e) {
+		    // Handle the exception if necessary
+		    e.printStackTrace();
+		  }
+		}
+		
+		System.out.println("KRAJ GRPC KOMUNIKACIJE NA RELACIJI SMESTAJ - RESERVATION SERVICE[provera da li postoje aktivne rezervacije vezane za smestaj]");
 		if(response.getExists()) {
 			System.out.println("SMESTAJ IMA AKTIVNU REZERVACIJU;");
 			return null;
@@ -216,6 +232,18 @@ public class SmestajService {
 		KorisnikGrpcBlockingStub bs = KorisnikGrpcGrpc.newBlockingStub(channel);
 		NovaOcenaSmestajaNotifikacijaRequest rqst = NovaOcenaSmestajaNotifikacijaRequest.newBuilder().setIdKorisnika(idVlasnika).build();
 		NovaOcenaSmestajaNotifikacijaResponse rspns = bs.novaOcenaSmestajaNotStatus(rqst);
+		channel.shutdown();
+
+		boolean terminated = false;
+		while (!terminated) {
+		  try {
+		    // Wait for the channel to terminate gracefully
+		    terminated = channel.awaitTermination(10, TimeUnit.SECONDS);
+		  } catch (InterruptedException e) {
+		    // Handle the exception if necessary
+		    e.printStackTrace();
+		  }
+		}
 		return rspns.getStanje();
 	}
 	
@@ -224,6 +252,18 @@ public class SmestajService {
 		KorisnikGrpcBlockingStub bs = KorisnikGrpcGrpc.newBlockingStub(channel);
 		NekoOcenioSmestajRequest rqst = NekoOcenioSmestajRequest.newBuilder().setIdKorisnika(os.getGost()).setIdSmestaja(os.getSmestaj()).setOcena(os.getOcena()).build();
 		NekoOcenioSmestajResponse rspns = bs.newRankSmestaj(rqst);
+		channel.shutdown();
+
+		boolean terminated = false;
+		while (!terminated) {
+		  try {
+		    // Wait for the channel to terminate gracefully
+		    terminated = channel.awaitTermination(10, TimeUnit.SECONDS);
+		  } catch (InterruptedException e) {
+		    // Handle the exception if necessary
+		    e.printStackTrace();
+		  }
+		}
 		if(rspns.getResult()) {
 			System.out.println("USPESNO POSLATO OBAVESTENJE O NOVOJ OCENI SMESTAJA");
 		}

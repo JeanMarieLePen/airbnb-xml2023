@@ -28,7 +28,7 @@ public class EmailService {
 
 	private SimpleMailMessage mail;
 	private static String host="http://localhost:8082";
-	
+//	private static String host="http://email:8082";
 	@Autowired
 	private KorisnikRep korisnikRep;
 	
