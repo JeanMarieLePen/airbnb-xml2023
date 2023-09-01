@@ -39,7 +39,7 @@ public class KorisnikCtrl {
 	@PreAuthorize("hasAnyAuthority('GUEST', 'HOST')")
 	@GetMapping("/{id}")
 	public ResponseEntity<KorisnikDTO> getProfileById(@PathVariable(name="id") String id){
-		KorisnikDTO retVal = this.korisnikService.getUserById(id.substring(1, id.length() - 1));
+		KorisnikDTO retVal = this.korisnikService.getUserById(osisajId(id));
 		if(retVal == null) {
 			return new ResponseEntity<KorisnikDTO>(HttpStatus.NO_CONTENT);
 		}else {
@@ -49,7 +49,7 @@ public class KorisnikCtrl {
 	@PreAuthorize("hasAnyAuthority('GUEST', 'HOST')")
 	@GetMapping("/getHostById/{id}")
 	public ResponseEntity<KorisnikDTO> getHostById(@PathVariable(name="id") String id){
-		KorisnikDTO retVal = this.korisnikService.getUserById(id.substring(1, id.length() - 1));
+		KorisnikDTO retVal = this.korisnikService.getUserById(osisajId(id));
 		if(retVal == null) {
 			return new ResponseEntity<KorisnikDTO>(HttpStatus.NO_CONTENT);
 		}else {
@@ -92,7 +92,7 @@ public class KorisnikCtrl {
 	@Transactional
 	@GetMapping("/getAllReservationsByUser/{id}")
 	public ResponseEntity<Collection<RezervacijaDTO>> getAllByUser(@PathVariable(value = "id") String id){
-		Collection<RezervacijaDTO> retList = this.korisnikService.getAllReservationByUserId(id);
+		Collection<RezervacijaDTO> retList = this.korisnikService.getAllReservationByUserId(osisajId(id));
 		if(retList == null) {
 			return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 		}else {
@@ -105,7 +105,7 @@ public class KorisnikCtrl {
 	@Transactional
 	@DeleteMapping("/deleteAccount/{id}")
 	public ResponseEntity<?> deleteAcc(@PathVariable(value = "id") String id){
-		KorisnikDTO retVal = this.korisnikService.deleteAcc(id.substring(1, id.length() - 1));
+		KorisnikDTO retVal = this.korisnikService.deleteAcc(osisajId(id));
 		if(retVal == null) {
 			return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 		}else {
@@ -116,11 +116,19 @@ public class KorisnikCtrl {
 	@Transactional
 	@PostMapping("/giveRatingToHost/{userId}/{hostId}")
 	public ResponseEntity<?> giveRatingToHost(@PathVariable(value = "userId") String userId, @PathVariable(value = "hostId") String hostId, @RequestBody OcenaHostBasicDTO ocena){
-		OcenaHostBasicDTO retVal = this.korisnikService.giveRatingToHost(userId.substring(1, userId.length() - 1), hostId, ocena);
+		OcenaHostBasicDTO retVal = this.korisnikService.giveRatingToHost(osisajId(userId), osisajId(hostId), ocena);
 		if(retVal == null) {
 			return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 		}else {
 			return new ResponseEntity<OcenaHostBasicDTO>(retVal, HttpStatus.OK);
 		}
+	}
+	
+	
+	private String osisajId(String id) {
+		if(id.startsWith("\"")){
+			return id.substring(1, id.length() - 1);
+		}else 
+			return id;
 	}
 }

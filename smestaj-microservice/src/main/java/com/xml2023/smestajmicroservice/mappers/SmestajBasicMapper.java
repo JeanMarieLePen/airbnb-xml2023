@@ -127,8 +127,11 @@ public class SmestajBasicMapper {
 		dto.setSlike(tempSlike);
 		dto.setPogodnosti(s.getPogodnosti());
 		
-		float suma= dto.getListaOcena().stream().mapToInt(x->x.getOcena()).sum();
-		dto.setProsecnaOcena(suma/dto.getListaOcena().size());	
+		if(dto.getListaOcena().size()>0) {
+			float suma= dto.getListaOcena().stream().mapToInt(x->x.getOcena()).sum();
+			dto.setProsecnaOcena(suma/dto.getListaOcena().size());	
+		}else 
+			dto.setProsecnaOcena(0);
 		
 		return dto;
 		

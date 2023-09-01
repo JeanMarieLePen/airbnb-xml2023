@@ -141,15 +141,15 @@ public class KorisnikService {
 				retVal.setSmestajList(tempList);
 				
 				Collection<OcenaHost> ocene=oRep.findAllByVlasnik(id).orElse(new ArrayList<OcenaHost>());
-				retVal.setOcene(ocene.stream().map(x->new OcenaHostBasicDTO(x)).collect(Collectors.toList()));
-				float prosek= retVal.getOcene().stream().mapToInt(x->x.getOcena()).sum();
-				if(prosek > 0) {
-					retVal.setProsecnaOcena(prosek/retVal.getOcene().size());
-				}else {
-					prosek = 0;
-					retVal.setProsecnaOcena(prosek);
-				}
+				if(ocene.size()<1) {
+					retVal.setOcene(new ArrayList<OcenaHostBasicDTO>());
+					retVal.setProsecnaOcena(0);
+				}else{
 				
+					retVal.setOcene(ocene.stream().map(x->new OcenaHostBasicDTO(x)).collect(Collectors.toList()));
+					float prosek= retVal.getOcene().stream().mapToInt(x->x.getOcena()).sum();
+					retVal.setProsecnaOcena(prosek/retVal.getOcene().size());
+				}
 				
 				return retVal;
 			}	

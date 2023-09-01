@@ -853,9 +853,10 @@ public class RezervacijaService {
 		if(rez.size()>0) {
 			//isfiltrirane zavrsene za smestaj za korisnika
 			Collection<Rezervacija> userRez= rez.stream().filter(x->x.getSmestaj().equals(smestajId) && x.getStatus().equals(StatusRezervacije.REZERVISANA)).collect(Collectors.toList());
-			if(userRez.size()>0)
+			if(userRez.size()>0) {
 				System.out.println("Korisnik moze oceniti!");
 				return true;
+			}
 		}
 		System.out.println("Korisnik NE moze oceniti!");
 		return false;
@@ -873,7 +874,7 @@ public class RezervacijaService {
 	}
 	
 	private boolean SmestajsBelongToHost(String hostId ,Collection<String> smestajsId ) {
-		ManagedChannel channel = ManagedChannelBuilder.forAddress(reglogHost, 7977).usePlaintext().build();
+		ManagedChannel channel = ManagedChannelBuilder.forAddress(smestajHost, 7977).usePlaintext().build();
 		SmestajGrpcBlockingStub smBlockStub= SmestajGrpcGrpc.newBlockingStub(channel);
 		AnySmestajBelongToHostRequest req= AnySmestajBelongToHostRequest.newBuilder().addAllSmestajIds(smestajsId).build();
 		AnySmestajBelongToHostResponse resp= smBlockStub.belongsToHost(req);

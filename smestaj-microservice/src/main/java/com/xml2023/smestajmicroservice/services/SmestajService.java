@@ -171,15 +171,6 @@ public class SmestajService {
 		Pogodnost p = pogRep.findAll().get(0);
 		return p.getNazivi().stream().collect(Collectors.toList());
 	}
-	public float getProsecnaOcena(Smestaj s) {
-//		Collection<OcenaSmestaj> ocene= s.getListaOcena();
-//		float uk=0;
-//		for(OcenaSmestaj o : ocene) {
-//			uk+=o.getOcena();
-//		}
-//		return uk/ocene.size();	
-		return 0F;
-	}
 
 	public OcenaSmestajaDTO giveRatingToSmestaj(String userId, String smestajId, OcenaSmestajaDTO ocena) {
 		OcenaSmestaj o= ocenaRep.findByGostAndSmestaj(userId,smestajId).orElse(null); 

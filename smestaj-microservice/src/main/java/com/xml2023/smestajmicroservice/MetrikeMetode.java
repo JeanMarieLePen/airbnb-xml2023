@@ -21,9 +21,11 @@ public class MetrikeMetode {
 		String os= o.writeValueAsString(resp);
 		int byteSize= os.getBytes().length;
 		mReg.counter("http_response_size_bytes",
-				"method","POST", 
+				//"method","POST", 
 				"status", resp.getStatusCode().toString(), 
-				"endpoint", string, 
-				"size", Integer.toString(byteSize)).increment(byteSize);
+				"endpoint", string//, 
+				//"size", Integer.toString(byteSize)
+				).increment(byteSize);;
 	}
+	
 }
