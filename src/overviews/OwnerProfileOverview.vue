@@ -183,7 +183,7 @@ export default{
                 // })
             });
 
-            await dataService.canGiveRating(this.userId, this.$route.params.id).then(response => {
+            await dataService.canGiveRatingHost(this.userId, this.$route.params.id).then(response => {
                 this.canRate = response.data;
                 console.log("Can give rating : "+this.canRate);
                 if(this.canRate===true){
