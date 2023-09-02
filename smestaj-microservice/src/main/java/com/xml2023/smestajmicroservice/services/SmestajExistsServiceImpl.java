@@ -187,10 +187,13 @@ public class SmestajExistsServiceImpl extends SmestajGrpcImplBase{
 		System.out.println("GRPC: USLO U SMESTAJ SERVICE");
 		String userId = request.getId();
 		List<Smestaj> listaSmestaja = this.sRep.findAll().stream().filter(s -> s.getVlasnik().equals(userId)).toList();
+		System.out.println("BROJ SMESTAJA HOST-a: " + listaSmestaja.size());
 		getListaSmestajaByUserIdResponse.Builder response = getListaSmestajaByUserIdResponse.newBuilder();
 		
 		if(listaSmestaja.isEmpty()) {
-			response.addAllListaSmestaja(new ArrayList<SmestajDTO>());
+//			response.addAllListaSmestaja(new ArrayList<SmestajDTO>());
+			response.addAllListaSmestaja(Collections.emptyList());
+
 		}else {
 			for(Smestaj s : listaSmestaja) {
 				response.addListaSmestaja(mapSmestaj(s));
@@ -266,11 +269,15 @@ public class SmestajExistsServiceImpl extends SmestajGrpcImplBase{
 			StreamObserver<AnySmestajBelongToHostResponse> responseObserver) {
 		// TODO Auto-generated method stub
 		//super.belongsToHost(request, responseObserver);
+		System.out.println("AnySmestajBelongToHost");
+		System.out.println("ID VLASNIKA CIJI SMESTAJ TRAZIMO: " + request.getHostId());
 		Collection<Smestaj> SmestajForHost=sRep.findAllByVlasnik(request.getHostId()).orElse(new ArrayList<Smestaj>());
+		System.out.println("BROJ SMESTAJA: " + SmestajForHost.size());
 		if(SmestajForHost.size()>0) {
 			Collection<String> localIds= SmestajForHost.stream().map(x->x.getId()).distinct().collect(Collectors.toList());
 			Collection <String> reqIds= request.getSmestajIdsList();
 			boolean presek= !Collections.disjoint(localIds, reqIds);
+			System.out.println("SMESTAJ PRIPADA KORISNIKU: " + presek);
 			AnySmestajBelongToHostResponse.Builder resp= AnySmestajBelongToHostResponse.newBuilder();
 			resp.setBelongs(presek);
 			

@@ -864,6 +864,10 @@ public class RezervacijaService {
 
 	public boolean canGiveRatingHost(String userId, String hostId) {
 		Collection<Rezervacija> rez= rezervacijaRep.findAllByGost(userId).orElse(new ArrayList<Rezervacija>());
+		System.out.println("CAN GIVE RATING HOST");
+		System.out.println("Gost id : "+userId);
+		System.out.println("HOST ID: " + hostId);
+		System.out.println("BROJ REZERVACIJA: " + rez.size());
 		Collection<String> smestajsId= new ArrayList<String>();
 		boolean canGiveRating=false;
 		if(rez.size()>0) {
@@ -876,7 +880,7 @@ public class RezervacijaService {
 	private boolean SmestajsBelongToHost(String hostId ,Collection<String> smestajsId ) {
 		ManagedChannel channel = ManagedChannelBuilder.forAddress(smestajHost, 7977).usePlaintext().build();
 		SmestajGrpcBlockingStub smBlockStub= SmestajGrpcGrpc.newBlockingStub(channel);
-		AnySmestajBelongToHostRequest req= AnySmestajBelongToHostRequest.newBuilder().addAllSmestajIds(smestajsId).build();
+		AnySmestajBelongToHostRequest req= AnySmestajBelongToHostRequest.newBuilder().setHostId(hostId).addAllSmestajIds(smestajsId).build();
 		AnySmestajBelongToHostResponse resp= smBlockStub.belongsToHost(req);
 		channel.shutdown();
 
