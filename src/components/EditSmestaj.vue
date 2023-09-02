@@ -98,7 +98,7 @@
                                         <td>
                                             <ul>
                                                 <li @click="slctPogodnost(index)" :class="{backgroundColor: 'mycolor'}" v-for="(tempPogodnost, index) in svePogodnosti" :key="index">
-                                                    {{tempPogodnost.naziv}} 
+                                                    {{tempPogodnost}} 
                                                 </li>
                                             </ul>
                                         </td>
@@ -117,7 +117,7 @@
                                         <td>
                                             <ul>
                                                 <li @click="slctPogodnost2(index)" :class="{backgroundColor: 'mycolor'}" v-for="(tempPogodnost, index) in smestaj.pogodnosti" :key="index">
-                                                    {{tempPogodnost.naziv}} 
+                                                    {{tempPogodnost}} 
                                                 </li>
                                             </ul>
                                         </td>
@@ -218,6 +218,11 @@
                             </td>
                         </tr>
                         <tr>
+                            <td colspan="2">
+                                <div v-if="messages.errorCenovnikSubmit" v-html="messages.errorCenovnikSubmit" class="alert alert-warning"></div>;
+                            </td>
+                        </tr>
+                        <tr>
                             
                             <td colspan="2" class="text-center">
                                 <button class="btn btn-warning" style="font-weight:600; margin:20px;" @click="editSmestaj()">Izmeni</button>
@@ -274,6 +279,8 @@ export default {
                 errorResponse:'',
                 successCenovnik:'',
                 errorCenovnik:'',
+                successCenovnikSubmit:'',
+                errorCenovnikSubmit:'',
             },
             // this.id = id;
             // this.version = version;
@@ -588,24 +595,36 @@ export default {
             await this.getCoordsFromAdresa(this.smestaj.adresa.adresa);
             console.log("ADRESA: " + JSON.stringify(this.smestaj.adresa));
             console.log("NEDOSTUPNI[EDIT method]: " + JSON.stringify(this.smestaj.nedostupni))
-            try{
-                dataService.editSmestaj(this.smestaj.id, this.userId, this.smestaj).then(response => {
-                    console.log("IZMENJEN SMESTAJ");
-                    if(response.status === 200){
-                        this.messages.successResponse = "<h4>Uspesno izmenjen smestaj</h4>";
-                        setTimeout(() => {
-                            this.messages.successResponse = '';
-                        }, 3500);
-                    }else{
-                        this.messages.errorResponse = "<h4>Doslo je do greske</h4>";
-                        setTimeout(() => {
-                            this.messages.errorResponse = '';
-                        }, 3500);
-                    }
-                });
-            }catch(error){
+            if(this.smestaj.cenovnik.cenaLeto == null || this.smestaj.cenovnik.cenaLeto < 0 || this.smestaj.cenovnik.cena == null || this.smestaj.cenovnik.cena < 0 ||
+            this.smestaj.cenovnik.cenaPraznik == null || this.smestaj.cenovnik.cenaPraznik < 0 || this.smestaj.cenovnik.cenaVikend == null || this.smestaj.cenovnik.cenaVikend < 0){
+                console.log("CENOVNIK GRESKA");
+                this.messages.errorCenovnikSubmit = "<h4>Cenovnik nepravilno kreiran</h4>";
+                setTimeout(() => {
+                    this.messages.errorCenovnikSubmit = "";
+                }, 4000);
+            }else{
+                console.log("CENOVNIK REGULARAN");
+                try{
+                    dataService.editSmestaj(this.smestaj.id, this.userId, this.smestaj).then(response => {
+                        console.log("IZMENJEN SMESTAJ");
+                        if(response.status === 200){
+                            this.messages.successResponse = "<h4>Uspesno izmenjen smestaj</h4>";
+                            setTimeout(() => {
+                                this.messages.successResponse = '';
+                            }, 3500);
+                        }else{
+                            this.messages.errorResponse = "<h4>Doslo je do greske</h4>";
+                            setTimeout(() => {
+                                this.messages.errorResponse = '';
+                            }, 3500);
+                        }
+                    });
+                }catch(error){
 
+                }
             }
+            
+            
         },
         getSmestaj(){
             return dataService.getSmestaj(this.$route.params.id).then(response => {

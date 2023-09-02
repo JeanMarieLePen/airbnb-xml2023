@@ -225,6 +225,11 @@
                             </td>
                         </tr>
                         <tr>
+                            <td colspan="2">
+                                <div v-if="messages.errorCenovnikSubmit" v-html="messages.errorCenovnikSubmit" class="alert alert-warning"></div>;
+                            </td>
+                        </tr>
+                        <tr>
                             
                             <td colspan="2" class="text-center">
                                 <button class="btn btn-warning" style="font-weight:600; margin:20px;" @click="createNewSmestaj()">Kreiraj</button>
@@ -286,6 +291,9 @@ export default {
                 errorCenovnik:'',
                 successPogodnost:'',
                 errorPogodnost:'',
+                successCenovnikSubmit:'',
+                errorCenovnikSubmit:'',
+
             },
             // this.id = id;
             // this.version = version;
@@ -608,20 +616,31 @@ export default {
             console.log("NEDOSTUPNI[CREATE method]: " + JSON.stringify(this.smestaj.nedostupni))
             try{
                 console.log(JSON.stringify(this.smestaj));
-                dataService.createNewSmestaj(this.smestaj).then(response => {
-                    console.log("KREIRAN SMESTAJ");
-                    if(response.status === 200){
-                        this.messages.successResponse = "<h4>Uspesno kreiran smestaj</h4>";
-                        setTimeout(() => {
-                            this.messages.successResponse = '';
-                        }, 3500);
-                    }else{
-                        this.messages.errorResponse = "<h4>Doslo je do greske</h4>";
-                        setTimeout(() => {
-                            this.messages.errorResponse = '';
-                        }, 3500);
-                    }
-                });
+                if(this.smestaj.cenovnik.cenaLeto == null || this.smestaj.cenovnik.cenaLeto < 0 || this.smestaj.cenovnik.cena == null || this.smestaj.cenovnik.cena < 0 ||
+                this.smestaj.cenovnik.cenaPraznik == null || this.smestaj.cenovnik.cenaPraznik < 0 || this.smestaj.cenovnik.cenaVikend == null || this.smestaj.cenovnik.cenaVikend < 0){
+                    console.log("CENOVNIK GRESKA");
+                    this.messages.errorCenovnikSubmit = "<h4>Cenovnik nepravilno kreiran</h4>";
+                    setTimeout(() => {
+                        this.messages.errorCenovnikSubmit = "";
+                    }, 4000);
+                }else{
+                    console.log("CENOVNIK REGULARAN");
+                    dataService.createNewSmestaj(this.smestaj).then(response => {
+                        console.log("KREIRAN SMESTAJ");
+                        if(response.status === 200){
+                            this.messages.successResponse = "<h4>Uspesno kreiran smestaj</h4>";
+                            setTimeout(() => {
+                                this.messages.successResponse = '';
+                            }, 3500);
+                        }else{
+                            this.messages.errorResponse = "<h4>Doslo je do greske</h4>";
+                            setTimeout(() => {
+                                this.messages.errorResponse = '';
+                            }, 3500);
+                        }
+                    });
+                }
+                
             }catch(error){
 
             }
