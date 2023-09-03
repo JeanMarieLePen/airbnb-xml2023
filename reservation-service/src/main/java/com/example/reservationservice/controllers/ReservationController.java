@@ -28,11 +28,18 @@ public class ReservationController {
 	
 	@PostMapping("/makeReservation/{userId}/{smestajId}")
 	public ResponseEntity<RezervacijaDTO> makeReservation(@PathVariable(value = "userId") String userId, @PathVariable(value = "smestajId") String smestajId, @RequestBody RezervacijaDTO r){
-		RezervacijaDTO retVal = this.rezervacijaService.makeReservation(userId.substring(1, userId.length() - 1), smestajId, r);
-		if(retVal == null) {
+		RezervacijaDTO retVal;
+		try {
+			retVal = this.rezervacijaService.makeReservationSaga(userId.substring(1, userId.length() - 1), smestajId, r);
+			if(retVal == null) {
+				return new ResponseEntity<RezervacijaDTO>(HttpStatus.NO_CONTENT);
+			}else {
+				return new ResponseEntity<RezervacijaDTO>(retVal, HttpStatus.OK);
+			}
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 			return new ResponseEntity<RezervacijaDTO>(HttpStatus.NO_CONTENT);
-		}else {
-			return new ResponseEntity<RezervacijaDTO>(retVal, HttpStatus.OK);
 		}
 	}
 	

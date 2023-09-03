@@ -297,8 +297,17 @@ public class RezervacijaService {
 		System.out.println("USPESNO PROMENJEN STATUS HOSTA U: " + isIstaknuti);
 		
 		//U GRAF BAZU SE UPISUJE REZERVISANI SMESTAJ OBOSTRANO;
+		System.out.println("SLEDI POKUSAJ CITANJA IZ NEO4j baze");
+		try {
+			Korisnik kor = this.neo4jKorisnikRep.findById(userId).orElse(null);
+			Smestaj sme = this.neo4jSmestajRep.findById(smestajId).orElse(null);
+		}catch(Exception e) {
+			System.out.println("CATCH BLOK ZA NEO4J");
+			throw new Neo4jDatabaseException("Neo4jDatabase je nedostupna. Revert");
+		}
 		Korisnik kor = this.neo4jKorisnikRep.findById(userId).orElse(null);
 		Smestaj sme = this.neo4jSmestajRep.findById(smestajId).orElse(null);
+		System.out.println("PROSAO POKUSAJ CITANJA IZ NEO4j baze");
 		if(kor == null || sme == null) {
 			throw new Neo4jDatabaseException("Neo4jDatabase je nedostupna. Revert");
 		}
@@ -320,80 +329,80 @@ public class RezervacijaService {
 		}
 	}
 	
-	public RezervacijaDTO makeReservation(String userId, String smestajId, RezervacijaDTO r) {
-		//proveri ostale rez za smestaj, da li je slobodan
-		Collection<Rezervacija> rezRezervisane = rezervacijaRep.findAllBySmestajAndStatus(smestajId, StatusRezervacije.REZERVISANA).orElse(new ArrayList<Rezervacija>());
-		//Collection<Rezervacija> rezPending=rezervacijaRep.findBySmestajIdAndStatus(smestajId, StatusRezervacije.PENDING).orElse(new ArrayList<Rezervacija>());
-		Termin t= new Termin(r.getOdDatum(), r.getDoDatum());
-		if(rezRezervisane.size()>0) {
-			for(Rezervacija rez: rezRezervisane) {
-				Boolean preklapanje= t.preklapanjeSa(new Termin(rez.getOdDatum(),rez.getDoDatum()));
-				if(preklapanje) return null;
-			}
-		}
-		//GRPC: provera smestaja, upitaj za nedostupne termine i cenovnik izabranog smestaja
-		SmestajDTO smestaj= getSmestaj(smestajId);
-		if(smestaj.getNedostupniCount()>0) {
-			for(TerminDTO ter : smestaj.getNedostupniList()) {
-				Boolean preklop = t.preklapanjeSa(new Termin(convertFromTimeStamp(ter.getPocetak()), convertFromTimeStamp(ter.getKraj())));
-				if(preklop) return null;
-			}
-		}
-		//TODO sta sa cenom?
-		float cena= cenaServ.ukupnaCena(smestaj, r.getOdDatum(), r.getDoDatum());
-		Rezervacija rez = rezMapper.fromDTO(r, smestajId, userId);
-		rez.setCena(cena);
-		//ZAVISNO OD TOGA DA LI JE VLASNIK SMESTAJA ODABRAO DA SE REZERVACIJE MODERIRAJU AUTOMATSKI ILI RUCNO
-		HostBasicDTO host= getHostBasic(smestaj.getVlasnik());		
-		
-		if(host.getRezAutomatski()) {
-			
-			ManagedChannel channel = ManagedChannelBuilder.forAddress(smestajHost, 7977).usePlaintext().build();
-			SmestajGrpcBlockingStub smestajBlockingStub = SmestajGrpcGrpc.newBlockingStub(channel);
-			TerminZauzmiRequest rqst = TerminZauzmiRequest.newBuilder().setSmestajId(smestajId).setTermin(mapTermin(r.getOdDatum(), r.getDoDatum())).build();
-			TerminZauzmiResponse rspns = smestajBlockingStub.zauzmiTermin(rqst);
-			channel.shutdown();
-
-			boolean terminated = false;
-			while (!terminated) {
-			  try {
-			    // Wait for the channel to terminate gracefully
-			    terminated = channel.awaitTermination(10, TimeUnit.SECONDS);
-			  } catch (InterruptedException e) {
-			    // Handle the exception if necessary
-			    e.printStackTrace();
-			  }
-			}
-			if(rspns.getZauzet()) {
-				rez.setStatus(StatusRezervacije.REZERVISANA);
-				
-			}else {
-				return null;
-			}
-		}else {
-			rez.setStatus(StatusRezervacije.PENDING);
-		}
-		rezervacijaRep.save(rez);
-		
-		//utvrdi da li je Host zavredio status istaknutog 
-		boolean isIstaknuti = determineIfIstaknuti(smestaj.getVlasnik());
-		//ako jeste, izmeni mu status u true, ako nije izmeni u false
-		boolean statusPromenjen = izmeniStatusHosta(smestaj.getVlasnik(), isIstaknuti);
-		System.out.println("USPESNO PROMENJEN STATUS HOSTA U: " + isIstaknuti);
-		
-		//U GRAF BAZU SE UPISUJE REZERVISANI SMESTAJ OBOSTRANO;
-		Korisnik kor = this.neo4jKorisnikRep.findById(userId).orElse(null);
-		Smestaj sme = this.neo4jSmestajRep.findById(smestajId).orElse(null);
-		if(kor != null) {
-			kor.getRezervisani().add(sme);
-		}
-		this.neo4jKorisnikRep.save(kor);
-		
-		if(novaRezervacijaNotificationEnabled(smestaj.getVlasnik())) {
-			newReservationNotify(rez);
-		}
-		return rezMapper.toDTO(rez);
-	}
+//	public RezervacijaDTO makeReservation(String userId, String smestajId, RezervacijaDTO r) {
+//		//proveri ostale rez za smestaj, da li je slobodan
+//		Collection<Rezervacija> rezRezervisane = rezervacijaRep.findAllBySmestajAndStatus(smestajId, StatusRezervacije.REZERVISANA).orElse(new ArrayList<Rezervacija>());
+//		//Collection<Rezervacija> rezPending=rezervacijaRep.findBySmestajIdAndStatus(smestajId, StatusRezervacije.PENDING).orElse(new ArrayList<Rezervacija>());
+//		Termin t= new Termin(r.getOdDatum(), r.getDoDatum());
+//		if(rezRezervisane.size()>0) {
+//			for(Rezervacija rez: rezRezervisane) {
+//				Boolean preklapanje= t.preklapanjeSa(new Termin(rez.getOdDatum(),rez.getDoDatum()));
+//				if(preklapanje) return null;
+//			}
+//		}
+//		//GRPC: provera smestaja, upitaj za nedostupne termine i cenovnik izabranog smestaja
+//		SmestajDTO smestaj= getSmestaj(smestajId);
+//		if(smestaj.getNedostupniCount()>0) {
+//			for(TerminDTO ter : smestaj.getNedostupniList()) {
+//				Boolean preklop = t.preklapanjeSa(new Termin(convertFromTimeStamp(ter.getPocetak()), convertFromTimeStamp(ter.getKraj())));
+//				if(preklop) return null;
+//			}
+//		}
+//		//TODO sta sa cenom?
+//		float cena= cenaServ.ukupnaCena(smestaj, r.getOdDatum(), r.getDoDatum());
+//		Rezervacija rez = rezMapper.fromDTO(r, smestajId, userId);
+//		rez.setCena(cena);
+//		//ZAVISNO OD TOGA DA LI JE VLASNIK SMESTAJA ODABRAO DA SE REZERVACIJE MODERIRAJU AUTOMATSKI ILI RUCNO
+//		HostBasicDTO host= getHostBasic(smestaj.getVlasnik());		
+//		
+//		if(host.getRezAutomatski()) {
+//			
+//			ManagedChannel channel = ManagedChannelBuilder.forAddress(smestajHost, 7977).usePlaintext().build();
+//			SmestajGrpcBlockingStub smestajBlockingStub = SmestajGrpcGrpc.newBlockingStub(channel);
+//			TerminZauzmiRequest rqst = TerminZauzmiRequest.newBuilder().setSmestajId(smestajId).setTermin(mapTermin(r.getOdDatum(), r.getDoDatum())).build();
+//			TerminZauzmiResponse rspns = smestajBlockingStub.zauzmiTermin(rqst);
+//			channel.shutdown();
+//
+//			boolean terminated = false;
+//			while (!terminated) {
+//			  try {
+//			    // Wait for the channel to terminate gracefully
+//			    terminated = channel.awaitTermination(10, TimeUnit.SECONDS);
+//			  } catch (InterruptedException e) {
+//			    // Handle the exception if necessary
+//			    e.printStackTrace();
+//			  }
+//			}
+//			if(rspns.getZauzet()) {
+//				rez.setStatus(StatusRezervacije.REZERVISANA);
+//				
+//			}else {
+//				return null;
+//			}
+//		}else {
+//			rez.setStatus(StatusRezervacije.PENDING);
+//		}
+//		rezervacijaRep.save(rez);
+//		
+//		//utvrdi da li je Host zavredio status istaknutog 
+//		boolean isIstaknuti = determineIfIstaknuti(smestaj.getVlasnik());
+//		//ako jeste, izmeni mu status u true, ako nije izmeni u false
+//		boolean statusPromenjen = izmeniStatusHosta(smestaj.getVlasnik(), isIstaknuti);
+//		System.out.println("USPESNO PROMENJEN STATUS HOSTA U: " + isIstaknuti);
+//		
+//		//U GRAF BAZU SE UPISUJE REZERVISANI SMESTAJ OBOSTRANO;
+//		Korisnik kor = this.neo4jKorisnikRep.findById(userId).orElse(null);
+//		Smestaj sme = this.neo4jSmestajRep.findById(smestajId).orElse(null);
+//		if(kor != null) {
+//			kor.getRezervisani().add(sme);
+//		}
+//		this.neo4jKorisnikRep.save(kor);
+//		
+//		if(novaRezervacijaNotificationEnabled(smestaj.getVlasnik())) {
+//			newReservationNotify(rez);
+//		}
+//		return rezMapper.toDTO(rez);
+//	}
 	
 	
 //	public List<OcenaSmestaj> getOceneSmestaja(String id){

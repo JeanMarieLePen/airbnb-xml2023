@@ -1,6 +1,6 @@
 package com.example.reservationservice.exceptions;
 
-public class PriceCalculationException extends Exception {
+public class PriceCalculationException extends RuntimeException {
 	/**
 	 * 
 	 */

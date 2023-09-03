@@ -1,6 +1,6 @@
 package com.example.reservationservice.exceptions;
 
-public class Neo4jDatabaseException extends Exception {
+public class Neo4jDatabaseException extends RuntimeException {
 	/**
 	 * 
 	 */

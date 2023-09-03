@@ -1,6 +1,6 @@
 package com.example.reservationservice.exceptions;
 
-public class AccommodationUnavailableException extends Exception {
+public class AccommodationUnavailableException extends RuntimeException {
 	/**
 	 * 
 	 */
