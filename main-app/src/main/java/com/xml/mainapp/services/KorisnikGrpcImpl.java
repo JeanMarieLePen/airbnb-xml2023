@@ -94,6 +94,8 @@ public class KorisnikGrpcImpl extends KorisnikGrpcImplBase{
 	public void rezOtkazanaHost(rezOtkazanaHostRequest request,
 			StreamObserver<rezOtkazanaHostResponse> responseObserver) {
 		// TODO Auto-generated method stub
+		System.out.println("REZOTKAZANA");
+		System.out.println("ODBIJENA REZERVACIJA: " + request.getResId());
 		String id = request.getHostId();
 		NotificationDTO notifikacija = new NotificationDTO();
 		notifikacija.setIdRezervacije(request.getResId());

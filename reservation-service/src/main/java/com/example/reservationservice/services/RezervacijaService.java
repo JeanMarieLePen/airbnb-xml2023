@@ -134,7 +134,7 @@ public class RezervacijaService {
 			
 			
 			//zauzimanje termina za rezervaciju
-			String terminId = makeReservationStep(smestajId, rez, r.getOdDatum(), r.getDoDatum());
+			boolean terminZauzet = makeReservationStep(smestajId, rez, r.getOdDatum(), r.getDoDatum());
 			LOGGER.info("Step 4: Zauzimanje termina zavrseno");
 			
 			 this.undoTerminBooking = () -> {
@@ -142,7 +142,7 @@ public class RezervacijaService {
 					
 					//mi ne koristimo terminId za oslobadjanje termina ali ako je neophodno, mozemo i tako
 					//u prevodu  terminId ne sluzi nicemu ovde
-					this.oslobodiTermin(rez, terminId);
+					this.oslobodiTermin(rez);
 				}catch (Exception e) {
 					LOGGER.error("Greska pri revertu termina", e);
 				}
@@ -196,7 +196,7 @@ public class RezervacijaService {
 		return null;
 	}
 	
-	public boolean oslobodiTermin(Rezervacija r, String terminId) {
+	public boolean oslobodiTermin(Rezervacija r) {
 		ManagedChannel channel = ManagedChannelBuilder.forAddress(smestajHost, 7977).usePlaintext().build();
 		SmestajGrpcBlockingStub smestajBlockingStub = SmestajGrpcGrpc.newBlockingStub(channel);
 		TerminOslobodiRequest rqst = TerminOslobodiRequest.newBuilder().setSmestajId(r.getSmestaj()).setTermin(mapTermin(r.getOdDatum(), r.getDoDatum())).build();
@@ -261,31 +261,67 @@ public class RezervacijaService {
 		return rez;
 	}
 	
-	private String makeReservationStep(String smestajId, Rezervacija r, LocalDateTime odDatum, LocalDateTime doDatum) throws ReservationTerminException {
+	private boolean makeReservationStep(String smestajId, Rezervacija r, LocalDateTime odDatum, LocalDateTime doDatum) {
 		SmestajDTO smestaj = getSmestaj(smestajId);
-		ManagedChannel channel = ManagedChannelBuilder.forAddress(smestajHost, 7977).usePlaintext().build();
-		SmestajGrpcBlockingStub smestajBlockingStub = SmestajGrpcGrpc.newBlockingStub(channel);
-		TerminZauzmiRequest rqst = TerminZauzmiRequest.newBuilder().setSmestajId(smestajId).setTermin(mapTermin(r.getOdDatum(), r.getDoDatum())).build();
-		TerminZauzmiResponse rspns = smestajBlockingStub.zauzmiTermin(rqst);
-		channel.shutdown();
+		String hostId = smestaj.getVlasnik();
+		HostBasicDTO owner= getHostBasic(hostId);
+		System.out.println("REZERVACIJE SE OBRADJUJU AUTOMATSKI: " + owner.getRezAutomatski());
+		if(owner.getRezAutomatski() == true) {
+			System.out.println("USAO U TRUE LOOP");
+			ManagedChannel channel = ManagedChannelBuilder.forAddress(smestajHost, 7977).usePlaintext().build();
+			SmestajGrpcBlockingStub smestajBlockingStub = SmestajGrpcGrpc.newBlockingStub(channel);
+			TerminZauzmiRequest rqst = TerminZauzmiRequest.newBuilder().setSmestajId(smestajId).setTermin(mapTermin(r.getOdDatum(), r.getDoDatum())).build();
+			TerminZauzmiResponse rspns = smestajBlockingStub.zauzmiTermin(rqst);
+			channel.shutdown();
 
-		boolean terminated = false;
-		while (!terminated) {
-		  try {
-		    // Wait for the channel to terminate gracefully
-		    terminated = channel.awaitTermination(10, TimeUnit.SECONDS);
-		  } catch (InterruptedException e) {
-		    // Handle the exception if necessary
-		    e.printStackTrace();
-		  }
-		}
-		if(rspns.getZauzet()) {
-			r.setStatus(setStatusRez(smestaj.getVlasnik()));			
+			boolean terminated = false;
+			while (!terminated) {
+			  try {
+			    // Wait for the channel to terminate gracefully
+			    terminated = channel.awaitTermination(10, TimeUnit.SECONDS);
+			  } catch (InterruptedException e) {
+			    // Handle the exception if necessary
+			    e.printStackTrace();
+			  }
+			}
+			if(rspns.getZauzet()) {
+				r.setStatus(StatusRezervacije.REZERVISANA);			
+			}else {
+				throw new ReservationTerminException("Greska pri zauzimanju termina");
+			}
+			return true;
 		}else {
-			throw new ReservationTerminException("Greska pri zauzimanju termina");
+			System.out.println("USAO U FALSE LOOP");
+			r.setStatus(StatusRezervacije.PENDING);
+			return true;
 		}
-		return rspns.getTerminId();
 	}
+	
+//	private String makeReservationStep(String smestajId, Rezervacija r, LocalDateTime odDatum, LocalDateTime doDatum) throws ReservationTerminException {
+//		SmestajDTO smestaj = getSmestaj(smestajId);
+//		ManagedChannel channel = ManagedChannelBuilder.forAddress(smestajHost, 7977).usePlaintext().build();
+//		SmestajGrpcBlockingStub smestajBlockingStub = SmestajGrpcGrpc.newBlockingStub(channel);
+//		TerminZauzmiRequest rqst = TerminZauzmiRequest.newBuilder().setSmestajId(smestajId).setTermin(mapTermin(r.getOdDatum(), r.getDoDatum())).build();
+//		TerminZauzmiResponse rspns = smestajBlockingStub.zauzmiTermin(rqst);
+//		channel.shutdown();
+//
+//		boolean terminated = false;
+//		while (!terminated) {
+//		  try {
+//		    // Wait for the channel to terminate gracefully
+//		    terminated = channel.awaitTermination(10, TimeUnit.SECONDS);
+//		  } catch (InterruptedException e) {
+//		    // Handle the exception if necessary
+//		    e.printStackTrace();
+//		  }
+//		}
+//		if(rspns.getZauzet()) {
+//			r.setStatus(setStatusRez(smestaj.getVlasnik()));			
+//		}else {
+//			throw new ReservationTerminException("Greska pri zauzimanju termina");
+//		}
+//		return rspns.getTerminId();
+//	}
 	
 	private void neo4jStep(String userId, String smestajId, Rezervacija rez) throws Neo4jDatabaseException{
 		SmestajDTO smestaj = getSmestaj(smestajId);
@@ -761,6 +797,22 @@ public class RezervacijaService {
 		//proveri postoji li smestaj
 		r.setStatus(StatusRezervacije.ODBIJENA);
 		rezervacijaRep.save(r);
+		
+		ManagedChannel channel = ManagedChannelBuilder.forAddress(reglogHost, 7979).usePlaintext().build();
+		KorisnikGrpcBlockingStub korServBlockStub= KorisnikGrpcGrpc.newBlockingStub(channel);
+		rezOtkazanaHostRequest req = rezOtkazanaHostRequest.newBuilder().setHostId(ownerId).setResId(reservationId).build();
+		rezOtkazanaHostResponse res= korServBlockStub.rezOtkazanaHost(req);
+		channel.shutdown();
+		boolean terminated = false;
+		while (!terminated) {
+		  try {
+		    // Wait for the channel to terminate gracefully
+		    terminated = channel.awaitTermination(10, TimeUnit.SECONDS);
+		  } catch (InterruptedException e) {
+		    // Handle the exception if necessary
+		    e.printStackTrace();
+		  }
+		}
 		return rezMapper.toDTO(r);
 	}
 
