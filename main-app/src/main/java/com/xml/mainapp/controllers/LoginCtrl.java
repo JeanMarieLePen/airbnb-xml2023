@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.xml.mainapp.dtos.KorisnikDTO;
 import com.xml.mainapp.dtos.LoginDTO;
 import com.xml.mainapp.dtos.LoginResponseDTO;
@@ -35,7 +36,8 @@ import io.micrometer.core.instrument.MeterRegistry;
 @RestController
 @RequestMapping("/login")
 public class LoginCtrl {
-	
+	@Autowired com.xml.mainapp.MetrikeMetode met;
+
 //	@Value("${server.port}") private int serverPort;
 	@Autowired
 	private Environment environment;
@@ -78,11 +80,10 @@ public class LoginCtrl {
 			
 			
 			//mReg.counter("http_requests_total","method","get", "status", "204", "uri","login/authenticate").increment();
-			ResponseEntity<LoginResponseDTO> rsp= new ResponseEntity<LoginResponseDTO>(HttpStatus.NO_CONTENT);
-			//int i= rsp.toString().getBytes().length;
-			//mReg.counter("http_response_size_bytes","method","get", "status", "204", "uri","login/authenticate", "size", Integer.toString(i) ).increment();
+			ResponseEntity<LoginResponseDTO> resp= new ResponseEntity<LoginResponseDTO>(HttpStatus.NO_CONTENT);
+			met.incrementTotalResponse((Object)resp, "/authenticate", "POST", resp.getStatusCode().value());
 
-			return new ResponseEntity<LoginResponseDTO>(HttpStatus.NO_CONTENT);
+			return resp;//new ResponseEntity<LoginResponseDTO>(HttpStatus.NO_CONTENT);
 		}
 		
 		//AKO USPESNO PRODJE AUTENTIFIKACIJU TREBA IZGENERISATI TOKEN KOJI CE DALJE
@@ -91,25 +92,31 @@ public class LoginCtrl {
 		final String jwt = generateJwt.generateToken(userDetails);
 		System.out.println("TOKEN KOJI SE SALJE U ODGOVORU NA ZAHTEV ZA LOGIN: " + jwt);
 		
-		//mReg.counter("http_requests_total","method","get", "status", "200", "uri","login/authenticate").increment();
-		
-		return ResponseEntity.ok(new LoginResponseDTO(jwt));
+		ResponseEntity<LoginResponseDTO> resp = ResponseEntity.ok(new LoginResponseDTO(jwt));
+		met.incrementTotalResponse((Object)resp, "/authenticate", "POST", resp.getStatusCode().value());
+		return resp;//ResponseEntity.ok(new LoginResponseDTO(jwt));
 		
 	}
 	
 	@PostMapping("/register")
-	public ResponseEntity<?> registerNewUser(@Validated @RequestBody RegisterDTO regDTO){
+	public ResponseEntity<?> registerNewUser(@Validated @RequestBody RegisterDTO regDTO) throws JsonProcessingException{
 		RegisterDTO retVal = this.loginService.registerNewUser(regDTO);
+		ResponseEntity<?> resp= ResponseEntity.ok(retVal);
 		if(retVal != null) {
-			return ResponseEntity.ok(retVal);
+			
+			resp= ResponseEntity.ok(retVal);
 		}else {
-			return (ResponseEntity<?>) ResponseEntity.noContent();
+			resp= (ResponseEntity<?>) ResponseEntity.noContent();
 		}
+		met.incrementTotalResponse((Object)resp, "/register", "POST", resp.getStatusCode().value());
+		return resp;
 	}
 	
 	@GetMapping("/activateAccount")
-	public String activateAccount(@RequestParam(name="id") String id, @RequestParam(name="secret") String pw, @RequestParam(name="exptime") String exptime) {
-		return this.loginService.activateAccount(id, pw, exptime);
+	public String activateAccount(@RequestParam(name="id") String id, @RequestParam(name="secret") String pw, @RequestParam(name="exptime") String exptime) throws JsonProcessingException {
+		String resp= this.loginService.activateAccount(id, pw, exptime);
+		met.incrementTotalResponse((Object)resp, "/activateAccount", "GET", 0);
+		return resp;
 	}
 	
 	

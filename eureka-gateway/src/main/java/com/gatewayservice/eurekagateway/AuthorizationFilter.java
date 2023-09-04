@@ -1,5 +1,8 @@
 package com.gatewayservice.eurekagateway;
 
+import java.net.InetSocketAddress;
+import java.net.http.HttpHeaders;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,6 +10,7 @@ import org.springframework.cloud.gateway.filter.GatewayFilterChain;
 import org.springframework.cloud.gateway.filter.GlobalFilter;
 import org.springframework.cloud.gateway.route.Route;
 import org.springframework.cloud.gateway.support.ServerWebExchangeUtils;
+import org.springframework.cloud.gateway.support.ipresolver.XForwardedRemoteAddressResolver;
 import org.springframework.core.Ordered;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.server.reactive.ServerHttpRequest;
@@ -15,6 +19,7 @@ import org.springframework.util.CollectionUtils;
 import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.server.ServerWebExchange;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.xml2023.flights.FlightsGrpc;
 import com.xml2023.flights.FlightsGrpc.FlightsBlockingStub;
 import com.xml2023.flights.Gateway.TokenValidanRequest;
@@ -31,13 +36,28 @@ public class AuthorizationFilter implements GlobalFilter, Ordered{
 	
 //	@Autowired
 //	private RedisHashComponent redisHashComponent;
-	
+	@Autowired MetrikeMetode met;
+
 	@Override
 	public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
-		// TODO Auto-generated method stub
+		// TODO Auto-generated method stub		
 		
 		ServerHttpRequest request = (ServerHttpRequest) exchange.getRequest(); 
+        //System.out.println("IP ADRESA: " + request.getHeaders().get("IPadresa"));
+        System.out.println("VREME: " + request.getHeaders().get("Vreme"));
 		String putanja = request.getURI().getPath();
+		try {
+			met.incrementTotalResponse((Object)request.getBody(), putanja.toString(), request.getMethod().toString());
+			met.trackVisitors(
+					request.getHeaders().get("IPadresa").toString(),
+					request.getHeaders().get("User-Agent").toString(),
+					request.getHeaders().get("Vreme").toString()
+					);
+		} catch (JsonProcessingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
 //		/regkor/reservationWithToken
 		if(putanja.equals("/regkor/reservationWithToken")) {
 			List<String> apiKeyHeader = exchange.getRequest().getHeaders().get("gatewayApiKey");
@@ -76,4 +96,6 @@ public class AuthorizationFilter implements GlobalFilter, Ordered{
 	public int getOrder() {
 		return Ordered.LOWEST_PRECEDENCE;
 	}
+	
+	
 }

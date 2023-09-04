@@ -1,13 +1,11 @@
-package com.xml2023.smestajmicroservice;
+package com.example.reservationservice;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import com.xml2023.smestajmicroservice.dtos.SmestajDTO;
 
 import io.micrometer.core.instrument.MeterRegistry;
 

@@ -34,6 +34,18 @@
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
 		</dependency>
+				
+				<!-- Za monitoring -->		
+	<!-- 	<dependency>
+            <groupId>io.opentracing.contrib</groupId>
+            <artifactId>opentracing-spring-jaeger-cloud-starter</artifactId>
+            <version>3.3.1</version>
+        </dependency>
+       <dependency>
+            <groupId>io.micrometer</groupId>
+            <artifactId>micrometer-registry-prometheus</artifactId>
+        </dependency> -->
+		<!-- END: Za monitoring-->	
 	</dependencies>
 	<dependencyManagement>
 		<dependencies>
@@ -44,18 +56,6 @@
 				<type>pom</type>
 				<scope>import</scope>
 			</dependency>
-		
-				<!-- Za monitoring -->		
-		<dependency>
-            <groupId>io.opentracing.contrib</groupId>
-            <artifactId>opentracing-spring-jaeger-cloud-starter</artifactId>
-            <version>3.3.1</version>
-        </dependency>
-   <!--     <dependency>
-            <groupId>io.micrometer</groupId>
-            <artifactId>micrometer-registry-prometheus</artifactId>
-        </dependency> -->
-		<!-- END: Za monitoring-->	
 		</dependencies>
 	</dependencyManagement>
 

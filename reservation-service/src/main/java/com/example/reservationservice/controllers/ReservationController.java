@@ -15,32 +15,41 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.reservationservice.MetrikeMetode;
 import com.example.reservationservice.dtos.RezervacijaDTO;
 import com.example.reservationservice.services.RezervacijaService;
+import com.fasterxml.jackson.core.JsonProcessingException;
 
 
 @RestController
 @RequestMapping("/rezervacija")
 public class ReservationController {
+	@Autowired MetrikeMetode met;
 
 	@Autowired
 	private RezervacijaService rezervacijaService;
 	
 	@PostMapping("/makeReservation/{userId}/{smestajId}")
-	public ResponseEntity<RezervacijaDTO> makeReservation(@PathVariable(value = "userId") String userId, @PathVariable(value = "smestajId") String smestajId, @RequestBody RezervacijaDTO r){
+	public ResponseEntity<RezervacijaDTO> makeReservation(@PathVariable(value = "userId") String userId, @PathVariable(value = "smestajId") 
+	String smestajId, @RequestBody RezervacijaDTO r) throws JsonProcessingException{
 		RezervacijaDTO retVal;
+		ResponseEntity<RezervacijaDTO> resp= new ResponseEntity<RezervacijaDTO>(HttpStatus.NO_CONTENT);
 		try {
 			retVal = this.rezervacijaService.makeReservationSaga(userId.substring(1, userId.length() - 1), smestajId, r);
 			if(retVal == null) {
-				return new ResponseEntity<RezervacijaDTO>(HttpStatus.NO_CONTENT);
+				resp = new ResponseEntity<RezervacijaDTO>(HttpStatus.NO_CONTENT);
 			}else {
-				return new ResponseEntity<RezervacijaDTO>(retVal, HttpStatus.OK);
+				resp = new ResponseEntity<RezervacijaDTO>(retVal, HttpStatus.OK);
 			}
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-			return new ResponseEntity<RezervacijaDTO>(HttpStatus.NO_CONTENT);
+			resp=new ResponseEntity<RezervacijaDTO>(HttpStatus.NO_CONTENT);
+			met.incrementTotalResponse((Object)resp, "/makeReservation", "POST", resp.getStatusCode().value());
+			return resp;
 		}
+		met.incrementTotalResponse((Object)resp, "/makeReservation", "POST", resp.getStatusCode().value());
+		return resp;
 	}
 	
 //	@PutMapping("/editReservation")
@@ -54,33 +63,44 @@ public class ReservationController {
 //	}
 	
 	@PutMapping("/cancelReservation/{userId}/{rezervacijaId}")
-	public ResponseEntity<RezervacijaDTO> cancelReservation(@PathVariable(value = "userId") String userId, @PathVariable(value = "rezervacijaId") String rezervacijaId){
+	public ResponseEntity<RezervacijaDTO> cancelReservation(@PathVariable(value = "userId") String userId, 
+			@PathVariable(value = "rezervacijaId") String rezervacijaId) throws JsonProcessingException{
 		RezervacijaDTO retVal = this.rezervacijaService.cancelReservation(userId.substring(1, userId.length() - 1), rezervacijaId);
+		ResponseEntity<RezervacijaDTO> resp= new ResponseEntity<RezervacijaDTO>(retVal, HttpStatus.OK);
 		if(retVal == null) {
-			return new ResponseEntity<RezervacijaDTO>(HttpStatus.NO_CONTENT);
+			resp =  new ResponseEntity<RezervacijaDTO>(HttpStatus.NO_CONTENT);
 		}else {
-			return new ResponseEntity<RezervacijaDTO>(retVal, HttpStatus.OK);
+			resp =  new ResponseEntity<RezervacijaDTO>(retVal, HttpStatus.OK);
 		}
+		met.incrementTotalResponse((Object)resp, "/cancelReservation", "PUT", resp.getStatusCode().value());
+		return resp;
 	}
 	
 	@PutMapping("/cancelReservationByHost/{hostId}/{rezervacijaId}")
-	public ResponseEntity<RezervacijaDTO> cancelReservationByHost(@PathVariable(value = "hostId") String hostId, @PathVariable(value = "rezervacijaId") String rezervacijaId){
+	public ResponseEntity<RezervacijaDTO> cancelReservationByHost(@PathVariable(value = "hostId") String hostId, 
+			@PathVariable(value = "rezervacijaId") String rezervacijaId) throws JsonProcessingException{
 		RezervacijaDTO retVal = this.rezervacijaService.cancelHost(hostId.substring(1, hostId.length() - 1), rezervacijaId);
+		ResponseEntity<RezervacijaDTO> resp= new ResponseEntity<RezervacijaDTO>(retVal, HttpStatus.OK);
 		if(retVal == null) {
-			return new ResponseEntity<RezervacijaDTO>(HttpStatus.NO_CONTENT);
+			resp =  new ResponseEntity<RezervacijaDTO>(HttpStatus.NO_CONTENT);
 		}else {
-			return new ResponseEntity<RezervacijaDTO>(retVal, HttpStatus.OK);
+			resp = new ResponseEntity<RezervacijaDTO>(retVal, HttpStatus.OK);
 		}
+		met.incrementTotalResponse((Object)resp, "/cancelReservationByHost", "PUT", resp.getStatusCode().value());
+		return resp;
 	}
 	
 	@GetMapping("/getAllReservationsByUserGuest/{id}")
-	public ResponseEntity<Collection<RezervacijaDTO>> getAllReservationsByUserGuest(@PathVariable(value = "id") String id){
+	public ResponseEntity<Collection<RezervacijaDTO>> getAllReservationsByUserGuest(@PathVariable(value = "id") String id) throws JsonProcessingException{
 		Collection<RezervacijaDTO> retList = this.rezervacijaService.getAllReservationByUserGuestId(id.substring(1, id.length() - 1));
+		ResponseEntity<Collection<RezervacijaDTO>> resp = new ResponseEntity<>(HttpStatus.NO_CONTENT);
 		if(retList == null) {
-			return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+			resp = new ResponseEntity<>(HttpStatus.NO_CONTENT);
 		}else {
-			return new ResponseEntity<Collection<RezervacijaDTO>>(retList, HttpStatus.OK);
+			resp = new ResponseEntity<Collection<RezervacijaDTO>>(retList, HttpStatus.OK);
 		}
+		met.incrementTotalResponse((Object)resp, "/getAllReservationsByUserGuest", "GET", resp.getStatusCode().value());
+		return resp;
 	}
 	
 //	@PostMapping("/giveRatingToSmestaj/{userId}/{smestajId}")
@@ -100,61 +120,80 @@ public class ReservationController {
 //	}
 	
 	@GetMapping("/getAllReservationsByUserHost/{id}")
-	private ResponseEntity<Collection<RezervacijaDTO>> getAllReservationsByUserHost(@PathVariable(value = "id") String id){
+	private ResponseEntity<Collection<RezervacijaDTO>> getAllReservationsByUserHost(@PathVariable(value = "id") String id) throws JsonProcessingException{
 		Collection<RezervacijaDTO> retList = this.rezervacijaService.getAllReservationsByHostId(id.substring(1, id.length() - 1));
+		ResponseEntity<Collection<RezervacijaDTO>> resp = new ResponseEntity<>(HttpStatus.NO_CONTENT);
+
 		if(retList == null) {
-			return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+			resp = new ResponseEntity<>(HttpStatus.NO_CONTENT);
 		}else {
-			return new ResponseEntity<Collection<RezervacijaDTO>>(retList, HttpStatus.OK);
+			resp = new ResponseEntity<Collection<RezervacijaDTO>>(retList, HttpStatus.OK);
 		}
+		met.incrementTotalResponse((Object)resp, "/getAllReservationsByUserHost", "GET", resp.getStatusCode().value());
+		return resp;
 	}
 	
 	@PutMapping("/approveReservation/{ownerId}/{reservationId}")
-	private ResponseEntity<?> approveReservation(@PathVariable(value = "ownerId") String ownerId, @PathVariable(value = "reservationId") String reservationId){
+	private ResponseEntity<?> approveReservation(@PathVariable(value = "ownerId") String ownerId, @PathVariable(value = "reservationId") String reservationId) 
+			throws JsonProcessingException{
 		RezervacijaDTO retVal = this.rezervacijaService.approveReservation(reservationId, ownerId.substring(1, ownerId.length() - 1));
+		ResponseEntity<RezervacijaDTO> resp= new ResponseEntity<>(HttpStatus.NO_CONTENT); 
 		if(retVal == null) {
-			return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+			resp = new ResponseEntity<>(HttpStatus.NO_CONTENT);
 		}else {
-			return new ResponseEntity<RezervacijaDTO>(retVal, HttpStatus.OK);
+			resp =  new ResponseEntity<RezervacijaDTO>(retVal, HttpStatus.OK);
 		}
+		met.incrementTotalResponse((Object)resp, "/approveReservation", "PUT", resp.getStatusCode().value());
+		return resp;
 	}
 	
 	@PutMapping("/rejectReservation/{ownerId}/{reservationId}")
-	private ResponseEntity<?> rejectReservation(@PathVariable(value = "ownerId") String ownerId, @PathVariable(value = "reservationId") String reservationId){
+	private ResponseEntity<?> rejectReservation(@PathVariable(value = "ownerId") String ownerId, @PathVariable(value = "reservationId") String reservationId)
+			throws JsonProcessingException{
 		RezervacijaDTO retVal = this.rezervacijaService.rejectReservation(reservationId, ownerId.substring(1, ownerId.length() - 1));
+		ResponseEntity<RezervacijaDTO> resp= new ResponseEntity<>(HttpStatus.NO_CONTENT); 
 		if(retVal == null) {
-			return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+			resp = new ResponseEntity<>(HttpStatus.NO_CONTENT);
 		}else {
-			return new ResponseEntity<RezervacijaDTO>(retVal, HttpStatus.OK);
+			resp = new ResponseEntity<RezervacijaDTO>(retVal, HttpStatus.OK);
 		}
+		met.incrementTotalResponse((Object)resp, "/rejectReservation", "PUT", resp.getStatusCode().value());
+		return resp;
 	}
 	
 	//@PreAuthorize("hasAuthority('GUEST')")
 	@Transactional
 	@GetMapping("/canGiveRating/{userId}/{smestajId}")
-	public ResponseEntity<?> canGiveRating(@PathVariable(value = "userId") String userId, @PathVariable(value = "smestajId") String smestajId){
+	public ResponseEntity<?> canGiveRating(@PathVariable(value = "userId") String userId, @PathVariable(value = "smestajId") String smestajId) throws JsonProcessingException{
 		System.out.println("Can give rating check:");
 		boolean retVal = this.rezervacijaService.canGiveRating(userId.substring(1, userId.length() - 1), smestajId);
-		return new ResponseEntity<Boolean>(retVal, HttpStatus.OK);
+		ResponseEntity<Boolean> resp= new ResponseEntity<Boolean>(retVal, HttpStatus.OK);
+		met.incrementTotalResponse((Object)resp, "/canGiveRating", "GET", resp.getStatusCode().value());
+		return resp;
 	}
 	//@PreAuthorize("hasAuthority('GUEST')")
 
 	@Transactional
 	@GetMapping("/canGiveRatingHost/{userId}/{smestajId}")
-	public ResponseEntity<?> canGiveRatingHost(@PathVariable(value = "userId") String userId, @PathVariable(value = "smestajId") String smestajId){
+	public ResponseEntity<?> canGiveRatingHost(@PathVariable(value = "userId") String userId, @PathVariable(value = "smestajId") String smestajId) throws JsonProcessingException{
 		System.out.println("Can give rating check:");
 		boolean retVal = this.rezervacijaService.canGiveRatingHost(userId.substring(1, userId.length() - 1), smestajId);
-		return new ResponseEntity<Boolean>(retVal, HttpStatus.OK);
+		ResponseEntity<Boolean> resp= new ResponseEntity<Boolean>(retVal, HttpStatus.OK);
+		met.incrementTotalResponse((Object)resp, "/canGiveRatingHost", "GET", resp.getStatusCode().value());
+		return resp;
 	}
 	
 	@GetMapping("/getReservationById/{id}")
-	public ResponseEntity<?> getReservation(@PathVariable(value = "id") String id){
+	public ResponseEntity<?> getReservation(@PathVariable(value = "id") String id) throws JsonProcessingException{
 		RezervacijaDTO retVal = this.rezervacijaService.getRezervacijaById(id);
+		ResponseEntity<RezervacijaDTO> resp=  new ResponseEntity<>(HttpStatus.NO_CONTENT);
 		if(retVal == null) {
-			return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+			resp = new ResponseEntity<>(HttpStatus.NO_CONTENT);
 		}else {
-			return new ResponseEntity<RezervacijaDTO>(retVal, HttpStatus.OK);
+			resp = new ResponseEntity<RezervacijaDTO>(retVal, HttpStatus.OK);
 		}
+		met.incrementTotalResponse((Object)resp, "/getReservationById", "GET", resp.getStatusCode().value());
+		return resp;
 	}
 	
 }

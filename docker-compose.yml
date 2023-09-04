@@ -45,15 +45,36 @@ services:
       - ./mongodb/data/db:/data/db
     depends_on:
       - neo4j
+    # environment:
+    #   - MONGO_INITDB_ROOT_USERNAME=admin
+    #   - MONGO_INITDB_ROOT_PASSWORD=admin123
+    #   - MONGO_INITDB_DATABASE=sample
 
-  neo4j:
+  mongo-prometheus: #https://github.com/stutzlab/mongo-prometheus
+    image: bitnami/mongodb-exporter:0.11.0-debian-10-r75
+    ports:
+      - "8880:9216"
+    environment:
+      - MONGODB_URI=mongodb://mongodb:27017 #admin:admin123@mongo:27017
+    logging: *fluent-bit
+    depends_on:
+      - mongodb
+    networks:
+      - airbnb
+      - monitoring
+
+      
+
+
+  neo4j: #https://github.com/graphaware/monitoring-neo4j-prometheus-grafana
     container_name: neo4j
     #hostname: neo4j
-    image: neo4j:4.3.0
+    image: neo4j:4.3-enterprise #neo4j:4.3.0
     restart: unless-stopped
     ports:
       - 7474:7474
       - 7687:7687
+      - 2006:2006
     volumes:
       - ./neo/conf:/conf
       - ./neo/data:/data
@@ -67,6 +88,9 @@ services:
       - NEO4J_dbms_memory_heap_max__size=1G 
       #- NEO4J_AUTH=neo4j/12341234
       - NEO4J_AUTH=none
+      - NEO4J_metrics_prometheus_enabled=true
+      - NEO4J_metrics_prometheus_endpoint=0.0.0.0:2006
+      - NEO4J_ACCEPT_LICENSE_AGREEMENT=yes
     networks:
       - airbnb
       - monitoring
@@ -93,6 +117,14 @@ services:
     image: gateway-service
     build: ./eureka-gateway
     container_name: gateway-service
+    environment:
+      - JAEGER_DOMAIN=${JAEGER_DOMAIN}
+      - OTEL_SERVICE_NAME=email
+      - OTEL_METRICS_EXPORTER=prometheus
+      - OTEL_TRACES_EXPORTER=jaeger
+      - OTEL_EXPORTER_JAEGER_ENDPOINT=http://jaeger:14250
+      - OTEL_EXPORTER_OTLP_ENDPOINT=http://jaeger:14250
+    logging: *fluent-bit
     ports:
       - "7777:7777"
     networks:
@@ -267,6 +299,7 @@ services:
     volumes:
       - .:/usr/app/
       - /usr/app/node_modules  
+
   
 volumes:
   database-data:

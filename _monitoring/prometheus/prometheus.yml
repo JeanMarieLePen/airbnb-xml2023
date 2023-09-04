@@ -62,7 +62,16 @@
       static_configs:
         - targets: ['email:8083']
       
-    # - job_name: 'email-localhost'
-    #   metrics_path: '/actuator/prometheus'
-    #   static_configs:
-    #     - targets: ['localhost:8083']
+    - job_name: 'mongo-prometheus'
+      metrics_path: '/metrics'
+      static_configs:
+        - targets: ['mongo-prometheus:9216']
+
+    - job_name: 'neo4j-prometheus'    
+      static_configs:
+        - targets: ['neo4j:2006']
+
+    - job_name: 'gateway-service'
+      metrics_path: '/actuator/prometheus'
+      static_configs:
+        - targets: ['gateway-service:7777']
