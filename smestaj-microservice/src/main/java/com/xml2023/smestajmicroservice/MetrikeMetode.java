@@ -15,17 +15,25 @@ import io.micrometer.core.instrument.MeterRegistry;
 public class MetrikeMetode {
 	@Autowired MeterRegistry mReg;
 
-	public void createNewMetrike(ResponseEntity<SmestajDTO> resp, String string) throws JsonProcessingException {
+	public void incrementTotalResponse(Object resp, String endpoint, String method, int status) throws JsonProcessingException {
 		ObjectMapper o= new ObjectMapper();
 		o.registerModule(new JavaTimeModule());
 		String os= o.writeValueAsString(resp);
 		int byteSize= os.getBytes().length;
 		mReg.counter("http_response_size_bytes",
-				//"method","POST", 
-				"status", resp.getStatusCode().toString(), 
-				"endpoint", string//, 
+				"method",method, 
+				"status", String.valueOf(status),
+				"endpoint", endpoint//, 
 				//"size", Integer.toString(byteSize)
-				).increment(byteSize);;
+				).increment(byteSize);
+		
+		mReg.counter("http_response_count_total", 
+				"endpoint", endpoint,
+				"status", String.valueOf(status)
+				).increment(1);
+	
 	}
+	
+	
 	
 }
