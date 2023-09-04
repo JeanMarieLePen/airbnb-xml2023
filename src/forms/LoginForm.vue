@@ -57,6 +57,8 @@ export default {
             neispravniPodaci: false,
 
             errorMessage:'',
+            ipAdresa:'0.0.0.0',
+
             
         }
     },
@@ -77,7 +79,11 @@ export default {
                     console.log("LOGIN USPESAN");
                     this.token = response.data.odgovor;
                     axios.defaults.headers.common['Authorization'] = 'Bearer ' + response.data.odgovor;
+                    axios.defaults.headers.common['IPadresa']= this.ipAdresa;
+
                     localStorage.setItem('xmljwt', JSON.stringify(this.token));
+                    localStorage.setItem('xmlIP', JSON.stringify(this.ipAdresa));
+
                     let tempObj = parserMixin.methods.parseXmlJwt();
                     this.emitter.emit("loggedIn", true);
                     this.emitter.emit("roleAssigned", tempObj.role);
@@ -91,6 +97,15 @@ export default {
                 };
             });
 
+        },
+        async getIp(){
+          //console.log("FETHC BEGIN: ", Date.now())
+          return fetch('https://api.ipify.org?format=json')
+            .then(x => x.json())
+            .then(({ ip }) => {
+          //console.log("IP: " ,ip )//, " end", Date.now())
+          this.ipAdresa=ip;
+          });
         }
     }
 }

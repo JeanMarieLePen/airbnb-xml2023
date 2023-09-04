@@ -14,6 +14,8 @@ const API_URL = "http://localhost:7777";
         console.log("AXIOS ERROR");
         axios.defaults.headers.common['Authorization'] = null;
     }
+    axios.defaults.headers.common['IPadresa']= localStorage.getItem('xmlIP');
+    axios.defaults.headers.common['Vreme']=Date.now();
 })();
 
 axios.interceptors.request.use(request => {
