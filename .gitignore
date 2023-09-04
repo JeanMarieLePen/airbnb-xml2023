@@ -1,4 +1,7 @@
-/neo/
+/neo/data/
+/neo/import
+/neo/logs
+/neo/plugins
 /mongodb/
 /node_modules_let.rar
 /airbnb-xml2023-front-smestaj/
