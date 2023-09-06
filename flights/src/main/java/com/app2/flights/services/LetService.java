@@ -143,6 +143,7 @@ public class LetService {
 	 * @return
 	 */
 	public List<LetDTOSimple> pretraga(PretragaDTO dto) {
+		System.out.println("DTO pretrage : "+dto.toString());
 		Query query= new Query();
 		/***VREME***/
 		if(dto.getPocetak()!=null && dto.getKraj()!=null) {
@@ -172,11 +173,13 @@ public class LetService {
 		}
 		/***LOKACIJE***/
 		if(dto.getPocetnaLok()!=null && !dto.getPocetnaLok().getAdresa().trim().equals("")) {
-			Criteria kreceIz= Criteria.where("lokOd.adresa").regex(dto.getPocetnaLok().getAdresa().toLowerCase());
+			System.out.println("Pocetna lok :"+ dto.getPocetnaLok().getAdresa() );
+			Criteria kreceIz= Criteria.where("lokOd.adresa").regex(dto.getPocetnaLok().getAdresa());
 			query.addCriteria(kreceIz);
 		}
 		if(dto.getKrajnjaLok()!=null && !dto.getKrajnjaLok().getAdresa().trim().equals("")) {
-			Criteria sleceU= Criteria.where("lokDo.adresa").regex(dto.getKrajnjaLok().getAdresa().toLowerCase());
+			System.out.println("Krajnja lok :"+ dto.getKrajnjaLok().getAdresa() );
+			Criteria sleceU= Criteria.where("lokDo.adresa").regex(dto.getKrajnjaLok().getAdresa());
 			query.addCriteria(sleceU);
 		}
 		List<Let> letovi= monTempl.find(query,Let.class);

@@ -43,6 +43,42 @@ groups:
       - record: ZAHTEVI_UNIQUE_IP_BROWSER_TIMESTAMP_ENDPOINT
         expr: count(count_values("ip", sum_over_time(prometheus_http_request_duration_seconds_sum{}[5m]))) by (endpoint, user_agent, timestamp)
 
+
+      - record: HOST_FILESYSTEM
+        expr: node_filesystem_size_bytes{}/1024/1024/1024
+      - record: HOST_FREEM_EMORY
+        expr: node_memory_MemAvailable_bytes{}/1024/1024/1024
+      - record: HOST_USED_MEMORY
+        expr: (node_memory_MemTotal_bytes{}*2-node_memory_MemAvailable_bytes{})/1024/1024/1024
+      - record: HOST_CPU_USAGE
+        expr: sum(system_cpu_usage{})
+      
+      - record: HTTP_REQUESTS_TOTAL_24h
+        expr: sum(sum_over_time(http_request_count_total{instance="gateway-service:7777"}[24h]))
+      - record: HTTP_RESPONSES_2xx_3xx_24h
+        expr: sum(sum_over_time(http_response_count_total{ status=~"2..|3.."}[24h]))
+      - record: HTTP_RESPONSES_4xx_5xx_24h
+        expr: sum(sum_over_time(http_response_count_total{ status=~"4..|5.."}[24h]))
+      - record: HTTP_RESPONSES_404_24h
+        expr: sum_over_time(http_response_count_total{ status=~"404"}[24h])
+      - record: HTTP_RESPONSE_SIZE
+        expr: sum(http_response_size_bytes_total{})
+      - record: HTTP_REQUEST_SIZE
+        expr: sum(http_request_size_bytes_total{})
+      - record: IP_TIMESTAMP_BROWSER_SUM
+        expr: sum(UNIQUE_VISITS_total{})
+      - record: IP_BROWSER_SUM
+        expr: sum(increase(UNIQUE_VISITS_total{}[24h])) by (userAgent, ip )
+          #sum by (userAgent, ip ) (UNIQUE_VISITS_total{})
+
+      - record: CONTAINERS_USED_MEMORY
+        expr: sum(jvm_buffer_memory_used_bytes)
+      - record: CONTAINERS_USED_CPU
+        expr: sum(process_cpu_usage{})
+      - record: NEO4J_SIZE
+        expr: neo4j_neo4j_store_size_database{}
+      - record: MONGO_SIZE
+        expr: mongodb_memory
   # - name: http_requests
   #   rules:
   #   - alert: too_many_http_requests_200

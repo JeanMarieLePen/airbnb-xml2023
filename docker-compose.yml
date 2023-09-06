@@ -119,7 +119,7 @@ services:
     container_name: gateway-service
     environment:
       - JAEGER_DOMAIN=${JAEGER_DOMAIN}
-      - OTEL_SERVICE_NAME=email
+      - OTEL_SERVICE_NAME=gateway
       - OTEL_METRICS_EXPORTER=prometheus
       - OTEL_TRACES_EXPORTER=jaeger
       - OTEL_EXPORTER_JAEGER_ENDPOINT=http://jaeger:14250
@@ -289,6 +289,13 @@ services:
       - monitoring
     environment:
       - SPRING_DATA_MONGODB_HOST=mongodb
+      - JAEGER_DOMAIN=${JAEGER_DOMAIN}
+      - OTEL_SERVICE_NAME=flights
+      - OTEL_METRICS_EXPORTER=prometheus
+      - OTEL_TRACES_EXPORTER=jaeger
+      - OTEL_EXPORTER_JAEGER_ENDPOINT=http://jaeger:14250
+    logging: *fluent-bit
+
 
 
   flights_front:

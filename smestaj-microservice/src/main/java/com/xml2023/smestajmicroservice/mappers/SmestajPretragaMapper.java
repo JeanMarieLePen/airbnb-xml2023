@@ -82,8 +82,9 @@ public class SmestajPretragaMapper {
 	}
 	
 	public float getProsecnaOcena(String id) {
-		Collection<OcenaSmestaj> ocene= oRep.findAllBySmestaj(id);;
+		Collection<OcenaSmestaj> ocene= oRep.findAllBySmestaj(id);
 		float uk=0;
+		if(ocene.size()<1) return 0;
 		for(OcenaSmestaj o : ocene) {
 			uk+=o.getOcena();
 		}

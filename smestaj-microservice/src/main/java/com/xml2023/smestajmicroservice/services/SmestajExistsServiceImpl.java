@@ -14,6 +14,7 @@ import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.google.protobuf.Timestamp;
 import com.xml2023.mainapp.AdresaDTO;
 import com.xml2023.mainapp.AnySmestajBelongToHostRequest;
@@ -40,6 +41,7 @@ import com.xml2023.mainapp.getOceneBySmestajIdRequest;
 import com.xml2023.mainapp.getOceneBySmestajIdResponse;
 import com.xml2023.mainapp.getSmestajByIdRequest;
 import com.xml2023.mainapp.getSmestajByIdResponse;
+import com.xml2023.smestajmicroservice.MetrikeMetode;
 import com.xml2023.smestajmicroservice.model.data.Adresa;
 import com.xml2023.smestajmicroservice.model.data.Cenovnik;
 import com.xml2023.smestajmicroservice.model.data.OcenaSmestaj;
@@ -68,7 +70,6 @@ public class SmestajExistsServiceImpl extends SmestajGrpcImplBase{
 		}else {
 			response.setResponseCode(200).setResponsemessage(r.getId());
 		}
-		
 		responseObserver.onNext(response.build());
 		
 		responseObserver.onCompleted();
@@ -78,6 +79,7 @@ public class SmestajExistsServiceImpl extends SmestajGrpcImplBase{
 	
 	@Override
 	public void zauzmiTermin(TerminZauzmiRequest request, StreamObserver<TerminZauzmiResponse> responseObserver) {
+		
 		// TODO Auto-generated method stub
 		System.out.println("ZAUZIMANJE TERMINA, smestajId:" +request.getSmestajId());
 		String id = request.getSmestajId();

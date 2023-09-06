@@ -16,12 +16,14 @@ import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Service;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.google.protobuf.Timestamp;
 import com.xml2023.mainapp.ActiveReservationsRequest;
 import com.xml2023.mainapp.ActiveReservationsResponse;
 import com.xml2023.mainapp.RezervacijaDTO;
 import com.xml2023.mainapp.RezervacijaGrpcGrpc;
 import com.xml2023.mainapp.RezervacijaGrpcGrpc.RezervacijaGrpcBlockingStub;
+import com.xml2023.smestajmicroservice.MetrikeMetode;
 import com.xml2023.smestajmicroservice.dtos.PretragaDTO;
 import com.xml2023.smestajmicroservice.dtos.SmestajPretragaDTO;
 import com.xml2023.smestajmicroservice.mappers.SmestajPretragaMapper;
@@ -40,7 +42,7 @@ public class PretragaService {
 	@Autowired 
 	private SmestajPretragaMapper smMap;
 	@Autowired OcenaSmestajRep oRep;
-	
+	@Autowired MetrikeMetode met;
 	private String rezService="reservation";
 	
 	public Collection<SmestajPretragaDTO> pretraga(PretragaDTO dto){
@@ -113,9 +115,16 @@ public class PretragaService {
 //				preklop(x.getOdDatum(),x.getDoDatum(),pocetak,kraj)).collect(Collectors.toList());
 		ManagedChannel channel = ManagedChannelBuilder.forAddress("reservation", 7978).usePlaintext().build();
 		RezervacijaGrpcBlockingStub rezServBlockStub = RezervacijaGrpcGrpc.newBlockingStub(channel);
-		
 		ActiveReservationsRequest.Builder req = ActiveReservationsRequest.newBuilder();
-		ActiveReservationsResponse rezervacijaAkt = rezServBlockStub.getActiveReservations(req.setSmestajId(s.getId()).setPocetak(convertToTimeStamp(pocetak)).setKraj(convertToTimeStamp(kraj)).build());
+		req=req.setSmestajId(s.getId()).setPocetak(convertToTimeStamp(pocetak)).setKraj(convertToTimeStamp(kraj));
+		int bSize=req.build().getSerializedSize();
+		try {
+			met.grpcRequestExport(bSize, "pretraga");
+		} catch (JsonProcessingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		ActiveReservationsResponse rezervacijaAkt = rezServBlockStub.getActiveReservations(req.build());
 		
 		channel.shutdown();
 
@@ -129,7 +138,13 @@ public class PretragaService {
 		    e.printStackTrace();
 		  }
 		}
-		
+		bSize=rezervacijaAkt.getSerializedSize();
+		try {
+			met.grpcResponseExport(bSize, "pretraga");
+		} catch (JsonProcessingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		List<RezervacijaDTO> rezervacijeAktIPreklop = rezervacijaAkt.getListaRezervacijaList().stream().filter(x -> 
 			this.preklop(convertFromTimeStamp(x.getOdDatum()), convertFromTimeStamp(x.getDoDatum()), pocetak, kraj)).collect(Collectors.toList());
 		

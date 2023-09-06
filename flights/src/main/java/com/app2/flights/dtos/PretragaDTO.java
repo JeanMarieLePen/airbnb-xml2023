@@ -78,4 +78,11 @@ public class PretragaDTO {
 	public void setKrajnjaLok(AdresaDTO krajnjaLok) {
 		this.krajnjaLok = krajnjaLok;
 	}
+
+	@Override
+	public String toString() {
+		return "PretragaDTO [pocetak=" + pocetak + ", kraj=" + kraj + ", brKarata=" + brKarata + ", minCena=" + minCena
+				+ ", maxCena=" + maxCena + ", pocetnaLok=" + pocetnaLok.getAdresa() + ", krajnjaLok=" + krajnjaLok.getAdresa() + "]";
+	}
+	
 }

@@ -48,8 +48,13 @@ public class AuthorizationFilter implements GlobalFilter, Ordered{
 		String putanja = request.getURI().getPath();
 		try {
 			met.incrementTotalResponse((Object)request.getBody(), putanja.toString(), request.getMethod().toString());
+			//System.out.println("VISITOR:"+ request.getHeaders().get("IPadresa").toString()+" , "+request.getHeaders().get("User-Agent").toString()+" , "
+			//		+ request.getHeaders().get("Vreme").toString());
+			String ip="0.0.0.0";
+			if(request.getHeaders().containsKey("IPadresa"))
+				ip=request.getHeaders().get("IPadresa").toString();
 			met.trackVisitors(
-					request.getHeaders().get("IPadresa").toString(),
+					ip,
 					request.getHeaders().get("User-Agent").toString(),
 					request.getHeaders().get("Vreme").toString()
 					);

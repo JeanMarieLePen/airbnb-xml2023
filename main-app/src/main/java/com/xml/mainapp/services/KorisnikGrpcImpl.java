@@ -3,6 +3,8 @@ package com.xml.mainapp.services;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.xml.mainapp.MetrikeMetode;
 import com.xml.mainapp.controllers.CommunicationListener;
 import com.xml.mainapp.dtos.NotificationDTO;
 import com.xml.mainapp.dtos.NotificationHostDTO;
@@ -47,7 +49,7 @@ import io.grpc.stub.StreamObserver;
 
 @Service
 public class KorisnikGrpcImpl extends KorisnikGrpcImplBase{
-
+	@Autowired MetrikeMetode met;
 	@Autowired
 	private KorisnikRep korRep;
 	
@@ -55,6 +57,12 @@ public class KorisnikGrpcImpl extends KorisnikGrpcImplBase{
 	private CommunicationListener cmnListener;
 	@Override
 	public void getHost(getHostRequest request, StreamObserver<getHostResponse> responseObserver) {
+		try {
+			met.grpcRequestExport(request.getSerializedSize(), "exists");
+		} catch (JsonProcessingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		// TODO Auto-generated method stub
 		System.out.println("INSIDE getHost");
 		String hostId = request.getHostId();
@@ -62,6 +70,12 @@ public class KorisnikGrpcImpl extends KorisnikGrpcImplBase{
 		getHostResponse.Builder response = getHostResponse.newBuilder();
 		response.setHost(mapHost(h));
 		responseObserver.onNext(response.build());
+		try {
+			met.grpcResponseExport(response.build().getSerializedSize(), "exists");
+		} catch (JsonProcessingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		responseObserver.onCompleted();
 	}
 	
@@ -75,6 +89,12 @@ public class KorisnikGrpcImpl extends KorisnikGrpcImplBase{
 
 	@Override
 	public void rezOtkazana(rezOtkazanaRequest request, StreamObserver<rezOtkazanaResponse> responseObserver) {
+		try {
+			met.grpcRequestExport(request.getSerializedSize(), "exists");
+		} catch (JsonProcessingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		// TODO Auto-generated method stub
 		String id = request.getGuestId();
 		Guest g = this.korRep.findGuestById(id);
@@ -87,12 +107,24 @@ public class KorisnikGrpcImpl extends KorisnikGrpcImplBase{
 		rezOtkazanaResponse.Builder response = rezOtkazanaResponse.newBuilder();
 		response.setPenalDodat(penal);
 		responseObserver.onNext(response.build());
+		try {
+			met.grpcResponseExport(response.build().getSerializedSize(), "exists");
+		} catch (JsonProcessingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		responseObserver.onCompleted();
 	}
 
 	@Override
 	public void rezOtkazanaHost(rezOtkazanaHostRequest request,
 			StreamObserver<rezOtkazanaHostResponse> responseObserver) {
+		try {
+			met.grpcRequestExport(request.getSerializedSize(), "exists");
+		} catch (JsonProcessingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		// TODO Auto-generated method stub
 		System.out.println("REZOTKAZANA");
 		System.out.println("ODBIJENA REZERVACIJA: " + request.getResId());
@@ -104,12 +136,24 @@ public class KorisnikGrpcImpl extends KorisnikGrpcImplBase{
 		rezOtkazanaHostResponse.Builder response = rezOtkazanaHostResponse.newBuilder();
 		response.setPenalDodat(true);
 		responseObserver.onNext(response.build());
+		try {
+			met.grpcResponseExport(response.build().getSerializedSize(), "exists");
+		} catch (JsonProcessingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		responseObserver.onCompleted();
 	}
 
 	@Override
 	public void rezObavestenje(reservationApprovedNotificationRequest request,
 			StreamObserver<reservationApprovedNotificationResponse> responseObserver) {
+		try {
+			met.grpcRequestExport(request.getSerializedSize(), "exists");
+		} catch (JsonProcessingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 			String id = request.getIdRezervacije();
 			NotificationDTO notifikacija = new NotificationDTO();
 			notifikacija.setIdRezervacije(id);
@@ -118,11 +162,23 @@ public class KorisnikGrpcImpl extends KorisnikGrpcImplBase{
 			reservationApprovedNotificationResponse.Builder response = reservationApprovedNotificationResponse.newBuilder();
 			response.setIsporuceno(true);
 			responseObserver.onNext(response.build());
+			try {
+				met.grpcResponseExport(response.build().getSerializedSize(), "exists");
+			} catch (JsonProcessingException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			responseObserver.onCompleted();		
 	}
 
 	@Override
 	public void newRezNotify(NekoRezervisaoRequest request, StreamObserver<NekoRezervisaoResponse> responseObserver) {
+		try {
+			met.grpcRequestExport(request.getSerializedSize(), "exists");
+		} catch (JsonProcessingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		String idKorisnika = request.getIdKorisnika();
 		String idSmestaja = request.getIdSmestaja();
 		NotificationHostDTO notifikacija = new NotificationHostDTO();
@@ -134,11 +190,23 @@ public class KorisnikGrpcImpl extends KorisnikGrpcImplBase{
 		NekoRezervisaoResponse.Builder response = NekoRezervisaoResponse.newBuilder();
 		response.setResult(true);
 		responseObserver.onNext(response.build());
+		try {
+			met.grpcResponseExport(response.build().getSerializedSize(), "exists");
+		} catch (JsonProcessingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		responseObserver.onCompleted();		
 	}
 
 	@Override
 	public void newQuitNotify(NekoOtkazaoRequest request, StreamObserver<NekoOtkazaoResponse> responseObserver) {
+		try {
+			met.grpcRequestExport(request.getSerializedSize(), "exists");
+		} catch (JsonProcessingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		String idKorisnika = request.getIdKorisnika();
 		String idSmestaja = request.getIdSmestaja();
 		NotificationHostDTO notifikacija = new NotificationHostDTO();
@@ -150,12 +218,24 @@ public class KorisnikGrpcImpl extends KorisnikGrpcImplBase{
 		NekoOtkazaoResponse.Builder response = NekoOtkazaoResponse.newBuilder();
 		response.setResult(true);
 		responseObserver.onNext(response.build());
+		try {
+			met.grpcResponseExport(response.build().getSerializedSize(), "exists");
+		} catch (JsonProcessingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		responseObserver.onCompleted();		
 	}
 
 	@Override
 	public void newRankSmestaj(NekoOcenioSmestajRequest request,
 			StreamObserver<NekoOcenioSmestajResponse> responseObserver) {
+		try {
+			met.grpcRequestExport(request.getSerializedSize(), "exists");
+		} catch (JsonProcessingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		String idKorisnika = request.getIdKorisnika();
 		String idSmestaja = request.getIdSmestaja();
 		int ocena = request.getOcena();
@@ -169,11 +249,23 @@ public class KorisnikGrpcImpl extends KorisnikGrpcImplBase{
 		NekoOcenioSmestajResponse.Builder response = NekoOcenioSmestajResponse.newBuilder();
 		response.setResult(true);
 		responseObserver.onNext(response.build());
+		try {
+			met.grpcResponseExport(response.build().getSerializedSize(), "exists");
+		} catch (JsonProcessingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		responseObserver.onCompleted();	
 	}
 
 	@Override
 	public void newRankHost(NekoOcenioHostaRequest request, StreamObserver<NekoOcenioHostaResponse> responseObserver) {
+		try {
+			met.grpcRequestExport(request.getSerializedSize(), "exists");
+		} catch (JsonProcessingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		String idKorisnika = request.getIdKorisnika();
 		int ocena = request.getOcena();
 		NotificationHostDTO notifikacija = new NotificationHostDTO();
@@ -185,12 +277,24 @@ public class KorisnikGrpcImpl extends KorisnikGrpcImplBase{
 		NekoOcenioHostaResponse.Builder response = NekoOcenioHostaResponse.newBuilder();
 		response.setResult(true);
 		responseObserver.onNext(response.build());
+		try {
+			met.grpcResponseExport(response.build().getSerializedSize(), "exists");
+		} catch (JsonProcessingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		responseObserver.onCompleted();	
 	}
 
 	@Override
 	public void istaknutiHost(DobioStatusIstaknutogRequest request,
 			StreamObserver<DobioStatusIstaknutogResponse> responseObserver) {
+		try {
+			met.grpcRequestExport(request.getSerializedSize(), "exists");
+		} catch (JsonProcessingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		String idKorisnika = request.getIdKorisnika();
 		Host h = this.korRep.findHostById(idKorisnika);
 		if(h != null) {
@@ -204,56 +308,122 @@ public class KorisnikGrpcImpl extends KorisnikGrpcImplBase{
 		}
 		DobioStatusIstaknutogResponse.Builder response = DobioStatusIstaknutogResponse.newBuilder().setResult(true);
 		responseObserver.onNext(response.build());
+		try {
+			met.grpcResponseExport(response.build().getSerializedSize(), "exists");
+		} catch (JsonProcessingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		responseObserver.onCompleted();	
 	}
 
 	@Override
 	public void novaRezNotStatus(NovaRezervacijaNotifikacijaRequest request,
 			StreamObserver<NovaRezervacijaNotifikacijaResponse> responseObserver) {
+		try {
+			met.grpcRequestExport(request.getSerializedSize(), "exists");
+		} catch (JsonProcessingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		String idKorisnika = request.getIdKorisnika();
 		Host k = this.korRep.findHostById(idKorisnika);
 		NovaRezervacijaNotifikacijaResponse response = NovaRezervacijaNotifikacijaResponse.newBuilder().setStanje(k.isNewNotification()).build();
 		responseObserver.onNext(response);
+		try {
+			met.grpcResponseExport(response.getSerializedSize(), "exists");
+		} catch (JsonProcessingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		responseObserver.onCompleted();	
 	}
 
 	@Override
 	public void otkazanaRezNotStatus(OtkazanaRezervacijaNotifikacijaRequest request,
 			StreamObserver<OtkazanaRezervacijaNotifikacijaResponse> responseObserver) {
+		try {
+			met.grpcRequestExport(request.getSerializedSize(), "exists");
+		} catch (JsonProcessingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		String idKorisnika = request.getIdKorisnika();
 		Host k = this.korRep.findHostById(idKorisnika);
 		OtkazanaRezervacijaNotifikacijaResponse response = OtkazanaRezervacijaNotifikacijaResponse.newBuilder().setStanje(k.isCanceledNotification()).build();
 		responseObserver.onNext(response);
+		try {
+			met.grpcResponseExport(response.getSerializedSize(), "exists");
+		} catch (JsonProcessingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		responseObserver.onCompleted();	
 	}
 
 	@Override
 	public void novaOcenaHostaNotStatus(NovaOcenaHostaNotifikacijaRequest request,
 			StreamObserver<NovaOcenaHostaNotifikacijaResponse> responseObserver) {
+		try {
+			met.grpcRequestExport(request.getSerializedSize(), "exists");
+		} catch (JsonProcessingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		String idKorisnika = request.getIdKorisnika();
 		Host k = this.korRep.findHostById(idKorisnika);
 		NovaOcenaHostaNotifikacijaResponse response = NovaOcenaHostaNotifikacijaResponse.newBuilder().setStanje(k.isRatedHostNotification()).build();
 		responseObserver.onNext(response);
+		try {
+			met.grpcResponseExport(response.getSerializedSize(), "exists");
+		} catch (JsonProcessingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		responseObserver.onCompleted();	
 	}
 
 	@Override
 	public void novaOcenaSmestajaNotStatus(NovaOcenaSmestajaNotifikacijaRequest request,
 			StreamObserver<NovaOcenaSmestajaNotifikacijaResponse> responseObserver) {
+		try {
+			met.grpcRequestExport(request.getSerializedSize(), "exists");
+		} catch (JsonProcessingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		String idKorisnika = request.getIdKorisnika();
 		Host k = this.korRep.findHostById(idKorisnika);
 		NovaOcenaSmestajaNotifikacijaResponse response = NovaOcenaSmestajaNotifikacijaResponse.newBuilder().setStanje(k.isRatedAccomodationNotification()).build();
 		responseObserver.onNext(response);
+		try {
+			met.grpcResponseExport(response.getSerializedSize(), "exists");
+		} catch (JsonProcessingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		responseObserver.onCompleted();	
 	}
 
 	@Override
 	public void istaknutiNotStatus(StatusIstaknutogNotifikacijaRequest request,
 			StreamObserver<StatusIstaknutogNotifikacijaResponse> responseObserver) {
+		try {
+			met.grpcRequestExport(request.getSerializedSize(), "exists");
+		} catch (JsonProcessingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		String idKorisnika = request.getIdKorisnika();
 		Host k = this.korRep.findHostById(idKorisnika);
 		StatusIstaknutogNotifikacijaResponse response = StatusIstaknutogNotifikacijaResponse.newBuilder().setStanje(k.isStatusNotification()).build();
 		responseObserver.onNext(response);
+		try {
+			met.grpcResponseExport(response.getSerializedSize(), "exists");
+		} catch (JsonProcessingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		responseObserver.onCompleted();	
 	}
 }

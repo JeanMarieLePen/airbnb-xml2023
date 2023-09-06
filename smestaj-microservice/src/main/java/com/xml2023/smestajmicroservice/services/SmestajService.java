@@ -21,6 +21,7 @@ import org.springframework.data.neo4j.core.Neo4jOperations.ExecutableQuery;
 import org.springframework.data.neo4j.core.Neo4jTemplate;
 import org.springframework.stereotype.Service;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.xml2023.mainapp.ActiveResExistsForSmestajRequest;
 import com.xml2023.mainapp.ActiveResExistsForSmestajResponse;
 import com.xml2023.mainapp.KorisnikGrpcGrpc;
@@ -32,6 +33,7 @@ import com.xml2023.mainapp.NovaOcenaSmestajaNotifikacijaRequest;
 import com.xml2023.mainapp.NovaOcenaSmestajaNotifikacijaResponse;
 import com.xml2023.mainapp.RezervacijaGrpcGrpc.RezervacijaGrpcBlockingStub;
 import com.xml2023.mainapp.neo4j.model.Korisnik;
+import com.xml2023.smestajmicroservice.MetrikeMetode;
 import com.xml2023.smestajmicroservice.dtos.OcenaSmestajaDTO;
 import com.xml2023.smestajmicroservice.dtos.SmestajDTO;
 import com.xml2023.smestajmicroservice.dtos.TerminDTO;
@@ -54,7 +56,7 @@ import io.grpc.ManagedChannelBuilder;
 
 @Service
 public class SmestajService {
-
+	@Autowired MetrikeMetode met;
 	@Autowired
 	private SmestajBasicMapper smestajMapper;
 	@Autowired
@@ -125,6 +127,13 @@ public class SmestajService {
 		ManagedChannel channel = ManagedChannelBuilder.forAddress("reservation", 7978).usePlaintext().build();
 		RezervacijaGrpcBlockingStub rezServBlockStub = RezervacijaGrpcGrpc.newBlockingStub(channel);
 		ActiveResExistsForSmestajRequest req = ActiveResExistsForSmestajRequest.newBuilder().setUserId(smestajId).build();
+		try {
+			met.grpcRequestExport(req.getSerializedSize(), "/removeSmestaj");
+		} catch (JsonProcessingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
 		ActiveResExistsForSmestajResponse response = rezServBlockStub.resExistsForSmestaj(req);
 		channel.shutdown();
 
@@ -138,7 +147,12 @@ public class SmestajService {
 		    e.printStackTrace();
 		  }
 		}
-		
+		try {
+			met.grpcResponseExport(response.getSerializedSize(), "/removeSmestaj");
+		} catch (JsonProcessingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		System.out.println("KRAJ GRPC KOMUNIKACIJE NA RELACIJI SMESTAJ - RESERVATION SERVICE[provera da li postoje aktivne rezervacije vezane za smestaj]");
 		if(response.getExists()) {
 			System.out.println("SMESTAJ IMA AKTIVNU REZERVACIJU;");
@@ -222,6 +236,12 @@ public class SmestajService {
 		ManagedChannel channel = ManagedChannelBuilder.forAddress(reglogHost, 7979).usePlaintext().build();
 		KorisnikGrpcBlockingStub bs = KorisnikGrpcGrpc.newBlockingStub(channel);
 		NovaOcenaSmestajaNotifikacijaRequest rqst = NovaOcenaSmestajaNotifikacijaRequest.newBuilder().setIdKorisnika(idVlasnika).build();
+		try {
+			met.grpcRequestExport(rqst.getSerializedSize(), "/novaOcenaSmestajaNotificationEnabled");
+		} catch (JsonProcessingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		NovaOcenaSmestajaNotifikacijaResponse rspns = bs.novaOcenaSmestajaNotStatus(rqst);
 		channel.shutdown();
 
@@ -235,6 +255,12 @@ public class SmestajService {
 		    e.printStackTrace();
 		  }
 		}
+		try {
+			met.grpcResponseExport(rspns.getSerializedSize(), "/novaOcenaSmestajaNotificationEnabled");
+		} catch (JsonProcessingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		return rspns.getStanje();
 	}
 	
@@ -242,6 +268,12 @@ public class SmestajService {
 		ManagedChannel channel = ManagedChannelBuilder.forAddress(reglogHost, 7979).usePlaintext().build();
 		KorisnikGrpcBlockingStub bs = KorisnikGrpcGrpc.newBlockingStub(channel);
 		NekoOcenioSmestajRequest rqst = NekoOcenioSmestajRequest.newBuilder().setIdKorisnika(os.getGost()).setIdSmestaja(os.getSmestaj()).setOcena(os.getOcena()).build();
+		try {
+			met.grpcRequestExport(rqst.getSerializedSize(), "newSmestajOcenaNotify");
+		} catch (JsonProcessingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		NekoOcenioSmestajResponse rspns = bs.newRankSmestaj(rqst);
 		channel.shutdown();
 
@@ -257,6 +289,12 @@ public class SmestajService {
 		}
 		if(rspns.getResult()) {
 			System.out.println("USPESNO POSLATO OBAVESTENJE O NOVOJ OCENI SMESTAJA");
+		}
+		try {
+			met.grpcResponseExport(rspns.getSerializedSize(), "newSmestajOcenaNotify");
+		} catch (JsonProcessingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 	}
 

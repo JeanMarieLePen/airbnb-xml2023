@@ -111,6 +111,7 @@ public class RezervacijaService {
     
     //PROBAJ JOS NEKI KORAK DA RAZLOZIS AKO MISLIS DA TREBA; OD MENE OVOLIKO ZA SAD
 	public RezervacijaDTO makeReservationSaga(String userId, String smestajId, RezervacijaDTO r) throws Exception{
+		System.out.println("MAKE RESERVATION SAGA START");
 		try {
 			//korak 1: Dostupnost
 			checkAvailability(smestajId, r.getOdDatum(), r.getOdDatum());
@@ -232,22 +233,31 @@ public class RezervacijaService {
 			}
 		}
 		//GRPC: provera smestaja, upitaj za nedostupne termine i cenovnik izabranog smestaja
-		SmestajDTO smestaj= getSmestaj(smestajId);
-		if(smestaj.getNedostupniCount()>0) {
-			for(TerminDTO ter : smestaj.getNedostupniList()) {
-				Boolean preklop = t.preklapanjeSa(new Termin(convertFromTimeStamp(ter.getPocetak()), convertFromTimeStamp(ter.getKraj())));
-				if(preklop) {
-					throw new AccommodationUnavailableException("Smestaj nije dostupan za taj opseg datuma.");
+		try {
+			SmestajDTO smestaj= getSmestaj(smestajId);
+			if(smestaj.getNedostupniCount()>0) {
+				for(TerminDTO ter : smestaj.getNedostupniList()) {
+					Boolean preklop = t.preklapanjeSa(new Termin(convertFromTimeStamp(ter.getPocetak()), convertFromTimeStamp(ter.getKraj())));
+					if(preklop) {
+						throw new AccommodationUnavailableException("Smestaj nije dostupan za taj opseg datuma.");
+					}
 				}
 			}
+		}catch(Exception e) {
+			throw new AccommodationUnavailableException("Smestaj Service nije dostupan.");
 		}
+		
 	}
 //	public void getSmestajStep();
 	
 	public float calculatePrice(String smestajId , LocalDateTime odDatum, LocalDateTime doDatum) throws PriceCalculationException{
-		SmestajDTO smestaj = getSmestaj(smestajId);
-		float cena = cenaServ.ukupnaCena(smestaj, odDatum, doDatum);
-		return cena;
+		try {
+			SmestajDTO smestaj = getSmestaj(smestajId);
+			float cena = cenaServ.ukupnaCena(smestaj, odDatum, doDatum);
+			return cena;
+		}catch(Exception e) {
+			throw new PriceCalculationException("Smestaj service nije dostupan.");
+		}
 	}
 	
 	private Rezervacija createReservationStep(String userId, String smestajId, RezervacijaDTO r, float cena) throws ReservationCreationException{
@@ -257,16 +267,33 @@ public class RezervacijaService {
 		}
 		rez.setCena(cena);
 		rez.setStatus(StatusRezervacije.PENDING);
+		
+		try {
+			rezervacijaRep.save(rez);
+		}catch(Exception e) {
+			throw new ReservationCreationException("Greska pri formiranju entiteta rezervacije.");
+		}
+		
 //		this.rezervacijaRep.save(rez);
 		return rez;
 	}
 	
 	private boolean makeReservationStep(String smestajId, Rezervacija r, LocalDateTime odDatum, LocalDateTime doDatum) {
-		SmestajDTO smestaj = getSmestaj(smestajId);
-		String hostId = smestaj.getVlasnik();
-		HostBasicDTO owner= getHostBasic(hostId);
-		System.out.println("REZERVACIJE SE OBRADJUJU AUTOMATSKI: " + owner.getRezAutomatski());
-		if(owner.getRezAutomatski() == true) {
+		boolean automatski = false;
+		try {
+			SmestajDTO smestaj = getSmestaj(smestajId);
+			String hostId = smestaj.getVlasnik();
+			HostBasicDTO owner= getHostBasic(hostId);
+			System.out.println("REZERVACIJE SE OBRADJUJU AUTOMATSKI: " + owner.getRezAutomatski());
+			automatski = owner.getRezAutomatski();
+		}catch(Exception e) {
+			System.out.println("CATCH BLOCK ZA makeReservationStep");			
+			throw new Neo4jDatabaseException("SmestajService je nedostupan. Revert");
+		}
+		
+		
+		
+		if(automatski == true) {
 			System.out.println("USAO U TRUE LOOP");
 			ManagedChannel channel = ManagedChannelBuilder.forAddress(smestajHost, 7977).usePlaintext().build();
 			SmestajGrpcBlockingStub smestajBlockingStub = SmestajGrpcGrpc.newBlockingStub(channel);

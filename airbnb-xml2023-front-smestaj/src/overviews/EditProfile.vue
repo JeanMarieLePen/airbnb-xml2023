@@ -1,0 +1,610 @@
+<template>
+   <div id="reg-profile-update" style="margin-bottom:200px;">
+        <div id='main'>
+			<div class="container" id='page-title'>
+			    <h1 style="margin-top:10px;color:#1E90FF;">Izmena profila <span id='titleEffect'>{{this.profile.korIme}}</span></h1>
+			    <hr style='background:#1E90FF;height:1px;'>
+			</div>
+            
+            <!-- <div v-if="userObj.role === 'GUEST'" class="container" style="margin-top:30px; margin-bottom:30px;">
+                <div style="display: inline-block;">
+                    <button  @click="tokenTable()" style="margin-right:20px;">API token</button>
+                    <input type="text" style="width:800px;" readonly v-model="tokenTekst" :placeholder="tokenPlaceHolder"/>
+                </div>
+                <table v-show="showTokenTable" style="margin-top:30px; margin-bottom:30px;">
+                    <thead>
+                        <th colspan="2" style=" text-align:center">GENERISANJE TOKENA</th>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>
+                                <label style="margin-right:40px;" >PRIVREMENI TOKEN [30 minuta]</label> 
+                            </td>
+                            <td>
+                                <input @change="selectTokenType()" v-model="tokenPrivremeni" type="checkbox">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                 <label style="margin-right:40px;" >TRAJNI TOKEN</label>
+                            </td>
+                            <td>
+                                <input @change="selectTokenType2()" v-model="tokenTrajni" type="checkbox">
+                            </td>
+                        </tr>
+                    </tbody>
+                    <tfoot >
+                        <tr >
+                            <td colspan="2" style="text-align:center">
+                                <button style="margin-top:30px;" @click="generateToken()"> Generisi</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="2">
+                                <div class="alert alert-success" v-if="messages.successToken" v-html="messages.successToken"/>
+                                <div class="alert alert-danger" v-if="messages.errorToken" v-html="messages.errorToken"/>
+                            </td>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div> -->
+            <div class="container">
+                <div v-if='messages.errorEmail' class="alert alert-danger" v-html="messages.errorEmail"></div>
+                <fieldset class="form-group">
+					<label><font color="#1E90FF">Email</font></label>
+					<input type="text" class="form-control" v-model="profile.email"/>
+				</fieldset>
+                <fieldset v-if="userObj.role=='HOST'" class="form-group">
+                    <table style="font-size:20px;">
+                        <tr style="vertical-align:center;">
+                            <td style="width:300px;">
+                                <!-- <ul>
+                                    <li><label style="margin-right:20px;">Automatska obrada:</label> 
+                                        <input type="checkbox" @change="selectRezAutomatski()" v-model="profile.rezAutomatski"/>
+                                    </li>
+                                </ul> -->
+                                <label>Automatska obrada:</label>
+                            </td>
+                            <td>
+                                <input type="checkbox" @change="selectRezAutomatski()" v-model="profile.rezAutomatski"/>
+                            </td>
+                        </tr>
+                    </table>
+				</fieldset>
+                <fieldset v-if="userObj.role=='GUEST'" class="form-group">
+                    <table style="font-size:20px;">
+                        <thead>
+                            <th>
+                                OBAVESTENJA
+                            </th>
+                        </thead>
+                        <tr style="text-align:center">
+                            <td>
+                                <ul>
+                                    <li><label style="margin-right:20px;">OBRADJENA REZERVACIJA:</label> 
+                                        <input type="checkbox" v-model="profile.obradjenaRezervacijaNotifikacija"/>
+                                    </li>
+                                </ul>
+                            </td>
+                        </tr>
+                    </table>
+				</fieldset>
+                <fieldset v-if="userObj.role=='HOST'" class="form-group">
+                    <table style="font-size:20px;">
+                        <thead>
+                            <th>
+                                OBAVESTENJA
+                            </th>
+                        </thead>
+                        <tr>
+                            <td>
+                                <ul>
+                                    <li><label style="margin-right:20px;">NOVA REZERVACIJA:</label> 
+                                        <input type="checkbox" v-model="profile.newNotification"/>
+                                    </li>
+                                </ul>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <ul>
+                                    <li><label style="margin-right:20px;">OTKAZANA REZERVACIJA:</label> 
+                                        <input type="checkbox" v-model="profile.canceledNotification"/>
+                                    </li>
+                                </ul>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <ul>
+                                    <li><label style="margin-right:20px;">OCENJEN HOST:</label> 
+                                        <input type="checkbox" v-model="profile.ratedHostNotification"/>
+                                    </li>
+                                </ul>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <ul>
+                                    <li><label style="margin-right:20px;">OCENJEN SMESTAJ:</label> 
+                                        <input type="checkbox" v-model="profile.ratedAccomodationNotification"/>
+                                    </li>
+                                </ul>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <ul>
+                                    <li><label style="margin-right:20px;">STATUS ISTAKNUTOG:</label> 
+                                        <input type="checkbox" v-model="profile.statusNotification"/>
+                                    </li>
+                                </ul>
+                            </td>
+                        </tr>
+                    </table>
+				</fieldset>
+                <div v-if='messages.errorUsername' id='testError' class="alert alert-danger" v-html="messages.errorUsername"></div>
+                <fieldset class="form-group">
+                    <label><font color="#1E90FF">Korisnicko ime</font></label>
+                    <input type="text" class="form-control" v-model="profile.korIme"/>
+                </fieldset>
+                <div v-if='messages.errorFirstName' id='testError' class="alert alert-danger" v-html="messages.errorFirstName"></div>
+                <fieldset class="form-group">
+                    <label><font color="#1E90FF">Ime</font></label>
+                    <input type="text" class="form-control" v-model="profile.ime" />
+                </fieldset>
+                <div v-if='messages.errorLastName' class="alert alert-danger" v-html="messages.errorLastName"></div>
+                <fieldset class="form-group">
+                    <label><font color="#1E90FF">Prezime</font></label>
+                    <input type="text" class="form-control" v-model="profile.prezime" />
+                </fieldset>
+                <div style="margin-top:20px" v-if='messages.errorAdresa' class="alert alert-danger" v-html="messages.errorAdresa"></div>
+                <fieldset class="form-group">
+                    <label><font color="#1E90FF">Adresa</font></label>
+                    <input type="text" class="form-control" v-model="profile.adresa.adresa" />
+                </fieldset>
+                <fieldset class="form-group">
+                    <div>
+                        <vueperslides id="slajdovi"  fixed-height="600px">
+                            <vueperslide v-for="(slide, i) in profile.slike" :key="i">
+                                <template v-slot:content>
+                                    <img :src="slide" style="width:100%;height:600px">
+                                </template>
+                            </vueperslide>
+                        </vueperslides>
+                    </div>
+                    <div style="display: flex; justify-content: flex-end">
+                        <input id="file-input" @change="uploadImage" multiple style="margin-top:20px;margin-bottom:20px;" type="file">
+                        <button class="btn btn-primary" style="margin:10px; height:35px; font-weight:400" @click="ponistiIzbor()">Undo</button>
+                    </div>
+                </fieldset>
+                <!-- <fieldset class="form-group">
+                    <label><font color="#1E90FF">Datum Rodjenja</font></label>
+                    <input type="text" class="form-control" v-model="profile.datumRodjenja" disabled/>
+                </fieldset> -->
+
+                <hr>
+                
+                <h4>Promena lozinke</h4>
+                <hr>
+                <div v-if='messages.errorNotEqualOldPassword' class="alert alert-danger" v-html="messages.errorNotEqualOldPassword"></div>
+                <div v-if='messages.errorOldPass' class="alert alert-danger" v-html="messages.errorOldPass"></div>
+                <fieldset class="form-group">
+                    <label><font color="#1E90FF">Stara lozinka</font></label>
+                    <input type="password" class="form-control" v-model="changedPassword.oldPassword" placeholder="Unesite staru loznku..." />
+                </fieldset>
+                <div v-if='messages.errorNewPass' class="alert alert-danger" v-html="messages.errorNewPass"></div>
+                <fieldset class="form-group">
+                    <label><font color="#1E90FF">Nova lozinka</font></label>
+                    <input type="password" class="form-control" v-model="changedPassword.newPassword" placeholder="Unesite novu loznku..." />
+                </fieldset>
+                <div v-if='messages.errorNotEqualNewPassword' class="alert alert-danger" v-html="messages.errorNotEqualNewPassword"></div>
+                <div v-if='messages.errorRepNewPass' class="alert alert-danger" v-html="messages.errorRepNewPass"></div>
+                <fieldset class="form-group">
+                    <label><font color="#1E90FF">Ponovite novu lozinku</font></label>
+                    <input type="password" class="form-control" v-model="changedPassword.newPasswordRepeat" placeholder="Ponovite novu loznku..."  />
+                </fieldset>
+                <button style="margin-top:20px;" :disabled='btnEnabled' type="button" class="btn btn-lg btn-success" v-on:click='updateProfile()'> Potvrdi </button>
+                
+                <div v-if='messages.errorResponse' class="alert alert-danger" v-html="messages.errorResponse"></div>
+                <div v-if='messages.successResponse' class="alert alert-success" v-html="messages.successResponse"></div>
+            </div>
+                
+                
+        </div>
+   </div>
+</template>
+
+
+<script>
+import dataService from '../services/dataService';
+import VueDatePicker from '@vuepic/vue-datepicker';
+import parserMixin from '@/mixins/mixin'
+
+import { VueperSlides, VueperSlide } from 'vueperslides'
+import 'vueperslides/dist/vueperslides.css'
+
+    export default{
+        data(){
+            return{
+                // showTokenTable: false,
+                btnEnabled:false,
+                profile: {
+                    slike:[],
+                    adresa:{},
+                },
+                ownerId : '',
+			    changedPassword: {
+                    oldPassword: '',
+                    newPassword: '',
+                    newPasswordRepeat: '',
+                },
+                slike:[],
+
+                // tokenPrivremeni: false,
+                // tokenTrajni : true, 
+                // tokenTekst: '',
+                messages:{
+                    errorUsername:'',
+                    errorEmail:'',
+                    errorFirstName: '',
+                    errorLastName: '',
+                    errorAdresa:'',
+                    errorOldPass: '',
+                    errorNewPass: '',
+                    errorRepNewPass: '',
+                    errorNotEqualOldPassword: '',
+                    errorNotEqualNewPassword: '',
+                    errorResponse: '',
+                    successResponse: '',
+                    // successToken:'',
+                    // errorToken:'',
+                },
+                userObj:{
+
+                }
+            }
+        },
+        async created(){
+            parserMixin.methods.checkLoginStatus();
+            this.userObj = parserMixin.methods.parseXmlJwt();
+            console.log("ID KORISNIKA: " + this.userObj.id);
+            this.getUserProfileData(this.userObj.id);
+        },
+        methods:{
+            
+            // selectTokenType(){
+            //     console.log("TOKEN PRIVREMENI: " + this.tokenPrivremeni);
+            //     this.tokenTrajni = !this.tokenPrivremeni;
+            //     console.log("TOKEN TRAJNI: " + this.tokenTrajni)
+            // },
+            //  selectTokenType2(){
+            //     console.log("TOKEN TRAJNI: " + this.tokenTrajni)
+            //     this.tokenPrivremeni = !this.tokenTrajni;
+            //     console.log("TOKEN PRIVREMENI: " + this.tokenPrivremeni);
+            //  },
+            // generateToken(){
+            //     let param = null;
+            //     if(this.tokenPrivremeni){
+            //         param = this.tokenPrivremeni;
+            //     }else if(!this.tokenPrivremeni){
+            //         param = this.tokenTrajni;
+            //     }
+            //     dataService.generateToken(param).then(response => {
+            //         if(response.status === 200){
+            //             console.log("USPESNO IZGENERISAN TOKEN");
+            //             console.log(JSON.stringify(response.data));
+            //             this.messages.successToken = '<h4>Uspesno generisan API token</h4>';
+            //              setTimeout(() => {
+            //                 this.messages.successToken = '';
+            //             }, 4000);
+            //         }else{
+            //             console.log("DOSLO DO GRESKE");
+            //             this.messages.errorToken = '<h4>Doslo je do greske pri generisanju tokena</h4>';
+            //             setTimeout(() => {
+            //                 this.messages.errorToken = '';
+            //             }, 4000);
+            //         }
+                    
+            //     });
+            // },
+            // tokenTable(){
+            //     this.showTokenTable = !this.showTokenTable;
+            // },
+            selectRezAutomatski(){
+                console.log("AUTOMATSKI: " + this.profile.rezAutomatski)
+            },
+            ponistiIzbor(){
+                this.slike.pop();
+                this.profile.slike.pop();
+            },
+            getUserProfileData(id){
+                try{
+                    if(this.userObj.role === "GUEST"){
+                        dataService.getUser(id).then(response => {
+                            // console.log("USER PROFILE: " + JSON.stringify(response.data));
+                            this.profile = response.data;
+                            console.log(JSON.stringify(this.profile))
+                            console.log("AUTOMATSKA OBRADA: " + this.profile.rezAutomatski)
+                            console.log("OBRADA NOTIFIKACIJA: " + this.profile.obradjenaRezervacijaNotifikacija);
+                            if(this.profile.slike){
+                                console.log("BROJ SLIKA: " + this.profile.slike.length);
+                                let tempSlike = [];
+                                for(let i = 0; i < this.profile.slike.length; i++){
+                                    // console.log("AAA")
+                                    tempSlike.push('data:image/png;base64,' + this.profile.slike[i]);
+                                }
+                                this.profile.slike = tempSlike;
+                                // console.log("SLIKA POSLE FORMATIRANJA: " + JSON.stringify(this.profile.slike[0]));
+                            }else{
+                                this.profile.slike = [];
+                            } 
+                        });
+                    }
+                    if(this.userObj.role === "HOST"){
+                        dataService.getOwnerById(id).then(response => {
+                            console.log("USER PROFILE: " + JSON.stringify(response.data));
+                            this.profile = response.data;
+                            console.log(JSON.stringify(this.profile))
+                            console.log("AUTOMATSKA OBRADA: " + this.profile.rezAutomatski);
+                            // console.log("OBRADA NOTIFIKACIJA: " + this.profile.obradjenaRezervacijaNotifikacija);
+                            if(this.profile.slike){
+                                console.log("BROJ SLIKA: " + this.profile.slike.length);
+                                let tempSlike = [];
+                                for(let i = 0; i < this.profile.slike.length; i++){
+                                    // console.log("AAA")
+                                    tempSlike.push('data:image/png;base64,' + this.profile.slike[i]);
+                                }
+                                this.profile.slike = tempSlike;
+                                // console.log("SLIKA POSLE FORMATIRANJA: " + JSON.stringify(this.profile.slike[0]));
+                            }else{
+                                this.profile.slike = [];
+                            } 
+                        });
+                    }
+                    
+                }catch(error){
+                    console.log("GRESKA: " + error.message);
+                }
+            },
+            uploadImage(e){
+                let images = [];
+                for(let i = 0; i < e.target.files.length; i++){
+                    images.push(e.target.files[i]);
+                }
+                for(let i = 0; i < images.length; i++){
+                    let reader = new FileReader();
+                    reader.readAsDataURL(images[i]);
+                    reader.onload = (() => {
+                        this.profile.slike.push(reader.result);
+                        this.slike.push(reader.result);
+                    });
+                }
+            },
+            updateProfile(){
+                 // First name i last name se u paru gledaju da li su popunjeni
+                // Ako su oba prazna u isto vreme ce za oba izbaciti error
+                if (this.profile.korIme == '') {
+                    this.messages.errorUsername = `<h4>Polje korisnicko ime ne moze biti prazno!</h4>`;
+                    setTimeout(() => this.messages.errorUsername = '', 5000);
+                }
+                else if(this.profile.email == ''){
+                    this.messages.errorEmail = `<h4>Polje email ne moze biti prazno!</h4>`;
+                    setTimeout(() => this.messages.errorEmail = '', 5000);
+                }
+                else if (this.profile.ime == '' && this.profile.prezime != '') {
+                    his.messages.errorFirstName = `<h4>Polje ime ne moze biti prazno!</h4>`;
+                    setTimeout(() => this.messages.errorFirstName = '', 5000);
+                }
+                else if (this.profile.ime != '' && this.profile.prezime == '') {
+                    this.messages.errorLastName = `<h4>Polje prezime ne moze biti prazno!</h4>`;
+                    setTimeout(() => this.messages.errorLastName = '', 5000);
+                }
+                else if (this.profile.ime == '' && this.profile.prezime == '') {
+                    this.messages.errorFirstName = `<h4>Polje ime ne moze biti prazno!</h4>`;
+                    this.messages.errorLastName = `<h4>Polje prezime ne moze biti prazno!</h4>`;
+                    setTimeout(() => this.messages.errorFirstName = '', 5000);
+                    setTimeout(() => this.messages.errorLastName = '', 5000);
+                }
+                else if (this.profile.adresa == '') {
+                    this.messages.errorAdresa = `<h4> Polje adresa moze biti prazno!</h4>`;
+                    setTimeout(() => this.errorAdresa = '', 5000);
+                }
+
+                 //Password check
+                //Ako je unet old password, a nije uneto jedno od polja newPassword ili newPassword reapeat unosi se error
+                else if (this.changedPassword.oldPassword !== '' && this.changedPassword.newPassword !== '' && this.changedPassword.newPasswordRepeat === '') {
+                    this.messages.errorRepNewPass = `<h4>Morate ponoviti Vasu novu sifru!</h4>`;
+                    setTimeout(() => this.messages.errorRepNewPass = '', 55000);
+                }
+                //Ako je unet old password, a nije uneto jedno od polja newPassword ili newPassword reapeat unosi se error
+                else if (this.changedPassword.oldPassword !== '' && this.changedPassword.newPassword === '' && this.changedPassword.newPasswordRepeat !== '') {
+                    this.messages.errorNewPass = `<h4>Morate uneti Vasu novu sifru!</h4>`;
+                    setTimeout(() => this.messages.errorNewPass = '', 5000);
+                }
+                //Ako je unet old password, a nije uneto jedno od polja newPassword ili newPassword reapeat unosi se error
+                else if (this.changedPassword.oldPassword !== '' && this.changedPassword.newPassword === '' && this.changedPassword.newPasswordRepeat === '') {
+                    this.messages.errorNewPass = `<h4>Morate uneti Vasu novu sifru!</h4>`;
+                    this.messages.errorRepNewPass = `<h4>Morate ponoviti Vasu novu sifru!</h4>`;
+                    setTimeout(() => this.messages.errorNewPass = '', 5000);
+                    setTimeout(() => this.messages.errorRepNewPass = '', 5000);
+                }
+                //Ako nije unet old password, a jesu novi ispisuje se error
+                else if (this.changedPassword.oldPassword === '' && this.changedPassword.newPassword !== '' && this.changedPassword.newPasswordRepeat !== '') {
+                    this.messages.errorOldPass = `<h4>Morate prvo uneti Vasu staru sifru!</h4>`;
+                    setTimeout(() => this.messages.errorOldPass = '', 5000);
+                }
+                 //Ako su uneta sva 3 passworda, nema errora za prazna polja, ali se proverava validnost samog unosa
+                else if (this.changedPassword.oldPassword !== '' && this.changedPassword.newPassword !== '' && this.changedPassword.newPasswordRepeat !== '') {
+                    if (this.changedPassword.newPassword !== this.changedPassword.newPasswordRepeat) {
+                        this.messages.errorNotEqualNewPassword = `<h4>Vase nove sifre se ne poklapaju! Molimo Vas pokusajte ponovo...</h4>`;
+                        setTimeout(() => this.messages.errorNotEqualNewPassword = '', 3000);
+                    }
+                    else {
+                        //ako je stara sifra dobro uneta, a nove se poklapaju,
+                        //stara sifra se menja novom.
+                        // this.profile.staraSifra = this.changedPassword.oldPassword;
+                        // this.profile.novaSifra = this.changedPassword.newPassword;
+                        let tempObjekat = {
+                            staraSifra: this.changedPassword.oldPassword,
+                            novaSifra: this.changedPassword.newPassword,
+                        }
+                        if(tempObjekat.novaSifra === '' || tempObjekat.novaSifra === null){
+                            tempObjekat.novaSifra='';
+                        }
+                        if(tempObjekat.staraSifra === '' || tempObjekat.staraSifra === null){
+                            tempObjekat.staraSifra='';
+                        }
+                        if(this.userObj.role === "HOST"){
+
+                            let objekat = {
+                                hostDTO: this.profile,
+                                novaSifraDTO: tempObjekat
+                            }
+                            console.log(JSON.stringify(objekat))
+                            dataService.updateUserProfile2(objekat).then(response => {
+                                if(response.status === 200){
+                                    this.messages.successResponse = `<h4>Vas profil je uspesno izmenjen!</h4>`;
+                                    setTimeout(() => this.messages.successResponse = '', 5000);
+                                    setTimeout(() => { this.$router.push(`/dash`)}, 5050);
+                                }
+                            })
+                            .catch(error=>{
+                                // && error.response.data.message === "Wrong password!"
+                                if(error.response.status === 409 ){
+                                    this.messages.errorResponse = `<h4>Vaša stara sifra je netačna! Molimo Vas pokušajte ponovo...</h4>`;
+                                    setTimeout(()=>this.messages.errorResponse='', 5000);
+                                }
+                                else if (error.response.status === 500 || error.response.status === 404) {
+                                    this.messages.errorResponse = `<h4>Imali smo nekih problema na serveru,  molimo Vas pokušajte ponovo kasnije!</h4>`;
+                                    setTimeout(() => this.messages.errorResponse = '', 5000);
+                                }
+                            });
+                        }
+                        if(this.userObj.role === "GUEST"){
+                            let objekat = {
+                                guestDTO: this.profile,
+                                novaSifraDTO: tempObjekat
+                            }
+                            dataService.updateUserProfile(objekat).then(response => {
+                                if(response.status === 200){
+                                    this.messages.successResponse = `<h4>Vas profil je uspesno izmenjen!</h4>`;
+                                    setTimeout(() => this.messages.successResponse = '', 5000);
+                                    setTimeout(() => { this.$router.push(`/dash`)}, 5050);
+                                }
+                            })
+                            .catch(error=>{
+                                // && error.response.data.message === "Wrong password!"
+                                if(error.response.status === 409 ){
+                                    this.messages.errorResponse = `<h4>Vaša stara sifra je netačna! Molimo Vas pokušajte ponovo...</h4>`;
+                                    setTimeout(()=>this.messages.errorResponse='', 5000);
+                                }
+                                else if (error.response.status === 500 || error.response.status === 404) {
+                                    this.messages.errorResponse = `<h4>Imali smo nekih problema na serveru,  molimo Vas pokušajte ponovo kasnije!</h4>`;
+                                    setTimeout(() => this.messages.errorResponse = '', 5000);
+                                }
+                            });
+                        }
+                        
+                    }
+                }
+                else{
+                    let tempObjekat = {
+                        staraSifra: '',
+                        novaSifra: '',
+                    }
+                    // let objekat = {
+                    //     guestDTO: this.profile,
+                    //     novaSifraDTO: tempObjekat
+                    // }
+                    if(this.userObj.role === "GUEST"){
+                       let objekat = {
+                            guestDTO: this.profile,
+                            novaSifraDTO: tempObjekat
+                        } 
+                        console.log(JSON.stringify(objekat));
+                        dataService.updateUserProfile(objekat).then(response => {
+                            this.messages.successResponse = `<h4>Vas profil je uspesno izmenjen!</h4>`;
+                            setTimeout(() => this.messages.successResponse = '', 5000);
+                            setTimeout(() => { this.$router.push(`/dash`)}, 5050);
+                            console.log(response.data)
+                            this.profile = response.data;
+                        })
+                        .catch(error => {
+                            if (error.response.status === 500 || error.response.status === 404) {
+                                this.messages.errorResponse = `<h4>Imali smo nekih problema na serveru, molimo Vas pokušajte kasnije!</h4>`;
+                                setTimeout(() => this.messages.errorResponse = '', 5000);
+                            }
+                        });
+                    }
+                    if(this.userObj.role === "HOST"){
+                        let objekat = {
+                            hostDTO: this.profile,
+                            novaSifraDTO: tempObjekat
+                        }
+                        console.log("APDEJT PROFILA HOST-a") 
+                        console.log(JSON.stringify(objekat))
+                        dataService.updateUserProfile2(objekat).then(response => {
+                            this.messages.successResponse = `<h4>Vas profil je uspesno izmenjen!</h4>`;
+                            setTimeout(() => this.messages.successResponse = '', 5000);
+                            setTimeout(() => { this.$router.push(`/dash`)}, 5050);
+                            console.log(response.data)
+                            this.profile = response.data;
+                        })
+                        .catch(error => {
+                            if (error.response.status === 500 || error.response.status === 404) {
+                                this.messages.errorResponse = `<h4>Imali smo nekih problema na serveru, molimo Vas pokušajte kasnije!</h4>`;
+                                setTimeout(() => this.messages.errorResponse = '', 5000);
+                            }
+                        });
+                    }
+                    
+                }
+            },
+        },
+        computed:{
+            tokenPlaceHolder(){
+                if(this.tokenTekst == ''){
+                    return 'NEMATE IZGENERISAN TOKEN';
+                }else{
+                    return this.tokenTekst;
+                }
+            },
+        },
+        components:{
+            datepicker:VueDatePicker,
+            vueperslides : VueperSlides,
+            vueperslide :VueperSlide,
+        }
+        
+    }
+    
+</script>
+
+<style scoped>
+
+#titleEffect{
+  color:#1E90FF;
+  font-weight: bold;
+}
+
+#admin-profile-update .one-forth{
+  width:24%;
+  padding:10px;
+  margin-bottom:15px
+}
+
+#admin-profile-update label{
+    color:#35424a;
+    display: block;
+    margin: 20px 0 10px;
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.header5{
+    color:#1E90FF;
+    font-weight: bold;
+}
+
+</style>

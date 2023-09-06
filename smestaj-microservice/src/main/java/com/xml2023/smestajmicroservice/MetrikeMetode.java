@@ -31,4 +31,29 @@ public class MetrikeMetode {
 				"status", String.valueOf(status)
 				).increment(1);
 	}
+	
+	public void grpcRequestExport(int req, String method) throws JsonProcessingException {
+		
+		int byteSize= req;
+		mReg.counter("grpc_request_count",
+				"method",method
+				//"size", Integer.toString(byteSize)
+				).increment(1);
+		mReg.counter("grpc_request_byte_total",
+				"method",method
+				//"size", Integer.toString(byteSize)
+				).increment(byteSize);
+	}
+	public void grpcResponseExport(int req, String method) throws JsonProcessingException {
+		int byteSize= req;
+
+		mReg.counter("grpc_response_count",
+				"method",method
+				//"size", Integer.toString(byteSize)
+				).increment(1);
+		mReg.counter("grpc_response_byte_total",
+				"method",method
+				//"size", Integer.toString(byteSize)
+				).increment(byteSize);
+	}
 }

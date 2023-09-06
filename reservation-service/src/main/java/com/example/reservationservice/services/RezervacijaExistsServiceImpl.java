@@ -11,9 +11,11 @@ import java.util.concurrent.TimeUnit;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.example.reservationservice.MetrikeMetode;
 import com.example.reservationservice.model.Rezervacija;
 import com.example.reservationservice.model.StatusRezervacije;
 import com.example.reservationservice.repositories.RezervacijaRep;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.google.protobuf.Timestamp;
 import com.xml2023.mainapp.ActiveResExistsForSmestajRequest;
 import com.xml2023.mainapp.ActiveResExistsForSmestajResponse;
@@ -44,8 +46,15 @@ public class RezervacijaExistsServiceImpl extends RezervacijaGrpcImplBase {
 	private String smestajHost = "smestaj";
 	private String reglogHost= "reglog";
 	@Autowired RezervacijaRep rRep;
+	@Autowired MetrikeMetode met;
 	@Override
 	public void exists(RezervacijaExistsRequest request, StreamObserver<RezervacijaExistsResponse> responseObserver) {
+		try {
+			met.grpcRequestExport(request.getSerializedSize(), "exists");
+		} catch (JsonProcessingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		String idRez= request.getId();
 		Rezervacija r= rRep.findById(idRez).orElse(null);
 		RezervacijaExistsResponse.Builder response = RezervacijaExistsResponse.newBuilder();
@@ -55,7 +64,12 @@ public class RezervacijaExistsServiceImpl extends RezervacijaGrpcImplBase {
 		}else {
 			response.setResponseCode(200).setResponsemessage(r.getId());
 		}
-		
+		try {
+			met.grpcResponseExport(response.build().getSerializedSize(), "exists");
+		} catch (JsonProcessingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		responseObserver.onNext(response.build());
 		
 		responseObserver.onCompleted();
@@ -64,6 +78,12 @@ public class RezervacijaExistsServiceImpl extends RezervacijaGrpcImplBase {
 	@Override
 	public void reservationsForUserExists(ActiveResExistsRequest request,
 			StreamObserver<ActiveResExistsResponse> responseObserver) {
+		try {
+			met.grpcRequestExport(request.getSerializedSize(), "exists");
+		} catch (JsonProcessingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		Boolean b=false;
 		String userId= request.getUserId();
 		String tip= request.getTip();
@@ -110,7 +130,14 @@ public class RezervacijaExistsServiceImpl extends RezervacijaGrpcImplBase {
 			res.setExists(1);
 		}
 		else res.setExists(0);
+		
 		responseObserver.onNext(res.build());
+		try {
+			met.grpcResponseExport(res.build().getSerializedSize(), "exists");
+		} catch (JsonProcessingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
 		responseObserver.onCompleted();
 		
@@ -120,6 +147,12 @@ public class RezervacijaExistsServiceImpl extends RezervacijaGrpcImplBase {
 	@Override
 	public void getRezervacijaById(getRezervacijaByIdRequest request,
 			StreamObserver<getRezervacijaByIdResponse> responseObserver) {
+		try {
+			met.grpcRequestExport(request.getSerializedSize(), "exists");
+		} catch (JsonProcessingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		String rezervacijaId = request.getRezervacijaId();
 		Rezervacija r = rRep.findById(rezervacijaId).orElse(null);
 		getRezervacijaByIdResponse.Builder response = getRezervacijaByIdResponse.newBuilder();
@@ -139,6 +172,12 @@ public class RezervacijaExistsServiceImpl extends RezervacijaGrpcImplBase {
 	@Override
 	public void getListaRezervacijaByUserId(getListaRezervacijaByUserIdRequest request,
 			StreamObserver<getListaRezervacijaByUserIdResponse> responseObserver) {
+		try {
+			met.grpcRequestExport(request.getSerializedSize(), "exists");
+		} catch (JsonProcessingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		String userId = request.getId();
 		List<Rezervacija> userReservation = this.rRep.findAll().stream().filter(r -> r.getGost().equals(userId)).toList();
 		getListaRezervacijaByUserIdResponse.Builder response = getListaRezervacijaByUserIdResponse.newBuilder();
@@ -159,12 +198,24 @@ public class RezervacijaExistsServiceImpl extends RezervacijaGrpcImplBase {
 			response.addAllListaRezervacija(new ArrayList<RezervacijaDTO>());
 		}
 		responseObserver.onNext(response.build());
+		try {
+			met.grpcResponseExport(response.build().getSerializedSize(), "exists");
+		} catch (JsonProcessingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		responseObserver.onCompleted();
 	}
 	
 	@Override
 	public void resExistsForSmestaj(ActiveResExistsForSmestajRequest request,
 			StreamObserver<ActiveResExistsForSmestajResponse> responseObserver) {
+		try {
+			met.grpcRequestExport(request.getSerializedSize(), "exists");
+		} catch (JsonProcessingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		String smestajId = request.getUserId();
 		//lista koja sadrzi sve rezervacije smestaja sa ID-om smestajId koje su u statusu REZERVISANA
 		List<Rezervacija> userAll = rRep.findAll().stream().filter(r -> r.getSmestaj().equals(smestajId) && r.getStatus().equals(StatusRezervacije.REZERVISANA)).toList();
@@ -175,11 +226,23 @@ public class RezervacijaExistsServiceImpl extends RezervacijaGrpcImplBase {
 			response.setExists(true);
 		}
 		responseObserver.onNext(response.build());
+		try {
+			met.grpcResponseExport(response.build().getSerializedSize(), "exists");
+		} catch (JsonProcessingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		responseObserver.onCompleted();
 	}
 	@Override
 	public void getActiveReservations(ActiveReservationsRequest request,
 			StreamObserver<ActiveReservationsResponse> responseObserver) {
+		try {
+			met.grpcRequestExport(request.getSerializedSize(), "exists");
+		} catch (JsonProcessingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		String smestajId = request.getSmestajId();
 		LocalDateTime pocetak = Instant.ofEpochSecond(request.getPocetak().getSeconds(), request.getPocetak().getNanos()).atZone(ZoneId.of("Europe/Belgrade")).toLocalDateTime();
 		LocalDateTime kraj = Instant.ofEpochSecond(request.getKraj().getSeconds(), request.getKraj().getNanos()).atZone(ZoneId.of("Europe/Belgrade")).toLocalDateTime();
@@ -202,7 +265,12 @@ public class RezervacijaExistsServiceImpl extends RezervacijaGrpcImplBase {
 		}
 		res.addAllListaRezervacija(retList);
 		responseObserver.onNext(res.build());
-		
+		try {
+			met.grpcResponseExport(res.build().getSerializedSize(), "exists");
+		} catch (JsonProcessingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		responseObserver.onCompleted();
 	}
 	
